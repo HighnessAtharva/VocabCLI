@@ -1,1 +1,5 @@
 my_env/
+.env
+src/VocabularyBuilder/tempCodeRunnerFile.py
+src/VocabularyBuilder/emojis.txt
+src/VocabularyBuilder/response.json
