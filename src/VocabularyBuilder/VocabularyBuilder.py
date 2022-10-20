@@ -1,4 +1,5 @@
 import typer
+import Dictionary
 from rich import print
 
 app = typer.Typer(
@@ -59,9 +60,10 @@ def define(word: str=typer.Argument(..., help="Word to search"),
     print(f"[blue]{word}[/blue]")
     print("[bold]DEFINITION: [/bold]")
     if short:
-        Dictionary.lookup(word, short=True)
+        Dictionary.definition(word, short=True)
     if not short:
-        Dictionary.lookup(word, short=False)
+        Dictionary.definition(word, short=False)
+        
 
 
 

@@ -28,13 +28,13 @@ def phonetic(query):
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
-        phonetic="phonetic not available"
+        phonetic="Phonetic Unavailable"
     else:
         for phonetics in response["phonetics"]:
             if "text" in phonetics and len(phonetics["text"])>0:
                 phonetic= phonetics["text"];     
             else:
-                phonetic= "Phonetic Not Available"
+                phonetic= "Phonetic Unavailable"
     print(f"{phonetic}")
                 
         
@@ -42,30 +42,36 @@ def pronounce(query):
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
-        print("AudioURL not available")
+        print("Audio Unavailable")
     else:
         phonetic = response["phonetics"][0] if "phonetics" in response else "phonetics not available"
-        audioURL=phonetic["audio"] if "audio" in phonetic else "AudioURL not available"
-        if audioURL != "AudioURL not available":
+        audioURL=phonetic["audio"] if "audio" in phonetic else None
+        if audioURL not in [None, ""]:
             audio = requests.get(audioURL, allow_redirects=True)
             open(f'{query}.mp3', 'wb').write(audio.content)
-            playsound(f'{Path().cwd()}/{query}.mp3', True)
+            playsound(f'{Path().cwd()}/{query}.mp3')
             print("Audio played")
             os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
         else:
             print("Audio Unavailable")
         
 
-def definition(query):
+def definition(query, short=False):
     if not (response := connectToApi(query)):
         return
-    for meaningNumber in response["meanings"]:
-        print(meaningNumber["partOfSpeech"])
-        for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-            print(f"{count}. {meaning['definition']}")            
-        print("\n")
+    if short:
+        for meaningNumber in response["meanings"]:
+            for meaning in meaningNumber["definitions"][:1]:
+                print(f"{meaningNumber['partOfSpeech']}: {meaning['definition']}")
+                
+    else:
+        for meaningNumber in response["meanings"]:
+            print(meaningNumber["partOfSpeech"])
+            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
+                print(f"{count}. {meaning['definition']}")            
+            print("\n")
+   
         
-        
-phonetic("grandiose")
-pronounce("grandiose")
-definition("grandiose")
+# phonetic("code")
+# pronounce("happy")
+# definition("associate")

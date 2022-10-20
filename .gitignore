@@ -3,3 +3,4 @@ my_env/
 src/VocabularyBuilder/tempCodeRunnerFile.py
 src/VocabularyBuilder/emojis.txt
 src/VocabularyBuilder/response.json
+*.pyc
