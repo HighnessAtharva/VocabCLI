@@ -4,8 +4,13 @@ import requests
 from playsound import playsound
 from pathlib import Path
 from requests import exceptions
+from typing import *
+from Database import *
+from datetime import datetime
+from rich import print
 
-def connectToApi(query="hello"):
+
+def connectToApi(query:str="hello"):
     try:
         response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
         response.raise_for_status()
@@ -23,22 +28,56 @@ def connectToApi(query="hello"):
         if response.status_code == 200:
             return response.json()[0]
         
+def definition(query:str, short:Optional[bool]=False):
+    if not (response := connectToApi(query)):
+        return
+    
+    print(f"[blue]{query}[/blue]\n")
+    phonetic(query)
+    print("\n[bold]DEFINITION: [/bold]\n")
+    if short:
+        for meaningNumber in response["meanings"]:
+            for meaning in meaningNumber["definitions"][:1]:
+                print(f"{meaningNumber['partOfSpeech']}: {meaning['definition']}")
+                
+    if not short:
+        for meaningNumber in response["meanings"]:
+            print(meaningNumber["partOfSpeech"])
+            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
+                print(f"{count}. {meaning['definition']}")            
+            print("\n")
             
-def phonetic(query):
+
+def tag(query: str, tagName:Optional[str]=None):
+    conn=createConnection()
+    c=conn.cursor()
+    if tagName:
+        sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
+        c.execute(sql, (query, datetime.now(), tagName))
+    if not tagName:
+        sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
+        c.execute(sql, (query, datetime.now()))
+    conn.commit()
+    
+    print(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]")
+    
+    
+    
+def phonetic(query: str):
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
-        phonetic="Phonetic Unavailable"
+        phonetic="[bold red]Phonetic Unavailable[/bold red]"
     else:
         for phonetics in response["phonetics"]:
             if "text" in phonetics and len(phonetics["text"])>0:
                 phonetic= phonetics["text"];     
             else:
-                phonetic= "Phonetic Unavailable"
+                phonetic= "[bold red]Phonetic Unavailable[/bold red]"
     print(f"{phonetic}")
                 
         
-def pronounce(query):
+def pronounce(query: str):
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
@@ -56,22 +95,6 @@ def pronounce(query):
             print("Audio Unavailable")
         
 
-def definition(query, short=False):
-    if not (response := connectToApi(query)):
-        return
-    if short:
-        for meaningNumber in response["meanings"]:
-            for meaning in meaningNumber["definitions"][:1]:
-                print(f"{meaningNumber['partOfSpeech']}: {meaning['definition']}")
-                
-    else:
-        for meaningNumber in response["meanings"]:
-            print(meaningNumber["partOfSpeech"])
-            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                print(f"{count}. {meaning['definition']}")            
-            print("\n")
+
    
-        
-# phonetic("code")
-# pronounce("happy")
-# definition("associate")
+    
