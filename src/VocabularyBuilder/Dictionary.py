@@ -11,6 +11,15 @@ from rich import print
 
 
 def connectToApi(query:str="hello"):
+    """_summary_: Connects to the API and returns the response in JSON format.
+
+    Args:
+        query (str, optional): _description_. Defaults to "hello".
+
+    Returns:
+        _type_: _description_
+    """
+    
     try:
         response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
         response.raise_for_status()
@@ -29,6 +38,12 @@ def connectToApi(query:str="hello"):
             return response.json()[0]
         
 def definition(query:str, short:Optional[bool]=False):
+    """_summary_: Prints the definition of the word. 
+
+    Args:
+        query (str): _description_
+        short (Optional[bool], optional): _description_. Defaults to False.
+    """
     if not (response := connectToApi(query)):
         return
     
@@ -49,6 +64,12 @@ def definition(query:str, short:Optional[bool]=False):
             
 
 def tag(query: str, tagName:Optional[str]=None):
+    """_summary_: Tags the word in the vocabulary builder list.
+
+    Args:
+        query (str): _description_
+        tagName (Optional[str], optional): _description_. Defaults to None.
+    """
     conn=createConnection()
     c=conn.cursor()
     if tagName:
@@ -64,6 +85,11 @@ def tag(query: str, tagName:Optional[str]=None):
     
     
 def phonetic(query: str):
+    """_summary_: Prints the phonetic of the word.
+
+    Args:
+        query (str): _description_
+    """
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
@@ -78,6 +104,11 @@ def phonetic(query: str):
                 
         
 def pronounce(query: str):
+    """_summary_: Pronounces the word. Downloads the audio file, plays it and deletes it.
+
+    Args:
+        query (str): _description_
+    """
     if not (response := connectToApi(query)):
         return
     if len(response["phonetics"])==0:
@@ -88,7 +119,8 @@ def pronounce(query: str):
         if audioURL not in [None, ""]:
             audio = requests.get(audioURL, allow_redirects=True)
             open(f'{query}.mp3', 'wb').write(audio.content)
-            playsound(f'{Path().cwd()}/{query}.mp3')
+            playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
+            # playsound(f'{Path().cwd()}/{query}.mp3')
             print("Audio played")
             os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
         else:

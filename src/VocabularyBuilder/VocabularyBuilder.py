@@ -3,6 +3,7 @@ from typing import *
 from rich import print
 import Dictionary
 from Database import *
+from DictionaryUtils import *
 
 
 # initialize the database with the tables if not already existing
@@ -39,8 +40,6 @@ def define(
     Shows the definition of WORD. 
     Adds it to the vocabulary builder list along with the timestamp if the user is logged in.
     """
-
-   
 
     if short:
         Dictionary.definition(word, short=True)

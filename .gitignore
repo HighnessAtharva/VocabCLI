@@ -4,3 +4,4 @@ src/VocabularyBuilder/tempCodeRunnerFile.py
 src/VocabularyBuilder/emojis.txt
 src/VocabularyBuilder/response.json
 *.pyc
+src/VocabularyBuilder/delete.py
