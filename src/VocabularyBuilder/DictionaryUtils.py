@@ -13,3 +13,5 @@ def fetchWordHistory(word):
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y %H:%M:%S')
             print(history)
+            
+fetchWordHistory("star")
