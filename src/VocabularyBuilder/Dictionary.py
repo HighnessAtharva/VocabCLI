@@ -36,6 +36,8 @@ def connectToApi(query:str="hello"):
     else:
         if response.status_code == 200:
             return response.json()[0]
+ 
+ 
         
 def definition(query:str, short:Optional[bool]=False):
     """_summary_: Prints the definition of the word. 
@@ -63,27 +65,7 @@ def definition(query:str, short:Optional[bool]=False):
             print("\n")
             
 
-def tag(query: str, tagName:Optional[str]=None):
-    """_summary_: Tags the word in the vocabulary builder list.
 
-    Args:
-        query (str): _description_
-        tagName (Optional[str], optional): _description_. Defaults to None.
-    """
-    conn=createConnection()
-    c=conn.cursor()
-    if tagName:
-        sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
-        c.execute(sql, (query, datetime.now(), tagName))
-    if not tagName:
-        sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
-        c.execute(sql, (query, datetime.now()))
-    conn.commit()
-    
-    print(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]")
-    
-    
-    
 def phonetic(query: str):
     """_summary_: Prints the phonetic of the word.
 
@@ -102,6 +84,7 @@ def phonetic(query: str):
                 phonetic= "[bold red]Phonetic Unavailable[/bold red]"
     print(f"{phonetic}")
                 
+        
         
 def pronounce(query: str):
     """_summary_: Pronounces the word. Downloads the audio file, plays it and deletes it.
@@ -126,7 +109,37 @@ def pronounce(query: str):
         else:
             print("Audio Unavailable")
         
+def fetchWordHistory(word):
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
+    rows=c.fetchall()
+    if len(rows) <= 0:
+        print("You have not searched for this word before.")
+    else:
+        count=len(rows)
+        print(f"You have searched for [bold]{word}[/bold] {count} times before.")
+        for row in rows:
+            history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y %H:%M:%S')
+            print(history)
+            
 
 
-   
+def tag(query: str, tagName:Optional[str]=None):
+    """_summary_: Tags the word in the vocabulary builder list.
+
+    Args:
+        query (str): _description_
+        tagName (Optional[str], optional): _description_. Defaults to None.
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    if tagName:
+        sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
+        c.execute(sql, (query, datetime.now(), tagName))
+    if not tagName:
+        sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
+        c.execute(sql, (query, datetime.now()))
+    conn.commit()
     
+    print(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]")

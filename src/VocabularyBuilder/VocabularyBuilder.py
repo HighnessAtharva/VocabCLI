@@ -3,7 +3,7 @@ from typing import *
 from rich import print
 import Dictionary
 from Database import *
-from DictionaryUtils import *
+
 
 
 # initialize the database with the tables if not already existing
