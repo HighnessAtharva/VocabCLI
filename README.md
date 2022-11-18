@@ -2,7 +2,7 @@
 
 <hr>
 
-## Running the Project
+## Running the Project 🕹
 
 **While setting up the project for the first time** :arrow_right: 
 
@@ -17,3 +17,15 @@
 - Run the main project file: `python VocabularyBuilder.py`
 
 <hr>
+
+
+## Features 🎯
+
+- Allow users to lookup word definitions
+- Generate flashcards for revision
+- Allow tagging of words (i.e. for categorization) such as "learning" or "mastered" or "SAT 1000 word list"
+- Recommend potential words for vocabulary building based on lookup history
+- Maintain lookup history and report it weekly
+- Generate learning graphs (matplotlib/seaborn)
+- Allow saving of quotes (possibly reading from clipboard/browser)
+
