@@ -1,6 +1,7 @@
 # PythonCLI
 
 <hr>
+
 ## Running the Project
 
 **While setting up the project for the first time** :arrow_right: 
