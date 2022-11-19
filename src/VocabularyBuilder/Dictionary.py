@@ -12,7 +12,7 @@ from random_word import RandomWords
 
 
 
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def connectToApi(query:str="hello"):
     """
     Connects to the API and returns the response in JSON format.
@@ -42,7 +42,7 @@ def connectToApi(query:str="hello"):
             return response.json()[0]
  
  
-# todo @anay: add proper docstrings and write PyTest case for this function   
+# todo @anay: add proper docstrings 
 # todo @anay: Refer typer/rich docs and add table formatting to the output      
 def definition(query:str, short:Optional[bool]=False):
     """
@@ -71,7 +71,7 @@ def definition(query:str, short:Optional[bool]=False):
             print("\n")
             
 
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def phonetic(query: str):
     """
     Prints the phonetic of the word.
@@ -92,7 +92,7 @@ def phonetic(query: str):
     print(f"{phonetic}")
                 
         
-# todo @anay: add proper docstrings and write PyTest case for this function         
+# todo @anay: add proper docstrings      
 def pronounce(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
@@ -118,7 +118,7 @@ def pronounce(query: str):
             print("Audio Unavailable")
        
         
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def fetchWordHistory(word):
     """_summary_:
 
@@ -139,7 +139,7 @@ def fetchWordHistory(word):
             print(history)
             
 
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
@@ -161,7 +161,7 @@ def tag(query: str, tagName:Optional[str]=None):
     print(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]")
   
     
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def set_mastered(query: str):
     """
     Sets the word as mastered.
@@ -187,7 +187,7 @@ def set_mastered(query: str):
         print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
     
 
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def set_unmastered(query: str):
     """
     Sets the word as unmastered.
@@ -239,7 +239,7 @@ def count_total_learning():
     
     
    
-# todo @anay: write PyTest case for this function
+
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
 def get_random_word_definition_from_api():
     """
@@ -250,7 +250,7 @@ def get_random_word_definition_from_api():
     definition(random_word)
             
 
-# todo @anay: add proper docstrings and write PyTest case for this function 
+# todo @anay: add proper docstrings
 def get_random_word_from_learning_set(tag:Optional[str]=None):
     """Gets a random word from the vocabulary builder list.
 
@@ -273,7 +273,7 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
             definition(row[0])
       
      
-# todo @anay: add proper docstrings and write PyTest case for this function        
+# todo @anay: add proper docstrings       
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """Gets a random word with definition from the mastered words list.
 
@@ -296,21 +296,21 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
             
             
 # todo @anay: write function to select all words in the database
-# todo @anay: add proper docstrings and write PyTest case for this function  
+# todo @anay: add proper docstrings 
 def get_all_words():
     pass
 
 # todo @anay: write function to select all words with a particular tag. Argument is required!
-# todo @anay: add proper docstrings and write PyTest case for this function  
+# todo @anay: add proper docstrings
 def get_words_of_tag(tag: str):
     pass
 
 # todo @anay: write function to select all words from learning list, filter by tag if tag is provided. Tag is optional.
-# todo @anay: add proper docstrings and write PyTest case for this function  
+# todo @anay: add proper docstrings
 def get_words_from_learning_list(tag:Optional[str]=None):
     pass
 
 # todo @anay: write function to select all words from mastered list, , filter by tag if tag is provided. Tag is optional.
-# todo @anay: add proper docstrings and write PyTest case for this function  
+# todo @anay: add proper docstrings  
 def get_words_from_mastered_list(tag:Optional[str]=None):
     pass

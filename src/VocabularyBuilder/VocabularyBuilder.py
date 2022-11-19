@@ -2,12 +2,12 @@ import typer
 from typing import *
 from rich import print
 import Dictionary
-from Database import *
+import Database
 
 
 
 # initialize the database with the tables if not already existing
-initializeDB()
+Database.initializeDB()
 
 app = typer.Typer(
     name="Vocabulary Builder",
@@ -29,6 +29,7 @@ def bye():
     print(":wave: [bold green]Bye bye![/bold green]")
 
 
+# todo @anay: write PyTest for this. Cover all cases/flags/arguments
 @app.command(rich_help_panel="Dictionary", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     word: str = typer.Argument(..., help="Word to search"),
