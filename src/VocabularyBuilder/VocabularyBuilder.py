@@ -60,8 +60,14 @@ def define(
     
     
     
+# todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
+# Make use of the following functions that you will be writing in Dictionary.py
+# get_all_words()
+# get_words_of_tag()
+# get_words_from_learning_list()
+# get_words_from_mastered_list()
 
- 
+
     
 if __name__ == "__main__":
     app()
