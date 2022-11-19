@@ -1,4 +1,4 @@
-# PythonCLI
+# VocabularyBuilder CLI
 
 <hr>
 
@@ -25,7 +25,7 @@
 - Generate flashcards for revision
 - Allow tagging of words (i.e. for categorization) such as "learning" or "mastered" or "SAT 1000 word list"
 - Recommend potential words for vocabulary building based on lookup history
-- Maintain lookup history and report it weekly
+- Maintain lookup history and report it daily/weekly/monthly
 - Generate learning graphs (matplotlib/seaborn)
 - Allow saving of quotes (possibly reading from clipboard/browser)
 
