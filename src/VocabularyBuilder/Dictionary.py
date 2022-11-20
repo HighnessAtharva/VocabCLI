@@ -18,10 +18,10 @@ def connectToApi(query:str="hello"):
     Connects to the API and returns the response in JSON format.
 
     Args:
-        query (str, optional): _description_. Defaults to "hello".
+        query (str, optional): Word to lookup to test the API. Defaults to "hello".
 
     Returns:
-        _type_: _description_
+        dict: Response in JSON format
     """
     
     try:
@@ -61,13 +61,20 @@ def definition(query:str, short:Optional[bool]=False):
     if short:
         for meaningNumber in response["meanings"]:
             for meaning in meaningNumber["definitions"][:1]:
+                
+                # Noun: definition
                 print(f"{meaningNumber['partOfSpeech']}: {meaning['definition']}")
                 
     if not short:
         for meaningNumber in response["meanings"]:
+            # Part of Speech: Noun/Verb/Adjective
             print(meaningNumber["partOfSpeech"])
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                print(f"{count}. {meaning['definition']}")            
+                # 1. Meaning EYXAKSJKSDJ
+                # 2. Meaning ASKDJASJD
+                # table row begins
+                print(f"{count}. {meaning['definition']}")  
+                # table row ends          
             print("\n")
             
 
@@ -77,7 +84,7 @@ def phonetic(query: str):
     Prints the phonetic of the word.
 
     Args:
-        query (str): _description_
+        query (str): word for which phonetic is to be printed
     """
     if not (response := connectToApi(query)):
         return
@@ -98,7 +105,8 @@ def pronounce(query: str):
     Pronounces the word. Downloads the audio file, plays it and deletes it.
 
     Args:
-        query (str): _description_
+        query (str): word to be pronounced
+    
     """
     if not (response := connectToApi(query)):
         return
@@ -120,10 +128,10 @@ def pronounce(query: str):
         
 # todo @anay: add proper docstrings
 def fetchWordHistory(word):
-    """_summary_:
+    """ Fetches all instances of timestamp for a word from the database 
 
     Args:
-        word (_type_): _description_
+        word (str): word for which history is to be fetched
     """
     conn=createConnection()
     c=conn.cursor()

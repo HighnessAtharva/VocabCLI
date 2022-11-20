@@ -59,8 +59,8 @@ def define(
     if not tag:
         Dictionary.tag(word)
     
-    
-    
+
+
 # todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
 # by default export all words in a csv file
 # OPTIONS/FLAGS will be (two or more can be used at once):
