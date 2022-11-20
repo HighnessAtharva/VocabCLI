@@ -16,6 +16,10 @@
 - Move to source folder: `cd src/VocabularyBuilder`
 - Run the main project file: `python VocabularyBuilder.py`
 
+**To Run Test Cases** :arrow_right:
+- Write test cases in /tests folder
+- Then go to src/VocbularyBuilder
+- RUN `python -m pytest ../../tests` in terminal
 <hr>
 
 
