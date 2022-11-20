@@ -1,14 +1,21 @@
 import typer
+import sys
 from typing import *
 from rich import print
-import Dictionary
-import Database
+from rich.console import Console
+from modules.Dictionary import (definition, say_aloud, add_tag)
+from modules.Database import initializeDB
+from modules.banner import print_banner
 
+console = Console(record=False, color_system="truecolor")
+print_banner(console)   
 
 
 # initialize the database with the tables if not already existing
-Database.initializeDB()
+initializeDB()
 
+
+# app configuration
 app = typer.Typer(
     name="Vocabulary Builder",
     add_completion=False,
@@ -17,10 +24,7 @@ app = typer.Typer(
 )
 
 
-"""
-APP COMMANDS
-"""
-
+# add the commands
 @app.command()
 def bye():
     """
@@ -33,9 +37,9 @@ def bye():
 @app.command(rich_help_panel="Dictionary", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     word: str = typer.Argument(..., help="Word to search"),
-    short: Optional[bool] = typer.Option(False, help="Lightweight definitions."),
-    pronounce: Optional[bool] = typer.Option(False, help="Pronounce the word."),
-    tag: Optional[str] = typer.Option(None, help="Tag the word in your vocabulary builder set.")
+    short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
+    pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag the word in your vocabulary builder set.")
 ):
     """
     Shows the definition of WORD. 
@@ -43,21 +47,21 @@ def define(
     """
 
     if short:
-        Dictionary.definition(word, short=True)
+        definition(word, short=True)
 
 
     if not short:
-        Dictionary.definition(word, short=False)
+        definition(word, short=False)
         
     
     if pronounce:
-        Dictionary.pronounce(query=word)
+        say_aloud(query=word)
         
     if tag:
-        Dictionary.tag(word, tag)
+        add_tag(word, tag)
     
     if not tag:
-        Dictionary.tag(word)
+        add_tag(word)
     
 
 
@@ -128,6 +132,7 @@ def define(
 # -f, --favorite: delete all words from the favorite list
 
 
+# todo @atharva: add a command "about" to get software details. Banner, version, credits,
 
 
 

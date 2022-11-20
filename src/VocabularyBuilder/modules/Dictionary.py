@@ -5,15 +5,14 @@ from playsound import playsound
 from pathlib import Path
 from requests import exceptions
 from typing import *
-from Database import *
 from datetime import datetime
 from rich import print
 from random_word import RandomWords
-
+from .Database import createConnection, createTables
 
 
 # todo @anay: add proper docstrings
-def connectToApi(query:str="hello"):
+def connect_to_api(query:str="hello"):
     """
     Connects to the API and returns the response in JSON format.
 
@@ -52,7 +51,7 @@ def definition(query:str, short:Optional[bool]=False):
         query (str): _description_
         short (Optional[bool], optional): _description_. Defaults to False.
     """
-    if not (response := connectToApi(query)):
+    if not (response := connect_to_api(query)):
         return 0
     
     print(f"[blue]{query}[/blue]\n")
@@ -67,14 +66,9 @@ def definition(query:str, short:Optional[bool]=False):
                 
     if not short:
         for meaningNumber in response["meanings"]:
-            # Part of Speech: Noun/Verb/Adjective
             print(meaningNumber["partOfSpeech"])
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                # 1. Meaning EYXAKSJKSDJ
-                # 2. Meaning ASKDJASJD
-                # table row begins
-                print(f"{count}. {meaning['definition']}")  
-                # table row ends          
+                print(f"{count}. {meaning['definition']}")         
             print("\n")
             
 
@@ -86,7 +80,7 @@ def phonetic(query: str):
     Args:
         query (str): word for which phonetic is to be printed
     """
-    if not (response := connectToApi(query)):
+    if not (response := connect_to_api(query)):
         return
     if len(response["phonetics"])==0:
         phonetic="[bold red]Phonetic Unavailable[/bold red]"
@@ -100,7 +94,7 @@ def phonetic(query: str):
                 
         
 # todo @anay: add proper docstrings      
-def pronounce(query: str):
+def say_aloud(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
 
@@ -127,7 +121,7 @@ def pronounce(query: str):
        
         
 # todo @anay: add proper docstrings
-def fetchWordHistory(word):
+def fetch_word_history(word):
     """ Fetches all instances of timestamp for a word from the database 
 
     Args:
@@ -148,7 +142,7 @@ def fetchWordHistory(word):
             
 
 # todo @anay: add proper docstrings
-def tag(query: str, tagName:Optional[str]=None):
+def add_tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
 
@@ -305,20 +299,5 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
             
 # todo @anay: write function to select all words in the database
 # todo @anay: add proper docstrings 
-def get_all_words():
-    pass
-
-# todo @anay: write function to select all words with a particular tag. Argument is required!
-# todo @anay: add proper docstrings
-def get_words_of_tag(tag: str):
-    pass
-
-# todo @anay: write function to select all words from learning list, filter by tag if tag is provided. Tag is optional.
-# todo @anay: add proper docstrings
-def get_words_from_learning_list(tag:Optional[str]=None):
-    pass
-
-# todo @anay: write function to select all words from mastered list, , filter by tag if tag is provided. Tag is optional.
-# todo @anay: add proper docstrings  
-def get_words_from_mastered_list(tag:Optional[str]=None):
+def get_all_words(tag=None, mastered=False, learning=False):
     pass
