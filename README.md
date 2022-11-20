@@ -19,7 +19,7 @@
 **To Run Test Cases** :arrow_right:
 - Write test cases in /tests folder
 - Then go to src/VocbularyBuilder
-- RUN `python -m pytest ../../tests` in terminal
+- RUN `python -m pytest ../tests` in terminal
 <hr>
 
 

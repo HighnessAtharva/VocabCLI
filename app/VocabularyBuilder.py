@@ -3,9 +3,13 @@ import sys
 from typing import *
 from rich import print
 from rich.console import Console
-from modules.Dictionary import (definition, say_aloud, add_tag)
+from modules.Dictionary import (definition, say_aloud)
+from modules.Utils import add_tag
 from modules.Database import initializeDB
-from modules.banner import print_banner
+from modules.Banner import print_banner
+from modules.Utils import show_list
+
+
 
 console = Console(record=False, color_system="truecolor")
 print_banner(console)   
@@ -75,7 +79,31 @@ def define(
 # -d, --date DATE: export words from a particular date
 # --most INT: export the most searched words (INT is the number of words to display)
 
-
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Get a list of all your looked up words.[/bold blue]")
+def list(
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
+    learning: Optional[bool] = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
+    mastered: Optional[bool] = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
+    date: Optional[str] = typer.Option(None, "--date", "-d", help="Get a list of words from a particular date."),
+    last: Optional[str] = typer.Option(10, "--last", "-L", help="Get a list of last searched words.")
+):
+    
+    if favorite:
+        show_list(favorite=True)
+    if learning:
+        show_list(learning=True)
+    if mastered:
+        show_list(mastered=True)
+    if tag:
+        show_list(tag=tag)
+    if date:
+        show_list(date=date)
+    if last:
+        show_list(last=last)
+    else:
+        show_list(favorite=False, learning=False, mastered=False, tag=False, date=False, last=None)    
+        
 # Make use of the following functions that you will be writing in Dictionary.py
 # get_all_words()
 # get_words_of_tag()

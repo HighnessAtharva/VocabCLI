@@ -1,125 +1,10 @@
-import os
-import json
-import requests
-from playsound import playsound
-from pathlib import Path
-from requests import exceptions
+from random_word import RandomWords
 from typing import *
 from datetime import datetime
 from rich import print
-from random_word import RandomWords
-from .Database import createConnection, createTables
 
+from Database import createConnection, createTables
 
-# todo @anay: add proper docstrings
-def connect_to_api(query:str="hello"):
-    """
-    Connects to the API and returns the response in JSON format.
-
-    Args:
-        query (str, optional): Word to lookup to test the API. Defaults to "hello".
-
-    Returns:
-        dict: Response in JSON format
-    """
-    
-    try:
-        response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
-        response.raise_for_status()
-    
-    except exceptions.ConnectionError as error:
-        print("[bold red]Error: You are not connected to the internet.[/bold red]")
-    
-    except exceptions.HTTPError as error:
-        print("[bold red]We do not have the definition for that word[/bold red]")
-        
-    except exceptions.Timeout as error:
-        print("[bold red]Error: Timeout[/bold red]")
-
-    else:
-        if response.status_code == 200:
-            return response.json()[0]
- 
- 
-# todo @anay: add proper docstrings 
-# todo @anay: Refer typer/rich docs and add table formatting to the output      
-def definition(query:str, short:Optional[bool]=False):
-    """
-    Prints the definition of the word. 
-
-    Args:
-        query (str): _description_
-        short (Optional[bool], optional): _description_. Defaults to False.
-    """
-    if not (response := connect_to_api(query)):
-        return 0
-    
-    print(f"[blue]{query}[/blue]\n")
-    phonetic(query)
-    print("\n[bold]DEFINITION: [/bold]\n")
-    if short:
-        for meaningNumber in response["meanings"]:
-            for meaning in meaningNumber["definitions"][:1]:
-                
-                # Noun: definition
-                print(f"{meaningNumber['partOfSpeech']}: {meaning['definition']}")
-                
-    if not short:
-        for meaningNumber in response["meanings"]:
-            print(meaningNumber["partOfSpeech"])
-            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                print(f"{count}. {meaning['definition']}")         
-            print("\n")
-            
-
-# todo @anay: add proper docstrings
-def phonetic(query: str):
-    """
-    Prints the phonetic of the word.
-
-    Args:
-        query (str): word for which phonetic is to be printed
-    """
-    if not (response := connect_to_api(query)):
-        return
-    if len(response["phonetics"])==0:
-        phonetic="[bold red]Phonetic Unavailable[/bold red]"
-    else:
-        for phonetics in response["phonetics"]:
-            if "text" in phonetics and len(phonetics["text"])>0:
-                phonetic= phonetics["text"];     
-            else:
-                phonetic= "[bold red]Phonetic Unavailable[/bold red]"
-    print(f"{phonetic}")
-                
-        
-# todo @anay: add proper docstrings      
-def say_aloud(query: str):
-    """
-    Pronounces the word. Downloads the audio file, plays it and deletes it.
-
-    Args:
-        query (str): word to be pronounced
-    
-    """
-    if not (response := connectToApi(query)):
-        return
-    if len(response["phonetics"])==0:
-        print("Audio Unavailable")
-    else:
-        phonetic = response["phonetics"][0] if "phonetics" in response else "phonetics not available"
-        audioURL=phonetic["audio"] if "audio" in phonetic else None
-        if audioURL not in [None, ""]:
-            audio = requests.get(audioURL, allow_redirects=True)
-            open(f'{query}.mp3', 'wb').write(audio.content)
-            playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
-            # playsound(f'{Path().cwd()}/{query}.mp3')
-            print("Audio played")
-            os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
-        else:
-            print("Audio Unavailable")
-       
-        
 # todo @anay: add proper docstrings
 def fetch_word_history(word):
     """ Fetches all instances of timestamp for a word from the database 
@@ -139,7 +24,7 @@ def fetch_word_history(word):
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y %H:%M:%S')
             print(history)
-            
+       
 
 # todo @anay: add proper docstrings
 def add_tag(query: str, tagName:Optional[str]=None):
@@ -187,6 +72,7 @@ def set_mastered(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!")
     else:
         print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
+   
     
 
 # todo @anay: add proper docstrings
@@ -221,12 +107,12 @@ def count_total_mastered():
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT COUNT(*) FROM words WHERE mastered=1")
+    c.execute("SELECT COUNT (DISTINCT word) FROM words WHERE mastered=1")
     rows=c.fetchall()
     count=rows[0][0]
     print(f"You have mastered [bold green]{count}[/bold green] words.")
    
-   
+
 # todo @anay: Write PyTest case for this function 
 def count_total_learning():
     """
@@ -234,12 +120,12 @@ def count_total_learning():
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT COUNT(*) FROM words WHERE mastered=0")
+    c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=0")
     rows=c.fetchall()
     count=rows[0][0]
-    print(f"You have [bold red]{count}[/bold red] words in your vocabulary builder list.")
+    print(f"You are learning [bold green]{count}[/bold green] words")
     
-    
+
    
 
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
@@ -299,5 +185,60 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
             
 # todo @anay: write function to select all words in the database
 # todo @anay: add proper docstrings 
-def get_all_words(tag=None, mastered=False, learning=False):
-    pass
+def show_list(favorite=False, learning=False, mastered=False, tag=False, date=False, last=None):
+    conn=createConnection()
+    c=conn.cursor()
+    def show_favorite_list():
+        c.execute("SELECT word FROM words WHERE favorite=1")
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            print("You have no favorite words yet.")
+        else:
+            for row in rows:
+                print(row[0]) 
+    
+    def show_learning_list():
+        c.execute("SELECT word FROM words WHERE mastered=1")
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            print("You aren't learning any words currently.")
+        else:
+            for row in rows:
+                print(row[0]) 
+    
+    def show_mastered_list():
+        pass
+    
+    def show_tag_list():
+        pass
+    
+    def show_date_list():
+        pass
+    
+    def show_last_list(last=10):
+        pass
+    
+    if favorite:
+        show_favorite_list()
+    if learning:
+        show_learning_list()
+    if mastered:
+        show_mastered_list()
+    if tag:
+        show_tag_list()
+    if date:
+        show_date_list()
+    if last:
+        show_last_list(last)
+    
+    if(not favorite and not learning and not mastered and not tag and not date and not last):
+        # show all the words    
+        conn=createConnection()
+        c=conn.cursor()
+        c.execute("SELECT word FROM words")
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            print("You have no favorite words yet.")
+        else:
+            for row in rows:
+                print(row[0]) 
