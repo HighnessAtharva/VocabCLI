@@ -24,3 +24,7 @@
 * [Discord Custom Card 1](https://www.youtube.com/watch?v=y58iPlj2QeE)
 * [Make ID Card](https://www.youtube.com/watch?v=eiF9cvsX_Jc)
 * [Make Instagram Card](https://www.nguyentrieuphong.com/2020/03/how-to-create-instagram-card-with-python-EN1.html)
+
+
+## Rich Tables
+* [Docs for Tables](https://rich.readthedocs.io/en/stable/tables.html)
