@@ -4,10 +4,11 @@ from typing import *
 from rich import print
 from rich.console import Console
 from modules.Dictionary import (definition, say_aloud)
-from modules.Utils import add_tag
+from modules.Utils import add_tag, fetch_word_history
 from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import show_list
+
 
 
 
@@ -17,6 +18,7 @@ print_banner(console)
 
 # initialize the database with the tables if not already existing
 initializeDB()
+
 
 
 # app configuration

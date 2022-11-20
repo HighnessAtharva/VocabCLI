@@ -1,11 +1,21 @@
-from random_word import RandomWords
+import os
+import json
+import requests
+from playsound import playsound
+from pathlib import Path
+from requests import exceptions
 from typing import *
 from datetime import datetime
 from rich import print
-
+from rich.panel import Panel
+from random_word import RandomWords
 from Database import createConnection, createTables
+from rich.console import Console
+from rich.table import Table
+from Dictionary import connect_to_api, definition
 
-# todo @anay: add proper docstrings
+
+# todo @anay: add proper docstrings   ✅
 def fetch_word_history(word):
     """ Fetches all instances of timestamp for a word from the database 
 
@@ -24,37 +34,44 @@ def fetch_word_history(word):
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y %H:%M:%S')
             print(history)
-       
+            
 
-# todo @anay: add proper docstrings
+
+
+# todo @anay: add proper docstrings     ✅
+# todo @atharva: do not add the word to the database if the word defintion is unavailable in Dictionary  
 def add_tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
 
     Args:
-        query (str): _description_
-        tagName (Optional[str], optional): _description_. Defaults to None.
+        query (str): Word which is to be tagged.
+        tagName (Optional[str], optional): Tag name which is to be added to the word. Defaults to None.
     """
-    conn=createConnection()
-    c=conn.cursor()
-    if tagName:
-        sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
-        c.execute(sql, (query, datetime.now(), tagName))
-    if not tagName:
-        sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
-        c.execute(sql, (query, datetime.now()))
-    conn.commit()
+    if(type(connect_to_api(query))==dict):
+        conn=createConnection()
+        c=conn.cursor()
+        if tagName:
+            sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
+            c.execute(sql, (query, datetime.now(), tagName))
+        if not tagName:
+            sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
+            c.execute(sql, (query, datetime.now()))
+        conn.commit()
+        
+        print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
+
+ 
+
+
     
-    print(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]")
-  
-    
-# todo @anay: add proper docstrings
+# todo @anay: add proper docstrings     ✅
 def set_mastered(query: str):
     """
     Sets the word as mastered.
     
     Args:
-        query (str): _description_
+        query (str): Word which is to be set as mastered.
     """
     conn=createConnection()
     c=conn.cursor()
@@ -72,16 +89,16 @@ def set_mastered(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!")
     else:
         print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
-   
     
 
-# todo @anay: add proper docstrings
+
+# todo @anay: add proper docstrings      ✅
 def set_unmastered(query: str):
     """
     Sets the word as unmastered.
     
     Args:
-        query (str): _description_
+        query (str): Word which is to be set as unmastered.
     """
     conn=createConnection()
     c=conn.cursor()
@@ -100,6 +117,7 @@ def set_unmastered(query: str):
         print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
         
 
+
 # todo @anay: Write PyTest case for this function 
 def count_total_mastered():
     """
@@ -107,12 +125,12 @@ def count_total_mastered():
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT COUNT (DISTINCT word) FROM words WHERE mastered=1")
+    c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=1")
     rows=c.fetchall()
     count=rows[0][0]
     print(f"You have mastered [bold green]{count}[/bold green] words.")
    
-
+   
 # todo @anay: Write PyTest case for this function 
 def count_total_learning():
     """
@@ -123,10 +141,10 @@ def count_total_learning():
     c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=0")
     rows=c.fetchall()
     count=rows[0][0]
-    print(f"You are learning [bold green]{count}[/bold green] words")
+    print(f"You have [bold red]{count}[/bold red] words in your vocabulary builder list.")
+    
     
 
-   
 
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
 def get_random_word_definition_from_api():
@@ -138,107 +156,87 @@ def get_random_word_definition_from_api():
     definition(random_word)
             
 
-# todo @anay: add proper docstrings
+# todo @anay: add proper docstrings         ✅
 def get_random_word_from_learning_set(tag:Optional[str]=None):
     """Gets a random word from the vocabulary builder list.
 
     Args:
-        tag (Optional[str], optional): _description_. Defaults to None.
+        tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
     """
         
     conn=createConnection()
     c=conn.cursor()
     if tag:
-        c.execute("SELECT word FROM words WHERE tag=? AND mastered=0 ORDER BY RANDOM() LIMIT 1", (tag,))
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=0 ORDER BY RANDOM() LIMIT 1", (tag,))
     if not tag:
-        c.execute("SELECT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
+        c.execute("SELECT DISTINCT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print("You have mastered all the words in the vocabulary builder list.")
     else:
         for row in rows:
             print(f"A Random Word for You: {row[0]}")
-            definition(row[0])
+            # Uncomment the below line to get the definition of the word as well
+            # definition(row[0])
       
      
-# todo @anay: add proper docstrings       
+# todo @anay: add proper docstrings      ✅       
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """Gets a random word with definition from the mastered words list.
 
     Args:
-        tag (Optional[str], optional): _description_. Defaults to None.
+        tag (Optional[str], optional): Tag from which the mastered word should be. Defaults to None.
     """
     conn=createConnection()
     c=conn.cursor()
     if tag:
-        c.execute("SELECT word FROM words WHERE tag=? AND mastered=1 ORDER BY RANDOM() LIMIT 1", (tag,))
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1 ORDER BY RANDOM() LIMIT 1", (tag,))
     if not tag:
-        c.execute("SELECT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
+        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print("You have not mastered any words yet.")
     else:
         for row in rows:
             print(f"A Random Word for You: {row[0]}")
-            definition(row[0])
-            
-            
-# todo @anay: write function to select all words in the database
-# todo @anay: add proper docstrings 
-def show_list(favorite=False, learning=False, mastered=False, tag=False, date=False, last=None):
+            # Uncomment the below line to get the definition of the word as well
+            # definition(row[0])
+
+        
+
+          
+# todo @anay: write function to select all words in the database     ✅
+# todo @anay: add proper docstrings     ✅
+def show_list(tag=None, mastered=False, learning=False):
+    """Gets all the words in the vocabulary builder list.
+
+    Args:
+        tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
+        mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
+        learning (bool, optional): If True, gets list of learning words. Defaults to False.
+    """
     conn=createConnection()
     c=conn.cursor()
-    def show_favorite_list():
-        c.execute("SELECT word FROM words WHERE favorite=1")
-        rows=c.fetchall()
-        if len(rows) <= 0:
-            print("You have no favorite words yet.")
-        else:
-            for row in rows:
-                print(row[0]) 
+
+    if tag is not None and mastered:
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1", (tag,))
+    elif tag is not None and learning:
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=0", (tag,))
+    elif mastered:
+        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
+    elif learning:
+        c.execute("SELECT DISTINCT word FROM words WHERE mastered=0")
+    elif tag is not None:
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
+    else:
+        c.execute("SELECT DISTINCT word FROM words")
     
-    def show_learning_list():
-        c.execute("SELECT word FROM words WHERE mastered=1")
-        rows=c.fetchall()
-        if len(rows) <= 0:
-            print("You aren't learning any words currently.")
-        else:
-            for row in rows:
-                print(row[0]) 
-    
-    def show_mastered_list():
-        pass
-    
-    def show_tag_list():
-        pass
-    
-    def show_date_list():
-        pass
-    
-    def show_last_list(last=10):
-        pass
-    
-    if favorite:
-        show_favorite_list()
-    if learning:
-        show_learning_list()
-    if mastered:
-        show_mastered_list()
-    if tag:
-        show_tag_list()
-    if date:
-        show_date_list()
-    if last:
-        show_last_list(last)
-    
-    if(not favorite and not learning and not mastered and not tag and not date and not last):
-        # show all the words    
-        conn=createConnection()
-        c=conn.cursor()
-        c.execute("SELECT word FROM words")
-        rows=c.fetchall()
-        if len(rows) <= 0:
-            print("You have no favorite words yet.")
-        else:
-            for row in rows:
-                print(row[0]) 
+    rows=c.fetchall()
+    if len(rows) <= 0:
+        print("You have not searched any words yet.")
+    else:
+        for row in rows:
+            print(f"Word: {row[0]}")
+            
+
+
