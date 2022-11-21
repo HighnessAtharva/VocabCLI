@@ -48,20 +48,31 @@ def add_tag(query: str, tagName:Optional[str]=None):
         query (str): Word which is to be tagged.
         tagName (Optional[str], optional): Tag name which is to be added to the word. Defaults to None.
     """
-    if(type(connect_to_api(query))==dict):
-        conn=createConnection()
-        c=conn.cursor()
-        if tagName:
-            sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
-            c.execute(sql, (query, datetime.now(), tagName))
-        if not tagName:
-            sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
-            c.execute(sql, (query, datetime.now()))
-        conn.commit()
-        
-        print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
+     
+    # check if word definitions exists. If yes, add to database otherwise do not do anything. Don't even print anything.    
+    try:
+        response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
+        response.raise_for_status()
+            
+    except exceptions.HTTPError as error:
+        return
 
- 
+    else:
+        if response.status_code == 200:
+            
+            conn=createConnection()
+            c=conn.cursor()
+            if tagName:
+                sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
+                c.execute(sql, (query, datetime.now(), tagName))
+            if not tagName:
+                sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
+                c.execute(sql, (query, datetime.now()))
+            conn.commit()
+
+            print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
+
+add_tag("golden","mine")
 
 
     

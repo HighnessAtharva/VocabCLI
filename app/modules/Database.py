@@ -15,15 +15,17 @@ def createConnection():
 
 
 def createTables(conn: sqlite3.Connection):
-    words=""" CREATE TABLE IF NOT EXISTS "words" (
+    words="""CREATE TABLE IF NOT EXISTS "words" (
 	"word"	TEXT,
 	"datetime"	timestamp NOT NULL UNIQUE,
 	"tag"	TEXT,
 	"mastered"	INTEGER NOT NULL DEFAULT 0,
+	"learning"	INTEGER NOT NULL DEFAULT 0,
 	"favorite"	INTEGER NOT NULL DEFAULT 0
 );
     """
     
+ 
     try:
         c = conn.cursor()
         c.execute(words)

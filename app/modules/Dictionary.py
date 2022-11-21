@@ -69,7 +69,7 @@ def phonetic(query: str):
                 
 # todo @anay: add proper docstrings     ✅
 # todo @anay: Refer typer/rich docs and add table formatting to the output    ✅  
-# FIXME @atharva: If definition is not available, message "we do not have the definition for that word" is being printed twice 🐞
+# FIXME @atharva: If definition is not available, message "we do not have the definition for that word" is being printed twice ✅ 
 # FIXME @atharva: For parts of Speech all defintions are not being printed or being printed more than once. Table formatting is right. Check indentation and loops 🐞
 
 def definition(query:str, short:Optional[bool]=False):
@@ -102,19 +102,19 @@ def definition(query:str, short:Optional[bool]=False):
     if not short:
         
         for meaningNumber in response["meanings"]:
-            print(Panel(f"Part of Speech:[bold blue] {meaningNumber['partOfSpeech']} [/bold blue]" ))
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):
+                print(Panel(f"Part of Speech:[bold blue] {meaningNumber['partOfSpeech']} [/bold blue]" ))
                 table=Table(show_header=True, header_style="bold magenta")
                 table.add_column("Sr. No.", style="dim", width=12)
                 table.add_column("Definition", style="dim")
                 table.add_row(f"{count}.", meaning["definition"])
                 
-            table.add_section()    
-            console = Console()
-            console.print(table)
+                table.add_section()    
+        console = Console()
+        console.print(table)
         print("\n")  
   
-      
+definition("hello", short=True)   
 
 
         
