@@ -27,12 +27,15 @@ def fetch_word_history(word):
     c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
     rows=c.fetchall()
     if len(rows) <= 0:
-        print("You have not searched for this word before.")
+        print("[bold red]You have not searched for this word before.[/bold red]")
     else:
         count=len(rows)
-        print(f"You have searched for [bold]{word}[/bold] {count} times before.")
+        if count==1:
+            print(f"You have searched for [bold]{word}[/bold] {count} time before.")
+        else:
+            print(f"You have searched for [bold]{word}[/bold] {count} times before.")
         for row in rows:
-            history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%m/%d/%Y %H:%M:%S')
+            history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y %H:%M:%S')
             print(history)
             
 
@@ -72,9 +75,6 @@ def add_tag(query: str, tagName:Optional[str]=None):
 
             print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
 
-
-
-
     
 # todo @anay: add proper docstrings     ✅
 def set_mastered(query: str):
@@ -87,6 +87,12 @@ def set_mastered(query: str):
     conn=createConnection()
     c=conn.cursor()
     
+    # check if word is set to learning
+    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
+    if c.fetchone():
+        c.execute("UPDATE words SET learning=0 WHERE word=?", (query,))
+    
+    
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
     if c.fetchone():
@@ -98,9 +104,7 @@ def set_mastered(query: str):
     if c.rowcount > 0:
         conn.commit()
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!")
-    else:
-        print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
-    
+
 
 
 # todo @anay: add proper docstrings      ✅
@@ -124,11 +128,116 @@ def set_unmastered(query: str):
     if c.rowcount > 0:
         conn.commit()
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it.")
-    else:
-        print(f"[bold blue]{query}[/bold blue] not in vocabulary builder list. Please look it up first. ")
+
         
 
+def set_learning(query: str):
+    """
+    Sets the word as learning.
+    
+    Args:
+        query (str): Word which is to be set as learning.
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    
 
+    # check if word is already mastered
+    c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
+    if c.fetchone():
+        # TODO add a typer prompt to ask if the user wants to move word from mastered to learning
+        c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
+        
+    
+    
+    # check if word is already learning
+    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
+    if c.fetchone():
+        print(f"[bold blue]{query}[/bold blue] is already marked as learning.")
+        return
+    
+    c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
+    if c.rowcount > 0:
+        conn.commit()
+        print(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!")
+
+
+
+def set_unlearning(query: str):
+    """
+    Sets the word as unlearning.
+    
+    Args:
+        query (str): Word which is to be set as unlearning.
+    """
+    conn=createConnection()
+    c=conn.cursor()
+        
+    # check if word is not already unlearned
+    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 0))
+    if c.fetchone():
+        print(f"[bold blue]{query}[/bold blue] was never learning.")
+        return    
+        
+    # check if word is already learning
+    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
+    if c.fetchone():
+        c.execute("UPDATE words SET learning=0 WHERE word=?", (query,))
+        
+    if c.rowcount > 0:
+        conn.commit()
+        print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red].")    
+
+
+
+def set_favorite(query: str):
+    """
+    Sets the word as favorite.
+    
+    Args:
+        query (str): Word which is to be set as favorite.
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    
+    # check if word is already favorite
+    c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 1))
+    if c.fetchone():
+        print(f"[bold blue]{query}[/bold blue] is already marked as favorite.")
+        return
+    
+    c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
+    if c.rowcount > 0:
+        conn.commit()
+        print(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green].")
+
+
+    
+def set_unfavorite(query:str):
+    """
+    Remove the word from favorite list.
+    
+    Args:
+        query (str): Word which is to be removed from favorite.
+    """
+    conn=createConnection()
+    c=conn.cursor()
+        
+    # check if word was never favorited
+    c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 0))
+    if c.fetchone():
+        print(f"[bold blue]{query}[/bold blue] was never favorite.")
+        return    
+        
+    # set word to favorite
+    c.execute("UPDATE words SET favorite=0 WHERE word=?", (query,))
+        
+    if c.rowcount > 0:
+        conn.commit()
+        print(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red].")   
+        
+
+    
 # todo @anay: Write PyTest case for this function 
 def count_total_mastered():
     """
@@ -140,6 +249,7 @@ def count_total_mastered():
     rows=c.fetchall()
     count=rows[0][0]
     print(f"You have mastered [bold green]{count}[/bold green] words.")
+   
    
    
 # todo @anay: Write PyTest case for this function 
@@ -218,36 +328,88 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
           
 # todo @anay: write function to select all words in the database     ✅
 # todo @anay: add proper docstrings     ✅
-def show_list(tag=None, mastered=False, learning=False):
-    """By default gets all the words in the vocabulary builder list. Otherwise, gets the words based on the arguments passed.
-
+# FIXME : debug only tag argument   
+def show_list(favorite=False,learning=False, mastered=False, tag=None, date=None, last=10):
+    """Gets all the words in the vocabulary builder list.
+    
     Args:
-        tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
-        mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
+        favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
         learning (bool, optional): If True, gets list of learning words. Defaults to False.
+        mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
+        tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
+        date (string, optional): Get a list of words from a particular date. Defaults to None.
+        last (string, optional):"Get a list of n last searched words. Defaults to 10.
     """
     conn=createConnection()
     c=conn.cursor()
 
-    if tag is not None and mastered:
+    if tag and mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1", (tag,))
-    elif tag is not None and learning:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=0", (tag,))
+        error_message="You have not mastered any words with this tag yet."
+    elif tag and learning:
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND learning=1", (tag,))
+        error_message="You have not added any words with this tag to the vocabulary builder list yet."
+    elif tag and favorite:
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND favorite=1", (tag,))
+        error_message="You have not added any words with this tag to the favorite list yet."
     elif mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
+        error_message="You have not mastered any words yet."
     elif learning:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=0")
-    elif tag is not None:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
+        c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
+        error_message="You have not added any words to the learning list yet."
+    elif favorite:
+        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
+        error_message="You have not added any words to the favorite list yet."
+    elif date:
+        c.execute("SELECT DISTINCT word FROM words WHERE datetime=?", (date,))
+        error_message="No records found within this date range"
+    elif last:
+        c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
+        error_message="You haven't searched for any words yet."
+    elif tag:
+        c.execute("SELECT word FROM words WHERE tag=?", (tag,))
+        error_message="No words found with this tag."
+    # default case when no arguments are passed
+    # elif tag==None and mastered==False and learning==False and favorite==False and date==None and last==10:
+    #     c.execute("SELECT DISTINCT word FROM words")
+    #     error_message="You haven't searched for any words yet."
     else:
-        c.execute("SELECT DISTINCT word FROM words")
+        error_message="Invalid arguments passed. You cannot pair those together. "
+        
+    
     
     rows=c.fetchall()
     if len(rows) <= 0:
-        print("You have not searched any words yet.")
+        print(error_message)
     else:
         for row in rows:
             print(f"Word: {row[0]}")
-            
+    
+# todo - @atharva: function to delete all word from the database
+def delete_all():
+    pass
+
+# todo - @atharva: function to delete mastered words from the database
+def delete_mastered():
+    pass
+
+# todo - @atharva: function to delete learning words from the database
+def delete_learning():
+    pass
+
+# todo - @atharva: function to delete favorite words from the database
+def delete_favorite():
+    pass
+
+# todo - @atharva: function to delete words of the last n days from the database
+def delete_days(days: int):
+    pass
+
+
+# todo - @atharva: function to delete words from a particular tag from the database
+def delete_words_from_tag(tag: str):
+    pass
+
 
 
