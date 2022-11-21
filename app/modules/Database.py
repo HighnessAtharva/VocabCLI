@@ -39,9 +39,7 @@ def initializeDB():
     
     
 
-            
-    
-
+        
 
 
     

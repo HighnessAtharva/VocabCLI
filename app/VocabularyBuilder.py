@@ -30,6 +30,8 @@ app = typer.Typer(
 )
 
 
+
+
 # add the commands
 @app.command()
 def bye():
@@ -72,14 +74,6 @@ def define(
 
 
 # todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
-# by default export all words in a csv file
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# -t, --tag TAGNAME: export words of a particular tag
-# -l, --learning: export words from the learning list
-# -m, --mastered: export words from the mastered list
-# -f, --favorite: export words from the favorite list
-# -d, --date DATE: export words from a particular date
-# --most INT: export the most searched words (INT is the number of words to display)
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Get a list of all your looked up words.[/bold blue]")
 def list(
@@ -88,7 +82,8 @@ def list(
     mastered: Optional[bool] = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
     date: Optional[str] = typer.Option(None, "--date", "-d", help="Get a list of words from a particular date."),
-    last: Optional[str] = typer.Option(10, "--last", "-L", help="Get a list of last searched words.")
+    last: Optional[str] = typer.Option(10, "--last", "-L", help="Get a list of last searched words."),
+    most: Optional[str] = typer.Option(10, "--most", "-M", help="Get a list of most searched words."),
 ):
     
     if favorite:
@@ -105,35 +100,17 @@ def list(
         show_list(last=last)
     else:
         show_list(favorite=False, learning=False, mastered=False, tag=False, date=False, last=None)    
-        
-# Make use of the following functions that you will be writing in Dictionary.py
-# get_all_words()
-# get_words_of_tag()
-# get_words_from_learning_list()
-# get_words_from_mastered_list()
-
-    
+            
     
 # todo @anay: add export command to export the word list
-# by default export all words in a csv file
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# -t, --tag TAGNAME: export words of a particular tag
-# -l, --learning: export words from the learning list
-# -m, --mastered: export words from the mastered list
-# -f, --favorite: export words from the favorite list
-# -d, --date DATE: export words from a particular date
-# -to-csv (default): export to csv file
-# -to-PDF: export to PDF file
+# --to-csv (default): export to csv file
+# --to-PDF: export to PDF file
 
 
 # todo @anay: add a command to import the word list
 # by default import all words in a csv file
 # OPTIONS/FLAGS will be (two or more can be used at once):
-# -t, --tag TAGNAME: import words of a particular tag
-# -l, --learning: import words from the learning list
-# -m, --mastered: import words from the mastered list
-# -f, --favorite: import words from the favorite list
-# -d, --date DATE: import words from a particular date
+
 
 
 # todo @anay: add a command to set word as favorite
