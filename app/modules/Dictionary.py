@@ -83,14 +83,13 @@ def definition(query:str, short:Optional[bool]=False):
     if not (response := connect_to_api(query)):
         return 0
     
-    print(Panel(f"[bold red]{query}[/bold red]"))
-    print(Panel(phonetic(query)))
-    print(Panel("[bold]DEFINITION: [/bold]"))
+    print(Panel(f"[bold green]{query}[/bold green]\n{phonetic(query)}"))
     
+    table=Table(show_header=True, header_style="bold bright_cyan")
+    table.add_column("Part of Speech", style="cyan", width=15)
+    table.add_column("Definition", style="light_green")
+            
     if short:
-        table=Table(show_header=True, header_style="bold magenta")
-        table.add_column("Part of Speech", style="dim", width=12)
-        table.add_column("Definition", style="dim")
         for meaningNumber in response["meanings"]:
             for meaning in meaningNumber["definitions"][:1]:
                 table.add_row(meaningNumber["partOfSpeech"], meaning["definition"])
@@ -99,16 +98,12 @@ def definition(query:str, short:Optional[bool]=False):
         console.print(table)
                 
     if not short:
-        table=Table(show_header=True, header_style="bold magenta")
-        table.add_column("Part of Speech", style="dim", width=15)
-        table.add_column("Definition", style="dim")
         for meaningNumber in response["meanings"]:
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):    
-                table.add_row(f"[bold blue] {meaningNumber['partOfSpeech']} [/bold blue]", f"{count}. {meaning['definition']}")    
+                table.add_row(f"{meaningNumber['partOfSpeech']}", f"{count}. {meaning['definition']}")    
             table.add_section()    
         console = Console()
         console.print(table)
-        print("\n")  
   
 
 
