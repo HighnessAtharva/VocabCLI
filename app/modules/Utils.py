@@ -72,7 +72,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
 
             print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
 
-add_tag("golden","mine")
+
 
 
     
@@ -219,7 +219,7 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
 # todo @anay: write function to select all words in the database     ✅
 # todo @anay: add proper docstrings     ✅
 def show_list(tag=None, mastered=False, learning=False):
-    """Gets all the words in the vocabulary builder list.
+    """By default gets all the words in the vocabulary builder list. Otherwise, gets the words based on the arguments passed.
 
     Args:
         tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.

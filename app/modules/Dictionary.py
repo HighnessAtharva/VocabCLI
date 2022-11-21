@@ -70,7 +70,7 @@ def phonetic(query: str):
 # todo @anay: add proper docstrings     ✅
 # todo @anay: Refer typer/rich docs and add table formatting to the output    ✅  
 # FIXME @atharva: If definition is not available, message "we do not have the definition for that word" is being printed twice ✅ 
-# FIXME @atharva: For parts of Speech all defintions are not being printed or being printed more than once. Table formatting is right. Check indentation and loops 🐞
+# FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 
 def definition(query:str, short:Optional[bool]=False):
     """
@@ -88,33 +88,28 @@ def definition(query:str, short:Optional[bool]=False):
     print(Panel("[bold]DEFINITION: [/bold]"))
     
     if short:
-
+        table=Table(show_header=True, header_style="bold magenta")
+        table.add_column("Part of Speech", style="dim", width=12)
+        table.add_column("Definition", style="dim")
         for meaningNumber in response["meanings"]:
-            table=Table(show_header=True, header_style="bold magenta")
             for meaning in meaningNumber["definitions"][:1]:
-                table.add_column("Part of Speech", style="dim", width=12)
-                table.add_column("Definition", style="dim")
                 table.add_row(meaningNumber["partOfSpeech"], meaning["definition"])
-        table.add_section() 
+            table.add_section() 
         console = Console()
         console.print(table)
                 
     if not short:
-        
+        table=Table(show_header=True, header_style="bold magenta")
+        table.add_column("Part of Speech", style="dim", width=15)
+        table.add_column("Definition", style="dim")
         for meaningNumber in response["meanings"]:
-            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                print(Panel(f"Part of Speech:[bold blue] {meaningNumber['partOfSpeech']} [/bold blue]" ))
-                table=Table(show_header=True, header_style="bold magenta")
-                table.add_column("Sr. No.", style="dim", width=12)
-                table.add_column("Definition", style="dim")
-                table.add_row(f"{count}.", meaning["definition"])
-                
-                table.add_section()    
+            for count, meaning in enumerate(meaningNumber["definitions"], start=1):    
+                table.add_row(f"[bold blue] {meaningNumber['partOfSpeech']} [/bold blue]", f"{count}. {meaning['definition']}")    
+            table.add_section()    
         console = Console()
         console.print(table)
         print("\n")  
   
-definition("hello", short=True)   
 
 
         
