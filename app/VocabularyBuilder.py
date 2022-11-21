@@ -8,6 +8,8 @@ from modules.Utils import add_tag, fetch_word_history
 from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import show_list
+from modules.Utils import export_to_csv
+from modules.Utils import export_to_pdf
 
 
 # TODO : find a way to print the banner only once when the app is launched. Currently it is printed everytime a command is executed.
@@ -98,9 +100,18 @@ def list(
         show_list()    
             
     
-# todo @anay: add export command to export the word list
+# todo @anay: add export command to export the word list    ✅
 # --to-csv (default): export to csv file
 # --to-PDF: export to PDF file
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Exports a list of all your looked up words.[/bold blue]")
+def export(
+    pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
+):
+
+    if pdf:
+        export_to_pdf()
+    else:
+        export_to_csv()
 
 
 # todo @anay: add a command to import the word list
