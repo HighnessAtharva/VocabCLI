@@ -414,3 +414,8 @@ def delete_words_from_tag(tag: str):
 
 
 
+def export_to_csv():
+    pass
+
+def export_to_pdf():
+    pass

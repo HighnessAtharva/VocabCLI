@@ -41,7 +41,7 @@ def connect_to_api(query:str="hello"):
             return response.json()[0]
  
  
-# todo @anay: add proper docstrings    ✅
+# @anay: add proper docstrings    ✅
 def phonetic(query: str):
     """
     Prints the phonetic of the word.
