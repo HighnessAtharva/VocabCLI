@@ -15,8 +15,8 @@ from rich.table import Table
 from Dictionary import connect_to_api, definition
 
 
-# todo @anay: add proper docstrings   ✅
-def fetch_word_history(word):
+# @anay: add proper docstrings   ✅
+def fetch_word_history(word: str):
     """ Fetches all instances of timestamp for a word from the database 
 
     Args:
@@ -41,8 +41,8 @@ def fetch_word_history(word):
 
 
 
-# todo @anay: add proper docstrings     ✅
-# todo @atharva: do not add the word to the database if the word defintion is unavailable in Dictionary  
+# @anay: add proper docstrings     ✅
+# @atharva: do not add the word to the database if the word defintion is unavailable in Dictionary  ✅
 def add_tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
@@ -75,8 +75,9 @@ def add_tag(query: str, tagName:Optional[str]=None):
 
             print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
 
+
     
-# todo @anay: add proper docstrings     ✅
+# @anay: add proper docstrings     ✅
 def set_mastered(query: str):
     """
     Sets the word as mastered.
@@ -87,17 +88,17 @@ def set_mastered(query: str):
     conn=createConnection()
     c=conn.cursor()
     
-    # check if word is set to learning
-    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
-    if c.fetchone():
-        c.execute("UPDATE words SET learning=0 WHERE word=?", (query,))
-    
-    
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
     if c.fetchone():
         print(f"[bold blue]{query}[/bold blue] is already marked as mastered.")
         return
+    
+    
+    # check if word is set to learning
+    c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
+    if c.fetchone():
+        c.execute("UPDATE words SET learning=0 WHERE word=?", (query,))
     
     
     c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
@@ -107,7 +108,7 @@ def set_mastered(query: str):
 
 
 
-# todo @anay: add proper docstrings      ✅
+# @anay: add proper docstrings ✅
 def set_unmastered(query: str):
     """
     Sets the word as unmastered.
@@ -130,7 +131,7 @@ def set_unmastered(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it.")
 
         
-
+# todo @anay: Write PyTest case for this function 
 def set_learning(query: str):
     """
     Sets the word as learning.
@@ -162,7 +163,7 @@ def set_learning(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!")
 
 
-
+# todo @anay: Write PyTest case for this function 
 def set_unlearning(query: str):
     """
     Sets the word as unlearning.
@@ -189,7 +190,7 @@ def set_unlearning(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red].")    
 
 
-
+# todo @anay: Write PyTest case for this function 
 def set_favorite(query: str):
     """
     Sets the word as favorite.
@@ -212,7 +213,7 @@ def set_favorite(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green].")
 
 
-    
+# todo @anay: Write PyTest case for this function   
 def set_unfavorite(query:str):
     """
     Remove the word from favorite list.
@@ -277,7 +278,7 @@ def get_random_word_definition_from_api():
     definition(random_word)
             
 
-# todo @anay: add proper docstrings         ✅
+# @anay: add proper docstrings         ✅
 def get_random_word_from_learning_set(tag:Optional[str]=None):
     """Gets a random word from the vocabulary builder list.
 
@@ -301,7 +302,7 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
             # definition(row[0])
       
      
-# todo @anay: add proper docstrings      ✅       
+# @anay: add proper docstrings      ✅       
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """Gets a random word with definition from the mastered words list.
 
@@ -326,10 +327,10 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
         
 
           
-# todo @anay: write function to select all words in the database     ✅
-# todo @anay: add proper docstrings     ✅
-# FIXME : debug only tag argument   
-def show_list(favorite=False,learning=False, mastered=False, tag=None, date=None, last=10):
+# @anay: write function to select all words in the database     ✅
+# @anay: add proper docstrings     ✅
+# FIXME @atharva: debug only tag argument 🐞
+def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=1, last:Optional[int]=10):
     """Gets all the words in the vocabulary builder list.
     
     Args:

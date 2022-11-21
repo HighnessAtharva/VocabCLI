@@ -67,8 +67,8 @@ def phonetic(query: str):
                 
                 
                 
-# todo @anay: add proper docstrings     ✅
-# todo @anay: Refer typer/rich docs and add table formatting to the output    ✅  
+# @anay: add proper docstrings     ✅
+# @anay: Refer typer/rich docs and add table formatting to the output    ✅  
 # FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 
 def definition(query:str, short:Optional[bool]=False):
@@ -107,7 +107,7 @@ def definition(query:str, short:Optional[bool]=False):
 
 
         
-# todo @anay: add proper docstrings    ✅    
+# @anay: add proper docstrings    ✅    
 def say_aloud(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.

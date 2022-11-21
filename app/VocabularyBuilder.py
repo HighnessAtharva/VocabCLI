@@ -10,8 +10,7 @@ from modules.Banner import print_banner
 from modules.Utils import show_list
 
 
-
-
+# TODO : find a way to print the banner only once when the app is launched. Currently it is printed everytime a command is executed.
 console = Console(record=False, color_system="truecolor")
 print_banner(console)   
 
@@ -30,16 +29,14 @@ app = typer.Typer(
 )
 
 
-
-
 # add the commands
 @app.command()
-def bye():
+def exit():
     """
-    Say bye to the CLI
+    Exit the program
     """
     print(":wave: [bold green]Bye bye![/bold green]")
-
+    sys.exit(0)
 
 # todo @anay: write PyTest for this. Cover all cases/flags/arguments
 @app.command(rich_help_panel="Dictionary", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
@@ -57,11 +54,9 @@ def define(
     if short:
         definition(word, short=True)
 
-
     if not short:
         definition(word, short=False)
         
-    
     if pronounce:
         say_aloud(query=word)
         
@@ -74,7 +69,7 @@ def define(
 
 
 # todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
-
+# todo @anay: PyTest for this
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Get a list of all your looked up words.[/bold blue]")
 def list(
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
@@ -99,7 +94,8 @@ def list(
     if last:
         show_list(last=last)
     else:
-        show_list(favorite=False, learning=False, mastered=False, tag=False, date=False, last=None)    
+        # show all the words by default
+        show_list()    
             
     
 # todo @anay: add export command to export the word list

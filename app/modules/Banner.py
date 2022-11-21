@@ -3,6 +3,7 @@ from platform import system, platform
 from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
+from . import __app_name__, __version__
 
 
 def get_terminal_width() -> int:
@@ -38,7 +39,7 @@ def print_banner(console):
         ),
         width=width,
         height=height,
-        subtitle="[bold blue]by Atharva & Anay[/bold blue]",
+        subtitle=f"[bold blue]v.{__version__} by Atharva & Anay[/bold blue]",
     )
     console.print(panel)
 
