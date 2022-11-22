@@ -21,7 +21,7 @@ def createTables(conn: sqlite3.Connection):
 	"tag"	TEXT,
 	"mastered"	INTEGER NOT NULL DEFAULT 0,
 	"learning"	INTEGER NOT NULL DEFAULT 0,
-	"favorite"	INTEGER NOT NULL DEFAULT 0
+	"favorite"	INEGER NOT NULL DEFAULT 0
 );
     """
     
@@ -29,7 +29,7 @@ def createTables(conn: sqlite3.Connection):
     try:
         c = conn.cursor()
         c.execute(words)
-    except Error as e:
+    except SQLException as e:
         print(e)
    
     

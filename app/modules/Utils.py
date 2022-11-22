@@ -8,12 +8,13 @@ from typing import *
 from datetime import datetime
 from rich import print
 from rich.panel import Panel
+from rich.console import Console
 from random_word import RandomWords
 from Database import createConnection, createTables
 from rich.console import Console
 from rich.table import Table
 from Dictionary import connect_to_api, definition
-
+from Exceptions import *
 
 # @anay: add proper docstrings   ✅
 def fetch_word_history(word: str):
@@ -24,11 +25,12 @@ def fetch_word_history(word: str):
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
-    rows=c.fetchall()
-    if len(rows) <= 0:
-        print("[bold red]You have not searched for this word before.[/bold red]")
-    else:
+
+    try:
+        c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            raise WordNeverSearchedException
         count=len(rows)
         if count==1:
             print(f"You have searched for [bold]{word}[/bold] {count} time before.")
@@ -37,10 +39,10 @@ def fetch_word_history(word: str):
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y %H:%M:%S')
             print(history)
-            
-
-
-
+    except WordNeverSearchedException as e:
+        print(e)
+        
+        
 # @anay: add proper docstrings     ✅
 # @atharva: do not add the word to the database if the word defintion is unavailable in Dictionary  ✅
 def add_tag(query: str, tagName:Optional[str]=None):
@@ -49,7 +51,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
 
     Args:
         query (str): Word which is to be tagged.
-        tagName (Optional[str], optional): Tag name which is to be added to the word. Defaults to None.
+        tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.
     """
      
     # check if word definitions exists. If yes, add to database otherwise do not do anything. Don't even print anything.    
@@ -77,7 +79,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
 
 
     
-# @anay: add proper docstrings     ✅
+# @anay: add proper docstrings  ✅
 def set_mastered(query: str):
     """
     Sets the word as mastered.
@@ -201,6 +203,14 @@ def set_favorite(query: str):
     conn=createConnection()
     c=conn.cursor()
     
+    # check if word exists in the database
+    try:
+        c.execute("SELECT * FROM words WHERE word=?", (query,))
+        if not c.fetchone():
+            raise WordNeverSearchedException
+    except WordNeverSearchedException as e:
+        print(e)
+        
     # check if word is already favorite
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 1))
     if c.fetchone():
@@ -224,6 +234,14 @@ def set_unfavorite(query:str):
     conn=createConnection()
     c=conn.cursor()
         
+    # check if word exists in the database
+    try:
+        c.execute("SELECT * FROM words WHERE word=?", (query,))
+        if not c.fetchone():
+            raise WordNeverSearchedException
+    except WordNeverSearchedException as e:
+        print(e)
+        
     # check if word was never favorited
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 0))
     if c.fetchone():
@@ -236,7 +254,7 @@ def set_unfavorite(query:str):
     if c.rowcount > 0:
         conn.commit()
         print(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red].")   
-        
+ 
 
     
 # todo @anay: Write PyTest case for this function 
@@ -251,6 +269,7 @@ def count_total_mastered():
     count=rows[0][0]
     print(f"You have mastered [bold green]{count}[/bold green] words.")
    
+
    
    
 # todo @anay: Write PyTest case for this function 
@@ -263,20 +282,20 @@ def count_total_learning():
     c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=0")
     rows=c.fetchall()
     count=rows[0][0]
-    print(f"You have [bold red]{count}[/bold red] words in your vocabulary builder list.")
+    print(f"You have [bold blue]{count}[/bold blue] words in your vocabulary builder list.")
     
     
-
 
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
 def get_random_word_definition_from_api():
     """
     Gets a random word from the random-words package. 
     """
+    
     random_word=RandomWords().get_random_word()
-    print(f"A Random Word for You: {random_word}")
+    print(f"A Random Word for You: [bold green]{random_word}[/bold green]")
     definition(random_word)
-            
+     
 
 # @anay: add proper docstrings         ✅
 def get_random_word_from_learning_set(tag:Optional[str]=None):
@@ -294,14 +313,15 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print("You have mastered all the words in the vocabulary builder list.")
+        print("You have no words in your vocabulary builder learning list.")
     else:
         for row in rows:
-            print(f"A Random Word for You: {row[0]}")
+            print(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]")
             # Uncomment the below line to get the definition of the word as well
             # definition(row[0])
       
-     
+
+    
 # @anay: add proper docstrings      ✅       
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """Gets a random word with definition from the mastered words list.
@@ -320,11 +340,10 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
         print("You have not mastered any words yet.")
     else:
         for row in rows:
-            print(f"A Random Word for You: {row[0]}")
+            print(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]")
             # Uncomment the below line to get the definition of the word as well
             # definition(row[0])
 
-        
 
           
 # @anay: write function to select all words in the database     ✅
@@ -346,47 +365,71 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
 
     if tag and mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1", (tag,))
-        error_message="You have not mastered any words with this tag yet."
+        success_message=f"[bold green]Mastered[/bold green] words with tag [bold green]{tag}[/bold green] are:"
+        error_message="You have not mastered any words with this tag yet. ❌"
+
     elif tag and learning:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND learning=1", (tag,))
-        error_message="You have not added any words with this tag to the vocabulary builder list yet."
+        success_message=f"[bold blue]Learning[/bold blue] words with tag [bold blue]{tag}[/bold blue] are:"
+        error_message="You have not added any words with this tag to the vocabulary builder list yet. ❌"
+
     elif tag and favorite:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND favorite=1", (tag,))
-        error_message="You have not added any words with this tag to the favorite list yet."
+        success_message=f"[bold gold1]Favorite[/bold gold1] words with tag [bold magenta]{tag}[/bold magenta] are:"
+        error_message="You have not added any words with this tag to the favorite list yet. ❌"
+
+    elif favorite and mastered:
+        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 AND mastered=1")
+        success_message = "[bold green]Mastered[/bold green] [bold gold1]Favorite[/bold gold1] words are:"
+        error_message="You do not mastered words that are set as favorite ❌"
+
+    elif favorite and learning:
+        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 AND learning=1")
+        success_message = "[bold blue]Learning[/bold blue] [bold gold1]Favorite[/bold gold1] words are:"
+        error_message="You do not have any learning words that are set as favorite ❌"
+
     elif mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
-        error_message="You have not mastered any words yet."
+        success_message = "[bold green]Mastered[/bold green] words are:"
+        error_message="You have not [bold green]mastered[/bold green] any words yet. ❌"
+
     elif learning:
         c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
-        error_message="You have not added any words to the learning list yet."
+        success_message="[bold blue]Learning[/bold blue] words are:"
+        error_message="You have not added any words to the [bold blue]learning list[/bold blue] yet. ❌"
+
     elif favorite:
         c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
-        error_message="You have not added any words to the favorite list yet."
+        success_message="[bold gold1]Favorite[/bold gold1] words are:"
+        error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
+
     elif date:
         c.execute("SELECT DISTINCT word FROM words WHERE datetime=?", (date,))
-        error_message="No records found within this date range"
+        success_message=f"Words searched on [bold blue]{date}[/bold blue] are:"
+        error_message="No records found within this date range ❌"
+
     elif last:
         c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
-        error_message="You haven't searched for any words yet."
+        success_message=f"Last [bold blue]{last}[/bold blue] words searched are:"
+        error_message="You haven't searched for any words yet. ❌"
+
     elif tag:
-        c.execute("SELECT word FROM words WHERE tag=?", (tag,))
-        error_message="No words found with this tag."
-    # default case when no arguments are passed
-    # elif tag==None and mastered==False and learning==False and favorite==False and date==None and last==10:
-    #     c.execute("SELECT DISTINCT word FROM words")
-    #     error_message="You haven't searched for any words yet."
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
+        success_message=f"Words with tag [bold magenta]{tag}[/bold magenta] are:"
+        error_message=f"No words found with the tag {tag}. ❌"
+
     else:
         error_message="Invalid arguments passed. You cannot pair those together. "
-        
-    
-    
+
     rows=c.fetchall()
     if len(rows) <= 0:
         print(error_message)
     else:
+        print(success_message)
         for row in rows:
-            print(f"Word: {row[0]}")
-    
+            print(row[0])
+            
+
 # todo - @atharva: function to delete all word from the database
 def delete_all():
     pass

@@ -10,6 +10,7 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
+from Exceptions import *
 
 
 def connect_to_api(query:str="hello"):
@@ -31,7 +32,7 @@ def connect_to_api(query:str="hello"):
         print("[bold red]Error: You are not connected to the internet.[/bold red]")
     
     except exceptions.HTTPError as error:
-        print("[bold red]We do not have the definition for that word[/bold red]")
+        print("[bold red]Could not find that word in the dictionary[/bold red]")
         
     except exceptions.Timeout as error:
         print("[bold red]Error: Timeout[/bold red]")
@@ -118,17 +119,22 @@ def say_aloud(query: str):
     """
     if not (response := connect_to_api(query)):
         return
-    if len(response["phonetics"])==0:
-        print("Audio Unavailable")
-    else:
+
+    try:
+        if len(response["phonetics"])==0:
+            raise AudioUnavailableException
+        
         phonetic = response["phonetics"][0] if "phonetics" in response else "phonetics not available"
         audioURL=phonetic["audio"] if "audio" in phonetic else None
-        if audioURL not in [None, ""]:
-            audio = requests.get(audioURL, allow_redirects=True)
-            open(f'{query}.mp3', 'wb').write(audio.content)
-            playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
-           
-            print("Audio played")
-            os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
-        else:
-            print("Audio Unavailable")
+        
+        if audioURL in [None, ""]:
+            raise AudioUnavailableException
+
+        audio = requests.get(audioURL, allow_redirects=True)
+        open(f'{query}.mp3', 'wb').write(audio.content)
+        playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
+        print("Audio played")
+        os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
+    
+    except AudioUnavailableException as e:
+        print(e)

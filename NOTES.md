@@ -7,3 +7,9 @@ Standard format for shorthand of command arguments *-l* for *--learning*
 Standard format for shorthand of command arguments *-d* for *--date*
 
 Date Time Format - %d/%m/%Y %H:%M:%S
+
+## Color Formats
+for errors: red
+for mastered words: green
+for favorite words: gold1
+for learning words: blue
