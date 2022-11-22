@@ -10,4 +10,8 @@ class AudioUnavailableException(Exception):
     def __init__(self):
         print("[bold red]Audio Unavailable[/bold red]")
     
+class NothingToDeleteException(Exception):
+    """raised when the user attempts to delete a word which is not present in the database."""
+    def __init__(self):
+        print("[bold red]Nothing to delete[/bold red]")
     

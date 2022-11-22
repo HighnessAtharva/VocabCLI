@@ -42,7 +42,7 @@ def connect_to_api(query:str="hello"):
             return response.json()[0]
  
  
-# @anay: add proper docstrings    ✅
+# @anay: add proper docstrings ✅
 def phonetic(query: str):
     """
     Prints the phonetic of the word.
@@ -68,8 +68,8 @@ def phonetic(query: str):
                 
                 
                 
-# @anay: add proper docstrings     ✅
-# @anay: Refer typer/rich docs and add table formatting to the output    ✅  
+# @anay: add proper docstrings ✅
+# @anay: Refer typer/rich docs and add table formatting to the output ✅  
 # FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 
 def definition(query:str, short:Optional[bool]=False):

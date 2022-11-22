@@ -12,6 +12,13 @@ from modules.ImportExport import export_to_csv
 from modules.ImportExport import export_to_pdf
 from modules.ImportExport import import_from_csv
 
+# app configuration
+app = typer.Typer(
+    name="Vocabulary Builder",
+    add_completion=False,
+    rich_markup_mode="rich",
+    help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
+)
 
 # TODO : find a way to print the banner only once when the app is launched. Currently it is printed everytime a command is executed.
 console = Console(record=False, color_system="truecolor")
@@ -22,28 +29,15 @@ print_banner(console)
 initializeDB()
 
 
-
-# app configuration
-app = typer.Typer(
-    name="Vocabulary Builder",
-    add_completion=False,
-    rich_markup_mode="rich",
-    help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
-)
-
-
 # add the commands
-@app.command()
-def exit():
-    """
-    Exit the program
-    """
+@app.command(rich_help_panel="Options", help="📚 [bold red]Exits[/bold red] the CLI")
+def bye():
     print(":wave: [bold green]Bye bye![/bold green]")
     sys.exit(0)
 
 
 # todo @anay: write PyTest for this. Cover all cases/flags/arguments
-@app.command(rich_help_panel="Dictionary", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     word: str = typer.Argument(..., help="Word to search"),
     short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
@@ -74,7 +68,7 @@ def define(
 
 # todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
 # todo @anay: PyTest for this
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Get a list of all your looked up words.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
 def list(
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
     learning: Optional[bool] = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
@@ -105,78 +99,69 @@ def list(
 # @anay: add export command to export the word list     ✅
 # --to-csv (default): export to csv file
 # --to-PDF: export to PDF file
-@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports a list of all your looked up words.[/bold blue]")
-def Export(
+@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
+def export(
     pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
 
-    if pdf:
-        export_to_pdf()
-    else:
-        export_to_csv()
+    pass
 
 
 # @anay: add a command to import the word list     ✅
 # by default import all words in a csv file
 # OPTIONS/FLAGS will be (two or more can be used at once):
-@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Imports a list words in the application.[/bold blue]")
+@app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
 def Import():
-
     import_from_csv()
 
 
 # @anay: add a command to set word as favorite    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as favorite.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
     word: str = typer.Argument(..., help="Word to add to favorites."),
 ):
-
-    set_favorite()
+    set_favorite(word)
 
 
 # @anay: add a command to set word as unfavorite    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from favorites.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
 def unfavorite(
     word: str = typer.Argument(..., help="Word to remove from favorites"),
 ):
-
-    set_unfavorite()
+    set_unfavorite(word)
 
 
 # @anay: add a command to set word as learning    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as learning.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
     word: str = typer.Argument(..., help="Word to add to learning."),
 ):
-
-    set_learning()
+    set_learning(word)
 
 
 # @anay: add a command to set word as unlearning    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from learning.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
 def unlearn(
     word: str = typer.Argument(..., help="Word to remove from learning"),
 ):
-
-    set_unlearning()
+    set_unlearning(word)
 
 
 # @anay: add a command to set word as mastered    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as mastered.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
 def master(
     word: str = typer.Argument(..., help="Word to add to mastered."),
 ):
 
-    set_mastered()
+    set_mastered(word)
 
 
 # @anay: add a command to set word as unmastered    ✅
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from mastered.[/bold blue]")
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
 def unmaster(
     word: str = typer.Argument(..., help="Word to remove from mastered"),
 ):
-
-    set_unmastered()
+    set_unmastered(word)
 
 
 
@@ -195,12 +180,24 @@ def unmaster(
 
 
 # todo @atharva: add a command to delete a word 
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# DEFAULT: delete a specified word from the database
-# -t, --tag: delete all words of a particular tag
-# -l, --learning: delete all words from the learning list
-# -m, --mastered: delete all words from the mastered list
-# -f, --favorite: delete all words from the favorite list
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
+def delete(
+    words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
+    ):
+    for word in words:
+        delete_word(word)
+        
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")        
+def clear(
+    all: Optional[bool] = typer.Option(False, "--all", "-a", help="clear all words in all lists"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="clear all words in your learning list"),
+    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="clear all words in your mastered list"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="clear all words in your favorite list"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="clear all words with a particular tag"),
+):
+    pass
+    # need to make calls to actual functions
+
 
 
 # todo @atharva: add a command "about" to get software details. Banner, version, credits,

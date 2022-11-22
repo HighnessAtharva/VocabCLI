@@ -430,27 +430,89 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
             print(row[0])
             
 
-# todo - @atharva: function to delete all word from the database
+# @atharva: function to delete all word from the database
 def delete_all():
-    pass
+    """ Deletes all the words from the database. """
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("DELETE FROM words")
+    conn.commit()
+    print("All words [bold red]deleted[/bold red] from all your lists. ✅")
 
-# todo - @atharva: function to delete mastered words from the database
+# @atharva: function to delete mastered words from the database
 def delete_mastered():
-    pass
+    """ Deletes all the mastered words from the database. """
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("DELETE FROM words WHERE mastered=1")
+    conn.commit()
+    print("All [bold green]mastered[/bold green] words [bold red]deleted[/bold red] from your lists. ✅")
+    
 
-# todo - @atharva: function to delete learning words from the database
+# @atharva: function to delete learning words from the database
 def delete_learning():
-    pass
+    """Deletes all the learning words from the database."""
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("DELETE FROM words WHERE learning=1")
+    conn.commit()
+    print("All [bold blue]learning[/bold blue] words [bold red]deleted[/bold red] from your lists. ✅")
 
-# todo - @atharva: function to delete favorite words from the database
+# @atharva: function to delete favorite words from the database
 def delete_favorite():
-    pass
+    """Deletes all the favorite words from the database."""
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("DELETE FROM words WHERE favorite=1")
+    conn.commit()
+    print("All [bold gold1]favorite[/bold gold1] words [bold red]deleted[/bold red] from your lists. ✅")
 
-# todo - @atharva: function to delete words of the last n days from the database
+# @atharva: function to delete words from a particular tag from the database
+def delete_words_from_tag(tag: str):
+    """Deletes all the words from a particular tag from the database."""
+    conn.createConnection()
+    c=conn.cursor()
+    try:
+        c.execute("DELETE FROM words WHERE tag=?", (tag,))
+        if c.rowcount <= 0:
+            raise NothingToDeleteException(f"No words found with the tag {tag}. ❌")
+        conn.commit()
+        print(f"All words with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
+    except NothingToDeleteException as e:
+        print(e)
+    
+
+# todo @atharva: function to delete words of the last n days from the database
 def delete_days(days: int):
     pass
 
+def delete_word(query:str):
+    """Deletes a word from the database.
 
-# todo - @atharva: function to delete words from a particular tag from the database
-def delete_words_from_tag(tag: str):
-    pass
+    Args:
+        query (str): Word to be deleted
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("DELETE FROM words WHERE word=?", (query,))
+    if c.rowcount <= 0:
+        print("No such word found. ❌")
+    else:
+        conn.commit()
+        print(f"[bold red]Deleted[/bold red] {query} from your lists. ✅")
+        
+        
+# add_tag("temper")
+# add_tag("tantrum")
+# add_tag("envy")
+# add_tag("vice")
+        
+# delete_word("temper")
+
+# def delete_multiple(*words):
+#     print("Deleting multiple words...")
+#     for word in words:
+#         delete_word(word)
+    
+
+    
