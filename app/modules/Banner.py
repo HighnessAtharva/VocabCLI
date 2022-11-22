@@ -42,7 +42,3 @@ def print_banner(console):
         subtitle=f"[bold blue]v.{__version__} by Atharva & Anay[/bold blue]",
     )
     console.print(panel)
-
-
-
-

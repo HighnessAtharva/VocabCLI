@@ -36,11 +36,3 @@ def createTables(conn: sqlite3.Connection):
 def initializeDB():
     conn=createConnection()
     createTables(conn)
-    
-    
-
-        
-
-
-    
-    

@@ -454,11 +454,3 @@ def delete_days(days: int):
 # todo - @atharva: function to delete words from a particular tag from the database
 def delete_words_from_tag(tag: str):
     pass
-
-
-
-def export_to_csv():
-    pass
-
-def export_to_pdf():
-    pass

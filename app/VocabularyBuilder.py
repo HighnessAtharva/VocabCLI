@@ -7,9 +7,10 @@ from modules.Dictionary import (definition, say_aloud)
 from modules.Utils import add_tag, fetch_word_history
 from modules.Database import initializeDB
 from modules.Banner import print_banner
-from modules.Utils import show_list
-from modules.Utils import export_to_csv
-from modules.Utils import export_to_pdf
+from modules.Utils import *
+from modules.ImportExport import export_to_csv
+from modules.ImportExport import export_to_pdf
+from modules.ImportExport import import_from_csv
 
 
 # TODO : find a way to print the banner only once when the app is launched. Currently it is printed everytime a command is executed.
@@ -39,6 +40,7 @@ def exit():
     """
     print(":wave: [bold green]Bye bye![/bold green]")
     sys.exit(0)
+
 
 # todo @anay: write PyTest for this. Cover all cases/flags/arguments
 @app.command(rich_help_panel="Dictionary", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
@@ -100,11 +102,11 @@ def list(
         show_list()    
             
     
-# todo @anay: add export command to export the word list    ✅
+# @anay: add export command to export the word list     ✅
 # --to-csv (default): export to csv file
 # --to-PDF: export to PDF file
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Exports a list of all your looked up words.[/bold blue]")
-def export(
+@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports a list of all your looked up words.[/bold blue]")
+def Export(
     pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
 
@@ -114,13 +116,68 @@ def export(
         export_to_csv()
 
 
-# todo @anay: add a command to import the word list
+# @anay: add a command to import the word list     ✅
 # by default import all words in a csv file
 # OPTIONS/FLAGS will be (two or more can be used at once):
+@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Imports a list words in the application.[/bold blue]")
+def Import():
+
+    import_from_csv()
 
 
+# @anay: add a command to set word as favorite    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as favorite.[/bold blue]")
+def favorite(
+    word: str = typer.Argument(..., help="Word to add to favorites."),
+):
 
-# todo @anay: add a command to set word as favorite
+    set_favorite()
+
+
+# @anay: add a command to set word as unfavorite    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from favorites.[/bold blue]")
+def unfavorite(
+    word: str = typer.Argument(..., help="Word to remove from favorites"),
+):
+
+    set_unfavorite()
+
+
+# @anay: add a command to set word as learning    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as learning.[/bold blue]")
+def learn(
+    word: str = typer.Argument(..., help="Word to add to learning."),
+):
+
+    set_learning()
+
+
+# @anay: add a command to set word as unlearning    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from learning.[/bold blue]")
+def unlearn(
+    word: str = typer.Argument(..., help="Word to remove from learning"),
+):
+
+    set_unlearning()
+
+
+# @anay: add a command to set word as mastered    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Sets a word as mastered.[/bold blue]")
+def master(
+    word: str = typer.Argument(..., help="Word to add to mastered."),
+):
+
+    set_mastered()
+
+
+# @anay: add a command to set word as unmastered    ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Removes the word from mastered.[/bold blue]")
+def unmaster(
+    word: str = typer.Argument(..., help="Word to remove from mastered"),
+):
+
+    set_unmastered()
+
 
 
 # todo @atharva: add a command to get learning rate of the user
