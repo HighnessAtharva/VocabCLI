@@ -166,7 +166,7 @@ def set_unmastered(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it.")
 
         
-# todo @anay: Write PyTest case for this function 
+# @anay: add proper docstrings ✅
 def set_learning(query: str):
     """
     Sets the word as learning.
@@ -199,7 +199,7 @@ def set_learning(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!")
 
 
-# todo @anay: Write PyTest case for this function 
+# @anay: add proper docstrings ✅
 def set_unlearning(query: str):
     """
     Sets the word as unlearning.
@@ -230,7 +230,7 @@ def set_unlearning(query: str):
 
 
 
-# todo @anay: Write PyTest case for this function 
+
 def set_favorite(query: str):
     """
     Sets the word as favorite.
@@ -256,7 +256,7 @@ def set_favorite(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green].")
 
 
-# todo @anay: Write PyTest case for this function   
+   
 def set_unfavorite(query:str):
     """
     Remove the word from favorite list.
@@ -414,8 +414,8 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
 
           
 # @anay: write function to select all words in the database     ✅
-# @anay: add proper docstrings     ✅
-# todo @anay - decorate with Panels
+# @anay: add proper docstrings     
+# @anay - decorate with Panels     ✅     
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=1, last:Optional[int]=10):
     """Gets all the words in the vocabulary builder list.
@@ -488,6 +488,9 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
 
     else:
         error_message="Invalid arguments passed. You cannot pair those together. "
+        #c.execute("SELECT DISTINCT word FROM words")
+        #success_message="All words are:"
+        #error_message="You have not added any words to the vocabulary builder list yet. ❌"
 
     rows=c.fetchall()
     if len(rows) <= 0:
@@ -521,7 +524,7 @@ def delete_all():
 
 
 # @atharva: function to delete mastered words from the database ✅
-def delete_all_mastered():
+def delete_mastered():
     """ Deletes all the mastered words from the database. """
     conn=createConnection()
     c=conn.cursor()
@@ -539,7 +542,7 @@ def delete_all_mastered():
 
 
 # @atharva: function to delete learning words from the database ✅
-def delete_all_learning():
+def delete_learning():
     """Deletes all the learning words from the database."""
     conn=createConnection()
     c=conn.cursor()
@@ -557,7 +560,7 @@ def delete_all_learning():
 
 
 # @atharva: function to delete favorite words from the database
-def delete_all_favorite():
+def delete_favorite():
     """Deletes all the favorite words from the database."""
     conn=createConnection()
     c=conn.cursor()
@@ -613,3 +616,4 @@ def delete_word(query:str):
         print(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
         
 
+show_list()

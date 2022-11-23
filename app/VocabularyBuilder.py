@@ -4,13 +4,10 @@ from typing import *
 from rich import print
 from rich.console import Console
 from modules.Dictionary import (definition, say_aloud)
-from modules.Utils import add_tag, fetch_word_history
 from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import *
-from modules.ImportExport import export_to_csv
-from modules.ImportExport import export_to_pdf
-from modules.ImportExport import import_from_csv
+from modules.ImportExport import *
 
 # app configuration
 app = typer.Typer(
@@ -100,6 +97,7 @@ def list(
 
 
 # @anay: add a command to set word as favorite    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
     words: List[str] = typer.Argument(..., help="Word to add to favorites."),
@@ -109,6 +107,7 @@ def favorite(
 
 
 # @anay: add a command to set word as unfavorite    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
 def unfavorite(
     words: List[str] = typer.Argument(..., help="Word to remove from favorites"),
@@ -118,6 +117,7 @@ def unfavorite(
 
 
 # @anay: add a command to set word as learning    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
     words: List[str] = typer.Argument(..., help="Word to add to learning."),
@@ -127,6 +127,7 @@ def learn(
 
 
 # @anay: add a command to set word as unlearning    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
 def unlearn(
     words: List[str] = typer.Argument(..., help="Word to remove from learning"),
@@ -136,6 +137,7 @@ def unlearn(
 
 
 # @anay: add a command to set word as mastered    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
 def master(
     words: List[str] = typer.Argument(..., help="Word to add to mastered."),
@@ -145,6 +147,7 @@ def master(
 
 
 # @anay: add a command to set word as unmastered    ✅
+# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
 def unmaster(
     words: List[str] = typer.Argument(..., help="Word to remove from mastered"),
