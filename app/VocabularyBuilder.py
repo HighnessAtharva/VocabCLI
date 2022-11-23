@@ -96,23 +96,6 @@ def list(
         show_list()    
             
     
-# @anay: add export command to export the word list     ✅
-# --to-csv (default): export to csv file
-# --to-PDF: export to PDF file
-@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
-def export(
-    pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
-):
-
-    pass
-
-
-# @anay: add a command to import the word list     ✅
-# by default import all words in a csv file
-# OPTIONS/FLAGS will be (two or more can be used at once):
-@app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
-def Import():
-    import_from_csv()
 
 
 # @anay: add a command to set word as favorite    ✅
@@ -187,20 +170,47 @@ def delete(
     for word in words:
         delete_word(word)
         
+        
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")        
 def clear(
-    all: Optional[bool] = typer.Option(False, "--all", "-a", help="clear all words in all lists"),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="clear all words in your learning list"),
-    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="clear all words in your mastered list"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="clear all words in your favorite list"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="clear all words with a particular tag"),
+    all: Optional[bool] = typer.Option(False, "--all", "-a", help="Clear all words in all lists"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
+    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
 ):
-    pass
-    # need to make calls to actual functions
-
-
+    if all:
+        delete_all()
+    if learning:
+        delete_learning()
+    if master:
+        delete_mastered()
+    if favorite:
+        delete_favorite()
+    if tag:
+        delete_words_from_tag(tag)
+    else:
+        print("[bold red] you cannot combine options with clear command[/bold red]")
 
 # todo @atharva: add a command "about" to get software details. Banner, version, credits,
+
+
+# @anay: add export command to export the word list     ✅
+# --to-csv (default): export to csv file
+# --to-PDF: export to PDF file
+@app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
+def export(
+    pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
+):
+    pass
+
+
+# @anay: add a command to import the word list     ✅
+# by default import all words in a csv file
+# OPTIONS/FLAGS will be (two or more can be used at once):
+@app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
+def Import():
+    pass
 
 
 

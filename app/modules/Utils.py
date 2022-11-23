@@ -1,3 +1,4 @@
+import contextlib
 import os
 import json
 import requests
@@ -16,6 +17,16 @@ from rich.table import Table
 from Dictionary import connect_to_api, definition
 from Exceptions import *
 
+def check_word_exists(query: str):
+    conn= createConnection()
+    c=conn.cursor()
+    # check if word exists in the database
+    with contextlib.suppress(WordNeverSearchedException):
+        c.execute("SELECT * FROM words WHERE word=?", (query,))
+        if not c.fetchone():
+            raise WordNeverSearchedException(query)
+        
+        
 # @anay: add proper docstrings   ✅
 def fetch_word_history(word: str):
     """ Fetches all instances of timestamp for a word from the database 
@@ -68,14 +79,26 @@ def add_tag(query: str, tagName:Optional[str]=None):
             conn=createConnection()
             c=conn.cursor()
             if tagName:
-                sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
-                c.execute(sql, (query, datetime.now(), tagName))
+                # if word already exists in the database with no tags, then add the tag to add words
+                sql = "SELECT * FROM words WHERE word=? and tag is NULL"
+                c.execute(sql, (query,))
+                if c.fetchone():
+                    c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
+                    conn.commit()
+                    print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
+                    return
+                
+                # otherwise, insert the word with the tag for the first time
+                else:
+                    sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
+                    c.execute(sql, (query, datetime.now(), tagName))
+            
+            # if tagName is not provided then silently add the word to the database but do not print anything
             if not tagName:
                 sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
                 c.execute(sql, (query, datetime.now()))
             conn.commit()
-
-            print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
+            # print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
 
 
     
@@ -89,6 +112,9 @@ def set_mastered(query: str):
     """
     conn=createConnection()
     c=conn.cursor()
+    
+    # warn user if word is never looked up before
+    check_word_exists(query)
     
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
@@ -107,6 +133,7 @@ def set_mastered(query: str):
     if c.rowcount > 0:
         conn.commit()
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!")
+
 
 
 
@@ -144,14 +171,14 @@ def set_learning(query: str):
     conn=createConnection()
     c=conn.cursor()
     
-
+    # warn user if word is never looked up before
+    check_word_exists(query)
+    
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
     if c.fetchone():
         # TODO add a typer prompt to ask if the user wants to move word from mastered to learning
         c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
-        
-    
     
     # check if word is already learning
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
@@ -159,6 +186,7 @@ def set_learning(query: str):
         print(f"[bold blue]{query}[/bold blue] is already marked as learning.")
         return
     
+    # set word as learning
     c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
@@ -192,6 +220,7 @@ def set_unlearning(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red].")    
 
 
+
 # todo @anay: Write PyTest case for this function 
 def set_favorite(query: str):
     """
@@ -203,14 +232,9 @@ def set_favorite(query: str):
     conn=createConnection()
     c=conn.cursor()
     
-    # check if word exists in the database
-    try:
-        c.execute("SELECT * FROM words WHERE word=?", (query,))
-        if not c.fetchone():
-            raise WordNeverSearchedException
-    except WordNeverSearchedException as e:
-        print(e)
-        
+    # warn user if word is never looked up before
+    check_word_exists(query)
+            
     # check if word is already favorite
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 1))
     if c.fetchone():
@@ -256,35 +280,74 @@ def set_unfavorite(query:str):
         print(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red].")   
  
 
-    
-# todo @anay: Write PyTest case for this function 
-def count_total_mastered():
-    """
-    Counts the total number of words mastered.
-    """
-    conn=createConnection()
-    c=conn.cursor()
-    c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=1")
-    rows=c.fetchall()
-    count=rows[0][0]
-    print(f"You have mastered [bold green]{count}[/bold green] words.")
-   
+def count_all_words()->int:
+    """Counts the distinct number of words in the database
 
-   
-   
-# todo @anay: Write PyTest case for this function 
-def count_total_learning():
-    """
-    Counts the total number of words in vocabulary builder list that are not mastered
+    Returns:
+        int: Total word count
+    """   
+    conn=createConnection()
+    c=conn.cursor()
+    sql="SELECT DISTINCT word FROM words"
+    c.execute(sql)
+    rows=c.fetchall()
+    return len(rows)    
+
+    
+def count_mastered()->int:
+    """ Counts the distinct number of mastered words in the database
+
+    Returns:
+        int: Total mastered word count
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE mastered=0")
+    sql="SELECT DISTINCT word FROM words WHERE mastered=1"
+    c.execute(sql)
     rows=c.fetchall()
-    count=rows[0][0]
-    print(f"You have [bold blue]{count}[/bold blue] words in your vocabulary builder list.")
+    return len(rows)    
     
-    
+
+def count_learning()->int:
+    """ Counts the distinct number of learning words in the database
+
+    Returns:
+        int: Total learning word count
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    sql="SELECT DISTINCT word FROM words WHERE learning=1"
+    c.execute(sql)
+    rows=c.fetchall()
+    return len(rows)
+
+def count_favorite()->int:
+    """ Counts the distinct number of favorite words in the database
+
+    Returns:
+        int: Total favorite word count
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    sql="SELECT DISTINCT word FROM words WHERE favorite=1"
+    c.execute(sql)
+    rows=c.fetchall()
+    return len(rows)
+
+def count_tag(tag:str)->int:
+    """ Counts the distinct number of words in the database with a particular tag
+
+    Returns:
+        int: Total word count of specific tag
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    sql="SELECT DISTINCT word FROM words WHERE tag=?"
+    c.execute(sql, (tag,))
+    rows=c.fetchall()
+    return len(rows)
+
+
 
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
 def get_random_word_definition_from_api():
@@ -430,57 +493,95 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
             print(row[0])
             
 
-# @atharva: function to delete all word from the database
+# @atharva: function to delete all word from the database ✅
 def delete_all():
     """ Deletes all the words from the database. """
     conn=createConnection()
     c=conn.cursor()
+    rowcount=count_all_words()
+    if rowcount==0:
+        print("[bold red]Nothing to delete.[/bold red] Look up some words first.")
+        return
+    
     c.execute("DELETE FROM words")
     conn.commit()
-    print("All words [bold red]deleted[/bold red] from all your lists. ✅")
+    
+    print(f"All words[{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
 
-# @atharva: function to delete mastered words from the database
-def delete_mastered():
+
+
+# @atharva: function to delete mastered words from the database ✅
+def delete_all_mastered():
     """ Deletes all the mastered words from the database. """
     conn=createConnection()
     c=conn.cursor()
+    
+    rowcount=count_mastered()
+    if rowcount==0:
+        print("[bold red]No words in your mastered list.[/bold red] Add some first.")
+        return
+    
     c.execute("DELETE FROM words WHERE mastered=1")
     conn.commit()
-    print("All [bold green]mastered[/bold green] words [bold red]deleted[/bold red] from your lists. ✅")
-    
+    print(f"All [bold green]mastered[/bold green] words[{rowcount}] [bold red]deleted[/bold red] from your lists. ✅")
 
-# @atharva: function to delete learning words from the database
-def delete_learning():
+
+
+
+# @atharva: function to delete learning words from the database ✅
+def delete_all_learning():
     """Deletes all the learning words from the database."""
     conn=createConnection()
     c=conn.cursor()
+    
+    rowcount=count_learning()
+    if rowcount==0:
+        print("[bold red]No words in your learning list.[/bold red] Add some first.")
+        return
+    
     c.execute("DELETE FROM words WHERE learning=1")
     conn.commit()
-    print("All [bold blue]learning[/bold blue] words [bold red]deleted[/bold red] from your lists. ✅")
+    
+    print(f"All [bold blue]learning[/bold blue] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+
+
 
 # @atharva: function to delete favorite words from the database
-def delete_favorite():
+def delete_all_favorite():
     """Deletes all the favorite words from the database."""
     conn=createConnection()
     c=conn.cursor()
+    
+    rowcount=count_favorite()
+    if rowcount==0:
+        print("[bold red]No words in your favorite list.[/bold red] Add some first.")
+        return
+    
     c.execute("DELETE FROM words WHERE favorite=1")
     conn.commit()
-    print("All [bold gold1]favorite[/bold gold1] words [bold red]deleted[/bold red] from your lists. ✅")
+    
+    print(f"All [bold gold1]favorite[/bold gold1] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+
+
 
 # @atharva: function to delete words from a particular tag from the database
 def delete_words_from_tag(tag: str):
     """Deletes all the words from a particular tag from the database."""
-    conn.createConnection()
+    conn=createConnection()
     c=conn.cursor()
-    try:
-        c.execute("DELETE FROM words WHERE tag=?", (tag,))
-        if c.rowcount <= 0:
-            raise NothingToDeleteException(f"No words found with the tag {tag}. ❌")
-        conn.commit()
-        print(f"All words with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
-    except NothingToDeleteException as e:
-        print(e)
+            
+    rowcount=count_tag(tag)
+    if rowcount==0:
+        print(f"[bold red]No words in tag {tag}.[/bold red] Add some first.")
+        return
     
+    c.execute("DELETE FROM words WHERE tag=?", (tag,))
+    conn.commit()
+    print(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
+
+    
+
+
 
 # todo @atharva: function to delete words of the last n days from the database
 def delete_days(days: int):
@@ -501,18 +602,6 @@ def delete_word(query:str):
         conn.commit()
         print(f"[bold red]Deleted[/bold red] {query} from your lists. ✅")
         
-        
-# add_tag("temper")
-# add_tag("tantrum")
-# add_tag("envy")
-# add_tag("vice")
-        
-# delete_word("temper")
 
-# def delete_multiple(*words):
-#     print("Deleting multiple words...")
-#     for word in words:
-#         delete_word(word)
-    
 
     

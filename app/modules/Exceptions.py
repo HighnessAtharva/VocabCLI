@@ -2,8 +2,10 @@ from rich import print
 
 class WordNeverSearchedException(Exception):
     """raised when a word is never searched but user attempts to perform some operation on it."""
-    def __init__(self):
-        print("[bold red] This word is never tracked before. use 'define' command first[/bold red]")
+    word=None
+    def __init__(self, word):
+        self.word=word
+        print(f"The word [bold red]{self.word}[/bold red] was never tracked before. Lookup using 'define' command first.")
         
 class AudioUnavailableException(Exception):
     """raised when the audio is not available for the word."""

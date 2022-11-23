@@ -65,8 +65,7 @@ def phonetic(query: str):
             else:
                 phonetic= "[bold red]Phonetic Unavailable[/bold red]"
     return(phonetic)
-                
-                
+                                
                 
 # @anay: add proper docstrings ✅
 # @anay: Refer typer/rich docs and add table formatting to the output ✅  
@@ -133,8 +132,9 @@ def say_aloud(query: str):
         audio = requests.get(audioURL, allow_redirects=True)
         open(f'{query}.mp3', 'wb').write(audio.content)
         playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
-        print("Audio played")
+        print("[bold green]Audio played[/bold green]")
         os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
     
     except AudioUnavailableException as e:
         print(e)
+
