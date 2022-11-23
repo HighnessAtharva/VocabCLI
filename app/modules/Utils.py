@@ -25,7 +25,9 @@ def check_word_exists(query: str):
         c.execute("SELECT * FROM words WHERE word=?", (query,))
         if not c.fetchone():
             raise WordNeverSearchedException(query)
+        return True
         
+
         
 # @anay: add proper docstrings   ✅
 def fetch_word_history(word: str):
@@ -115,6 +117,7 @@ def set_mastered(query: str):
     
     # warn user if word is never looked up before
     check_word_exists(query)
+    
     
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
@@ -579,8 +582,6 @@ def delete_words_from_tag(tag: str):
     conn.commit()
     print(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
 
-    
-
 
 
 # todo @atharva: function to delete words of the last n days from the database
@@ -595,13 +596,14 @@ def delete_word(query:str):
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("DELETE FROM words WHERE word=?", (query,))
-    if c.rowcount <= 0:
-        print("No such word found. ❌")
-    else:
+    
+    check_word_exists(query)
+
+    sql="DELETE FROM words WHERE word=?"
+    c.execute(sql, (query,))
+    if c.rowcount>0:
         conn.commit()
-        print(f"[bold red]Deleted[/bold red] {query} from your lists. ✅")
+        print(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
         
 
-
-    
+delete_all_favorite()

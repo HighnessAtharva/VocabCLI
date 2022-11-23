@@ -57,3 +57,8 @@ class TestDefine:
         result= runner.invoke(app, ["define", "extraordinary", "--pronounce"])
         assert result.exit_code == 0
         assert """Audio Unavailable""" in result.stdout
+
+
+        
+        
+        
