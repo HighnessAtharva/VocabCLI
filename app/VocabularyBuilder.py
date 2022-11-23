@@ -39,7 +39,7 @@ def bye():
 # todo @anay: write PyTest for this. Cover all cases/flags/arguments
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
-    word: str = typer.Argument(..., help="Word to search"),
+    words: List[str] = typer.Argument(..., help="Word to search"),
     short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
     pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag the word in your vocabulary builder set.")
@@ -49,20 +49,21 @@ def define(
     Adds it to the vocabulary builder list along with the timestamp if the user is logged in.
     """
 
-    if short:
-        definition(word, short=True)
+    for word in words:
+        if short:
+                definition(word, short=True)
 
-    if not short:
-        definition(word, short=False)
+        if not short:
+            definition(word, short=False)
+            
+        if pronounce:
+            say_aloud(query=word)
+            
+        if tag:
+            add_tag(word, tag)
         
-    if pronounce:
-        say_aloud(query=word)
-        
-    if tag:
-        add_tag(word, tag)
-    
-    if not tag:
-        add_tag(word)
+        if not tag:
+            add_tag(word)
     
 
 
@@ -101,50 +102,55 @@ def list(
 # @anay: add a command to set word as favorite    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
-    word: str = typer.Argument(..., help="Word to add to favorites."),
+    words: List[str] = typer.Argument(..., help="Word to add to favorites."),
 ):
-    set_favorite(word)
+    for word in words:
+        set_favorite(word)
 
 
 # @anay: add a command to set word as unfavorite    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
 def unfavorite(
-    word: str = typer.Argument(..., help="Word to remove from favorites"),
+    words: List[str] = typer.Argument(..., help="Word to remove from favorites"),
 ):
-    set_unfavorite(word)
+    for word in words:
+        set_unfavorite(word)
 
 
 # @anay: add a command to set word as learning    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
-    word: str = typer.Argument(..., help="Word to add to learning."),
+    words: List[str] = typer.Argument(..., help="Word to add to learning."),
 ):
-    set_learning(word)
+    for word in words:
+        set_learning(word)
 
 
 # @anay: add a command to set word as unlearning    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
 def unlearn(
-    word: str = typer.Argument(..., help="Word to remove from learning"),
+    words: List[str] = typer.Argument(..., help="Word to remove from learning"),
 ):
-    set_unlearning(word)
+    for word in words:
+        set_unlearning(word)
 
 
 # @anay: add a command to set word as mastered    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
 def master(
-    word: str = typer.Argument(..., help="Word to add to mastered."),
+    words: List[str] = typer.Argument(..., help="Word to add to mastered."),
 ):
-
-    set_mastered(word)
+    for word in words:
+        set_mastered(word)
 
 
 # @anay: add a command to set word as unmastered    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
 def unmaster(
-    word: str = typer.Argument(..., help="Word to remove from mastered"),
+    words: List[str] = typer.Argument(..., help="Word to remove from mastered"),
 ):
-    set_unmastered(word)
+    for word in words:
+        set_unmastered(word)
 
 
 

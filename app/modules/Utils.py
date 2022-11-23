@@ -151,6 +151,9 @@ def set_unmastered(query: str):
     conn=createConnection()
     c=conn.cursor()
     
+    #check if word exists in database
+    check_word_exists(query)
+    
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 0))
     if c.fetchone():
@@ -206,6 +209,9 @@ def set_unlearning(query: str):
     """
     conn=createConnection()
     c=conn.cursor()
+    
+    #check if word exists in database
+    check_word_exists(query)
         
     # check if word is not already unlearned
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 0))
@@ -261,13 +267,8 @@ def set_unfavorite(query:str):
     conn=createConnection()
     c=conn.cursor()
         
-    # check if word exists in the database
-    try:
-        c.execute("SELECT * FROM words WHERE word=?", (query,))
-        if not c.fetchone():
-            raise WordNeverSearchedException
-    except WordNeverSearchedException as e:
-        print(e)
+    #check if word exists in database
+    check_word_exists(query)
         
     # check if word was never favorited
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 0))
@@ -414,6 +415,7 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
           
 # @anay: write function to select all words in the database     ✅
 # @anay: add proper docstrings     ✅
+# todo @anay - decorate with Panels
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=1, last:Optional[int]=10):
     """Gets all the words in the vocabulary builder list.
@@ -606,4 +608,3 @@ def delete_word(query:str):
         print(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
         
 
-delete_all_favorite()
