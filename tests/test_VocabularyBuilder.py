@@ -59,11 +59,17 @@ class TestDefine:
 # test cases for favorite and unfavorite commands
 class TestFavorite:
     def test_favorite(self):
+        # adding word to DB using define if it doesn't already exist
+        runner.invoke(app, ["define", "hello"])
+
+        # reset favorite value if it was already favorite (edge case)
+        runner.invoke(app, ["unfavorite", "hello"])
+                
         result = runner.invoke(app, ["favorite", "hello"])
         assert result.exit_code == 0
         assert "has been set as favorite" in result.stdout
+        
 
-    # FIXME @atharva Assertion error for this test case. 🐞
     def test_favorite_fake_word(self):
         result = runner.invoke(app, ["favorite", "fakewordhaha"])
         assert result.exit_code == 0
@@ -84,7 +90,7 @@ class TestFavorite:
         assert result.exit_code == 0
         assert "was never favorite" in result.stdout
 
-    # FIXME @atharva Assertion error for this test case. 🐞
+
     def test_unfavorite_fake_word(self):
         result = runner.invoke(app, ["unfavorite", "fakewordhaha"])
         assert result.exit_code == 0
@@ -94,11 +100,17 @@ class TestFavorite:
 # test cases for learn and unlearn commands
 class TestLearn:
     def test_learn(self):
+        # adding this word to learning list programatically
+        runner.invoke(app, ["define", "hello"])
+        
+        # reset learning value if it was already learning (edge case)
+        runner.invoke(app, ["unlearn", "hello"])
+        
         result = runner.invoke(app, ["learn", "hello"])
         assert result.exit_code == 0
         assert "has been set as learning. Keep revising!" in result.stdout
         
-    # FIXME @atharva Assertion error for this test case. 🐞
+
     def test_learn_fake_word(self):
         result = runner.invoke(app, ["learn", "fakewordhaha"])
         assert result.exit_code == 0
@@ -119,7 +131,7 @@ class TestLearn:
         assert result.exit_code == 0
         assert "was never learning" in result.stdout
 
-    # FIXME @atharva Assertion error for this test case. 🐞
+
     def test_unlearn_fake_word(self):
         result = runner.invoke(app, ["unlearn", "fakewordhaha"])
         assert result.exit_code == 0
@@ -133,6 +145,10 @@ class TestMaster:
     def test_master(self):    
         # adding this word to learning list programatically
         runner.invoke(app, ["define", "hello"])
+        
+        # reset master value if it was already master (edge case)
+        runner.invoke(app, ["unmaster", "hello"])
+        
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "has been set as mastered. Good work!" in result.stdout
