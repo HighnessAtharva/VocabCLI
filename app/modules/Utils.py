@@ -491,11 +491,16 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
 
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(error_message)
+        print(Panel(error_message))
     else:
-        print(success_message)
+        print(Panel(success_message))
+        table=Table(show_header=True, header_style="bold bright_cyan")
+        table.add_column("Word", style="cyan", width=15)
         for row in rows:
-            print(row[0])
+            table.add_row(row[0])
+            table.add_section() 
+        console = Console()
+        console.print(table)
             
 
 # @atharva: function to delete all word from the database ✅
