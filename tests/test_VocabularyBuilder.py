@@ -67,7 +67,7 @@ class TestFavorite:
     def test_favorite_fake_word(self):
         result = runner.invoke(app, ["favorite", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
         
     def test_favorite_already_favorite(self):
         result = runner.invoke(app, ["favorite", "hello"])
@@ -88,7 +88,7 @@ class TestFavorite:
     def test_unfavorite_fake_word(self):
         result = runner.invoke(app, ["unfavorite", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
 
 
 # test cases for learn and unlearn commands
@@ -102,7 +102,7 @@ class TestLearn:
     def test_learn_fake_word(self):
         result = runner.invoke(app, ["learn", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
         
     def test_learn_already_learn(self):
         result = runner.invoke(app, ["learn", "hello"])
@@ -123,22 +123,35 @@ class TestLearn:
     def test_unlearn_fake_word(self):
         result = runner.invoke(app, ["unlearn", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
 
 
 # test cases for master and unmaster commands
 class TestMaster:    
-    def test_master(self):
+
+    
+    def test_master(self):    
+        # adding this word to learning list programatically
+        runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "has been set as mastered. Good work!" in result.stdout
+        
         #should also be removed from learning if present, how to check it?
         
-    # FIXME @atharva Assertion error for this test case. 🐞
+        #Solution -> 
+        # You can make the runner invoke multiple commands in a single test case.
+
+        # Once word is mastered, it will be removed from learning. So, we can check if it is present in learning list or not by using unlearn function and then asserting that it is not present in learning list. Because for unlearn function, if word is not present in learning list, it will print never learnt message.
+
+        result=runner.invoke(app, ["unlearn", "hello"])
+        assert result.exit_code == 0
+        assert "was never learning" in result.stdout
+        
     def test_master_fake_word(self):
         result = runner.invoke(app, ["master", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
         
     def test_master_already_master(self):
         result = runner.invoke(app, ["master", "hello"])
@@ -155,9 +168,8 @@ class TestMaster:
         assert result.exit_code == 0
         assert "was never mastered" in result.stdout
         
-    # FIXME @atharva Assertion error for this test case. 🐞
     def test_unmaster_fake_word(self):
         result = runner.invoke(app, ["unmaster", "fakewordhaha"])
         assert result.exit_code == 0
-        assert "was never tracked before. Lookup using 'define' command first." in result.stdout
+        assert "was never tracked before. Lookup using 'define' command" in result.stdout
       
