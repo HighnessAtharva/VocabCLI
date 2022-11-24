@@ -211,7 +211,10 @@ def clear(
 def export(
     pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
-    pass
+    if pdf:
+        export_to_pdf()
+    else:
+        export_to_csv()
 
 
 # @anay: add a command to import the word list     ✅
@@ -219,7 +222,7 @@ def export(
 # OPTIONS/FLAGS will be (two or more can be used at once):
 @app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
 def Import():
-    pass
+    import_from_csv()
 
 
 

@@ -16,4 +16,8 @@ class NothingToDeleteException(Exception):
     """raised when the user attempts to delete a word which is not present in the database."""
     def __init__(self):
         print("[bold red]Nothing to delete[/bold red]")
-    
+
+class NoDataFoundException(Exception):
+    """raised when the user attempts to export data but there is no data to export."""
+    def __init__(self):
+        print("[bold red]No words to export. Lookup using 'define' command first.[/bold red]")
