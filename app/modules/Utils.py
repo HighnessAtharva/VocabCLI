@@ -615,5 +615,3 @@ def delete_word(query:str):
         conn.commit()
         print(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
         
-
-show_list()
