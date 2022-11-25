@@ -119,7 +119,7 @@ def export_to_pdf():    # sourcery skip: extract-method
             pdf.cell(10,8, txt=str(sr_no),border=True, align='L') # Sr No.
             pdf.cell(40,8, txt=str(row[0]),border=True, align='L') # Word
 
-            date=datetime.strptime(row[1], '%d/%m/%Y %H:%M:%S')
+            date=datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S')
             date=date.strftime('%b %d \'%y | %H:%M')
             pdf.cell(40,8, txt=str(date),border=True, align='L') # Lookup Date
 

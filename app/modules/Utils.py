@@ -16,6 +16,7 @@ from rich.console import Console
 from rich.table import Table
 from Dictionary import connect_to_api, definition
 from Exceptions import *
+from datetime import datetime, timedelta
 
 def check_word_exists(query: str):
     conn= createConnection()
@@ -48,7 +49,7 @@ def fetch_word_history(word: str):
         else:
             print(f"You have searched for [bold]{word}[/bold] {count} times before.")
         for row in rows:
-            history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f').strftime('%d/%m/%Y %H:%M:%S')
+            history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
             print(history)
     except WordNeverSearchedException as e:
         print(e)
@@ -80,7 +81,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 # if word already exists in the database with no tags, then add the tag to add words
                 c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
                 if c.fetchone():
-                    c.execute("INSERT INTO words (word, datetime,tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    c.execute("INSERT INTO words (word, datetime,tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
                     c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
                     conn.commit()
                     print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
@@ -96,7 +97,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 
                 # otherwise, insert the word with the tag for the first time
                 else:
-                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
                     print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
                     
             
@@ -107,11 +108,11 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 if c.fetchone():
                     c.execute("SELECT tag FROM words WHERE word=?", (query,))
                     tagName=c.fetchone()[0]
-                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
                     conn.commit()
                     return
 
-                c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S")))
+                c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                 conn.commit()
                 # if word was was not previously tagged and being added for the first time, then add it with no tag
                 
@@ -421,8 +422,7 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
           
   
 # FIXME @atharva: debug only tag argument 🐞
-def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=1, last:Optional[int]=10):
-    # sourcery skip: extract-method
+def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=None, last:Optional[int]=None, most: Optional[int]=None):
     """Gets all the words in the vocabulary builder list.
     
     Args:
@@ -431,12 +431,14 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
         tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
         date (string, optional): Get a list of words from a particular date. Defaults to None.
-        last (string, optional):"Get a list of n last searched words. Defaults to 10.
+        last (string, optional):"Get a list of n last searched words. Defaults to None.
+        most (string, optional): Get a list of n most searched words. Defaults to None.
     """
     conn=createConnection()
     c=conn.cursor()
 
-    if tag and mastered:
+    # todo: arguments do not work together. Fix this. list -m -t fruits invokes commands seperately.
+    if tag is not None and mastered==True:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1", (tag,))
         success_message=f"[bold green]Mastered[/bold green] words with tag [bold green]{tag}[/bold green] are:"
         error_message="You have not mastered any words with this tag yet. ❌"
@@ -477,8 +479,10 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif date:
-        c.execute("SELECT DISTINCT word FROM words WHERE datetime=?", (date,))
-        success_message=f"Words searched on [bold blue]{date}[/bold blue] are:"
+        c.execute(f"SELECT word FROM words where datetime > datetime('now' , '-{date} days')")
+        date_today=datetime.now().strftime("%d/%m/%Y")
+        date_before=datetime.now() - timedelta(days=int(date))
+        success_message=f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue] are:"
         error_message="No records found within this date range ❌"
 
     elif last:
@@ -490,12 +494,20 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
         success_message=f"Words with tag [bold magenta]{tag}[/bold magenta] are:"
         error_message=f"No words found with the tag {tag}. ❌"
-
+    
+    elif most:
+        c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
+        success_message=f"Top [bold blue]{most}[/bold blue] most searched words are:"
+        error_message="You haven't searched for any words yet. ❌"
+    
+    elif favorite is False and learning is False and mastered is False and tag is None and date is None and last is None and most is None:
+        c.execute("SELECT DISTINCT word FROM words")
+        success_message="Here is your list of words: "
+        error_message="You have no words in your vocabulary builder list."
+    
     else:
         error_message="Invalid arguments passed. You cannot pair those together. "
-        #c.execute("SELECT DISTINCT word FROM words")
-        #success_message="All words are:"
-        #error_message="You have not added any words to the vocabulary builder list yet. ❌"
+        
 
     rows=c.fetchall()
     if len(rows) <= 0:

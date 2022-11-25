@@ -12,7 +12,7 @@ from modules.ImportExport import *
 # app configuration
 app = typer.Typer(
     name="Vocabulary Builder",
-    add_completion=False,
+    add_completion=True,
     rich_markup_mode="rich",
     help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
 )
@@ -70,8 +70,8 @@ def list(
     mastered: Optional[bool] = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
     date: Optional[str] = typer.Option(None, "--date", "-d", help="Get a list of words from a particular date."),
-    last: Optional[str] = typer.Option(10, "--last", "-L", help="Get a list of last searched words."),
-    most: Optional[str] = typer.Option(10, "--most", "-M", help="Get a list of most searched words."),
+    last: Optional[str] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
+    most: Optional[str] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
 ):
     
     if favorite:
@@ -86,8 +86,10 @@ def list(
         show_list(date=date)
     if last:
         show_list(last=last)
-    else:
-        # show all the words by default
+    if most:
+        show_list(most=most)
+    # todo: print list horizontally instead of vertically.
+    elif not any([favorite, learning, mastered, tag, date, last, most]):
         show_list()    
             
     
