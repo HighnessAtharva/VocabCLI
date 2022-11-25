@@ -3,86 +3,140 @@ from fpdf import FPDF
 from datetime import datetime
 from Database import createConnection
 from Exceptions import NoDataFoundException
-
-
-def import_from_csv():
-    """Import words from csv file."""
-    #trying this out
-    with open ('words.csv', 'r') as file:
-        reader = csv.reader(file)
-        next(reader)
-        for row in reader:
-            print(row)
-    pass
-
-
+from datetime import datetime
+from rich import print
 
 def export_to_csv():
     """Export words to csv file."""
-
     conn= createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words")
-    words = c.fetchall()
-    if len(words) <= 0:
+    try:
+        c.execute("SELECT * FROM words")
+        words = c.fetchall()
+        if len(words) <= 0:
             raise NoDataFoundException
-    with open('VocabularyBuilder.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
-        writer.writerows(words)
+        with open('VocabularyBuilder.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
+            writer.writerows(words)
+        print(f"[bold green]EXPORTED[/bold green] [bold blue]{len(words)}[/bold blue] words to [bold blue]VocabularyBuilder.csv[/bold blue]")
+    except NoDataFoundException as e:
+        print(e)
+        
+        
+def import_from_csv(): 
+    """Import words from csv file."""
+    conn= createConnection()
+    c=conn.cursor()
+    
+    # count of words added to database from the csv file
+    added_words=0 
+    
+    # words that already exists in database (counter will be incremented everytime SQL throws an error about datetime column UNIQUE constraint violation)
+    word_already_exists=0 
+    
+    try:
+        with open ('VocabularyBuilder.csv', 'r') as file:
+            reader = csv.reader(file)
+            next(reader) # skip header
+            sql="INSERT INTO words (word, datetime, tag, mastered, learning, favorite) VALUES (?,?,?,?,?,?)"
+            for row in reader:
+                try:
+                    c.execute(sql, row)
+                    conn.commit()
+                    added_words += c.rowcount
+                except Exception as e:
+                    word_already_exists+=1
+    except FileNotFoundError:
+        print("[bold red]FILE NOT FOUND[/bold red]. Make sure you have a file named [bold red]VocabularyBuilder.csv[/bold red] in the same directory as the executable file.")
+    
+    finally:
+        if word_already_exists>0:
+            if word_already_exists == 1:
+                print(f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORD WITH THE SAME TIMESTAMP")
+            else:
+                print(f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORDS WITH THE SAME TIMESTAMP")
+        
+        
+        if added_words == 1:
+            print(f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORD")
+        else:
+            print(f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORDS")
+        
 
 
+class PDF(FPDF):
+    def header(self):
+        #self.image('logo.png', 10, 8, 33)
+        
+        self.set_font('helvetica', 'B', 15)
+        
+        self.set_title("Vocabulary Builder")
+        self.cell(55)
+        self.cell(80, 10, 'Vocabulary Builder', border=1, align='C')
+        self.ln(20)
+    
+    
+    def footer(self):
+        """Page footer."""
+        #self.set_creation_date = datetime.now()
+        self.set_y(-15)
+        self.set_font('helvetica', 'I', 10)
+        
+        # Page number
+        self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
+        
+        #self.cell(0, 10, self.creation_date, 0, 0, 'L')
 
-def export_to_pdf():
+
+def export_to_pdf():    # sourcery skip: extract-method
     """Export words to pdf file."""
-    class PDF(FPDF):
-        def header(self):
-            #self.image('logo.png', 10, 8, 33)
-            self.set_font('helvetica', 'B', 15)
-            # Move to the right
-            self.set_title("Vocabulary Builder")
-            
-            self.cell(55)
-            self.cell(80, 10, 'Vocabulary Builder', border=1, align='C')
-            self.ln(20)
-
-        # Page footer
-        def footer(self):
-            #self.set_creation_date = datetime.now()
-            self.set_y(-15)
-            self.set_font('helvetica', 'I', 10)
-            # Page number
-            self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
-            #self.cell(0, 10, self.creation_date, 0, 0, 'L')
-    
-    pdf=PDF('P', 'mm', 'A4')
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("helvetica","", size=12)
-    conn= createConnection()
-    c=conn.cursor()
-    c.execute("SELECT * FROM words")
-    rows = c.fetchall()
-    i=1
-    if len(rows) <= 0:
+    try:
+        pdf=PDF('P', 'mm', 'A4')
+        pdf.set_fill_color(r=152, g=251, b=152)
+        pdf.set_auto_page_break(auto=True, margin=5)
+        pdf.add_page()
+        pdf.set_font("Arial","B", 12)
+        conn= createConnection()
+        c=conn.cursor()
+        c.execute("SELECT * FROM words")
+        rows = c.fetchall()
+        if len(rows) <= 0:
             raise NoDataFoundException
-    pdf.cell(15,8, txt="SrNo",border=True, align='L')
-    pdf.cell(20,8, txt="Word",border=True, align='L')
-    pdf.cell(60,8, txt="Date Time",border=True, align='L')
-    pdf.cell(20,8, txt="Tag",border=True, align='L')
-    pdf.cell(20,8, txt="Mastered",border=True, align='L')
-    pdf.cell(20,8, txt="Learning",border=True, align='L')
-    pdf.cell(20,8, txt="Favorite",border=True, align='L')
-    pdf.ln()    
-    for row in rows:
-            pdf.cell(15,8, txt=str(i),border=True, align='L')
-            pdf.cell(20,8, txt=str(row[0]),border=True, align='L')
-            pdf.cell(60,8, txt=str(row[1]),border=True, align='L')
-            pdf.cell(20,8, txt=str(row[2]),border=True, align='L')
-            pdf.cell(20,8, txt=str(row[3]),border=True, align='L')
-            pdf.cell(20,8, txt=str(row[4]),border=True, align='L')
-            pdf.cell(20,8, txt=str(row[5]),border=True, align='L')
+        pdf.cell(10,8, txt="#",border=True, align='L', fill=True)
+        pdf.cell(40,8, txt="Word",border=True, align='L', fill=True)
+        pdf.cell(40,8, txt="Lookup Date",border=True, align='L', fill=True)
+        pdf.cell(30,8, txt="Tag",border=True, align='L', fill=True)
+        pdf.cell(20,8, txt="Mastered",border=True, align='L', fill=True)
+        pdf.cell(20,8, txt="Learning ",border=True, align='L', fill=True)
+        pdf.cell(20,8, txt="Favorite",border=True, align='L', fill=True)
+        pdf.ln()
+
+        #reset font
+        pdf.set_font("Courier","",10)
+        for sr_no, row in enumerate(rows, start=1):
+
+            pdf.cell(10,8, txt=str(sr_no),border=True, align='L') # Sr No.
+            pdf.cell(40,8, txt=str(row[0]),border=True, align='L') # Word
+
+            date=datetime.strptime(row[1], '%d/%m/%Y %H:%M:%S')
+            date=date.strftime('%b %d \'%y | %H:%M')
+            pdf.cell(40,8, txt=str(date),border=True, align='L') # Lookup Date
+
+            tag = row[2] if row[2] != None else ""
+            pdf.cell(30,8, txt=str(tag),border=True, align='L') # Tag
+
+            mastered= "X" if row[3] == 1 else ""
+            pdf.cell(20,8, txt=mastered ,border=True, align='C') # Mastered
+
+            learning= "X" if row[4] == 1 else ""
+            pdf.cell(20,8, txt=learning,border=True, align='C') # Learning
+
+            favorite= "X" if row[5] == 1 else ""
+            pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
-            i=i+1
+        pdf.output(f"Vocabulary Words [{datetime.now().strftime('%d %b %Y')}].pdf")
+        print(f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF")
     
-    pdf.output("VocabularyBuilder.pdf")
+    except NoDataFoundException as e:
+        print(e)

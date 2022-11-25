@@ -56,8 +56,6 @@ def fetch_word_history(word: str):
         print(e)
         
         
-# @anay: add proper docstrings     ✅
-# @atharva: do not add the word to the database if the word defintion is unavailable in Dictionary  ✅
 def add_tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
@@ -82,28 +80,47 @@ def add_tag(query: str, tagName:Optional[str]=None):
             c=conn.cursor()
             if tagName:
                 # if word already exists in the database with no tags, then add the tag to add words
-                sql = "SELECT * FROM words WHERE word=? and tag is NULL"
-                c.execute(sql, (query,))
+                c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
                 if c.fetchone():
+                    c.execute("INSERT INTO words (word, datetime,tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
                     c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
                     conn.commit()
                     print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
                     return
                 
+                # if word already exists in the database with tags, then overwrite the tags
+                c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
+                if c.fetchone():
+                    c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
+                    conn.commit()
+                    print(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green].")
+                    return
+                
                 # otherwise, insert the word with the tag for the first time
                 else:
-                    sql="INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)"
-                    c.execute(sql, (query, datetime.now(), tagName))
+                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
+                    
             
             # if tagName is not provided then silently add the word to the database but do not print anything
             if not tagName:
-                sql="INSERT INTO words (word, datetime) VALUES (?, ?)"
-                c.execute(sql, (query, datetime.now()))
-            conn.commit()
-            # print(Panel(f"[bold green]{query}[/bold green] added to the vocabulary builder list with the tag: [blue]{tagName}[/blue]"))
+                # if word was previously tagged, and looked up again with no tag then add it with the same tag
+                c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
+                if c.fetchone():
+                    c.execute("SELECT tag FROM words WHERE word=?", (query,))
+                    tagName=c.fetchone()[0]
+                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    conn.commit()
+                    return
+
+                c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S")))
+                conn.commit()
+                # if word was was not previously tagged and being added for the first time, then add it with no tag
+                
 
 
-    
+
+
 # @anay: add proper docstrings  ✅
 def set_mastered(query: str):
     """
