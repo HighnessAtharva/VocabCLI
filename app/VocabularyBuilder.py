@@ -21,19 +21,16 @@ app = typer.Typer(
 console = Console(record=False, color_system="truecolor")
 print_banner(console)   
 
-
 # initialize the database with the tables if not already existing
 initializeDB()
 
 
-# add the commands
 @app.command(rich_help_panel="Options", help="📚 [bold red]Exits[/bold red] the CLI")
 def bye():
     print(":wave: [bold green]Bye bye![/bold green]")
     sys.exit(0)
 
 
-# todo @anay: write PyTest for this. Cover all cases/flags/arguments
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
@@ -94,10 +91,6 @@ def list(
         show_list()    
             
     
-
-
-# @anay: add a command to set word as favorite    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
     words: List[str] = typer.Argument(..., help="Word to add to favorites."),
@@ -106,8 +99,6 @@ def favorite(
         set_favorite(word)
 
 
-# @anay: add a command to set word as unfavorite    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
 def unfavorite(
     words: List[str] = typer.Argument(..., help="Word to remove from favorites"),
@@ -116,8 +107,6 @@ def unfavorite(
         set_unfavorite(word)
 
 
-# @anay: add a command to set word as learning    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
     words: List[str] = typer.Argument(..., help="Word to add to learning."),
@@ -126,8 +115,6 @@ def learn(
         set_learning(word)
 
 
-# @anay: add a command to set word as unlearning    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
 def unlearn(
     words: List[str] = typer.Argument(..., help="Word to remove from learning"),
@@ -136,8 +123,6 @@ def unlearn(
         set_unlearning(word)
 
 
-# @anay: add a command to set word as mastered    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
 def master(
     words: List[str] = typer.Argument(..., help="Word to add to mastered."),
@@ -146,8 +131,6 @@ def master(
         set_mastered(word)
 
 
-# @anay: add a command to set word as unmastered    ✅
-# @anay: Write PyTest case for this command    ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
 def unmaster(
     words: List[str] = typer.Argument(..., help="Word to remove from mastered"),
@@ -155,23 +138,7 @@ def unmaster(
     for word in words:
         set_unmastered(word)
 
-
-
-# todo @atharva: add a command to get learning rate of the user
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# --today: get learning rate today
-# --week: get learning rate this week
-# --month: get learning rate this month
-# --year: get learning rate this year
-# --graph: get learning rate graph
-
-
-# todo @atharva: add a command to export flashcards (images)
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# -t, --tag: export words of a particular tag
-
-
-# todo @atharva: add a command to delete a word 
+ 
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
 def delete(
     words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
@@ -201,12 +168,7 @@ def clear(
     else:
         print("[bold red] you cannot combine options with clear command[/bold red]")
 
-# todo @atharva: add a command "about" to get software details. Banner, version, credits,
 
-
-# @anay: add export command to export the word list     ✅
-# --to-csv (default): export to csv file
-# --to-PDF: export to PDF file
 @app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
 def export(
     pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
@@ -217,14 +179,29 @@ def export(
         export_to_csv()
 
 
-# @anay: add a command to import the word list     ✅
-# by default import all words in a csv file
-# OPTIONS/FLAGS will be (two or more can be used at once):
 @app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
 def Import():
     import_from_csv()
 
 
+# todo @anay: add a command to untag a word
+
+
+# todo @atharva: add a command "about" to get software details. Banner, version, credits
+
+
+# todo @atharva: add a command to get learning rate of the user
+# OPTIONS/FLAGS will be (two or more can be used at once):
+# --today: get learning rate today
+# --week: get learning rate this week
+# --month: get learning rate this month
+# --year: get learning rate this year
+# --graph: get learning rate graph
+
+
+# todo @atharva: add a command to export flashcards (images)
+# OPTIONS/FLAGS will be (two or more can be used at once):
+# -t, --tag: export words of a particular tag
 
 if __name__ == "__main__":
     app()

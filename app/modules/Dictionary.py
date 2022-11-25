@@ -42,7 +42,6 @@ def connect_to_api(query:str="hello"):
             return response.json()[0]
  
  
-# @anay: add proper docstrings ✅
 def phonetic(query: str):
     """
     Prints the phonetic of the word.
@@ -66,11 +65,8 @@ def phonetic(query: str):
                 phonetic= "[bold red]Phonetic Unavailable[/bold red]"
     return(phonetic)
                                 
-                
-# @anay: add proper docstrings ✅
-# @anay: Refer typer/rich docs and add table formatting to the output ✅  
-# FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 
+# FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 def definition(query:str, short:Optional[bool]=False):
     """
     Prints the definition of the word. 
@@ -106,8 +102,6 @@ def definition(query:str, short:Optional[bool]=False):
   
 
 
-        
-# @anay: add proper docstrings    ✅    
 def say_aloud(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.

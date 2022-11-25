@@ -28,8 +28,6 @@ def check_word_exists(query: str):
         return True
         
 
-        
-# @anay: add proper docstrings   ✅
 def fetch_word_history(word: str):
     """ Fetches all instances of timestamp for a word from the database 
 
@@ -119,9 +117,6 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 
 
 
-
-
-# @anay: add proper docstrings  ✅
 def set_mastered(query: str):
     """
     Sets the word as mastered.
@@ -134,7 +129,6 @@ def set_mastered(query: str):
     
     # warn user if word is never looked up before
     check_word_exists(query)
-    
     
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
@@ -156,8 +150,6 @@ def set_mastered(query: str):
 
 
 
-
-# @anay: add proper docstrings ✅
 def set_unmastered(query: str):
     """
     Sets the word as unmastered.
@@ -183,7 +175,7 @@ def set_unmastered(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it.")
 
         
-# @anay: add proper docstrings ✅
+        
 def set_learning(query: str):
     """
     Sets the word as learning.
@@ -216,7 +208,7 @@ def set_learning(query: str):
         print(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!")
 
 
-# @anay: add proper docstrings ✅
+
 def set_unlearning(query: str):
     """
     Sets the word as unlearning.
@@ -374,21 +366,19 @@ def count_tag(tag:str)->int:
 def get_random_word_definition_from_api():
     """
     Gets a random word from the random-words package. 
-    """
-    
+    """    
     random_word=RandomWords().get_random_word()
     print(f"A Random Word for You: [bold green]{random_word}[/bold green]")
     definition(random_word)
      
 
-# @anay: add proper docstrings         ✅
+
 def get_random_word_from_learning_set(tag:Optional[str]=None):
     """Gets a random word from the vocabulary builder list.
 
     Args:
         tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
-    """
-        
+    """  
     conn=createConnection()
     c=conn.cursor()
     if tag:
@@ -406,7 +396,6 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
       
 
     
-# @anay: add proper docstrings      ✅       
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """Gets a random word with definition from the mastered words list.
 
@@ -430,11 +419,10 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
 
 
           
-# @anay: write function to select all words in the database     ✅
-# @anay: add proper docstrings     
-# @anay - decorate with Panels     ✅     
+  
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=1, last:Optional[int]=10):
+    # sourcery skip: extract-method
     """Gets all the words in the vocabulary builder list.
     
     Args:
@@ -522,8 +510,7 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         console = Console()
         console.print(table)
             
-
-# @atharva: function to delete all word from the database ✅
+            
 def delete_all():
     """ Deletes all the words from the database. """
     conn=createConnection()
@@ -535,12 +522,9 @@ def delete_all():
     
     c.execute("DELETE FROM words")
     conn.commit()
-    
     print(f"All words[{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
 
 
-
-# @atharva: function to delete mastered words from the database ✅
 def delete_mastered():
     """ Deletes all the mastered words from the database. """
     conn=createConnection()
@@ -557,8 +541,6 @@ def delete_mastered():
 
 
 
-
-# @atharva: function to delete learning words from the database ✅
 def delete_learning():
     """Deletes all the learning words from the database."""
     conn=createConnection()
@@ -571,12 +553,9 @@ def delete_learning():
     
     c.execute("DELETE FROM words WHERE learning=1")
     conn.commit()
-    
     print(f"All [bold blue]learning[/bold blue] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
 
 
-
-# @atharva: function to delete favorite words from the database
 def delete_favorite():
     """Deletes all the favorite words from the database."""
     conn=createConnection()
@@ -589,12 +568,10 @@ def delete_favorite():
     
     c.execute("DELETE FROM words WHERE favorite=1")
     conn.commit()
-    
     print(f"All [bold gold1]favorite[/bold gold1] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
 
 
 
-# @atharva: function to delete words from a particular tag from the database
 def delete_words_from_tag(tag: str):
     """Deletes all the words from a particular tag from the database."""
     conn=createConnection()
@@ -614,6 +591,7 @@ def delete_words_from_tag(tag: str):
 # todo @atharva: function to delete words of the last n days from the database
 def delete_days(days: int):
     pass
+
 
 def delete_word(query:str):
     """Deletes a word from the database.
