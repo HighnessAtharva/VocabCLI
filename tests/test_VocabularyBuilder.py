@@ -30,7 +30,7 @@ class TestDefine:
         assert result.exit_code == 0
         assert """Could not find that word in the dictionary""" in result.stdout       
 
-    def test_define_short(self):
+    def test_define_short(self):  
         result = runner.invoke(app, ["define", "hello", "--short"])
         assert result.exit_code == 0
         assert """"Hello!" or an equivalent greeting""" in result.stdout

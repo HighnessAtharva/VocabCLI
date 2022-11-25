@@ -6,7 +6,7 @@ Standard format for shorthand of command arguments *-d* for *--delete*
 Standard format for shorthand of command arguments *-l* for *--learning*
 Standard format for shorthand of command arguments *-d* for *--date*
 
-Date Time Format - %d/%m/%Y %H:%M:%S
+Date Time Format -  %Y-%m-%d %H:%M:%S
 
 ## Color Formats
 for errors: red
