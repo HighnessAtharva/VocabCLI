@@ -29,13 +29,13 @@ def connect_to_api(query:str="hello"):
         response.raise_for_status()
     
     except exceptions.ConnectionError as error:
-        print("[bold red]Error: You are not connected to the internet.[/bold red]")
+        print(Panel("[bold red]Error: You are not connected to the internet.[/bold red] ❌"))
     
     except exceptions.HTTPError as error:
-        print("[bold red]Could not find that word in the dictionary[/bold red]")
+        print(Panel("[bold red]Could not find that word in the dictionary[/bold red] ❌"))
         
     except exceptions.Timeout as error:
-        print("[bold red]Error: Timeout[/bold red]")
+        print(Panel("[bold red]Error: Timeout[/bold red] ⏳"))
 
     else:
         if response.status_code == 200:
@@ -126,7 +126,7 @@ def say_aloud(query: str):
         audio = requests.get(audioURL, allow_redirects=True)
         open(f'{query}.mp3', 'wb').write(audio.content)
         playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
-        print("[bold green]Audio played[/bold green]")
+        print(Panel("[bold green]Audio played[/bold green] 🎧"))
         os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
     
     except AudioUnavailableException as e:

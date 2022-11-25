@@ -27,7 +27,7 @@ initializeDB()
 
 @app.command(rich_help_panel="Options", help="📚 [bold red]Exits[/bold red] the CLI")
 def bye():
-    print(":wave: [bold green]Bye bye![/bold green]")
+    print(Panel(":wave: [bold green]Bye bye![/bold green]"))
     sys.exit(0)
 
 
@@ -168,7 +168,7 @@ def clear(
     if tag:
         delete_words_from_tag(tag)
     else:
-        print("[bold red] you cannot combine options with clear command[/bold red]")
+        print(Panel("[bold red] you cannot combine options with clear command[/bold red] ❌"))
 
 
 @app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
@@ -186,7 +186,23 @@ def Import():
     import_from_csv()
 
 
-# todo @anay: add a command to untag a word
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Tags[/bold blue] a word")
+def tag(
+    words: List[str] = typer.Argument(..., help="Words to tagged"),
+    tag: str = typer.Argument(..., help="Tag to add to the words"), #is str right or should it be a list? And can we add multiple tags to a single word? @atharva
+):
+    for word in words:
+        add_tag(word, tag)
+
+
+# todo @anay: add a command to untag a word   ✅
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Remove[/bold red] tag of a word in the dictionary")
+def untag(
+    words: List[str] = typer.Argument(..., help="Word to remove tag from"),
+    tag: str = typer.Argument(None, "--untag", "-u", help="Tag which is to be removed from the word"), #is this right or flags should be removed as it is a compulsory argument @atharva
+):  
+    for word in words:
+        remove_tag(word, tag)
 
 
 # todo @atharva: add a command "about" to get software details. Banner, version, credits

@@ -45,16 +45,16 @@ def fetch_word_history(word: str):
             raise WordNeverSearchedException
         count=len(rows)
         if count==1:
-            print(f"You have searched for [bold]{word}[/bold] {count} time before.")
+            print(Panel(f"You have searched for [bold]{word}[/bold] {count} time before."))
         else:
-            print(f"You have searched for [bold]{word}[/bold] {count} times before.")
+            print(Panel(f"You have searched for [bold]{word}[/bold] {count} times before."))
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
             print(history)
     except WordNeverSearchedException as e:
         print(e)
         
-        
+#why is tag name optional? @atharva
 def add_tag(query: str, tagName:Optional[str]=None):
     """
     Tags the word in the vocabulary builder list.
@@ -84,7 +84,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
                     c.execute("INSERT INTO words (word, datetime,tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
                     c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
                     conn.commit()
-                    print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
+                    print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]."))
                     return
                 
                 # if word already exists in the database with tags, then overwrite the tags
@@ -92,13 +92,14 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 if c.fetchone():
                     c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
                     conn.commit()
-                    print(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green].")
+                    print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]."))
                     return
                 
                 # otherwise, insert the word with the tag for the first time
                 else:
-                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
-                    print(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green].")
+
+                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
+                    print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]."))
                     
             
             # if tagName is not provided then silently add the word to the database but do not print anything
@@ -117,6 +118,23 @@ def add_tag(query: str, tagName:Optional[str]=None):
                 # if word was was not previously tagged and being added for the first time, then add it with no tag
                 
 
+def remove_tag(query: str, tagName: str):
+    """Removes the tag from the word in the database
+
+    Args:
+        query (str): Word for which the tag is to be removed
+        tagName (str): Tag name which is to be removed from the word
+    """
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT * FROM words WHERE word=? and tag=?", (query, tagName))
+    if c.fetchone():
+        c.execute("UPDATE words SET tag=NULL WHERE word=? and tag=?", (query, tagName))
+        conn.commit()
+        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]{tagName}[/bold red] tag."))
+    else:
+        print(Panel(f"[bold blue]{query}[/bold blue] was not tagged as [bold green]{tagName}[/bold green]."))
+
 
 def set_mastered(query: str):
     """
@@ -134,7 +152,7 @@ def set_mastered(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] is already marked as mastered.")
+        print(Panel(f"[bold blue]{query}[/bold blue] is already marked as mastered."))
         return
     
     
@@ -147,7 +165,7 @@ def set_mastered(query: str):
     c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!")
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work!"))
 
 
 
@@ -167,13 +185,13 @@ def set_unmastered(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 0))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] was never mastered.")
+        print(Panel(f"[bold blue]{query}[/bold blue] was never mastered."))
         return
     
     c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it.")
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it."))
 
         
         
@@ -199,14 +217,14 @@ def set_learning(query: str):
     # check if word is already learning
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] is already marked as learning.")
+        print(Panel(f"[bold blue]{query}[/bold blue] is already marked as learning."))
         return
     
     # set word as learning
     c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!")
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising!"))
 
 
 
@@ -226,7 +244,7 @@ def set_unlearning(query: str):
     # check if word is not already unlearned
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 0))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] was never learning.")
+        print(Panel(f"[bold blue]{query}[/bold blue] was never learning."))
         return    
         
     # check if word is already learning
@@ -236,7 +254,7 @@ def set_unlearning(query: str):
         
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red].")    
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red].")    )
 
 
 
@@ -257,13 +275,13 @@ def set_favorite(query: str):
     # check if word is already favorite
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 1))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] is already marked as favorite.")
+        print(Panel(f"[bold blue]{query}[/bold blue] is already marked as favorite."))
         return
     
     c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green].")
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green]."))
 
 
    
@@ -283,7 +301,7 @@ def set_unfavorite(query:str):
     # check if word was never favorited
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 0))
     if c.fetchone():
-        print(f"[bold blue]{query}[/bold blue] was never favorite.")
+        print(Panel(f"[bold blue]{query}[/bold blue] was never favorite."))
         return    
         
     # set word to favorite
@@ -291,7 +309,7 @@ def set_unfavorite(query:str):
         
     if c.rowcount > 0:
         conn.commit()
-        print(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red].")   
+        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red]."))   
  
 
 def count_all_words()->int:
@@ -369,7 +387,7 @@ def get_random_word_definition_from_api():
     Gets a random word from the random-words package. 
     """    
     random_word=RandomWords().get_random_word()
-    print(f"A Random Word for You: [bold green]{random_word}[/bold green]")
+    print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)
      
 
@@ -388,10 +406,10 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print("You have no words in your vocabulary builder learning list.")
+        print(Panel("You have no words in your vocabulary builder learning list."))
     else:
         for row in rows:
-            print(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]")
+            print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
             # Uncomment the below line to get the definition of the word as well
             # definition(row[0])
       
@@ -411,10 +429,10 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print("You have not mastered any words yet.")
+        print(Panel("You have not mastered any words yet."))
     else:
         for row in rows:
-            print(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]")
+            print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
             # Uncomment the below line to get the definition of the word as well
             # definition(row[0])
 
@@ -529,12 +547,12 @@ def delete_all():
     c=conn.cursor()
     rowcount=count_all_words()
     if rowcount==0:
-        print("[bold red]Nothing to delete.[/bold red] Look up some words first.")
+        print(Panel("[bold red]Nothing to delete.[/bold red] Look up some words first."))
         return
     
     c.execute("DELETE FROM words")
     conn.commit()
-    print(f"All words[{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
+    print(Panel(f"All words[{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
 
 
 def delete_mastered():
@@ -544,12 +562,12 @@ def delete_mastered():
     
     rowcount=count_mastered()
     if rowcount==0:
-        print("[bold red]No words in your mastered list.[/bold red] Add some first.")
+        print(Panel("[bold red]No words in your mastered list.[/bold red] Add some first."))
         return
     
     c.execute("DELETE FROM words WHERE mastered=1")
     conn.commit()
-    print(f"All [bold green]mastered[/bold green] words[{rowcount}] [bold red]deleted[/bold red] from your lists. ✅")
+    print(Panel(f"All [bold green]mastered[/bold green] words[{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
 
@@ -560,12 +578,12 @@ def delete_learning():
     
     rowcount=count_learning()
     if rowcount==0:
-        print("[bold red]No words in your learning list.[/bold red] Add some first.")
+        print(Panel("[bold red]No words in your learning list.[/bold red] Add some first."))
         return
     
     c.execute("DELETE FROM words WHERE learning=1")
     conn.commit()
-    print(f"All [bold blue]learning[/bold blue] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+    print(Panel(f"All [bold blue]learning[/bold blue] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 def delete_favorite():
@@ -575,12 +593,12 @@ def delete_favorite():
     
     rowcount=count_favorite()
     if rowcount==0:
-        print("[bold red]No words in your favorite list.[/bold red] Add some first.")
+        print(Panel("[bold red]No words in your favorite list.[/bold red] Add some first."))
         return
     
     c.execute("DELETE FROM words WHERE favorite=1")
     conn.commit()
-    print(f"All [bold gold1]favorite[/bold gold1] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+    print(Panel(f"All [bold gold1]favorite[/bold gold1] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 
@@ -591,12 +609,12 @@ def delete_words_from_tag(tag: str):
             
     rowcount=count_tag(tag)
     if rowcount==0:
-        print(f"[bold red]No words in tag {tag}.[/bold red] Add some first.")
+        print(Panel(f"[bold red]No words in tag {tag}.[/bold red] Add some first."))
         return
     
     c.execute("DELETE FROM words WHERE tag=?", (tag,))
     conn.commit()
-    print(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
+    print(Panel(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
 
@@ -620,5 +638,5 @@ def delete_word(query:str):
     c.execute(sql, (query,))
     if c.rowcount>0:
         conn.commit()
-        print(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
+        print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
         
