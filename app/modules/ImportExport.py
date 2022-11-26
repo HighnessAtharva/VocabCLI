@@ -43,6 +43,7 @@ def import_from_csv():
             sql="INSERT INTO words (word, datetime, tag, mastered, learning, favorite) VALUES (?,?,?,?,?,?)"
             for row in reader:
                 try:
+                    # add a checker to see if the word already exists in the database with the same timestamp
                     c.execute(sql, row)
                     conn.commit()
                     added_words += c.rowcount
@@ -80,14 +81,12 @@ class PDF(FPDF):
     
     def footer(self):
         """Page footer."""
-        #self.set_creation_date = datetime.now()
         self.set_y(-15)
         self.set_font('helvetica', 'I', 10)
         
         # Page number
         self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
         
-        #self.cell(0, 10, self.creation_date, 0, 0, 'L')
 
 
 def export_to_pdf():    # sourcery skip: extract-method
@@ -136,7 +135,7 @@ def export_to_pdf():    # sourcery skip: extract-method
             favorite= "X" if row[5] == 1 else ""
             pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
-        pdf.output(f"Vocabulary Words [{datetime.now().strftime('%d %b %Y')}].pdf")
+        pdf.output(f"VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
         print(Panel(f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF"))
     
     except NoDataFoundException as e:

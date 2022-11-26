@@ -36,7 +36,6 @@ def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
     short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
     pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag the word in your vocabulary builder set.")
 ):
     """
     Shows the definition of WORD. 
@@ -45,7 +44,7 @@ def define(
 
     for word in words:
         if short:
-                definition(word, short=True)
+            definition(word, short=True)
 
         if not short:
             definition(word, short=False)
@@ -53,11 +52,7 @@ def define(
         if pronounce:
             say_aloud(query=word)
             
-        if tag:
-            add_tag(word, tag)
-        
-        if not tag:
-            add_tag(word)
+  
     
 
 
@@ -189,7 +184,7 @@ def Import():
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Tags[/bold blue] a word")
 def tag(
     words: List[str] = typer.Argument(..., help="Words to tagged"),
-    tag: str = typer.Argument(..., help="Tag to add to the words"), #is str right or should it be a list? And can we add multiple tags to a single word? @atharva
+    tag: str = typer.Option(..., "--name", "-n", help="Tag to add to the words"),
 ):
     for word in words:
         add_tag(word, tag)
@@ -198,11 +193,10 @@ def tag(
 # todo @anay: add a command to untag a word   ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Remove[/bold red] tag of a word in the dictionary")
 def untag(
-    words: List[str] = typer.Argument(..., help="Word to remove tag from"),
-    tag: str = typer.Argument(None, "--untag", "-u", help="Tag which is to be removed from the word"), #is this right or flags should be removed as it is a compulsory argument @atharva
+    words: List[str] = typer.Argument(..., help="Word to remove tag from"),    
 ):  
     for word in words:
-        remove_tag(word, tag)
+        remove_tag(word)
 
 
 # todo @atharva: add a command "about" to get software details. Banner, version, credits
@@ -220,6 +214,20 @@ def untag(
 # todo @atharva: add a command to export flashcards (images)
 # OPTIONS/FLAGS will be (two or more can be used at once):
 # -t, --tag: export words of a particular tag
+
+# todo revise
+
+# todo homophones
+
+# todo synonyms
+
+# todo antonyms
+
+# todo: SPACY: paraphrase
+
+# todo: SPACY: sentiment analysis
+
+# todo: SPACY: check paraphrase
 
 if __name__ == "__main__":
     app()

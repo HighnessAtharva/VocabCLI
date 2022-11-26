@@ -54,8 +54,7 @@ def fetch_word_history(word: str):
     except WordNeverSearchedException as e:
         print(e)
         
-#why is tag name optional? @atharva
-def add_tag(query: str, tagName:Optional[str]=None):
+def add_tag(query: str, tagName:str):
     """
     Tags the word in the vocabulary builder list.
 
@@ -70,6 +69,7 @@ def add_tag(query: str, tagName:Optional[str]=None):
         response.raise_for_status()
             
     except exceptions.HTTPError as error:
+        print(Panel(f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔"))
         return
 
     else:
@@ -77,65 +77,53 @@ def add_tag(query: str, tagName:Optional[str]=None):
             
             conn=createConnection()
             c=conn.cursor()
-            if tagName:
-                # if word already exists in the database with no tags, then add the tag to add words
-                c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
-                if c.fetchone():
-                    c.execute("INSERT INTO words (word, datetime,tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
-                    c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
-                    conn.commit()
-                    print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]."))
-                    return
-                
-                # if word already exists in the database with tags, then overwrite the tags
-                c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
-                if c.fetchone():
-                    c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
-                    conn.commit()
-                    print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]."))
-                    return
-                
-                # otherwise, insert the word with the tag for the first time
-                else:
-
-                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), tagName))
-                    print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]."))
-                    
+  
+            # check if word exists in the database
+            check_word_exists(query)
             
-            # if tagName is not provided then silently add the word to the database but do not print anything
-            if not tagName:
-                # if word was previously tagged, and looked up again with no tag then add it with the same tag
-                c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
-                if c.fetchone():
-                    c.execute("SELECT tag FROM words WHERE word=?", (query,))
-                    tagName=c.fetchone()[0]
-                    c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
-                    conn.commit()
-                    return
-
-                c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+            # if word already exists in the database with no tags, then add the tag to add words
+            c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
+            if c.fetchone():
+                c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
                 conn.commit()
-                # if word was was not previously tagged and being added for the first time, then add it with no tag
-                
+                print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]."))
+                return
 
-def remove_tag(query: str, tagName: str):
+            # if word already exists in the database with tags, then overwrite the tags
+            c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
+            if c.fetchone():
+                c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
+                conn.commit()
+                print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]."))
+                return
+
+            
+def remove_tag(query: str):
     """Removes the tag from the word in the database
 
     Args:
         query (str): Word for which the tag is to be removed
-        tagName (str): Tag name which is to be removed from the word
     """
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words WHERE word=? and tag=?", (query, tagName))
+    c.execute("SELECT * FROM words WHERE word=?", (query,))
     if c.fetchone():
-        c.execute("UPDATE words SET tag=NULL WHERE word=? and tag=?", (query, tagName))
-        conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]{tagName}[/bold red] tag."))
+        c.execute("SELECT word FROM words WHERE word=? and tag is not NULL", (query,))
+        if c.fetchone():
+            # word exists with tag
+            c.execute("UPDATE words SET tag=NULL WHERE word=?", (query,))
+            conn.commit()
+            print(Panel(f"Tags deleted for the word [bold blue]{query}[/bold blue]."))
+        else:
+            print(Panel(f"[bold blue]{query}[/bold blue] was not tagged."))    
     else:
-        print(Panel(f"[bold blue]{query}[/bold blue] was not tagged as [bold green]{tagName}[/bold green]."))
+        # word exits without tag
+        raise WordNeverSearchedException(query)
+        
 
 
+
+# word doesn't exist
 def set_mastered(query: str):
     """
     Sets the word as mastered.

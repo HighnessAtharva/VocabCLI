@@ -28,7 +28,7 @@ class TestDefine:
     def test_define_fake_word(self):
         result= runner.invoke(app, ["define", "fakewordhaha"])
         assert result.exit_code == 0
-        assert """Could not find that word in the dictionary""" in result.stdout       
+        assert """is not a valid word""" in result.stdout       
 
     def test_define_short(self):  
         result = runner.invoke(app, ["define", "hello", "--short"])
@@ -38,7 +38,7 @@ class TestDefine:
     def test_define_short_fake_word(self):
         result= runner.invoke(app, ["define", "fakewordhaha", "--short"])
         assert result.exit_code == 0
-        assert """Could not find that word in the dictionary""" in result.stdout
+        assert """is not a valid word""" in result.stdout
         
     def test_define_pronounce(self):
         result= runner.invoke(app, ["define", "hello", "--pronounce"])
@@ -48,13 +48,17 @@ class TestDefine:
     def test_define_pronounce_fake_word(self):
         result= runner.invoke(app, ["define", "fakewordhaha", "--pronounce"])
         assert result.exit_code == 0
-        assert """Could not find that word in the dictionary""" in result.stdout
+        assert """is not a valid word""" in result.stdout
         
     def test_define_pronounce_unavailable(self):
         result= runner.invoke(app, ["define", "extraordinary", "--pronounce"])
         assert result.exit_code == 0
         assert """Audio Unavailable""" in result.stdout
 
+    # def test_define_multiple_words(self):
+    #     result= runner.invoke(app, ["define", "indigo", "paint"])
+    #     assert result.exit_code == 0
+    #     assert """5. """ in result.stdout
 
 # test cases for favorite and unfavorite commands
 class TestFavorite:
@@ -68,6 +72,15 @@ class TestFavorite:
         result = runner.invoke(app, ["favorite", "hello"])
         assert result.exit_code == 0
         assert "has been set as favorite" in result.stdout
+        
+    def test_favorite_multiple_words(self):
+        # adding words to DB using define if it doesn't already exist
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["unfavorite", "hello", "world"])
+        result = runner.invoke(app, ["favorite", "hello", "world"])
+        assert result.exit_code == 0
+        assert "hello has been set as favorite" in result.stdout
+        assert "world has been set as favorite" in result.stdout
         
 
     def test_favorite_fake_word(self):
@@ -150,13 +163,6 @@ class TestMaster:
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "has been set as mastered. Good work!" in result.stdout
-        
-        #should also be removed from learning if present, how to check it?
-        
-        #Solution -> 
-        # You can make the runner invoke multiple commands in a single test case.
-
-        # Once word is mastered, it will be removed from learning. So, we can check if it is present in learning list or not by using unlearn function and then asserting that it is not present in learning list. Because for unlearn function, if word is not present in learning list, it will print never learnt message.
 
         result=runner.invoke(app, ["unlearn", "hello"])
         assert result.exit_code == 0
@@ -186,4 +192,55 @@ class TestMaster:
         result = runner.invoke(app, ["unmaster", "fakewordhaha"])
         assert result.exit_code == 0
         assert "was never tracked before. Add some words" in result.stdout
-      
+
+class TestTag:    
+    def test_tag(self):
+        # adding this word to learning list programatically
+        runner.invoke(app, ["delete", "hello"])
+        runner.invoke(app, ["define", "hello"])
+        result = runner.invoke(app, ["tag", "hello","--name", "testtag"])
+        assert result.exit_code == 0
+        assert "has been tagged as" in result.stdout
+        
+    def test_tag_already_exists(self):
+        # adding this word to learning list programatically with a tag
+        runner.invoke(app, ["define", "hello", "--tag", "testtag"])
+
+        result = runner.invoke(app, ["tag", "hello", "--name", "testtag2"])
+        assert result.exit_code == 0
+        assert "tag has been changed to" in result.stdout
+    
+    def test_tag_fake_word(self):
+        result=runner.invoke(app, ["tag", "fakeworkhaha", "--name", "testtag"])
+        assert result.exit_code == 0 
+        assert "is not a valid word" in result.stdout
+        
+    def test_untag(self):        
+        # reset tag value if it was already tagged (edge case)
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["delete", "hello"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["tag", "hello", "--name", "testtag2"])
+
+        result = runner.invoke(app, ["untag", "hello"])
+        assert result.exit_code == 0
+        assert "Tags deleted for the word" in result.stdout
+
+    def test_untag_not_tagged(self):
+        # reset tag value if it was already tagged (edge case)
+        runner.invoke(app, ["untag", "hello"])
+
+        result = runner.invoke(app, ["untag", "hello"])
+        assert result.exit_code == 0
+        assert "was not tagged" in result.stdout
+
+    def test_untag_fake_word(self):
+        result = runner.invoke(app, ["untag", "fakewordhaha"])
+        assert result.exit_code == 1 # exception raised
+        assert "was never tracked before." in result.stdout
+        
+
+class TestDelete:
+    def test_delete(self):
+        pass
+    pass
