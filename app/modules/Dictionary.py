@@ -122,6 +122,8 @@ def insert_word_to_db(query: str):
             if c.fetchone():
                 c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
                 conn.commit()
+            
+            
                 
             
             

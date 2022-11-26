@@ -55,11 +55,19 @@ class TestDefine:
         assert result.exit_code == 0
         assert """Audio Unavailable""" in result.stdout
 
-    # def test_define_multiple_words(self):
-    #     result= runner.invoke(app, ["define", "indigo", "paint"])
-    #     assert result.exit_code == 0
-    #     assert """5. """ in result.stdout
+    def test_define_multiple_real_words(self):
+        result= runner.invoke(app, ["define", "indigo", "paint"])
+        assert result.exit_code == 0
+        assert """Having a deep purplish-blue""" in result.stdout #substr from def of first word
+        assert """To direct a radar beam toward""" in result.stdout #substr from def of second word
 
+    def test_define_multiple_real_fake_words(self):
+        result=runner.invoke(app, ["define","fakewordhaha", "paint"])
+        assert result.exit_code == 0
+        assert """is not a valid word""" in result.stdout #error msg for fake word
+        assert """To direct a radar beam toward""" in result.stdout #substr from def of second word
+        
+        
 # test cases for favorite and unfavorite commands
 class TestFavorite:
     def test_favorite(self):
@@ -82,7 +90,14 @@ class TestFavorite:
         assert "hello has been set as favorite" in result.stdout
         assert "world has been set as favorite" in result.stdout
         
-
+    def test_unfavorite_multiple_words(self):
+        runner.invoke(app, ["define", "calm", "morning"] )
+        runner.invoke(app, ["favorite", "calm", "morning"])
+        result = runner.invoke(app, ["unfavorite", "calm", "morning"])
+        assert result.exit_code == 0
+        assert "calm has been removed from favorite" in result.stdout
+        assert "morning has been removed from favorite" in result.stdout
+        
     def test_favorite_fake_word(self):
         result = runner.invoke(app, ["favorite", "fakewordhaha"])
         assert result.exit_code == 0
@@ -109,7 +124,7 @@ class TestFavorite:
         assert result.exit_code == 0
         assert "was never tracked before. Add some words" in result.stdout
 
-
+    
 # test cases for learn and unlearn commands
 class TestLearn:
     def test_learn(self):
@@ -123,6 +138,11 @@ class TestLearn:
         assert result.exit_code == 0
         assert "has been set as learning. Keep revising!" in result.stdout
         
+    def test_learn_multiple_words(self):
+        pass
+    
+    def test_unlearn_multiple_words(self):
+        pass
 
     def test_learn_fake_word(self):
         result = runner.invoke(app, ["learn", "fakewordhaha"])
@@ -167,6 +187,12 @@ class TestMaster:
         result=runner.invoke(app, ["unlearn", "hello"])
         assert result.exit_code == 0
         assert "was never learning" in result.stdout
+        
+    def test_master_multiple_words(self):
+        pass
+
+    def test_unmaster_multiple_words(self):
+        pass
         
     def test_master_fake_word(self):
         result = runner.invoke(app, ["master", "fakewordhaha"])
@@ -243,4 +269,16 @@ class TestTag:
 class TestDelete:
     def test_delete(self):
         pass
+    
+    def test_delete_multiple_words(self):
+        pass
+    
+    def test_delete_fake_word(self):
+        pass
+    
+    def test_delete_unadded_word(self):
+        pass
+    
+    
+class TestList:
     pass
