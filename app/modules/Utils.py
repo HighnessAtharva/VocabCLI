@@ -6,9 +6,9 @@ from playsound import playsound
 from pathlib import Path
 from requests import exceptions
 from typing import *
-from datetime import datetime
 from rich import print
 from rich.panel import Panel
+from rich.columns import Columns
 from rich.console import Console
 from random_word import RandomWords
 from Database import createConnection, createTables
@@ -520,13 +520,15 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         print(Panel(error_message))
     else:
         print(Panel(success_message))
-        table=Table(show_header=True, header_style="bold bright_cyan")
-        table.add_column("Word", style="cyan", width=15)
-        for row in rows:
-            table.add_row(row[0])
-            table.add_section() 
+        # table=Table(show_header=True, header_style="bold bright_cyan")
+        # table.add_column("Word", style="cyan", width=15)
+        # for row in rows:
+        #     table.add_row(row[0])
+        #     table.add_section() 
         console = Console()
-        console.print(table)
+        # console.print(table)
+        rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+        console.print(Columns(rows))
             
             
 def delete_all():
@@ -627,4 +629,3 @@ def delete_word(query:str):
     if c.rowcount>0:
         conn.commit()
         print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
-        
