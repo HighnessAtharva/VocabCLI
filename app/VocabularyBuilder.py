@@ -7,8 +7,9 @@ from modules.Dictionary import (definition, say_aloud)
 from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import *
-from modules.ImportExport import *
-from modules.Thesaurus import *
+from modules.About import *
+#from modules.ImportExport import *
+#from modules.Thesaurus import *
 
 # app configuration
 app = typer.Typer(
@@ -84,7 +85,16 @@ def list(
         show_list(last=last)
     if most:
         show_list(most=most)
-    # todo: print list horizontally instead of vertically.
+    if tag and mastered:
+        show_list(tag=tag, mastered=True)
+    if tag and learning:
+        show_list(tag=tag, learning=True)
+    if tag and favorite:
+        show_list(tag=tag, favorite=True)
+    if favorite and learning:
+            show_list(favorite=True, learning=True)
+    if favorite and mastered:
+            show_list(favorite=True, mastered=True)
     elif not any([favorite, learning, mastered, tag, date, last, most]):
         show_list()    
             
@@ -200,6 +210,11 @@ def untag(
 
 
 # todo @atharva: add a command "about" to get software details. Banner, version, credits
+@app.command(rich_help_panel="About", help="📚 [bold blue]About[/bold blue] the software")
+def about():
+    console = Console(record=False, color_system="truecolor")
+    print_banner(console) 
+    about_app()
 
 
 # todo @atharva: add a command to get learning rate of the user
@@ -209,6 +224,36 @@ def untag(
 # --month: get learning rate this month
 # --year: get learning rate this year
 # --graph: get learning rate graph
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] of the user")
+def learning_rate(
+    today: Optional[bool] = typer.Option(False, "--today", "-t", help="Get learning rate today"),
+    week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
+    month: Optional[bool] = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
+    year: Optional[bool] = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
+    graph: Optional[bool] = typer.Option(False, "--graph", "-g", help="Get learning rate graph"),
+):
+    if today:
+        learning_rate(today=true)
+    if week:
+        learning_rate(week=true)
+    if month:
+        learning_rate(month=true)
+    if year:
+        learning_rate(year=true)
+    if graph:
+        learning_rate(graph=true)
+    if graph and today:
+        learning_rate(graph=true, today=true)
+    if graph and week:
+        learning_rate(graph=true, week=true)
+    if graph and month:
+        learning_rate(graph=true, month=true)
+    if graph and year:
+        learning_rate(graph=true, year=true)
+    if not any([today, week, month, year, graph]):
+            learning_rate()
+    else:
+        print(Panel("[bold red] you cannot combine options with learning rate command[/bold red] ❌"))
 
 
 # todo @atharva: add a command to export flashcards (images)
