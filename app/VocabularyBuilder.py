@@ -8,6 +8,7 @@ from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import *
 from modules.ImportExport import *
+from modules.Thesaurus import *
 
 # app configuration
 app = typer.Typer(
@@ -190,7 +191,6 @@ def tag(
         add_tag(word, tag)
 
 
-# todo @anay: add a command to untag a word   ✅
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Remove[/bold red] tag of a word in the dictionary")
 def untag(
     words: List[str] = typer.Argument(..., help="Word to remove tag from"),    
@@ -220,8 +220,21 @@ def untag(
 # todo homophones
 
 # todo synonyms
-
+@app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]synonyms[/bold pink] for a word")
+def synonym(
+    words: List[str] = typer.Argument(..., help="Word to search synonyms for"),    
+):  
+    for word in words:
+        find_synonym(word)
+        
 # todo antonyms
+@app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]antonyms[/bold pink] for a word")
+def antonym(
+    words: List[str] = typer.Argument(..., help="Word to search antonyms for"),    
+):  
+    for word in words:
+        find_antonym(word)
+        
 
 # todo: SPACY: paraphrase
 

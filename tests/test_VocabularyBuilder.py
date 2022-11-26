@@ -227,7 +227,13 @@ class TestTag:
         result = runner.invoke(app, ["tag", "hello","--name", "testtag"])
         assert result.exit_code == 0
         assert "has been tagged as" in result.stdout
-        
+    
+    def test_tag_multiple_words(self):
+        pass
+    
+    def test_untag_multiple_words(self):
+        pass
+    
     def test_tag_already_exists(self):
         # adding this word to learning list programatically with a tag
         runner.invoke(app, ["define", "hello", "--tag", "testtag"])
