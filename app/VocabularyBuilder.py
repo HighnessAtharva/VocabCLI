@@ -8,8 +8,8 @@ from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import *
 from modules.About import *
-#from modules.ImportExport import *
-#from modules.Thesaurus import *
+from modules.ImportExport import *
+from modules.Thesaurus import *
 
 # app configuration
 app = typer.Typer(
@@ -233,23 +233,23 @@ def learning_rate(
     graph: Optional[bool] = typer.Option(False, "--graph", "-g", help="Get learning rate graph"),
 ):
     if today:
-        learning_rate(today=true)
+        learning_rate(today=True)
     if week:
-        learning_rate(week=true)
+        learning_rate(week=True)
     if month:
-        learning_rate(month=true)
+        learning_rate(month=True)
     if year:
-        learning_rate(year=true)
+        learning_rate(year=True)
     if graph:
-        learning_rate(graph=true)
+        learning_rate(graph=True)
     if graph and today:
-        learning_rate(graph=true, today=true)
+        learning_rate(graph=True, today=True)
     if graph and week:
-        learning_rate(graph=true, week=true)
+        learning_rate(graph=True, week=True)
     if graph and month:
-        learning_rate(graph=true, month=true)
+        learning_rate(graph=True, month=True)
     if graph and year:
-        learning_rate(graph=true, year=true)
+        learning_rate(graph=True, year=True)
     if not any([today, week, month, year, graph]):
             learning_rate()
     else:
