@@ -3,12 +3,11 @@
 # Run specific Class Test: ⏩ python -m pytest -k "ClassName" ../tests
 # Run a specific Test: ⏩ python -m pytest -k "test_bye" ../tests
 
-
-
+import pytest
+import os
 from typer.testing import CliRunner
 from VocabularyBuilder import app
-import pytest
-  
+ 
 runner=CliRunner()
 
 # test for bye command
@@ -285,6 +284,61 @@ class TestDelete:
     def test_delete_unadded_word(self):
         pass
     
+class TestClear:
+    def test_clear_all(self):
+        pass
     
+    def test_clear_learning(self):
+        pass
+    
+    def test_clear_mastered(self):
+        pass
+    
+    def test_clear_favorite(self):
+        pass
+    
+    def test_clear_tag(self):
+        pass
+    
+    def test_clear_with_empty_db(self):
+        pass
+    
+    
+ 
 class TestList:
     pass
+
+class TestImportExport:
+    def test_pdf_export(self):
+        runner.invoke(app, ["define", "hello"])
+        result = runner.invoke(app, ["export", "--pdf"])
+        assert result.exit_code == 0 
+        assert "WORDS TO PDF" in result.stdout
+          
+    def test_csv_import_with_duplicates(self):
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["export"])
+        result = runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "WITH THE SAME TIMESTAMP" in result.stdout
+        
+    # WARNING: Running this test will delete all the words in the database. Might want to comment it out.     
+    def test_csv_import_without_duplicates(self):
+        runner.invoke(app, ["define", "math","echo", "chamber"])
+        runner.invoke(app, ["export"])
+        runner.invoke(app, ["clear", "--all"])
+        result = runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "IMPORTED" in result.stdout
+        
+    def test_csv_import_no_file(self):
+        # programatically delete the csv file (if exists)
+        test = os.listdir(os.getcwd())
+        for item in test:
+            if item.endswith(".csv"):
+                os.remove(os.path.join(os.getcwd(), item))
+        
+        # try to import non-existent file
+        result=runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "FILE NOT FOUND" in result.stdout

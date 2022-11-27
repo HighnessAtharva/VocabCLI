@@ -40,11 +40,17 @@ def import_from_csv():
         with open ('VocabularyBuilder.csv', 'r') as file:
             reader = csv.reader(file)
             next(reader) # skip header
-            sql="INSERT INTO words (word, datetime, tag, mastered, learning, favorite) VALUES (?,?,?,?,?,?)"
+           
             for row in reader:
                 try:
-                    # add a checker to see if the word already exists in the database with the same timestamp
-                    c.execute(sql, row)
+                    # if tag is empty, skip the tag column in db
+                    if row[2] == "":
+                        sql = "INSERT INTO words (word, datetime, mastered, learning, favorite) VALUES (?, ?, ?, ?, ?)"
+                        c.execute(sql, (row[0], row[1], row[3], row[4], row[5]))
+                    else:
+                        # add a checker to see if the word already exists in the database with the same timestamp
+                        sql="INSERT INTO words (word, datetime, tag, mastered, learning, favorite) VALUES (?,?,?,?,?,?)"
+                        c.execute(sql, row)
                     conn.commit()
                     added_words += c.rowcount
                 except Exception as e:
