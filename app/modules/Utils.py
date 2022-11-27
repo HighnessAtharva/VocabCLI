@@ -29,7 +29,7 @@ def check_word_exists(query: str):
         return True
         
 
-def fetch_word_history(word: str):
+def fetch_word_history(word: str):  # sourcery skip: extract-method
     """ Fetches all instances of timestamp for a word from the database 
 
     Args:
@@ -44,7 +44,7 @@ def fetch_word_history(word: str):
         table=Table(show_header=True, header_style="bold green")
         table.add_column("History", style="cyan")
         if len(rows) <= 0:
-            raise WordNeverSearchedException
+            raise WordNeverSearchedException(word)
         count=len(rows)
         if count==1:
             print(Panel(f"You have searched for [bold]{word}[/bold] {count} time before. 🔎"))
@@ -58,7 +58,7 @@ def fetch_word_history(word: str):
     except WordNeverSearchedException as e:
         print(e)
         
-fetch_word_history("hello")
+
 def add_tag(query: str, tagName:str):
     """
     Tags the word in the vocabulary builder list.
@@ -433,7 +433,16 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
           
   
 # FIXME @atharva: debug only tag argument 🐞
-def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, mastered:Optional[bool]=False, tag:Optional[bool]=None, date:Optional[int]=None, last:Optional[int]=None, most: Optional[int]=None):
+def show_list(
+    favorite:Optional[bool]=False,
+    learning:Optional[bool]=False, 
+    mastered:Optional[bool]=False, 
+    tag:Optional[bool]=None, 
+    date:Optional[int]=None, 
+    last:Optional[int]=None, 
+    most: Optional[int]=None
+    ):
+    # sourcery skip: low-code-quality
     """Gets all the words in the vocabulary builder list.
     
     Args:
@@ -448,33 +457,7 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
     conn=createConnection()
     c=conn.cursor()
 
-    # todo: arguments do not work together. Fix this. list -m -t fruits invokes commands seperately.
-    if tag is not None and mastered==True:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1", (tag,))
-        success_message=f"[bold green]Mastered[/bold green] words with tag [bold green]{tag}[/bold green] are:"
-        error_message="You have not mastered any words with this tag yet. ❌"
-
-    elif tag and learning:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND learning=1", (tag,))
-        success_message=f"[bold blue]Learning[/bold blue] words with tag [bold blue]{tag}[/bold blue] are:"
-        error_message="You have not added any words with this tag to the vocabulary builder list yet. ❌"
-
-    elif tag and favorite:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND favorite=1", (tag,))
-        success_message=f"[bold gold1]Favorite[/bold gold1] words with tag [bold magenta]{tag}[/bold magenta] are:"
-        error_message="You have not added any words with this tag to the favorite list yet. ❌"
-
-    elif favorite and mastered:
-        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 AND mastered=1")
-        success_message = "[bold green]Mastered[/bold green] [bold gold1]Favorite[/bold gold1] words are:"
-        error_message="You do not mastered words that are set as favorite ❌"
-
-    elif favorite and learning:
-        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 AND learning=1")
-        success_message = "[bold blue]Learning[/bold blue] [bold gold1]Favorite[/bold gold1] words are:"
-        error_message="You do not have any learning words that are set as favorite ❌"
-
-    elif mastered:
+    if mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
         success_message = "[bold green]Mastered[/bold green] words are:"
         error_message="You have not [bold green]mastered[/bold green] any words yet. ❌"

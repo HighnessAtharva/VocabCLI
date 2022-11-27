@@ -7,3 +7,4 @@ src/VocabularyBuilder/response.json
 src/VocabularyBuilder/delete.py
 app/modules/tempCodeRunnerFile.py
 app/modules/tempCodeRunnerFile.py
+tests/tempCodeRunnerFile.py

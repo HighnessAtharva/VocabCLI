@@ -26,7 +26,3 @@ def generate_graph_report():
     pdf.output("TextReport.pdf")
     pdf.output("GraphReport.pdf")
     
-
-
-generate_graph_report()
-generate_text_report()

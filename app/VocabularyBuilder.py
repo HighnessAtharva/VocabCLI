@@ -82,16 +82,6 @@ def list(
         show_list(last=last)
     if most:
         show_list(most=most)
-    if tag and mastered:
-        show_list(tag=tag, mastered=True)
-    if tag and learning:
-        show_list(tag=tag, learning=True)
-    if tag and favorite:
-        show_list(tag=tag, favorite=True)
-    if favorite and learning:
-            show_list(favorite=True, learning=True)
-    if favorite and mastered:
-            show_list(favorite=True, mastered=True)
     elif not any([favorite, learning, mastered, tag, date, last, most]):
         show_list()    
             
@@ -210,7 +200,7 @@ def untag(
 def about():
     console = Console(record=False, color_system="truecolor")
     print_banner(console) 
-    about_app()
+    print_about_app()
 
 # todo conditionals need to be fixed
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
