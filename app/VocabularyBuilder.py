@@ -222,24 +222,23 @@ def learning_rate(
     graph: Optional[bool] = typer.Option(False, "--graph", "-g", help="Get learning rate graph"),
 ):
     if today:
-        get_learning_rate(today=True)
-        
+        learning_rate(today=True)
     if week:
-        get_learning_rate(week=True)
+        learning_rate(week=True)
     if month:
-        get_learning_rate(month=True)
+        learning_rate(month=True)
     if year:
-        get_learning_rate(year=True)
+        learning_rate(year=True)
     if graph:
-        get_learning_rate(graph=True)
+        learning_rate(graph=True)
     if graph and today:
-        get_learning_rate(graph=True, today=True)
+        learning_rate(graph=True, today=True)
     if graph and week:
-        get_learning_rate(graph=True, week=True)
+        learning_rate(graph=True, week=True)
     if graph and month:
-        get_learning_rate(graph=True, month=True)
+        learning_rate(graph=True, month=True)
     if graph and year:
-        get_learning_rate(graph=True, year=True)
+        learning_rate(graph=True, year=True)
     if not any([today, week, month, year, graph]):
             get_learning_rate()
     else:

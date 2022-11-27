@@ -156,16 +156,14 @@ def definition(query:str, short:Optional[bool]=False):
             for meaning in meaningNumber["definitions"][:1]:
                 table.add_row(meaningNumber["partOfSpeech"], meaning["definition"])
             table.add_section() 
-        console = Console()
-        console.print(table)
+        print(table)
                 
     if not short:
         for meaningNumber in response["meanings"]:
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):    
                 table.add_row(f"{meaningNumber['partOfSpeech']}", f"{count}. {meaning['definition']}")    
-            table.add_section()    
-        console = Console()
-        console.print(table)
+            table.add_section() 
+        print(table)
         
  
   

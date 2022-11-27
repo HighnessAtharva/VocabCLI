@@ -14,11 +14,11 @@ def find_synonym(query:str):
         synonyms.extend(lm.name() for lm in syn.lemmas())
     if synonyms := set(filter(lambda x: "_" not in x, synonyms)):
         synonyms = set(filter(lambda x: x != query, synonyms))
-        print(f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are ⏭")
+        print(Panel(f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are ⏭"))
         synonyms = [Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
-        console.print(Columns(synonyms))
+        print(Columns(synonyms))
     else:
-        print(f"No synonyms found for {query}")
+        print(Panel(f"No synonyms found for {query}"))
     print("\n\n")
     
 def find_antonym(query:str):
@@ -26,13 +26,9 @@ def find_antonym(query:str):
     for syn in wordnet.synsets(query):
         antonyms.extend(lm.antonyms()[0].name() for lm in syn.lemmas() if lm.antonyms())
     if antonyms := set(filter(lambda x: "_" not in x, antonyms)):
-        print(f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are ⏭")
+        print(Panel(f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are ⏭"))
         antonyms = [Panel(f"[deep_pink4]{antonym}[deep_pink4]", expand=True) for antonym in antonyms]
-        console.print(Columns(antonyms))
+        print(Columns(antonyms))
     else:
-        print(f"No antonyms found for {query}")
+        print(Panel(f"No antonyms found for {query}"))
     print("\n\n")
-    
-
-
-    

@@ -18,4 +18,4 @@ class AudioUnavailableException(Exception):
 class NoDataFoundException(Exception):
     """raised when the user attempts to export data but there is no data to export."""
     def __init__(self):
-        print(Panel("[bold red]No words to export ❌. Add some words in your list using 'define' command fisear➕. [/bold red]"))
+        print(Panel("[bold red]No words to export ❌. Add some words in your list using 'define' command ➕. [/bold red]"))
