@@ -204,35 +204,26 @@ def about():
 
 # todo conditionals need to be fixed
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
-def learning_rate(
+def rate(
     today: Optional[bool] = typer.Option(False, "--today", "-t", help="Get learning rate today"),
     week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
     month: Optional[bool] = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
     year: Optional[bool] = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
-    graph: Optional[bool] = typer.Option(False, "--graph", "-g", help="Get learning rate graph"),
+    
 ):
     if today:
-        learning_rate(today=True)
-    if week:
-        learning_rate(week=True)
-    if month:
-        learning_rate(month=True)
-    if year:
-        learning_rate(year=True)
-    if graph:
-        learning_rate(graph=True)
-    if graph and today:
-        learning_rate(graph=True, today=True)
-    if graph and week:
-        learning_rate(graph=True, week=True)
-    if graph and month:
-        learning_rate(graph=True, month=True)
-    if graph and year:
-        learning_rate(graph=True, year=True)
-    if not any([today, week, month, year, graph]):
-            get_learning_rate()
-    else:
-        print(Panel("[bold red] you cannot combine options with learning rate command[/bold red] ❌"))
+        get_lookup_rate(today=True)
+    elif week:
+        get_lookup_rate(week=True)
+    elif month:
+        get_lookup_rate(month=True)
+    elif year:
+        get_lookup_rate(year=True)
+    elif not any([today, week, month, year]):
+        # default is today
+        get_lookup_rate(today=True)
+
+        
 
 
 # todo @atharva: add a command to export flashcards (images)

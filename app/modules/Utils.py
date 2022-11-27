@@ -268,7 +268,7 @@ def set_favorite(query: str):
     # check if word is already favorite
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 1))
     if c.fetchone():
-        print(Panel(f"[bold blue]{query}[/bold blue] is already marked as favorite. 💙"))
+        print(Panel(f"[bold blue]{query}[/bold blue] is already marked as [bold green]favorite[/bold green]. 💙"))
         return
     
     c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
@@ -459,44 +459,44 @@ def show_list(
 
     if mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
-        success_message = "[bold green]Mastered[/bold green] words are:"
+        success_message = "[bold green]Mastered[/bold green] words"
         error_message="You have not [bold green]mastered[/bold green] any words yet. ❌"
 
     elif learning:
         c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
-        success_message="[bold blue]Learning[/bold blue] words are:"
+        success_message="[bold blue]Learning[/bold blue] words"
         error_message="You have not added any words to the [bold blue]learning list[/bold blue] yet. ❌"
 
     elif favorite:
         c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
-        success_message="[bold gold1]Favorite[/bold gold1] words are:"
+        success_message="[bold gold1]Favorite[/bold gold1] words"
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif date:
         c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{date} days')")
         date_today=datetime.now().strftime("%d/%m/%Y")
         date_before=datetime.now() - timedelta(days=int(date))
-        success_message=f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue] are:"
+        success_message=f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue]"
         error_message="No records found within this date range ❌"
 
     elif last:
         c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
-        success_message=f"Last [bold blue]{last}[/bold blue] words searched are:"
+        success_message=f"Last [bold blue]{last}[/bold blue] words searched"
         error_message="You haven't searched for any words yet. ❌"
 
     elif tag:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
-        success_message=f"Words with tag [bold magenta]{tag}[/bold magenta] are:"
+        success_message=f"Words with tag [bold magenta]{tag}[/bold magenta]"
         error_message=f"No words found with the tag {tag}. ❌"
     
     elif most:
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
-        success_message=f"Top [bold blue]{most}[/bold blue] most searched words are:"
+        success_message=f"Top [bold blue]{most}[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
     
     elif favorite is False and learning is False and mastered is False and tag is None and date is None and last is None and most is None:
         c.execute("SELECT DISTINCT word FROM words")
-        success_message="Here is your list of words: "
+        success_message="Here is your list of words"
         error_message="You have no words in your vocabulary builder list. ❌"
     
     else:
@@ -507,7 +507,7 @@ def show_list(
     if len(rows) <= 0:
         print(Panel(error_message))
     else:
-        print(Panel(success_message))
+        print(Panel(f"{success_message} [bold blue][{len(rows)}][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
         print(Columns(rows))
             
@@ -606,22 +606,67 @@ def delete_word(query:str):
         print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
         
         
-def get_learning_rate(today=False, week=False, month=False, year=False, graph=False):
+def get_lookup_rate(today=False, week=False, month=False, year=False):
     """Returns the learning rate of the user."""
     conn=createConnection()
     c=conn.cursor()
+    
     if today:
-        c.execute("SELECT word FROM words WHERE tag is NULL")
-        total_words=c.fetchall()
-        print(total_words)
-        # # get todays learning words
-        # c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE learning=1 AND date(datetime)=date('now')")
-        # learning_count_today=c.fetchone()[0]
-        # # get yesterdays learning words
-        # c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE learning=1 AND date(datetime)=date('now', '-1 day')")
-        # learning_count_yesterday=c.fetchone()[0]
+        # get todays learning words
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)=date('now')")
+        learning_count_today=c.fetchone()[0]
         
+        # get yesterdays learning words
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)=date('now', '-1 day')")
+        learning_count_yesterday=c.fetchone()[0]
+
+        percentage=round((learning_count_today)/(learning_count_today-learning_count_yesterday)*100, 2)
+        if percentage>0:
+            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words."))
+        else:
+            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words."))
+    
+    elif week:
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-7 day')")
+        learning_count_week=c.fetchone()[0]
         
-        # print(Panel(f"[bold]Yesterday's[/bold] learning rate was [bold blue]{learning_count_yesterday}[/bold blue] words."))
-        # print(Panel(f"[bold]Today[/bold] you have learned [bold blue]{learning_count_today}[/bold blue] words."))
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-14 day') AND date(datetime)<date('now', '-7 day')")
+        learning_count_last_week=c.fetchone()[0]
         
+        percentage=round((learning_count_week)/(learning_count_week-learning_count_last_week)*100, 2)
+        if percentage>0:
+            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words."))
+            
+        else:
+            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words."))
+            
+    elif month:
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-1 month')")
+        learning_count_month=c.fetchone()[0]
+        
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-2 month') AND date(datetime)<date('now', '-1 month')")
+        learning_count_last_month=c.fetchone()[0]
+        
+        percentage=round((learning_count_month)/(learning_count_month-learning_count_last_month)*100, 2)
+        if percentage>0:
+            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words."))
+            
+        else:
+            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words."))
+            
+    elif year:
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-1 year')")
+        learning_count_year=c.fetchone()[0]
+        
+        c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)>=date('now', '-2 year') AND date(datetime)<date('now', '-1 year')")
+        learning_count_last_year=c.fetchone()[0]
+        
+        percentage=round((learning_count_year)/(learning_count_year-learning_count_last_year)*100, 2)
+        if percentage>0:
+            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words."))
+            
+        else:
+            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words."))
+    
+    else:
+        print(Panel("[bold red] you cannot combine options with learning rate command[/bold red] ❌"))
