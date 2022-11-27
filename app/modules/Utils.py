@@ -184,7 +184,7 @@ def set_unmastered(query: str):
     c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it. 🧠"))
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]learning[/bold red]. Remember to practice it."))
 
         
         
@@ -247,7 +247,7 @@ def set_unlearning(query: str):
         
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unlearning[/bold red]. ✅")    )
+        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]learning[/bold red].")    )
 
 
 
@@ -490,7 +490,7 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif date:
-        c.execute(f"SELECT word FROM words where datetime > datetime('now' , '-{date} days')")
+        c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{date} days')")
         date_today=datetime.now().strftime("%d/%m/%Y")
         date_before=datetime.now() - timedelta(days=int(date))
         success_message=f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue] are:"
@@ -525,13 +525,6 @@ def show_list(favorite:Optional[bool]=False,learning:Optional[bool]=False, maste
         print(Panel(error_message))
     else:
         print(Panel(success_message))
-        # table=Table(show_header=True, header_style="bold bright_cyan")
-        # table.add_column("Word", style="cyan", width=15)
-        # for row in rows:
-        #     table.add_row(row[0])
-        #     table.add_section() 
-        # console = Console()
-        # console.print(table)
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
         print(Columns(rows))
             

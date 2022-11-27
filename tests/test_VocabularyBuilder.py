@@ -127,21 +127,27 @@ class TestFavorite:
 # test cases for learn and unlearn commands
 class TestLearn:
     def test_learn(self):
-        # adding this word to learning list programatically
         runner.invoke(app, ["define", "hello"])
-        
-        # reset learning value if it was already learning (edge case)
         runner.invoke(app, ["unlearn", "hello"])
-        
         result = runner.invoke(app, ["learn", "hello"])
         assert result.exit_code == 0
         assert "has been set as learning. Keep revising!" in result.stdout
         
     def test_learn_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["unlearn", "hello", "world"])
+        result = runner.invoke(app, ["learn", "hello", "world"])
+        assert result.exit_code == 0
+        assert "hello has been set as learning" in result.stdout
+        assert "world has been set as learning" in result.stdout
     
     def test_unlearn_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "white", "black"])
+        runner.invoke(app, ["learn", "white", "black"])
+        result = runner.invoke(app, ["unlearn", "white", "black"])
+        assert result.exit_code == 0
+        assert "white has been removed from learning" in result.stdout
+        assert "black has been removed from learning" in result.stdout
 
     def test_learn_fake_word(self):
         result = runner.invoke(app, ["learn", "fakewordhaha"])
@@ -156,7 +162,7 @@ class TestLearn:
     def test_unlearn(self):
         result = runner.invoke(app, ["unlearn", "hello"])
         assert result.exit_code == 0
-        assert "has been set as unlearning" in result.stdout
+        assert "has been removed from learning" in result.stdout
            
     def test_unlearn_not_learn(self):
         result = runner.invoke(app, ["unlearn", "hello"])
@@ -188,10 +194,20 @@ class TestMaster:
         assert "was never learning" in result.stdout
         
     def test_master_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["learn", "hello", "world"])
+        result = runner.invoke(app, ["master", "hello", "world"])
+        assert result.exit_code == 0
+        assert "hello has been set as mastered" in result.stdout
+        assert "world has been set as mastered" in result.stdout
 
     def test_unmaster_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["master", "hello", "world"])
+        result = runner.invoke(app, ["unmaster", "hello", "world"])
+        assert result.exit_code == 0
+        assert "hello has been set as learning" in result.stdout
+        assert "world has been set as learning" in result.stdout
         
     def test_master_fake_word(self):
         result = runner.invoke(app, ["master", "fakewordhaha"])
@@ -199,6 +215,8 @@ class TestMaster:
         assert "was never tracked before. Add some words" in result.stdout
         
     def test_master_already_master(self):
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["master", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "is already marked as mastered" in result.stdout
@@ -206,7 +224,7 @@ class TestMaster:
     def test_unmaster(self):
         result = runner.invoke(app, ["unmaster", "hello"])
         assert result.exit_code == 0
-        assert "has been set as unmastered" in result.stdout
+        assert "has been set as learning" in result.stdout
            
     def test_unmaster_not_master(self):
         result = runner.invoke(app, ["unmaster", "hello"])
@@ -219,8 +237,7 @@ class TestMaster:
         assert "was never tracked before. Add some words" in result.stdout
 
 class TestTag:    
-    def test_tag(self):
-        # adding this word to learning list programatically
+    def test_tag(self):  # sourcery skip: class-extract-method
         runner.invoke(app, ["delete", "hello"])
         runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["tag", "hello","--name", "testtag"])
@@ -228,15 +245,24 @@ class TestTag:
         assert "has been tagged as" in result.stdout
     
     def test_tag_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["untag", "hello", "world"])
+        result=runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
+        assert result.exit_code == 0
+        assert "hello has been tagged as" in result.stdout
+        assert "world has been tagged as" in result.stdout
+        
     
     def test_untag_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
+        result=runner.invoke(app, ["untag", "hello", "world"])
+        assert result.exit_code == 0
+        assert "Tags deleted for the word hello" in result.stdout
+        assert "Tags deleted for the word world" in result.stdout
     
     def test_tag_already_exists(self):
-        # adding this word to learning list programatically with a tag
-        runner.invoke(app, ["define", "hello", "--tag", "testtag"])
-
+        runner.invoke(app, ["tag", "hello", "--name", "testtag"])
         result = runner.invoke(app, ["tag", "hello", "--name", "testtag2"])
         assert result.exit_code == 0
         assert "tag has been changed to" in result.stdout
@@ -247,7 +273,6 @@ class TestTag:
         assert "is not a valid word" in result.stdout
         
     def test_untag(self):        
-        # reset tag value if it was already tagged (edge case)
         runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["delete", "hello"])
         runner.invoke(app, ["define", "hello"])
@@ -258,9 +283,8 @@ class TestTag:
         assert "Tags deleted for the word" in result.stdout
 
     def test_untag_not_tagged(self):
-        # reset tag value if it was already tagged (edge case)
+        runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["untag", "hello"])
-
         result = runner.invoke(app, ["untag", "hello"])
         assert result.exit_code == 0
         assert "was not tagged" in result.stdout
@@ -273,35 +297,67 @@ class TestTag:
 
 class TestDelete:
     def test_delete(self):
-        pass
+        runner.invoke(app, ["define", "hello"])
+        result = runner.invoke(app, ["delete", "hello"])
+        assert result.exit_code == 0 
+        assert "hello deleted from your lists." in result.stdout
     
     def test_delete_multiple_words(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world"])
+        result = runner.invoke(app, ["delete", "hello", "world"])
+        assert result.exit_code == 0 
+        assert "hello deleted from your lists." in result.stdout
     
-    def test_delete_fake_word(self):
-        pass
     
     def test_delete_unadded_word(self):
-        pass
+        runner.invoke(app, ["define", "fakewordhaha"])
+        result = runner.invoke(app, ["delete", "fakewordhaha"])
+        assert result.exit_code == 0 
+        assert "was never tracked before" in result.stdout
+        
     
 class TestClear:
     def test_clear_all(self):
-        pass
+        runner.invoke(app, ["clear", "--all"])
+        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        result = runner.invoke(app, ["clear", "--all"])
+        assert result.exit_code == 0 
+        assert "All words[3] deleted" in result.stdout
     
     def test_clear_learning(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        runner.invoke(app, ["learn", "hello", "world"])
+        result = runner.invoke(app, ["clear", "--learning"])
+        assert result.exit_code == 0 
+        assert "All learning words[2] deleted" in result.stdout
     
     def test_clear_mastered(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        runner.invoke(app, ["master", "hello", "world"])
+        result = runner.invoke(app, ["clear", "--mastered"])
+        assert result.exit_code == 0 
+        assert "All mastered words[2] deleted" in result.stdout
     
     def test_clear_favorite(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        runner.invoke(app, ["favorite", "hello", "world"])
+        result = runner.invoke(app, ["clear", "--favorite"])
+        assert result.exit_code == 0 
+        assert "All favorite words[2] deleted" in result.stdout
     
     def test_clear_tag(self):
-        pass
+        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
+        result = runner.invoke(app, ["clear", "--tag", "testtag"])
+        assert result.exit_code == 0 
+        assert "All words[2] with tag testtag deleted" in result.stdout
     
     def test_clear_with_empty_db(self):
-        pass
+        runner.invoke(app, ["clear", "--all"])
+        result = runner.invoke(app, ["clear", "--all"])
+        assert result.exit_code == 0 
+        assert "Nothing to delete." in result.stdout
+        
     
     
  
