@@ -3,12 +3,11 @@
 # Run specific Class Test: ⏩ python -m pytest -k "ClassName" ../tests
 # Run a specific Test: ⏩ python -m pytest -k "test_bye" ../tests
 
-
-
+import pytest
+import os
 from typer.testing import CliRunner
 from VocabularyBuilder import app
-import pytest
-  
+ 
 runner=CliRunner()
 
 # test for bye command
@@ -288,3 +287,36 @@ class TestDelete:
     
 class TestList:
     pass
+
+class TestImportExport:
+    def test_pdf_export(self):
+        result = runner.invoke(app, ["export", "--pdf"])
+        assert result.exit_code == 0 
+        assert "WORDS TO PDF" in result.stdout
+          
+    def test_csv_import_with_duplicates(self):
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["export"])
+        result = runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "WITH THE SAME TIMESTAMP" in result.stdout
+        
+    def test_csv_import_without_duplicates(self):
+        runner.invoke(app, ["define", "math","echo", "chamber"])
+        runner.invoke(app, ["export"])
+        runner.invoke(app, ["clear", "--all"])
+        result = runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "IMPORTED" in result.stdout
+        
+    def test_csv_import_no_file(self):
+        # programatically delete the csv file (if exists)
+        test = os.listdir(os.getcwd())
+        for item in test:
+            if item.endswith(".csv"):
+                os.remove(os.path.join(os.getcwd(), item))
+        
+        # try to import non-existent file
+        result=runner.invoke(app, ["import"])
+        assert result.exit_code == 0
+        assert "FILE NOT FOUND" in result.stdout
