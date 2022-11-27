@@ -284,12 +284,33 @@ class TestDelete:
     def test_delete_unadded_word(self):
         pass
     
+class TestClear:
+    def test_clear_all(self):
+        pass
     
+    def test_clear_learning(self):
+        pass
+    
+    def test_clear_mastered(self):
+        pass
+    
+    def test_clear_favorite(self):
+        pass
+    
+    def test_clear_tag(self):
+        pass
+    
+    def test_clear_with_empty_db(self):
+        pass
+    
+    
+ 
 class TestList:
     pass
 
 class TestImportExport:
     def test_pdf_export(self):
+        runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["export", "--pdf"])
         assert result.exit_code == 0 
         assert "WORDS TO PDF" in result.stdout
@@ -301,6 +322,7 @@ class TestImportExport:
         assert result.exit_code == 0
         assert "WITH THE SAME TIMESTAMP" in result.stdout
         
+    # WARNING: Running this test will delete all the words in the database. Might want to comment it out.     
     def test_csv_import_without_duplicates(self):
         runner.invoke(app, ["define", "math","echo", "chamber"])
         runner.invoke(app, ["export"])

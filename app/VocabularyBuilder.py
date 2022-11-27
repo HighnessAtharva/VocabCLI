@@ -8,8 +8,8 @@ from modules.Database import initializeDB
 from modules.Banner import print_banner
 from modules.Utils import *
 from modules.About import *
-#from modules.ImportExport import *
-#from modules.Thesaurus import *
+from modules.ImportExport import *
+from modules.Thesaurus import *
 
 # app configuration
 app = typer.Typer(
@@ -19,9 +19,6 @@ app = typer.Typer(
     help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
 )
 
-# TODO : find a way to print the banner only once when the app is launched. Currently it is printed everytime a command is executed.
-console = Console(record=False, color_system="truecolor")
-print_banner(console)   
 
 # initialize the database with the tables if not already existing
 initializeDB()
@@ -209,22 +206,14 @@ def untag(
         remove_tag(word)
 
 
-# todo @atharva: add a command "about" to get software details. Banner, version, credits
 @app.command(rich_help_panel="About", help="📚 [bold blue]About[/bold blue] the software")
 def about():
     console = Console(record=False, color_system="truecolor")
     print_banner(console) 
     about_app()
 
-
-# todo @atharva: add a command to get learning rate of the user
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# --today: get learning rate today
-# --week: get learning rate this week
-# --month: get learning rate this month
-# --year: get learning rate this year
-# --graph: get learning rate graph
-@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] of the user")
+# todo conditionals need to be fixed
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
 def learning_rate(
     today: Optional[bool] = typer.Option(False, "--today", "-t", help="Get learning rate today"),
     week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
@@ -233,25 +222,26 @@ def learning_rate(
     graph: Optional[bool] = typer.Option(False, "--graph", "-g", help="Get learning rate graph"),
 ):
     if today:
-        learning_rate(today=true)
+        get_learning_rate(today=True)
+        
     if week:
-        learning_rate(week=true)
+        get_learning_rate(week=True)
     if month:
-        learning_rate(month=true)
+        get_learning_rate(month=True)
     if year:
-        learning_rate(year=true)
+        get_learning_rate(year=True)
     if graph:
-        learning_rate(graph=true)
+        get_learning_rate(graph=True)
     if graph and today:
-        learning_rate(graph=true, today=true)
+        get_learning_rate(graph=True, today=True)
     if graph and week:
-        learning_rate(graph=true, week=true)
+        get_learning_rate(graph=True, week=True)
     if graph and month:
-        learning_rate(graph=true, month=true)
+        get_learning_rate(graph=True, month=True)
     if graph and year:
-        learning_rate(graph=true, year=true)
+        get_learning_rate(graph=True, year=True)
     if not any([today, week, month, year, graph]):
-            learning_rate()
+            get_learning_rate()
     else:
         print(Panel("[bold red] you cannot combine options with learning rate command[/bold red] ❌"))
 

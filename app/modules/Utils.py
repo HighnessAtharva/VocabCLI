@@ -607,12 +607,6 @@ def delete_words_from_tag(tag: str):
     print(Panel(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
-
-# todo @atharva: function to delete words of the last n days from the database
-def delete_days(days: int):
-    pass
-
-
 def delete_word(query:str):
     """Deletes a word from the database.
 
@@ -629,3 +623,24 @@ def delete_word(query:str):
     if c.rowcount>0:
         conn.commit()
         print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
+        
+        
+def get_learning_rate(today=False, week=False, month=False, year=False, graph=False):
+    """Returns the learning rate of the user."""
+    conn=createConnection()
+    c=conn.cursor()
+    if today:
+        c.execute("SELECT word FROM words WHERE tag is NULL")
+        total_words=c.fetchall()
+        print(total_words)
+        # # get todays learning words
+        # c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE learning=1 AND date(datetime)=date('now')")
+        # learning_count_today=c.fetchone()[0]
+        # # get yesterdays learning words
+        # c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE learning=1 AND date(datetime)=date('now', '-1 day')")
+        # learning_count_yesterday=c.fetchone()[0]
+        
+        
+        # print(Panel(f"[bold]Yesterday's[/bold] learning rate was [bold blue]{learning_count_yesterday}[/bold blue] words."))
+        # print(Panel(f"[bold]Today[/bold] you have learned [bold blue]{learning_count_today}[/bold blue] words."))
+        
