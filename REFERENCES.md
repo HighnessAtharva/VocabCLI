@@ -28,3 +28,8 @@
 
 ## Rich Tables
 * [Docs for Tables](https://rich.readthedocs.io/en/stable/tables.html)
+
+## Graphs
+* [#1](https://towardsdatascience.com/a-simple-guide-to-beautiful-visualizations-in-python-f564e6b9d392)
+* [#2](https://www.python-graph-gallery.com/basic-barplot-with-seaborn)
+* [#3](https://www.machinelearningplus.com/plots/top-50-matplotlib-visualizations-the-master-plots-python/)
