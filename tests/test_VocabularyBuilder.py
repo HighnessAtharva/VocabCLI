@@ -5,10 +5,64 @@
 
 import pytest
 import os
+import shutil
+from pathlib import Path
+import sqlite3
 from typer.testing import CliRunner
 from VocabularyBuilder import app
  
 runner=CliRunner()
+
+
+def setup_module(module):
+    """
+    Will run before any test.
+    Setup any state specific to the execution.
+    """
+        
+    if not os.path.exists("VocabularyBuilder.db"):
+        return 
+    
+    # move the app database to the parent directory
+    app_DB_path=os.path.join(os.getcwd(), "VocabularyBuilder.db")
+    parent_dir = Path(os.getcwd()).parents[0]
+    shutil.move(app_DB_path, parent_dir)
+
+    # create a test database
+    conn = sqlite3.connect('./VocabularyBuilder.db')
+    c = conn.cursor()
+    words="""CREATE TABLE IF NOT EXISTS "words" (
+        "word"	TEXT,
+        "datetime"	timestamp NOT NULL UNIQUE,
+        "tag"	TEXT,
+        "mastered"	INTEGER NOT NULL DEFAULT 0,
+        "learning"	INTEGER NOT NULL DEFAULT 0,
+        "favorite"	INTEGER NOT NULL DEFAULT 0
+    );
+    """
+    c.execute(words)
+
+
+def teardown_module(module):
+    """
+    Will run after all tests.
+    Teardown any state that was previously setup with a setup_module method. 
+    """
+    
+    # close the connection 
+    conn = sqlite3.connect('./VocabularyBuilder.db')
+    conn.close()
+    
+    # delete the test database
+    if os.path.exists("VocabularyBuilder.db"):
+        os.remove("VocabularyBuilder.db")
+        
+    # move the app database back to the app folder
+    app_DB_path=os.path.join(Path(os.getcwd()).parents[0], "VocabularyBuilder.db")
+    current_dir =  os.getcwd()
+    shutil.move(app_DB_path, current_dir)
+
+
 
 # test for bye command
 def test_bye():
