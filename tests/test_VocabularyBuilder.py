@@ -14,7 +14,7 @@ from VocabularyBuilder import app
 runner=CliRunner()
 
 
-def setup_module(module):
+def setup_module():
     """
     Will run before any test.
     Setup any state specific to the execution.
@@ -43,7 +43,7 @@ def setup_module(module):
     c.execute(words)
 
 
-def teardown_module(module):
+def teardown_module():
     """
     Will run after all tests.
     Teardown any state that was previously setup with a setup_module method. 
@@ -424,6 +424,11 @@ class TestImportExport:
         result = runner.invoke(app, ["export", "--pdf"])
         assert result.exit_code == 0 
         assert "WORDS TO PDF" in result.stdout
+        # delete the created file
+        test = os.listdir(os.getcwd())
+        for item in test:
+            if item.endswith(".pdf"):
+                os.remove(os.path.join(os.getcwd(), item))
           
     def test_csv_import_with_duplicates(self):
         runner.invoke(app, ["define", "hello"])
