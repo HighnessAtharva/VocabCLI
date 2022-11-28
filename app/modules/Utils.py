@@ -68,41 +68,27 @@ def add_tag(query: str, tagName:str):
         tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.
     """
      
-    # check if word definitions exists. If yes, add to database otherwise do not do anything. Don't even print anything.    
-    try:
-        response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
-        response.raise_for_status()
-            
-    except exceptions.HTTPError as error:
-        print(Panel(f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔"))
+    conn=createConnection()
+    c=conn.cursor()
+    # check if word exists in the database
+    check_word_exists(query)
+    
+    # if word already exists in the database with no tags, then add the tag to add words
+    c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
+    if c.fetchone():
+        c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
+        conn.commit()
+        print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]. ✅"))
         return
-
-    else:
-        if response.status_code == 200:
-            
-            conn=createConnection()
-            c=conn.cursor()
-  
-            # check if word exists in the database
-            check_word_exists(query)
-            
-            # if word already exists in the database with no tags, then add the tag to add words
-            c.execute("SELECT * FROM words WHERE word=? and tag is NULL", (query,))
-            if c.fetchone():
-                c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
-                conn.commit()
-                print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]. ✅"))
-                return
-
-            # if word already exists in the database with tags, then overwrite the tags
-            c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
-            if c.fetchone():
-                c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
-                conn.commit()
-                print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]. ✅"))
-                return
-
-            
+    
+    # if word already exists in the database with tags, then overwrite the tags
+    c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
+    if c.fetchone():
+        c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
+        conn.commit()
+        print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]. ✅"))
+        return
+        
 def remove_tag(query: str):
     """Removes the tag from the word in the database
 

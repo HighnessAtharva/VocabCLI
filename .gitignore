@@ -8,3 +8,4 @@ src/VocabularyBuilder/delete.py
 app/modules/tempCodeRunnerFile.py
 app/modules/tempCodeRunnerFile.py
 tests/tempCodeRunnerFile.py
+app/tempCodeRunnerFile.py
