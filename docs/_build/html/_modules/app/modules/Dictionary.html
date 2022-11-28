@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.modules.Dictionary &mdash; VocabularyCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> VocabularyCLI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">PythonCLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">VocabularyCLI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app.modules.Dictionary</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for app.modules.Dictionary</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">playsound</span> <span class="kn">import</span> <span class="n">playsound</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">rich.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
+<span class="kn">from</span> <span class="nn">Exceptions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Database</span> <span class="kn">import</span> <span class="n">createConnection</span>
+
+
+
+<div class="viewcode-block" id="connect_to_api"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Dictionary.connect_to_api">[docs]</a><span class="k">def</span> <span class="nf">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connects to the API and returns the response in JSON format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str, optional): Word to lookup to test the API. Defaults to &quot;hello&quot;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Response in JSON format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.dictionaryapi.dev/api/v2/entries/en/</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;[bold red]Error: You are not connected to the internet.[/bold red] ❌&quot;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The word [bold red]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold red] is not a valid word. Please check the spelling. 🤔&quot;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;[bold red]Error: Timeout[/bold red] ⏳&quot;</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="phonetic"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Dictionary.phonetic">[docs]</a><span class="k">def</span> <span class="nf">phonetic</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the phonetic of the word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): Word for which phonetic is to be printed.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        string: Phonetic of the word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;phonetics&quot;</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">phonetic</span><span class="o">=</span><span class="s2">&quot;[bold red]Phonetic Unavailable[/bold red]&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">phonetics</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;phonetics&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">phonetics</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">phonetics</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">phonetic</span><span class="o">=</span> <span class="n">phonetics</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">];</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">phonetic</span><span class="o">=</span> <span class="s2">&quot;[bold red]Phonetic Unavailable[/bold red]&quot;</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">phonetic</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="insert_word_to_db"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Dictionary.insert_word_to_db">[docs]</a><span class="k">def</span> <span class="nf">insert_word_to_db</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tags the word in the vocabulary builder list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): Word which is to be tagged.</span>
+<span class="sd">        tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># check if word definitions exists. If yes, add to database otherwise do not do anything. Don&#39;t even print anything.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.dictionaryapi.dev/api/v2/entries/en/</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The word [bold red]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold red] is not a valid word. Please check the spelling. 🤔&quot;</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+
+            <span class="n">conn</span><span class="o">=</span><span class="n">createConnection</span><span class="p">()</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM words WHERE word=? and tag is not NULL&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+            <span class="c1"># if word is already tagged previously, insert it with the same tag</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT tag FROM words WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+                <span class="n">tagName</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span> <span class="n">tagName</span><span class="p">))</span>
+            <span class="c1"># if word is not tagged, insert it with no tag</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO words (word, datetime) VALUES (?, ?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+            <span class="c1"># if word already exists in the database with favorite 1, then update the above inserted record with favorite 1</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT favorite FROM words WHERE word=? and favorite=1&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE words SET favorite=1 WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+            <span class="c1"># if word already exists in the database with learning 1, then update the above inserted record with learning 1</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT learning FROM words WHERE word=? and learning=1&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE words SET learning=1 WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+            <span class="c1"># if word already exists in the database with mastered 1, then update the above inserted record with mastered </span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT mastered FROM words WHERE word=? and mastered=1&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE words SET mastered=1 WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+
+
+
+
+
+
+
+<span class="c1"># FIXME @atharva: Print part of speech only once in the first column for every table section 🐞</span>
+<div class="viewcode-block" id="definition"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Dictionary.definition">[docs]</a><span class="k">def</span> <span class="nf">definition</span><span class="p">(</span><span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">short</span><span class="p">:</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Prints the definition of the word. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): Word which is meant to be defined.</span>
+<span class="sd">        short (Optional[bool], optional): If True, it will print just the short definition, if False it will print the whole definition. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold green]</span><span class="se">\n</span><span class="si">{</span><span class="n">phonetic</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="n">table</span><span class="o">=</span><span class="n">Table</span><span class="p">(</span><span class="n">show_header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header_style</span><span class="o">=</span><span class="s2">&quot;bold bright_cyan&quot;</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Part of Speech&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Definition&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;light_green&quot;</span><span class="p">)</span>
+
+    <span class="c1"># insert search word into DB</span>
+    <span class="n">insert_word_to_db</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">short</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">meaning</span> <span class="ow">in</span> <span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;definitions&quot;</span><span class="p">][:</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;partOfSpeech&quot;</span><span class="p">],</span> <span class="n">meaning</span><span class="p">[</span><span class="s2">&quot;definition&quot;</span><span class="p">])</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">add_section</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">short</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">meaning</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;definitions&quot;</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s1">&#39;partOfSpeech&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">meaning</span><span class="p">[</span><span class="s1">&#39;definition&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">add_section</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
+
+
+
+
+
+
+<div class="viewcode-block" id="say_aloud"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Dictionary.say_aloud">[docs]</a><span class="k">def</span> <span class="nf">say_aloud</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pronounces the word. Downloads the audio file, plays it and deletes it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): Word to be pronounced.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;phonetics&quot;</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AudioUnavailableException</span>
+
+        <span class="n">phonetic</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;phonetics&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;phonetics&quot;</span> <span class="ow">in</span> <span class="n">response</span> <span class="k">else</span> <span class="s2">&quot;phonetics not available&quot;</span>
+        <span class="n">audioURL</span><span class="o">=</span><span class="n">phonetic</span><span class="p">[</span><span class="s2">&quot;audio&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;audio&quot;</span> <span class="ow">in</span> <span class="n">phonetic</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">audioURL</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">AudioUnavailableException</span>
+
+        <span class="n">audio</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">audioURL</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s1">.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">audio</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">playsound</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">.mp3&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;[bold green]Audio played[/bold green] 🎧&quot;</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">.mp3&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">.mp3&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="n">AudioUnavailableException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, AtharvaShah, AnayDeshpande.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

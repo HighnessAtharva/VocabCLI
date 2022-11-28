@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.modules.ImportExport &mdash; VocabularyCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> VocabularyCLI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">PythonCLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">VocabularyCLI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app.modules.ImportExport</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for app.modules.ImportExport</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">fpdf</span> <span class="kn">import</span> <span class="n">FPDF</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">Database</span> <span class="kn">import</span> <span class="n">createConnection</span>
+<span class="kn">from</span> <span class="nn">Exceptions</span> <span class="kn">import</span> <span class="n">NoDataFoundException</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">rich.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
+
+<div class="viewcode-block" id="export_to_csv"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.export_to_csv">[docs]</a><span class="k">def</span> <span class="nf">export_to_csv</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Export words to csv file.&quot;&quot;&quot;</span>
+    <span class="n">conn</span><span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM words&quot;</span><span class="p">)</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoDataFoundException</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;VocabularyBuilder.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">,</span> <span class="s2">&quot;tag&quot;</span><span class="p">,</span> <span class="s2">&quot;mastered&quot;</span><span class="p">,</span> <span class="s2">&quot;learning&quot;</span><span class="p">,</span> <span class="s2">&quot;favorite&quot;</span><span class="p">])</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]EXPORTED[/bold green] [bold blue]</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="si">}</span><span class="s2">[/bold blue] words to [bold blue]VocabularyBuilder.csv[/bold blue]file 📁&quot;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">NoDataFoundException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="import_from_csv"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.import_from_csv">[docs]</a><span class="k">def</span> <span class="nf">import_from_csv</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Import words from csv file.&quot;&quot;&quot;</span>
+    <span class="n">conn</span><span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># count of words added to database from the csv file</span>
+    <span class="n">added_words</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="c1"># words that already exists in database (counter will be incremented everytime SQL throws an error about datetime column UNIQUE constraint violation)</span>
+    <span class="n">word_already_exists</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="s1">&#39;VocabularyBuilder.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span> <span class="c1"># skip header</span>
+
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># if tag is empty, skip the tag column in db</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO words (word, datetime, mastered, learning, favorite) VALUES (?, ?, ?, ?, ?)&quot;</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># add a checker to see if the word already exists in the database with the same timestamp</span>
+                        <span class="n">sql</span><span class="o">=</span><span class="s2">&quot;INSERT INTO words (word, datetime, tag, mastered, learning, favorite) VALUES (?,?,?,?,?,?)&quot;</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
+                    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                    <span class="n">added_words</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="n">rowcount</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">word_already_exists</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;[bold red]FILE NOT FOUND[/bold red] ❌. Make sure you have a file named [bold red]VocabularyBuilder.csv[/bold red] in the same directory as the executable file. 📂&quot;</span><span class="p">))</span>
+
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word_already_exists</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word_already_exists</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold red]SKIPPED[/bold red] [bold blue]</span><span class="si">{</span><span class="n">word_already_exists</span><span class="si">}</span><span class="s2">[/bold blue] DUPLICATE WORD WITH THE SAME TIMESTAMP ⏩&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold red]SKIPPED[/bold red] [bold blue]</span><span class="si">{</span><span class="n">word_already_exists</span><span class="si">}</span><span class="s2">[/bold blue] DUPLICATE WORDS WITH THE SAME TIMESTAMP ⏩&quot;</span><span class="p">))</span>
+
+
+        <span class="k">if</span> <span class="n">added_words</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]IMPORTED[/bold green] [bold blue]</span><span class="si">{</span><span class="n">added_words</span><span class="si">}</span><span class="s2">[/bold blue] WORD ✅&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]IMPORTED[/bold green] [bold blue]</span><span class="si">{</span><span class="n">added_words</span><span class="si">}</span><span class="s2">[/bold blue] WORDS ✅&quot;</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="PDF"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.PDF">[docs]</a><span class="k">class</span> <span class="nc">PDF</span><span class="p">(</span><span class="n">FPDF</span><span class="p">):</span>
+<div class="viewcode-block" id="PDF.header"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.PDF.header">[docs]</a>    <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#self.image(&#39;logo.png&#39;, 10, 8, 33)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;helvetica&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">55</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;Vocabulary Builder&#39;</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ln</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PDF.footer"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.PDF.footer">[docs]</a>    <span class="k">def</span> <span class="nf">footer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Page footer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_y</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;helvetica&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="c1"># Page number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Page </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page_no</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)</span></div></div>
+
+
+
+<div class="viewcode-block" id="export_to_pdf"><a class="viewcode-back" href="../../../app.modules.html#app.modules.ImportExport.export_to_pdf">[docs]</a><span class="k">def</span> <span class="nf">export_to_pdf</span><span class="p">():</span>    <span class="c1"># sourcery skip: extract-method</span>
+    <span class="sd">&quot;&quot;&quot;Export words to pdf file.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pdf</span><span class="o">=</span><span class="n">PDF</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_fill_color</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">152</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">251</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">152</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_auto_page_break</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;Arial&quot;</span><span class="p">,</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM words&quot;</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoDataFoundException</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Word&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Lookup Date&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Tag&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Mastered&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Learning &quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="s2">&quot;Favorite&quot;</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">ln</span><span class="p">()</span>
+
+        <span class="c1">#reset font</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;Courier&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sr_no</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">sr_no</span><span class="p">),</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">)</span> <span class="c1"># Sr No.</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">)</span> <span class="c1"># Word</span>
+
+            <span class="n">date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+            <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%b </span><span class="si">%d</span><span class="s1"> </span><span class="se">\&#39;</span><span class="s1">%y | %H:%M&#39;</span><span class="p">)</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="p">),</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">)</span> <span class="c1"># Lookup Date</span>
+
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tag</span><span class="p">),</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">)</span> <span class="c1"># Tag</span>
+
+            <span class="n">mastered</span><span class="o">=</span> <span class="s2">&quot;X&quot;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">mastered</span> <span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span> <span class="c1"># Mastered</span>
+
+            <span class="n">learning</span><span class="o">=</span> <span class="s2">&quot;X&quot;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">learning</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span> <span class="c1"># Learning</span>
+
+            <span class="n">favorite</span><span class="o">=</span> <span class="s2">&quot;X&quot;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">favorite</span><span class="p">,</span><span class="n">border</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>  <span class="c1"># Favorite</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">ln</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;VocabularyWords[</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">_%b_%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">].pdf&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]EXPORTED[/bold green] [bold blue]</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="si">}</span><span class="s2">[/bold blue] WORDS TO PDF ✅&quot;</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">NoDataFoundException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, AtharvaShah, AnayDeshpande.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

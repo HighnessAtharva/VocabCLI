@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.modules.About &mdash; VocabularyCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> VocabularyCLI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">PythonCLI</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">VocabularyCLI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app.modules.About</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for app.modules.About</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span> <span class="nn">rich.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">rich.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="n">box</span>
+<span class="kn">from</span> <span class="nn">rich.align</span> <span class="kn">import</span> <span class="n">Align</span>
+
+
+<div class="viewcode-block" id="print_about_app"><a class="viewcode-back" href="../../../app.modules.html#app.modules.About.print_about_app">[docs]</a><span class="k">def</span> <span class="nf">print_about_app</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Prints the details of the app&quot;&quot;&quot;</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+
+    <span class="n">header_content</span> <span class="o">=</span>  <span class="n">Panel</span><span class="p">(</span>
+        <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;[bold gold1]VocabularyBuilder[/bold gold1] is a [i]Lightweight CLI[/i] for Dictionary Lookups, Vocabulary Building, Quote Saving and enhancing Knowledge Base. Supported with Rich Markup, Graph Reporting and Flashcard Generation&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[reverse]ABOUT VOCABULARY CLI[/reverse]&quot;</span><span class="p">,</span>
+        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;bold green&quot;</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">box</span><span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">DOUBLE_EDGE</span><span class="p">,</span>
+        <span class="n">highlight</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+
+    <span class="n">footer_content</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span>
+        <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;Developed using: Python, Typer, Rich, Matplotlib, Pytest</span><span class="se">\n</span><span class="s2">Copyright: © 2021 (Atharva Shah, Anay Deshpande)</span><span class="se">\n</span><span class="s2">Source: [link=https://github.com/HighnessAtharva/VocabularyBuilderCLI]GitHub[/link]&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[reverse]THANK YOU FOR USING THIS APP[/reverse]&quot;</span><span class="p">,</span>
+        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;bold violet&quot;</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">box</span><span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">DOUBLE_EDGE</span><span class="p">,</span>
+        <span class="n">highlight</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+    <span class="n">main_content</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span>
+        <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;[bold u]WE HAVE[/bold u]:</span><span class="se">\n\n</span><span class="s2">[bold green]1.[/bold green] Dictionary Lookups</span><span class="se">\n</span><span class="s2">[bold green]2.[/bold green] Vocabulary Building</span><span class="se">\n</span><span class="s2">[bold green]3.[/bold green] Quote Saving</span><span class="se">\n</span><span class="s2">[bold green]4.[/bold green] Knowledge Base</span><span class="se">\n</span><span class="s2">[bold green]5.[/bold green] Rich Markup</span><span class="se">\n</span><span class="s2">[bold green]6.[/bold green] Graph Reporting</span><span class="se">\n</span><span class="s2">[bold green]7.[/bold green] Flashcard Generation&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[reverse]FEATURES[/reverse]&quot;</span><span class="p">,</span>
+        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;bold blue&quot;</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">box</span><span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">DOUBLE_EDGE</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+    <span class="c1"># Divide the &quot;screen&quot; in to three parts</span>
+    <span class="n">layout</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+        <span class="n">Layout</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+        <span class="n">Layout</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+        <span class="n">Layout</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;footer&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="c1">#HEADER</span>
+    <span class="n">layout</span><span class="p">[</span><span class="s2">&quot;header&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">header_content</span>
+    <span class="p">)</span>
+
+
+    <span class="c1"># MAIN CONTENT</span>
+    <span class="n">layout</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split_row</span><span class="p">(</span>
+        <span class="n">Layout</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;side&quot;</span><span class="p">,),</span>
+        <span class="n">Layout</span><span class="p">(</span>
+            <span class="n">main_content</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">)</span>
+
+
+    <span class="c1"># SIDE CONTENT</span>
+    <span class="n">layout</span><span class="p">[</span><span class="s2">&quot;side&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+            <span class="c1"># SIDE CONTENT TOP</span>
+            <span class="n">Layout</span><span class="p">(</span>
+                <span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+            <span class="p">),</span>
+
+            <span class="c1"># SIDE CONTENT BOTTOM</span>
+            <span class="n">Layout</span><span class="p">(</span>
+                <span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># FOOTER</span>
+    <span class="n">layout</span><span class="p">[</span><span class="s2">&quot;footer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">footer_content</span>
+    <span class="p">)</span>
+
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span></div>
+
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, AtharvaShah, AnayDeshpande.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+</body>
+</html>

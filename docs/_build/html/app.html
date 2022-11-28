@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2D2D2D" />
+
+  <title>VocabularyCLI :: app package</title>
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="_static/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="_static/img/favicon-16x16.png">
+  <link rel="index" title="Index" href="genindex.html"/>
+
+  <link rel="stylesheet" href="_static/css/insegel.css"/>
+  <link rel="stylesheet" href="_static/css/custom.css"/>
+
+  <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+      <script type="text/javascript" src="_static/documentation_options.js"></script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/sphinx_highlight.js"></script>
+
+
+  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script>
+</head>
+
+<body>
+  <div id="insegel-container">
+    <header>
+      <div id="logo-container">
+
+          <h1>VocabularyCLI</h1>
+
+      </div>
+      <div id="project-container">
+
+        <h1>Documentation</h1>
+
+      </div>
+    </header>
+
+    <div id="content-container">
+
+      <div id="main-content-container">
+        <div id="main-content" role="main">
+
+  <section id="app-package">
+<h1>app package<a class="headerlink" href="#app-package" title="Permalink to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.modules.html">app.modules package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.About">app.modules.About module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.About.print_about_app"><code class="docutils literal notranslate"><span class="pre">print_about_app()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Banner">app.modules.Banner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Banner.get_terminal_width"><code class="docutils literal notranslate"><span class="pre">get_terminal_width()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Banner.print_banner"><code class="docutils literal notranslate"><span class="pre">print_banner()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Database">app.modules.Database module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.createConnection"><code class="docutils literal notranslate"><span class="pre">createConnection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.createTables"><code class="docutils literal notranslate"><span class="pre">createTables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.initializeDB"><code class="docutils literal notranslate"><span class="pre">initializeDB()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Dictionary">app.modules.Dictionary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.connect_to_api"><code class="docutils literal notranslate"><span class="pre">connect_to_api()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.definition"><code class="docutils literal notranslate"><span class="pre">definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.insert_word_to_db"><code class="docutils literal notranslate"><span class="pre">insert_word_to_db()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.phonetic"><code class="docutils literal notranslate"><span class="pre">phonetic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.say_aloud"><code class="docutils literal notranslate"><span class="pre">say_aloud()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Exceptions">app.modules.Exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Exceptions.AudioUnavailableException"><code class="docutils literal notranslate"><span class="pre">AudioUnavailableException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Exceptions.NoDataFoundException"><code class="docutils literal notranslate"><span class="pre">NoDataFoundException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Exceptions.WordNeverSearchedException"><code class="docutils literal notranslate"><span class="pre">WordNeverSearchedException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.modules.html#app.modules.Exceptions.WordNeverSearchedException.word"><code class="docutils literal notranslate"><span class="pre">WordNeverSearchedException.word</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Flashcard">app.modules.Flashcard module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Flashcard.generate_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_flashcards()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.ImportExport">app.modules.ImportExport module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.PDF"><code class="docutils literal notranslate"><span class="pre">PDF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.PDF.footer"><code class="docutils literal notranslate"><span class="pre">PDF.footer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.PDF.header"><code class="docutils literal notranslate"><span class="pre">PDF.header()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.export_to_csv"><code class="docutils literal notranslate"><span class="pre">export_to_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.export_to_pdf"><code class="docutils literal notranslate"><span class="pre">export_to_pdf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.ImportExport.import_from_csv"><code class="docutils literal notranslate"><span class="pre">import_from_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Report">app.modules.Report module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Report.generate_graph_report"><code class="docutils literal notranslate"><span class="pre">generate_graph_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Report.generate_text_report"><code class="docutils literal notranslate"><span class="pre">generate_text_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Report.learning_rate"><code class="docutils literal notranslate"><span class="pre">learning_rate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Thesaurus">app.modules.Thesaurus module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Thesaurus.find_antonym"><code class="docutils literal notranslate"><span class="pre">find_antonym()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Thesaurus.find_synonym"><code class="docutils literal notranslate"><span class="pre">find_synonym()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Utils">app.modules.Utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.add_tag"><code class="docutils literal notranslate"><span class="pre">add_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.check_word_exists"><code class="docutils literal notranslate"><span class="pre">check_word_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_all_words"><code class="docutils literal notranslate"><span class="pre">count_all_words()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_favorite"><code class="docutils literal notranslate"><span class="pre">count_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_learning"><code class="docutils literal notranslate"><span class="pre">count_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_mastered"><code class="docutils literal notranslate"><span class="pre">count_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_tag"><code class="docutils literal notranslate"><span class="pre">count_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_all"><code class="docutils literal notranslate"><span class="pre">delete_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_favorite"><code class="docutils literal notranslate"><span class="pre">delete_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_learning"><code class="docutils literal notranslate"><span class="pre">delete_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_mastered"><code class="docutils literal notranslate"><span class="pre">delete_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_word"><code class="docutils literal notranslate"><span class="pre">delete_word()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.delete_words_from_tag"><code class="docutils literal notranslate"><span class="pre">delete_words_from_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.fetch_word_history"><code class="docutils literal notranslate"><span class="pre">fetch_word_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_lookup_rate"><code class="docutils literal notranslate"><span class="pre">get_lookup_rate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_definition_from_api"><code class="docutils literal notranslate"><span class="pre">get_random_word_definition_from_api()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_from_learning_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_learning_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_from_mastered_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_mastered_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.remove_tag"><code class="docutils literal notranslate"><span class="pre">remove_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_favorite"><code class="docutils literal notranslate"><span class="pre">set_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_learning"><code class="docutils literal notranslate"><span class="pre">set_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_mastered"><code class="docutils literal notranslate"><span class="pre">set_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_unfavorite"><code class="docutils literal notranslate"><span class="pre">set_unfavorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_unlearning"><code class="docutils literal notranslate"><span class="pre">set_unlearning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_unmastered"><code class="docutils literal notranslate"><span class="pre">set_unmastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.show_list"><code class="docutils literal notranslate"><span class="pre">show_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#app-modules-tempcoderunnerfile-module">app.modules.tempCodeRunnerFile module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="app-graph-module">
+<h2>app.Graph module<a class="headerlink" href="#app-graph-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="app-vocabularybuilder-module">
+<h2>app.VocabularyBuilder module<a class="headerlink" href="#app-vocabularybuilder-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="app-tempcoderunnerfile-module">
+<h2>app.tempCodeRunnerFile module<a class="headerlink" href="#app-tempcoderunnerfile-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-app">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app" title="Permalink to this heading">¶</a></h2>
+<p>Vocabulary Builder</p>
+</section>
+</section>
+
+
+        </div>
+      </div>
+
+      <div id="side-menu-container">
+
+        <div id="search" role="search">
+        <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+            <input type="text" name="q" placeholder="Search..." />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+        </form>
+</div>
+
+        <div id="side-menu" role="navigation">
+
+
+
+
+
+
+    <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">PythonCLI</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">app package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-graph-module">app.Graph module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-vocabularybuilder-module">app.VocabularyBuilder module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-tempcoderunnerfile-module">app.tempCodeRunnerFile module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-app">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+<footer>
+    <div id="footer-info">
+        <ul id="build-details">
+
+                <li class="footer-element">
+
+                        <a href="_sources/app.rst.txt" rel="nofollow"> source</a>
+
+                </li>
+
+
+
+
+
+        </ul>
+
+
+            <div id="copyright">
+                &copy; 2022, AtharvaShah, AnayDeshpande
+            </div>
+
+
+        <div id="credit">
+            created with <a href="http://sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/Autophagy/insegel">Insegel</a>
+
+        </div>
+    </div>
+
+    <a id="menu-toggle" class="fa fa-bars" aria-hidden="true"></a>
+
+    <script type="text/javascript">
+      $("#menu-toggle").click(function() {
+        $("#menu-toggle").toggleClass("toggled");
+        $("#side-menu-container").slideToggle(300);
+      });
+    </script>
+
+</footer>
+
+</div>
+
+</body>
+</html>

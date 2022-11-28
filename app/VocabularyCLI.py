@@ -29,7 +29,7 @@ def bye():
     print(Panel(":wave: [bold green]Bye bye![/bold green]"))
     sys.exit(0)
 
-
+# todo add an flag to show examples
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
@@ -37,7 +37,7 @@ def define(
     pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
 ):
     """
-    Shows the definition of WORD. 
+    Shows the definition of WORD.
     Adds it to the vocabulary builder list along with the timestamp if the user is logged in.
     """
 
@@ -47,12 +47,12 @@ def define(
 
         if not short:
             definition(word, short=False)
-            
+
         if pronounce:
             say_aloud(query=word)
-            
-  
-    
+
+
+
 
 
 # todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
@@ -66,8 +66,9 @@ def list(
     date: Optional[str] = typer.Option(None, "--date", "-d", help="Get a list of words from a particular date."),
     last: Optional[str] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
     most: Optional[str] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
+    tagnames: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
 ):
-    
+
     if favorite:
         show_list(favorite=True)
     if learning:
@@ -82,10 +83,13 @@ def list(
         show_list(last=last)
     if most:
         show_list(most=most)
+    # todo: PyTest pending for this
+    if tagnames:
+        show_list(tagnames=True)
     elif not any([favorite, learning, mastered, tag, date, last, most]):
-        show_list()    
-            
-    
+        show_list()
+
+
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
     words: List[str] = typer.Argument(..., help="Word to add to favorites."),
@@ -133,16 +137,26 @@ def unmaster(
     for word in words:
         set_unmastered(word)
 
- 
+# todo - change the test to take care of the confirmation prompt
+# todo @anay: manually test this once. Have added a confirmation prompt
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
 def delete(
     words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
     ):
-    for word in words:
-        delete_word(word)
-        
-        
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")        
+    if len(words)==1:
+        sure = typer.confirm(f"Are you sure you want to delete '{words[0]}'?")
+    else:
+        sure = typer.confirm(f"Are you sure you want to delete {len(words)} words?")
+    if sure:
+        for word in words:
+            delete_word(word)
+    else:
+        print("Ok, not deleting anything.")
+
+
+# todo - change the test to take care of the confirmation prompt
+# todo @anay: manually test this once. Have added a confirmation prompt
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")
 def clear(
     all: Optional[bool] = typer.Option(False, "--all", "-a", help="Clear all words in all lists"),
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
@@ -151,15 +165,40 @@ def clear(
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
 ):
     if all:
-        delete_all()
-    if learning:
-        delete_learning()
-    if master:
-        delete_mastered()
-    if favorite:
-        delete_favorite()
-    if tag:
-        delete_words_from_tag(tag)
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words in all lists?[/b]")
+        if sure := typer.confirm(""):
+            delete_all()
+        else:
+            print("OK, not deleting anything.")
+
+    elif learning:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
+        if sure := typer.confirm(""):
+            delete_learning()
+        else:
+            print("OK, not deleting anything.")
+
+    elif master:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?")
+        if sure := typer.confirm(""):
+            delete_mastered()
+        else:
+            print("OK, not deleting anything.")
+
+    elif favorite:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
+        if sure := typer.confirm(""):
+            delete_favorite()
+        else:
+            print("OK, not deleting anything.")
+
+    elif tag:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
+        if sure := typer.confirm(""):
+            delete_words_from_tag(tag)
+        else:
+            print("OK, not deleting anything.")
+
     else:
         print(Panel("[bold red] you cannot combine options with clear command[/bold red] ❌"))
 
@@ -190,8 +229,8 @@ def tag(
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Remove[/bold red] tag of a word in the dictionary")
 def untag(
-    words: List[str] = typer.Argument(..., help="Word to remove tag from"),    
-):  
+    words: List[str] = typer.Argument(..., help="Word to remove tag from"),
+):
     for word in words:
         remove_tag(word)
 
@@ -199,7 +238,7 @@ def untag(
 @app.command(rich_help_panel="About", help="📚 [bold blue]About[/bold blue] the software")
 def about():
     console = Console(record=False, color_system="truecolor")
-    print_banner(console) 
+    print_banner(console)
     print_about_app()
 
 # todo conditionals need to be fixed
@@ -209,7 +248,7 @@ def rate(
     week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
     month: Optional[bool] = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
     year: Optional[bool] = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
-    
+
 ):
     if today:
         get_lookup_rate(today=True)
@@ -223,7 +262,7 @@ def rate(
         # default is today
         get_lookup_rate(today=True)
 
-        
+
 
 
 # todo @atharva: add a command to export flashcards (images)
@@ -237,19 +276,19 @@ def rate(
 # todo synonyms
 @app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]synonyms[/bold pink] for a word")
 def synonym(
-    words: List[str] = typer.Argument(..., help="Word to search synonyms for"),    
-):  
+    words: List[str] = typer.Argument(..., help="Word to search synonyms for"),
+):
     for word in words:
         find_synonym(word)
-        
+
 # todo antonyms
 @app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]antonyms[/bold pink] for a word")
 def antonym(
-    words: List[str] = typer.Argument(..., help="Word to search antonyms for"),    
-):  
+    words: List[str] = typer.Argument(..., help="Word to search antonyms for"),
+):
     for word in words:
         find_antonym(word)
-        
+
 
 # todo: SPACY: paraphrase
 
