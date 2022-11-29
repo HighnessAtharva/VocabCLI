@@ -4,7 +4,7 @@
 
 ## Running the Project 🕹
 
-**While setting up the project for the first time** :arrow_right: 
+**While setting up the project for the first time** :arrow_right:
 
 - Make a Virtual environment: `python3 -m venv my_env`
 - Activate the virtual environment: `my_env\Scripts\activate`
@@ -32,4 +32,3 @@
 - Maintain lookup history and report it daily/weekly/monthly
 - Generate learning graphs (matplotlib/seaborn)
 - Allow saving of quotes (possibly reading from clipboard/browser)
-
