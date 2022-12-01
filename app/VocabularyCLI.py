@@ -36,9 +36,13 @@ def define(
     short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
     pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
 ):
-    """
-    Shows the definition of WORD.
-    Adds it to the vocabulary builder list along with the timestamp if the user is logged in.
+    """ 
+    Looks up a word in the dictionary.
+
+    Args:
+        words (List[str]): Word which is to be defined. 
+        short (Optional[bool], optional): If True, prints the short definition of the word. Defaults to False.
+        pronounce (Optional[bool], optional): If True, plays the pronounciation of the word. Defaults to False.
     """
 
     for word in words:
@@ -68,6 +72,19 @@ def list(
     most: Optional[str] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
     tagnames: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
 ):
+    """ 
+    Lists all the words looked up by the user.
+
+    Args:
+        favorite (Optional[bool], optional): If True, prints the list of favorite words. Defaults to False. 
+        learning (Optional[bool], optional): If True, prints the list of words in learning list. Defaults to False.
+        mastered (Optional[bool], optional): If True, prints the list of words in mastered list. Defaults to False.
+        tag (Optional[str], optional): If True, prints the list of words with a particular tag. Defaults to None. 
+        date (Optional[str], optional):  If True, prints the list of words from a particular date. Defaults to None.
+        last (Optional[str], optional): If True, prints the list of last searched words. Defaults to None. 
+        most (Optional[str], optional): If True, prints the list of most searched words. Defaults to None.
+        tagnames (Optional[bool], optional): If True, prints the list of all the tags. Defaults to False.
+    """
 
     if favorite:
         show_list(favorite=True)
@@ -94,6 +111,13 @@ def list(
 def favorite(
     words: List[str] = typer.Argument(..., help="Word to add to favorites."),
 ):
+    """
+    Adds a word to the favorite list.
+
+    Args:
+        words (List[str]): Word which is to be added to the favorite list.
+    """
+
     for word in words:
         set_favorite(word)
 
@@ -102,6 +126,13 @@ def favorite(
 def unfavorite(
     words: List[str] = typer.Argument(..., help="Word to remove from favorites"),
 ):
+    """
+    Removes a word from the favorite list.
+
+    Args:
+        words (List[str]): Word which is to be removed from the favorite list.
+    """
+
     for word in words:
         set_unfavorite(word)
 
@@ -110,6 +141,13 @@ def unfavorite(
 def learn(
     words: List[str] = typer.Argument(..., help="Word to add to learning."),
 ):
+    """
+    Adds a word to the learning list.
+
+    Args:
+        words (List[str]): Word which is to be added to the learning list.
+    """
+
     for word in words:
         set_learning(word)
 
@@ -118,6 +156,13 @@ def learn(
 def unlearn(
     words: List[str] = typer.Argument(..., help="Word to remove from learning"),
 ):
+    """
+    Removes a word from the learning list.
+
+    Args:
+        words (List[str]): Word which is to be removed from the learning list.
+    """
+
     for word in words:
         set_unlearning(word)
 
@@ -126,6 +171,13 @@ def unlearn(
 def master(
     words: List[str] = typer.Argument(..., help="Word to add to mastered."),
 ):
+    """
+    Adds a word to the mastered list.
+
+    Args:
+        words (List[str]): Word which is to be added to the mastered list.
+    """
+
     for word in words:
         set_mastered(word)
 
@@ -134,6 +186,13 @@ def master(
 def unmaster(
     words: List[str] = typer.Argument(..., help="Word to remove from mastered"),
 ):
+    """
+    Removes a word from the mastered list.
+
+    Args:
+        words (List[str]): Word which is to be removed from the mastered list.
+    """
+
     for word in words:
         set_unmastered(word)
 
@@ -143,6 +202,13 @@ def unmaster(
 def delete(
     words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
     ):
+    """
+    Deletes words from your lists.
+
+    Args:
+        words (List[str]): Words to delete from your lists.
+    """
+
     if len(words)==1:
         sure = typer.confirm(f"Are you sure you want to delete '{words[0]}'?")
     else:
@@ -164,6 +230,17 @@ def clear(
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
 ):
+    """
+    Clears all the words from the lists.
+
+    Args:
+        all (Optional[bool], optional): If True, clears all the words from all the lists. Defaults to False.
+        learning (Optional[bool], optional): If True, clears all the words from the learning list. Defaults to False.
+        master (Optional[bool], optional): If True, clears all the words from the mastered list. Defaults to False.
+        favorite (Optional[bool], optional): If True, clears all the words from the favorite list. Defaults to False.
+        tag (Optional[str], optional): If True, clears all the words with a particular tag. Defaults to None.
+    """
+
     if all:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words in all lists?[/b]")
         if sure := typer.confirm(""):
@@ -207,6 +284,13 @@ def clear(
 def export(
     pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
+    """
+    Exports a list of all your looked up words.
+
+    Args:
+        pdf (Optional[bool], optional): If True, exports a list of your looked up words in PDF format. Defaults to False.
+    """
+
     if pdf:
         export_to_pdf()
     else:
@@ -215,6 +299,10 @@ def export(
 
 @app.command("import", rich_help_panel="Import / Export", help="📝 [bold blue]Imports[/bold blue] a list words in the application")
 def Import():
+    """
+    Imports a list of words in the application.
+    """
+
     import_from_csv()
 
 
@@ -223,6 +311,14 @@ def tag(
     words: List[str] = typer.Argument(..., help="Words to tagged"),
     tag: str = typer.Option(..., "--name", "-n", help="Tag to add to the words"),
 ):
+    """
+    Tags a word.
+
+    Args:
+        words (List[str]): Words to tagged.
+        tag (str): Tag to add to the words.
+    """
+
     for word in words:
         add_tag(word, tag)
 
@@ -231,12 +327,23 @@ def tag(
 def untag(
     words: List[str] = typer.Argument(..., help="Word to remove tag from"),
 ):
+    """
+    Remove tag of a word in the dictionary.
+
+    Args:
+        words (List[str]): Word to remove tag from.
+    """
+
     for word in words:
         remove_tag(word)
 
 
 @app.command(rich_help_panel="About", help="📚 [bold blue]About[/bold blue] the software")
 def about():
+    """
+    Print information about the software.
+    """
+
     console = Console(record=False, color_system="truecolor")
     print_banner(console)
     print_about_app()
@@ -248,8 +355,17 @@ def rate(
     week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
     month: Optional[bool] = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
     year: Optional[bool] = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
-
 ):
+    """
+    Gives the number of words you have learned in a particular time period with a comparison of a previous time period.
+
+    Args:
+        today (Optional[bool], optional): If True, get learning rate today. Defaults to False.
+        week (Optional[bool], optional): If True, get learning rate this week. Defaults to False.
+        month (Optional[bool], optional): If True, get learning rate this month. Defaults to False.
+        year (Optional[bool], optional): If True, get learning rate this year. Defaults to False.
+    """
+
     if today:
         get_lookup_rate(today=True)
     elif week:
@@ -278,6 +394,13 @@ def rate(
 def synonym(
     words: List[str] = typer.Argument(..., help="Word to search synonyms for"),
 ):
+    """
+    Find synonyms for a word.
+
+    Args:
+        words (List[str]): Word to search synonyms for.
+    """
+
     for word in words:
         find_synonym(word)
 
@@ -286,6 +409,13 @@ def synonym(
 def antonym(
     words: List[str] = typer.Argument(..., help="Word to search antonyms for"),
 ):
+    """
+    Find antonyms for a word.
+
+    Args:
+        words (List[str]): Word to search antonyms for.
+    """
+    
     for word in words:
         find_antonym(word)
 

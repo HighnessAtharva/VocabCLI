@@ -9,6 +9,7 @@ from rich.panel import Panel
 
 def export_to_csv():
     """Export words to csv file."""
+
     conn= createConnection()
     c=conn.cursor()
     try:
@@ -27,6 +28,7 @@ def export_to_csv():
         
 def import_from_csv(): 
     """Import words from csv file."""
+
     conn= createConnection()
     c=conn.cursor()
     
@@ -97,6 +99,7 @@ class PDF(FPDF):
 
 def export_to_pdf():    # sourcery skip: extract-method
     """Export words to pdf file."""
+    
     try:
         pdf=PDF('P', 'mm', 'A4')
         pdf.set_fill_color(r=152, g=251, b=152)

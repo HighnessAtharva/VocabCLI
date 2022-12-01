@@ -19,6 +19,13 @@ from Exceptions import *
 from datetime import datetime, timedelta
 
 def check_word_exists(query: str):
+    """
+    Checks if the word exists in the database
+    
+    Args:
+        query (str): Word which is to be checked
+    """
+    
     conn= createConnection()
     c=conn.cursor()
     # check if word exists in the database
@@ -30,11 +37,13 @@ def check_word_exists(query: str):
 
 
 def fetch_word_history(word: str):  # sourcery skip: extract-method
-    """ Fetches all instances of timestamp for a word from the database
+    """ 
+    Fetches all instances of timestamp for a word from the database
 
     Args:
         word (str): word for which history is to be fetched
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -95,6 +104,7 @@ def remove_tag(query: str):
     Args:
         query (str): Word for which the tag is to be removed
     """
+    
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT * FROM words WHERE word=?", (query,))
@@ -122,6 +132,7 @@ def set_mastered(query: str):
     Args:
         query (str): Word which is to be set as mastered.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -155,6 +166,7 @@ def set_unmastered(query: str):
     Args:
         query (str): Word which is to be set as unmastered.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -181,6 +193,7 @@ def set_learning(query: str):
     Args:
         query (str): Word which is to be set as learning.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -214,6 +227,7 @@ def set_unlearning(query: str):
     Args:
         query (str): Word which is to be set as unlearning.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -245,6 +259,7 @@ def set_favorite(query: str):
     Args:
         query (str): Word which is to be set as favorite.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -271,6 +286,7 @@ def set_unfavorite(query:str):
     Args:
         query (str): Word which is to be removed from favorite.
     """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -292,11 +308,13 @@ def set_unfavorite(query:str):
 
 
 def count_all_words()->int:
-    """Counts the distinct number of words in the database
+    """
+    Counts the distinct number of words in the database.
 
     Returns:
-        int: Total word count
+        int: Total word count.
     """
+    
     conn=createConnection()
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words"
@@ -306,11 +324,13 @@ def count_all_words()->int:
 
 
 def count_mastered()->int:
-    """ Counts the distinct number of mastered words in the database
+    """ 
+    Counts the distinct number of mastered words in the database.
 
     Returns:
-        int: Total mastered word count
+        int: Total mastered word count.
     """
+    
     conn=createConnection()
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE mastered=1"
@@ -320,11 +340,13 @@ def count_mastered()->int:
 
 
 def count_learning()->int:
-    """ Counts the distinct number of learning words in the database
+    """ 
+    Counts the distinct number of learning words in the database.
 
     Returns:
-        int: Total learning word count
+        int: Total learning word count.
     """
+    
     conn=createConnection()
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE learning=1"
@@ -333,11 +355,13 @@ def count_learning()->int:
     return len(rows)
 
 def count_favorite()->int:
-    """ Counts the distinct number of favorite words in the database
+    """ 
+    Counts the distinct number of favorite words in the database.
 
     Returns:
-        int: Total favorite word count
+        int: Total favorite word count.
     """
+
     conn=createConnection()
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE favorite=1"
@@ -346,11 +370,13 @@ def count_favorite()->int:
     return len(rows)
 
 def count_tag(tag:str)->int:
-    """ Counts the distinct number of words in the database with a particular tag
+    """ 
+    Counts the distinct number of words in the database with a particular tag.
 
     Returns:
-        int: Total word count of specific tag
+        int: Total word count of specific tag.
     """
+
     conn=createConnection()
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE tag=?"
@@ -365,6 +391,7 @@ def get_random_word_definition_from_api():
     """
     Gets a random word from the random-words package.
     """
+    
     random_word=RandomWords().get_random_word()
     print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)
@@ -372,11 +399,13 @@ def get_random_word_definition_from_api():
 
 
 def get_random_word_from_learning_set(tag:Optional[str]=None):
-    """Gets a random word from the vocabulary builder list.
+    """
+    Gets a random word from the vocabulary builder list.
 
     Args:
         tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
     """
+
     conn=createConnection()
     c=conn.cursor()
     if tag:
@@ -395,11 +424,13 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
 
 
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
-    """Gets a random word with definition from the mastered words list.
+    """
+    Gets a random word with definition from the mastered words list.
 
     Args:
         tag (Optional[str], optional): Tag from which the mastered word should be. Defaults to None.
     """
+
     conn=createConnection()
     c=conn.cursor()
     if tag:
@@ -430,7 +461,8 @@ def show_list(
     tagnames:Optional[bool]=False
     ):
     # sourcery skip: low-code-quality
-    """Gets all the words in the vocabulary builder list.
+    """
+    Gets all the words in the vocabulary builder list.
 
     Args:
         favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
@@ -440,7 +472,9 @@ def show_list(
         date (string, optional): Get a list of words from a particular date. Defaults to None.
         last (string, optional):"Get a list of n last searched words. Defaults to None.
         most (string, optional): Get a list of n most searched words. Defaults to None.
+        tagnames (bool, optional): If True, gets list of all tags. Defaults to False.
     """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -507,6 +541,7 @@ def show_list(
 
 def delete_all():
     """ Deletes all the words from the database. """
+    
     conn=createConnection()
     c=conn.cursor()
     rowcount=count_all_words()
@@ -521,6 +556,7 @@ def delete_all():
 
 def delete_mastered():
     """ Deletes all the mastered words from the database. """
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -537,6 +573,7 @@ def delete_mastered():
 
 def delete_learning():
     """Deletes all the learning words from the database."""
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -552,6 +589,7 @@ def delete_learning():
 
 def delete_favorite():
     """Deletes all the favorite words from the database."""
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -568,6 +606,7 @@ def delete_favorite():
 
 def delete_words_from_tag(tag: str):
     """Deletes all the words from a particular tag from the database."""
+    
     conn=createConnection()
     c=conn.cursor()
 
@@ -582,11 +621,13 @@ def delete_words_from_tag(tag: str):
 
 
 def delete_word(query:str):
-    """Deletes a word from the database.
+    """
+    Deletes a word from the database.
 
     Args:
-        query (str): Word to be deleted
+        query (str): Word to be deleted.
     """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -600,7 +641,16 @@ def delete_word(query:str):
 
 
 def get_lookup_rate(today=False, week=False, month=False, year=False):
-    """Returns the learning rate of the user."""
+    """
+    Returns the learning rate of the user.
+    
+    Args:
+        today (bool, optional): If True, returns the lookup rate for today. Defaults to False.
+        week (bool, optional): If True, returns the lookup rate for the week. Defaults to False.
+        month (bool, optional): If True, returns the lookup rate for the month. Defaults to False.
+        year (bool, optional): If True, returns the lookup rate for the year. Defaults to False.
+    """
+
     conn=createConnection()
     c=conn.cursor()
 

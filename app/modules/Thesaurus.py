@@ -9,6 +9,13 @@ from rich.panel import Panel
 # nltk.download('omw-1.4')
 
 def find_synonym(query:str):
+    """ 
+    Finds the synonyms of the query word 
+
+    Args:
+        query (str): Word to find synonyms for.
+    """
+
     synonyms = []
     for syn in wordnet.synsets(query):
         synonyms.extend(lm.name() for lm in syn.lemmas())
@@ -22,6 +29,13 @@ def find_synonym(query:str):
     print("\n\n")
     
 def find_antonym(query:str):
+    """ 
+    Finds the antonyms of the query word
+
+    Args:
+        query (str): Word to find antonyms for.
+    """
+    
     antonyms = []
     for syn in wordnet.synsets(query):
         antonyms.extend(lm.antonyms()[0].name() for lm in syn.lemmas() if lm.antonyms())

@@ -11,6 +11,13 @@ from modules.Database import *
 
 # function to visualize top N tags with the most words
 def viz_top_tags(N=10):
+    """ 
+    Visualizes the top N tags with the most words.
+
+    Args:
+        N (int, optional): Number of top tags to visualize . Defaults to 10.
+    """
+
     # get top N tags
     conn=createConnection()
     c=conn.cursor()
@@ -45,6 +52,14 @@ def viz_top_tags(N=10):
 
 # todo function to visualize top distribution of words by date [day, week, month]
 def words_distribution_week_util():
+    """ 
+    Returns the distribution of words by day of the week.
+
+    Returns:
+        list: list of days of the week.
+        list: list of days of the word counts.
+    """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -65,6 +80,8 @@ def words_distribution_week_util():
     return days_of_week, word_count
 
 def viz_words_distribution_week():
+    """ Visualizes the distribution of words by day of the week. """
+    
     days_of_week, word_count=words_distribution_week_util()
 
     # create a dataframe
@@ -83,6 +100,14 @@ def viz_words_distribution_week():
 
 
 def word_distribution_month_util():
+    """
+    Returns the distribution of word by dates of month.
+
+    Returns:
+        list: List of dates of month.
+        list: List of word counts.
+    """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -111,6 +136,8 @@ def word_distribution_month_util():
     return dates, word_count
 
 def viz_word_distribution_month():
+    """ Visualizes the distribution of words by dates of month. """
+    
     dates, word_count=word_distribution_month_util()
     # print(dates)
 
