@@ -36,13 +36,13 @@ def define(
     short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
     pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
 ):
-    """ 
+    """
     Looks up a word in the dictionary.
 
     Args:
-        words (List[str]): Word which is to be defined. 
+        words (List[str]): Word which is to be defined.
         short (Optional[bool], optional): If True, prints the short definition of the word. Defaults to False.
-        pronounce (Optional[bool], optional): If True, plays the pronounciation of the word. Defaults to False.
+        pronounce (Optional[bool], optional): If True, plays the pronunciation of the word. Defaults to False.
     """
 
     for word in words:
@@ -72,16 +72,16 @@ def list(
     most: Optional[str] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
     tagnames: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
 ):
-    """ 
+    """
     Lists all the words looked up by the user.
 
     Args:
-        favorite (Optional[bool], optional): If True, prints the list of favorite words. Defaults to False. 
+        favorite (Optional[bool], optional): If True, prints the list of favorite words. Defaults to False.
         learning (Optional[bool], optional): If True, prints the list of words in learning list. Defaults to False.
         mastered (Optional[bool], optional): If True, prints the list of words in mastered list. Defaults to False.
-        tag (Optional[str], optional): If True, prints the list of words with a particular tag. Defaults to None. 
+        tag (Optional[str], optional): If True, prints the list of words with a particular tag. Defaults to None.
         date (Optional[str], optional):  If True, prints the list of words from a particular date. Defaults to None.
-        last (Optional[str], optional): If True, prints the list of last searched words. Defaults to None. 
+        last (Optional[str], optional): If True, prints the list of last searched words. Defaults to None.
         most (Optional[str], optional): If True, prints the list of most searched words. Defaults to None.
         tagnames (Optional[bool], optional): If True, prints the list of all the tags. Defaults to False.
     """
@@ -415,9 +415,67 @@ def antonym(
     Args:
         words (List[str]): Word to search antonyms for.
     """
-    
+
     for word in words:
         find_antonym(word)
+
+
+@app.command(rich_help_panel="history", help="📚 Get a lookup history of a word")
+def history(
+    words: List[str] = typer.Argument(..., help="Word to get lookup history for"),
+):
+    """
+    Get a lookup history of a word.
+
+    Args:
+        words (List[str]): Word to get lookup history for.
+    """
+
+    for word in words:
+        fetch_word_history(word)
+
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="revise", help="📚 Revise words from your learning list")
+def revise(
+    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to revise"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise"),
+    timer: Optional[int] = typer.Option(10, "--timer", "-T", help="Duration for each word"),
+    shuffle: Optional[bool] = typer.Option(False, "--shuffle", "-s", help="Shuffle the order of words"),
+):
+    """
+    Revise words from your learning list.
+    """
+    pass
+    # revise_words()
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="flashcards", help="📚 Create flashcards for words in your learning list")
+def flashcard():
+    """_summary_
+    """
+    pass
+
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="quiz", help="📚 Take a quiz on words in your learning list")
+def quiz(
+    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to quiz on"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
+    timer: Optional[int] = typer.Option(15, "--timer", "-T", help="Countdown timer for each question"),
+):
+    """_summary_
+
+    Args:
+        number (Optional[int], optional): _description_. Defaults to typer.Option(10, "--number", "-n", help="Number of words to quiz on").
+        tag (Optional[str], optional): _description_. Defaults to typer.Option(None, "--tag", "-t", help="Tag of words to quiz on").
+        timer (Optional[int], optional): _description_. Defaults to typer.Option(15, "--timer", "-T", help="Countdown timer for each question").
+    """
+    pass
+
 
 
 # todo: SPACY: paraphrase

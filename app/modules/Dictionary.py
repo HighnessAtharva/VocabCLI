@@ -207,9 +207,6 @@ def definition(query:str, short:Optional[bool]=False):
 
 
 
-
-
-
 def say_aloud(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
