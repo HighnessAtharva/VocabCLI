@@ -174,7 +174,7 @@ def definition(query:str, short:Optional[bool]=False):
         return
 
     # print(response)
-    print(Panel(f"[bold green]{query}[/bold green]\n{phonetic(query)}"))
+    print(Panel(f"[bold gold1]{query.upper()}[/bold gold1]\n{phonetic(query)}"))
 
     table=Table(show_header=True, header_style="bold bright_cyan")
     table.add_column("Part of Speech", style="cyan", width=15)
@@ -193,9 +193,17 @@ def definition(query:str, short:Optional[bool]=False):
     if not short:
         for meaningNumber in response["meanings"]:
             for count, meaning in enumerate(meaningNumber["definitions"], start=1):
-                table.add_row(f"{meaningNumber['partOfSpeech']}", f"{count}. {meaning['definition']}")
+
+                # if example available
+                if "example" in meaning:
+                    table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n[bold white u]Example:[/bold white u] [i white]{meaning['example']}[/i white]\n")
+
+                # if example not available
+                else:
+                    table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n")
             table.add_section()
         print(table)
+        print("\n")
 
 
 
