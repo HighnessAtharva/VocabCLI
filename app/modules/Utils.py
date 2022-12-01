@@ -14,7 +14,7 @@ from random_word import RandomWords
 from Database import createConnection, createTables
 from rich.console import Console
 from rich.table import Table
-from Dictionary import connect_to_api, definition
+from Dictionary import *
 from Exceptions import *
 from datetime import datetime, timedelta
 
@@ -463,7 +463,6 @@ def show_list(
     # sourcery skip: low-code-quality
     """
     Gets all the words in the vocabulary builder list.
-
     Args:
         favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
         learning (bool, optional): If True, gets list of learning words. Defaults to False.
@@ -536,7 +535,7 @@ def show_list(
     else:
         print(Panel(f"{success_message} [bold blue][{len(rows)}][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
-        print(Columns(rows))
+        print(Columns(rows, equal=True))
 
 
 def delete_all():

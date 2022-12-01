@@ -205,6 +205,21 @@ def definition(query:str, short:Optional[bool]=False):
         print(table)
         print("\n")
 
+def one_line_definition(query:str):
+    """
+    Prints the one line definition of the word.
+
+    Args:
+        query (str): Word which is meant to be defined.
+    """
+    if not (response := connect_to_api(query)):
+        return
+
+    for meaningNumber in response["meanings"]:
+        for meaning in meaningNumber["definitions"][:1]:
+            return (meaning["definition"])
+
+
 
 
 def say_aloud(query: str):

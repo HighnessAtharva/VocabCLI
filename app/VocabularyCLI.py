@@ -10,6 +10,7 @@ from modules.Utils import *
 from modules.About import *
 from modules.ImportExport import *
 from modules.Thesaurus import *
+from modules.Study import *
 
 # app configuration
 app = typer.Typer(
@@ -338,7 +339,7 @@ def untag(
         remove_tag(word)
 
 
-@app.command(rich_help_panel="About", help="📚 [bold blue]About[/bold blue] the software")
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]About[/bold blue] the software")
 def about():
     """
     Print information about the software.
@@ -420,7 +421,7 @@ def antonym(
         find_antonym(word)
 
 
-@app.command(rich_help_panel="history", help="📚 Get a lookup history of a word")
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Get a lookup history of a word")
 def history(
     words: List[str] = typer.Argument(..., help="Word to get lookup history for"),
 ):
@@ -437,7 +438,7 @@ def history(
 
 
 # todo - need to write the function
-@app.command(rich_help_panel="revise", help="📚 Revise words from your learning list")
+@app.command(rich_help_panel="study", help="📚 Revise words from your learning list")
 def revise(
     number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to revise"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise"),
@@ -447,12 +448,11 @@ def revise(
     """
     Revise words from your learning list.
     """
-    pass
-    # revise_words()
+    revise_words()
 
 
 # todo - need to write the function
-@app.command(rich_help_panel="flashcards", help="📚 Create flashcards for words in your learning list")
+@app.command(rich_help_panel="study", help="📚 Create flashcards for words in your learning list")
 def flashcard():
     """_summary_
     """
@@ -461,7 +461,7 @@ def flashcard():
 
 
 # todo - need to write the function
-@app.command(rich_help_panel="quiz", help="📚 Take a quiz on words in your learning list")
+@app.command(rich_help_panel="study", help="📚 Take a quiz on words in your learning list")
 def quiz(
     number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to quiz on"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
