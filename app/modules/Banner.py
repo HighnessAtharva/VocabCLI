@@ -7,7 +7,12 @@ from . import __app_name__, __version__
 
 
 def get_terminal_width() -> int:
-    """ Returns the width of the terminal """
+    """
+    Gets the width of the terminal.
+    
+    Returns: 
+        int: width of the terminal.
+    """
     try:
         width, _ = os.get_terminal_size()
     except OSError:

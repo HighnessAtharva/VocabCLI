@@ -8,6 +8,8 @@ def learning_rate():
     pass
 
 def generate_text_report():
+    """ Generates a text report """
+    
     pdf=PDF('P', 'mm', 'A4')
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
@@ -17,6 +19,8 @@ def generate_text_report():
     pdf.output("TextReport.pdf")
 
 def generate_graph_report():
+    """ Generates a graph report """
+    
     pdf=PDF('P', 'mm', 'A4')
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
