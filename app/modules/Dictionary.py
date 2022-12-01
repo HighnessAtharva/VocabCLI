@@ -12,6 +12,7 @@ from rich.table import Table
 from rich.panel import Panel
 from Exceptions import *
 from Database import createConnection
+import time
 
 
 
@@ -27,6 +28,18 @@ def connect_to_api(query:str="hello"):
     """
 
     try:
+
+        # sql query to check if word exists in the cache_word table
+        conn=createConnection()
+        c=conn.cursor()
+        c.execute("SELECT * FROM cache_words WHERE word=?", (query,))
+
+        # if word exists in the cache_word table, return the response from the cache_word table
+        if c.fetchone():
+            c.execute("SELECT api_response FROM cache_words WHERE word=?", (query,))
+            return json.loads(c.fetchone()[0])
+
+        # if word does not exist in the cache_word table, then connect to the API
         response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
         response.raise_for_status()
 
@@ -41,6 +54,13 @@ def connect_to_api(query:str="hello"):
 
     else:
         if response.status_code == 200:
+            # insert the word and its response into the cache_word table if it isn't already there
+            c.execute("SELECT * FROM cache_words WHERE word=?", (query,))
+            if not c.fetchone():
+                c.execute("INSERT INTO cache_words (word, api_response) VALUES (?, ?)", (query, json.dumps(response.json()[0])))
+                conn.commit()
+
+            # return the response from the API
             return response.json()[0]
 
 
@@ -80,6 +100,17 @@ def insert_word_to_db(query: str):
 
     # check if word definitions exists. If yes, add to database otherwise do not do anything. Don't even print anything.
     try:
+        # sql query to check if word exists in the cache_word table
+        conn=createConnection()
+        c=conn.cursor()
+        c.execute("SELECT * FROM cache_words WHERE word=?", (query,))
+
+        # if word exists in the cache_word table, return the response from the cache_word table
+        if c.fetchone():
+            conn=createConnection()
+            time.sleep(1)
+            insert_to_db_util(conn, query)
+            return
         response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{query}")
         response.raise_for_status()
 
@@ -89,41 +120,45 @@ def insert_word_to_db(query: str):
 
     else:
         if response.status_code == 200:
-
             conn=createConnection()
-            c=conn.cursor()
-
-            c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
-            # if word is already tagged previously, insert it with the same tag
-            if c.fetchone():
-                c.execute("SELECT tag FROM words WHERE word=?", (query,))
-                tagName=c.fetchone()[0]
-                c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
-            # if word is not tagged, insert it with no tag
-            else:
-                c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-            conn.commit()
+            insert_to_db_util(conn, query)
 
 
-            # if word already exists in the database with favorite 1, then update the above inserted record with favorite 1
-            c.execute("SELECT favorite FROM words WHERE word=? and favorite=1", (query,))
-            if c.fetchone():
-                c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
-                conn.commit()
+# TODO Rename this here and in `insert_word_to_db`
+def insert_to_db_util(conn, query):
+    c=conn.cursor()
+
+    c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
+    # if word is already tagged previously, insert it with the same tag
+    if c.fetchone():
+        c.execute("SELECT tag FROM words WHERE word=?", (query,))
+        tagName=c.fetchone()[0]
+        c.execute("INSERT INTO words (word, datetime, tag) VALUES (?, ?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tagName))
+    # if word is not tagged, insert it with no tag
+    else:
+        c.execute("INSERT INTO words (word, datetime) VALUES (?, ?)", (query, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    conn.commit()
 
 
-            # if word already exists in the database with learning 1, then update the above inserted record with learning 1
-            c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
-            if c.fetchone():
-                c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
-                conn.commit()
+    # if word already exists in the database with favorite 1, then update the above inserted record with favorite 1
+    c.execute("SELECT favorite FROM words WHERE word=? and favorite=1", (query,))
+    if c.fetchone():
+        c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
+        conn.commit()
 
 
-            # if word already exists in the database with mastered 1, then update the above inserted record with mastered
-            c.execute("SELECT mastered FROM words WHERE word=? and mastered=1", (query,))
-            if c.fetchone():
-                c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
-                conn.commit()
+    # if word already exists in the database with learning 1, then update the above inserted record with learning 1
+    c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
+    if c.fetchone():
+        c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
+        conn.commit()
+
+
+    # if word already exists in the database with mastered 1, then update the above inserted record with mastered
+    c.execute("SELECT mastered FROM words WHERE word=? and mastered=1", (query,))
+    if c.fetchone():
+        c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
+        conn.commit()
 
 
 # FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
@@ -138,6 +173,7 @@ def definition(query:str, short:Optional[bool]=False):
     if not (response := connect_to_api(query)):
         return
 
+    # print(response)
     print(Panel(f"[bold green]{query}[/bold green]\n{phonetic(query)}"))
 
     table=Table(show_header=True, header_style="bold bright_cyan")

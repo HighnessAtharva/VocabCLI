@@ -5,11 +5,11 @@ from rich import print
 
 
 def createConnection():
-    """ 
-    Creates a database connection to a SQLite database VocabularyBuilder.db 
-    
-    Returns: 
-        Connection object or None.    
+    """
+    Creates a database connection to a SQLite database VocabularyBuilder.db
+
+    Returns:
+        Connection object or None.
     """
     conn = None
     try:
@@ -20,9 +20,9 @@ def createConnection():
 
 
 def createTables(conn: sqlite3.Connection):
-    """ 
-    Creates tables in the database 
-    
+    """
+    Creates tables in the database
+
     Args:
         conn (sqlite3.Connection): Connection object
     """
@@ -36,15 +36,22 @@ def createTables(conn: sqlite3.Connection):
 	"favorite"	INTEGER NOT NULL DEFAULT 0
 );
     """
-    
- 
+
+    cache_words="""CREATE TABLE IF NOT EXISTS "cache_words" (
+	"word"	TEXT NOT NULL UNIQUE,
+    "api_response" json NOT NULL
+);
+    """
+
     try:
         c = conn.cursor()
         c.execute(words)
+        c.execute(cache_words)
+
     except SQLException as e:
         print(e)
-   
-    
+
+
 def initializeDB():
     """ Initializes the database """
 
