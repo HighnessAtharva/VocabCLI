@@ -346,7 +346,7 @@ def count_mastered()->int:
     else:
         print(Panel(f"There are no mastered words. 🤷‍♂️"))
         return 0
-    
+
 
 
 def count_learning()->int:
@@ -367,7 +367,7 @@ def count_learning()->int:
     else:
         print(Panel("[bold red]No words are learning. 🤷‍♂️[/bold red]"))
         return 0
-    
+
 
 def count_favorite()->int:
     """
@@ -387,7 +387,7 @@ def count_favorite()->int:
     else:
         print(Panel("[bold red]There are no favorite words. 🤷‍♂️[/bold red]"))
         return 0
-    
+
 
 def count_tag(tag:str)->int:
     """
@@ -538,7 +538,7 @@ def show_list(
         error_message="You haven't searched for any words yet. ❌"
 
     elif tagnames:
-        c.execute("SELECT DISTINCT tag FROM words")
+        c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL")
         success_message = "[bold magenta]YOUR TAGS[/bold magenta]"
         error_message="You haven't added any tags to your words yet. ❌"
 
@@ -672,9 +672,9 @@ def clear_learning():
     c.execute("UPDATE words SET learning=0")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words[/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
+        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
     else:
-        print(Panel(f"[bold red]No words[/bold red] were marked as [bold red]learning[/bold red]. ❌"))
+        print(Panel("[bold red]No words[/bold red] were marked as [bold red]learning[/bold red]. ❌"))
 
 
 def clear_mastered():
@@ -688,9 +688,9 @@ def clear_mastered():
     c.execute("UPDATE words SET mastered=0")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
+        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
     else:
-        print(Panel(f"[bold red]No words[/bold red] were marked as [bold red]mastered[/bold red]. ❌"))
+        print(Panel("[bold red]No words[/bold red] were marked as [bold red]mastered[/bold red]. ❌"))
 
 
 def clear_favorite():
@@ -704,9 +704,9 @@ def clear_favorite():
     c.execute("UPDATE words SET favorite=0")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words[/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
+        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
     else:
-        print(Panel(f"[bold red]No words[/bold red] were marked as [bold red]favorite[/bold red]. ❌"))
+        print(Panel("[bold red]No words [/bold red] were marked as [bold red]favorite[/bold red]. ❌"))
 
 
 def clear_tag(tag:str):
@@ -720,15 +720,15 @@ def clear_tag(tag:str):
     conn=createConnection()
     c=conn.cursor()
 
-    c.execute("UPDATE words SET tag='' WHERE tag=?", (tag,))
+    c.execute("UPDATE words SET tag=NULL WHERE tag=?", (tag,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words[/bold green] have been removed from [bold red]{tag}[/bold red]. ✅"))
+        print(Panel(f"[bold green]All words[{c.rowcount}][/bold green] have been removed from [bold red]{tag}[/bold red]. ✅"))
     else:
         print(Panel(f"[bold red]No words[/bold red] were marked as [bold red]{tag}[/bold red]. ❌"))
 
 
-def clear_all_tags():
+def clear_all_words_from_tag(tagName:str):
     """
     Clears all the tags.
     """
@@ -736,12 +736,12 @@ def clear_all_tags():
     conn=createConnection()
     c=conn.cursor()
 
-    c.execute("UPDATE words SET tag=''")
+    c.execute("UPDATE words SET tag=NULL where tag=?", (tagName,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All tags[/bold green] have been removed. ✅"))
+        print(Panel(f"[bold green]All words[{c.rowcount}][/bold green] have been removed from the tag {tagName}. ✅"))
     else:
-        print(Panel(f"[bold red]No tags[/bold red] were found. ❌"))
+        print(Panel("[bold red]No words[/bold red] were found. ❌"))
 
 
 

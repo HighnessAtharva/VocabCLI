@@ -11,7 +11,7 @@ from modules.Database import *
 
 # function to visualize top N tags with the most words
 def viz_top_tags(N=10):
-    """ 
+    """
     Visualizes the top N tags with the most words.
 
     Args:
@@ -52,7 +52,7 @@ def viz_top_tags(N=10):
 
 # todo function to visualize top distribution of words by date [day, week, month]
 def words_distribution_week_util():
-    """ 
+    """
     Returns the distribution of words by day of the week.
 
     Returns:
@@ -81,7 +81,7 @@ def words_distribution_week_util():
 
 def viz_words_distribution_week():
     """ Visualizes the distribution of words by day of the week. """
-    
+
     days_of_week, word_count=words_distribution_week_util()
 
     # create a dataframe
@@ -137,7 +137,7 @@ def word_distribution_month_util():
 
 def viz_word_distribution_month():
     """ Visualizes the distribution of words by dates of month. """
-    
+
     dates, word_count=word_distribution_month_util()
     # print(dates)
 
@@ -169,3 +169,6 @@ def word_distribution_year():
 # todo function to vizualize trend of learning and mastered words in a given time period [day, week, month] -> USE COMPOSITE BAR GRAPH
 
 # todo function to visualize most looked up words [top 10] with the number of times looked up
+
+
+# todo @anay: suggest more possible visualizations

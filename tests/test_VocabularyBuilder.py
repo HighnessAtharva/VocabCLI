@@ -541,3 +541,6 @@ class TestImportExport:
         result=runner.invoke(app, ["import"])
         assert result.exit_code == 0
         assert "FILE NOT FOUND" in result.stdout
+
+
+# todo @anay: write tests for list command and check coverage html report and see if any command is missing. Do not start writing tests for individual functions yet, only the commands.

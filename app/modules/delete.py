@@ -1,17 +1,15 @@
-from questionary import prompt
+import questionary
 
-questions = [
-    {
-        'type': 'text',
-        'name': 'phone',
-        'message': "What's your phone number",
-    },
-    {
-        'type': 'confirm',
-        'message': 'Do you want to continue?',
-        'name': 'continue',
-        'default': True,
-    }
-]
 
-answers = prompt(questions)
+
+# something=questionary.rawselect(
+#     "What do you want to do?",
+#     choices=["Order a pizza", "Make a reservation", "Ask for opening hours"],
+# ).ask()
+
+# print(something==definition('after')):
+#     point+=1
+
+# questionary.checkbox(
+#     "Select toppings", choices=["foo", "bar", "bazz"]
+# ).ask()

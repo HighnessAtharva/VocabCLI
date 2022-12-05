@@ -57,11 +57,7 @@ def define(
             say_aloud(query=word)
 
 
-
-
-
-# todo @anay: add a command to show word list [either all or by tag or by date or by learning/mastered]
-# todo @anay: PyTest for this
+# todo @anay: add flag to show words with one line def. Call the flag as --showDefs: Optional[boolean]
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
 def list(
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
@@ -101,7 +97,6 @@ def list(
         show_list(last=last)
     if most:
         show_list(most=most)
-    # todo: PyTest pending for this
     if tagnames:
         show_list(tagnames=True)
     elif not any([favorite, learning, mastered, tag, date, last, most]):
@@ -196,89 +191,6 @@ def unmaster(
 
     for word in words:
         set_unmastered(word)
-
-# todo - change the test to take care of the confirmation prompt
-# todo @anay: manually test this once. Have added a confirmation prompt
-# @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
-# def delete(
-#     words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
-#     ):
-#     """
-#     Deletes words from your lists.
-
-#     Args:
-#         words (List[str]): Words to delete from your lists.
-#     """
-
-#     if len(words)==1:
-#         sure = typer.confirm(f"Are you sure you want to delete '{words[0]}'?")
-#     else:
-#         sure = typer.confirm(f"Are you sure you want to delete {len(words)} words?")
-#     if sure:
-#         for word in words:
-#             delete_word(word)
-#     else:
-#         print("Ok, not deleting anything.")
-
-
-# todo - change the test to take care of the confirmation prompt
-# todo @anay: manually test this once. Have added a confirmation prompt
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")
-def clear(
-    all: Optional[bool] = typer.Option(False, "--all", "-a", help="Clear all words in all lists"),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
-    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
-):
-    """
-    Clears all the words from the lists.
-
-    Args:
-        all (Optional[bool], optional): If True, clears all the words from all the lists. Defaults to False.
-        learning (Optional[bool], optional): If True, clears all the words from the learning list. Defaults to False.
-        master (Optional[bool], optional): If True, clears all the words from the mastered list. Defaults to False.
-        favorite (Optional[bool], optional): If True, clears all the words from the favorite list. Defaults to False.
-        tag (Optional[str], optional): If True, clears all the words with a particular tag. Defaults to None.
-    """
-
-    if all:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words in all lists?[/b]")
-        if sure := typer.confirm(""):
-            delete_all()
-        else:
-            print("OK, not deleting anything.")
-
-    elif learning:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
-        if sure := typer.confirm(""):
-            delete_learning()
-        else:
-            print("OK, not deleting anything.")
-
-    elif master:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?")
-        if sure := typer.confirm(""):
-            delete_mastered()
-        else:
-            print("OK, not deleting anything.")
-
-    elif favorite:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
-        if sure := typer.confirm(""):
-            delete_favorite()
-        else:
-            print("OK, not deleting anything.")
-
-    elif tag:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
-        if sure := typer.confirm(""):
-            delete_words_from_tag(tag)
-        else:
-            print("OK, not deleting anything.")
-
-    else:
-        print(Panel("[bold red] you cannot combine options with clear command[/bold red] ❌"))
 
 
 @app.command(rich_help_panel="Import / Export", help="📝 [bold blue]Exports[/bold blue] a list of all your looked up words")
@@ -510,14 +422,14 @@ def count(
 ):
     """
     Gives count of the words in yout list.
-    
+
     Args:
         mastered (Optional[bool], optional): Count mastered words. Defaults to False.
         learning (Optional[bool], optional): Count learning words. Defaults to False.
         favorite (Optional[bool], optional): Count favorite words. Defaults to False.
         tag (Optional[str], optional): Tag of words to count. Defaults to None.
     """
-    
+
     if mastered:
         print(Panel(count_mastered()))
     elif learning:
@@ -534,9 +446,9 @@ def count(
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Deletes the word from the database")
 def delete(
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Deletes mastered words"),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Deletes learning words"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Deletes favorite words"),
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Deletes all mastered words"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Deletes all learning words"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Deletes all favorite words"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to be deleted"),
     words: List[str] = typer.Argument(None, help="Word to be deleted"),
 ):
@@ -544,27 +456,104 @@ def delete(
     Deletes the word from the database.
 
     Args:
-        mastered (Optional[bool], optional): Deletes mastered words. Defaults to False.
-        learning (Optional[bool], optional): Deletes learning words. Defaults to False.
-        favorite (Optional[bool], optional): Deletes favorite words. Defaults to False.
+        mastered (Optional[bool], optional): Deletes all mastered words. Defaults to False.
+        learning (Optional[bool], optional): Deletes all learning words. Defaults to False.
+        favorite (Optional[bool], optional): Deletes all favorite words. Defaults to False.
         tag (Optional[str], optional): Tag of words to be deleted. Defaults to None.
         words (List[str], optional): Word to be deleted. Defaults to None.
     """
-    for word in words:
-        if mastered:
+
+
+    if mastered:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?")
+        if sure := typer.confirm(""):
             delete_mastered()
-        elif learning:
+
+    elif learning:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?")
+        if sure := typer.confirm(""):
             delete_learning()
-        elif favorite:
+    elif favorite:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?")
+        if sure := typer.confirm(""):
             delete_favorite()
-        elif tag:
+    elif tag:
+        print(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag {tag}[/b]?")
+        if sure := typer.confirm(""):
             delete_words_from_tag(tag)
-        elif word:
-            delete_word(word)
-        elif not any([mastered, learning, favorite, tag, word]):
-            delete_all()
+    elif word:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
+        if sure := typer.confirm(""):
+            for word in words:
+                delete_word(word)
+    elif not any([mastered, learning, favorite, tag, word]):
+        delete_all()
+    else:
+        typer.echo("Invalid option")
+
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")
+def clear(
+    all: Optional[bool] = typer.Option(False, "--all", "-a", help="Clears all the attributes of the word"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
+    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
+    words: List[str] = typer.Argument(None, help="Clear all statuses of a particular word"),
+):
+    """
+    Clears all the words from the lists.
+
+    Args:
+        all (Optional[bool], optional): If True, clears all the words from all the lists. Defaults to False.
+        learning (Optional[bool], optional): If True, clears all the words from the learning list. Defaults to False.
+        master (Optional[bool], optional): If True, clears all the words from the mastered list. Defaults to False.
+        favorite (Optional[bool], optional): If True, clears all the words from the favorite list. Defaults to False.
+        tag (Optional[str], optional): If True, clears all the words with a particular tag. Defaults to None.
+    """
+
+    if all:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words in all lists?[/b]")
+        if sure := typer.confirm(""):
+            if words:
+                for word in words:
+                    clear_all(word)
+            else:
+                print("No words provided")
         else:
-            typer.echo("Invalid option")
+            print("OK, not clearing anything.")
+
+    elif learning:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
+        if sure := typer.confirm(""):
+            clear_learning()
+        else:
+            print("OK, not clearing anything.")
+
+    elif master:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?")
+        if sure := typer.confirm(""):
+            clear_mastered()
+        else:
+            print("OK, not clearing anything.")
+
+    elif favorite:
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
+        if sure := typer.confirm(""):
+            clear_favorite()
+        else:
+            print("OK, not clearing anything.")
+
+    # todo write this function
+    elif tag:
+        print(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag {tag}[/b]?")
+        if sure := typer.confirm(""):
+            clear_all_words_from_tag(tag)
+        else:
+            print(f"OK, not clearning any words from the tag {tag}.")
+
+    else:
+        print(Panel("[bold red] you cannot combine options with clear command[/bold red] ❌"))
 
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
