@@ -626,7 +626,12 @@ def delete_favorite():
 
 
 def delete_words_from_tag(tag: str):
-    """Deletes all the words from a particular tag from the database."""
+    """
+    Deletes all the words from a particular tag from the database.
+    
+    Args:
+        tag (str): The tag to delete words from.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -709,28 +714,9 @@ def clear_favorite():
         print(Panel("[bold red]No words [/bold red] were marked as [bold red]favorite[/bold red]. ❌"))
 
 
-def clear_tag(tag:str):
-    """
-    Clears all the words marked with a tag.
-
-    Args:
-        tag (str): Tag which is to be cleared.
-    """
-
-    conn=createConnection()
-    c=conn.cursor()
-
-    c.execute("UPDATE words SET tag=NULL WHERE tag=?", (tag,))
-    if c.rowcount > 0:
-        conn.commit()
-        print(Panel(f"[bold green]All words[{c.rowcount}][/bold green] have been removed from [bold red]{tag}[/bold red]. ✅"))
-    else:
-        print(Panel(f"[bold red]No words[/bold red] were marked as [bold red]{tag}[/bold red]. ❌"))
-
-
 def clear_all_words_from_tag(tagName:str):
     """
-    Clears all the tags.
+    Clears all the words with specific tag.
     """
 
     conn=createConnection()
@@ -744,7 +730,6 @@ def clear_all_words_from_tag(tagName:str):
         print(Panel("[bold red]No words[/bold red] were found. ❌"))
 
 
-
 def clear_all(word: str):
     """
     Clears all the word marked as learning, mastered and favorite.
@@ -756,7 +741,6 @@ def clear_all(word: str):
     conn=createConnection()
     c=conn.cursor()
 
-    #check if word exists in database
     check_word_exists(word)
 
     c.execute("UPDATE words SET learning=0, mastered=0, favorite=0 WHERE word=?", (word,))

@@ -437,26 +437,45 @@ def delete(
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?")
         if sure := typer.confirm(""):
             delete_mastered()
+        else:
+            print("OK, not deleting anything.")
 
     elif learning:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?")
         if sure := typer.confirm(""):
             delete_learning()
+        else:
+            print("OK, not deleting anything.")
+
     elif favorite:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?")
         if sure := typer.confirm(""):
             delete_favorite()
+        else:
+            print("OK, not deleting anything.")
+
     elif tag:
         print(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag {tag}[/b]?")
         if sure := typer.confirm(""):
             delete_words_from_tag(tag)
+        else:
+            print("OK, not deleting anything.")
+
     elif word:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
         if sure := typer.confirm(""):
             for word in words:
                 delete_word(word)
+        else:
+            print("OK, not deleting anything.")
+
     elif not any([mastered, learning, favorite, tag, word]):
-        delete_all()
+        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
+        if sure := typer.confirm(""):
+            delete_all()
+        else:
+            print("OK, not deleting anything.")
+
     else:
         typer.echo("Invalid option")
 
