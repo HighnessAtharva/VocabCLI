@@ -30,6 +30,44 @@
 * [Docs for Tables](https://rich.readthedocs.io/en/stable/tables.html)
 
 ## Graphs
-* [#1](https://towardsdatascience.com/a-simple-guide-to-beautiful-visualizations-in-python-f564e6b9d392)
-* [#2](https://www.python-graph-gallery.com/basic-barplot-with-seaborn)
-* [#3](https://www.machinelearningplus.com/plots/top-50-matplotlib-visualizations-the-master-plots-python/)
+* [Beautiful Graphs](https://towardsdatascience.com/a-simple-guide-to-beautiful-visualizations-in-python-f564e6b9d392)
+* [Python Graph Gallery](https://www.python-graph-gallery.com/basic-barplot-with-seaborn)
+* [50 Visualizations](https://www.machinelearningplus.com/plots/top-50-matplotlib-visualizations-the-master-plots-python/)
+
+
+
+## NLP and Advanced Word Processing
+
+**NOTE**: For all the below listed commands Input Can be Webpage URL, Text File name, Console Text Input
+
+
+
+**Sentiment Analysis (Input Can be Webpage URL, Text File name, Console Text Input)**
+
+- https://importsem.com/evaluate-sentiment-analysis-in-bulk-with-spacy-and-python/
+- https://medium.com/mlearning-ai/ai-in-the-real-world-2-sentiment-analysis-using-spacy-pipelines-b39a2618d7c1
+
+
+
+**Extract Difficult Words** **(Readability Index)**
+
+- https://stackoverflow.com/questions/54710198/getting-out-difficult-english-words-from-text-for-vocabulary-building-using-pyth
+- https://www.geeksforgeeks.org/readability-index-pythonnlp/
+
+
+
+**Plagiarism Detector**
+
+- https://betterprogramming.pub/build-your-own-plagiarism-checker-with-python-and-machine-learning-7e81877fd970
+
+
+
+**Paraphrase Text**
+
+
+
+**Summarize Text**
+
+
+
+**Check if Text Contains Offensive Language or Slurs and censor/filter them out**
