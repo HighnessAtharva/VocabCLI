@@ -199,26 +199,26 @@ def unmaster(
 
 # todo - change the test to take care of the confirmation prompt
 # todo @anay: manually test this once. Have added a confirmation prompt
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
-def delete(
-    words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
-    ):
-    """
-    Deletes words from your lists.
+# @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Delete[/bold red] words from your lists")
+# def delete(
+#     words:List[str] = typer.Argument(..., help="Words to delete from your lists"),
+#     ):
+#     """
+#     Deletes words from your lists.
 
-    Args:
-        words (List[str]): Words to delete from your lists.
-    """
+#     Args:
+#         words (List[str]): Words to delete from your lists.
+#     """
 
-    if len(words)==1:
-        sure = typer.confirm(f"Are you sure you want to delete '{words[0]}'?")
-    else:
-        sure = typer.confirm(f"Are you sure you want to delete {len(words)} words?")
-    if sure:
-        for word in words:
-            delete_word(word)
-    else:
-        print("Ok, not deleting anything.")
+#     if len(words)==1:
+#         sure = typer.confirm(f"Are you sure you want to delete '{words[0]}'?")
+#     else:
+#         sure = typer.confirm(f"Are you sure you want to delete {len(words)} words?")
+#     if sure:
+#         for word in words:
+#             delete_word(word)
+#     else:
+#         print("Ok, not deleting anything.")
 
 
 # todo - change the test to take care of the confirmation prompt
@@ -447,14 +447,22 @@ def revise(
 ):
     """
     Revise words from your learning list.
+
+    Args:
+        number (Optional[int], optional): Number of words to revise. Defaults to 10.
+        tag (Optional[str], optional): Tag of words to revise. Defaults to None.
+        timer (Optional[int], optional): Duration for each word. Defaults to 10.
+        shuffle (Optional[bool], optional): Shuffle the order of words. Defaults to False.
     """
+
     revise_words()
 
 
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="📚 Create flashcards for words in your learning list")
 def flashcard():
-    """_summary_
+    """
+    Create flashcards for words in your learning list.
     """
     pass
 
@@ -467,15 +475,120 @@ def quiz(
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
     timer: Optional[int] = typer.Option(15, "--timer", "-T", help="Countdown timer for each question"),
 ):
-    """_summary_
+    """
+    Take a quiz on words in your learning list.
 
     Args:
-        number (Optional[int], optional): _description_. Defaults to typer.Option(10, "--number", "-n", help="Number of words to quiz on").
-        tag (Optional[str], optional): _description_. Defaults to typer.Option(None, "--tag", "-t", help="Tag of words to quiz on").
-        timer (Optional[int], optional): _description_. Defaults to typer.Option(15, "--timer", "-T", help="Countdown timer for each question").
+        number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
+        tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
+        timer (Optional[int], optional): Countdown timer for each question. Defaults to 15.
     """
     pass
 
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gives the word history of a word")
+def wordhistory(
+    words: List[str] = typer.Argument(..., help="Word to get history for"),
+):
+    """
+    Gives the word history of a word.
+
+    Args:
+        words (List[str]): Word to get history for.
+    """
+
+    for word in words:
+        fetch_word_history(word)
+
+# FIXME need to debug @atharva
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gives count of the words in yout list")
+def count(
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Count mastered words"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Count learning words"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Count favorite words"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to count"),
+):
+    """
+    Gives count of the words in yout list.
+    
+    Args:
+        mastered (Optional[bool], optional): Count mastered words. Defaults to False.
+        learning (Optional[bool], optional): Count learning words. Defaults to False.
+        favorite (Optional[bool], optional): Count favorite words. Defaults to False.
+        tag (Optional[str], optional): Tag of words to count. Defaults to None.
+    """
+    
+    if mastered:
+        print(Panel(count_mastered()))
+    elif learning:
+        print(Panel(count_learning()))
+    elif favorite:
+        print(Panel(count_favorite()))
+    elif tag:
+        print(Panel(count_tag(tag)))
+    elif not any([mastered, learning, favorite, tag]):
+        print(Panel(count_all_words()))
+    else:
+        typer.echo("Invalid option")
+
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Deletes the word from the database")
+def delete(
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Deletes mastered words"),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Deletes learning words"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Deletes favorite words"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to be deleted"),
+    words: List[str] = typer.Argument(None, help="Word to be deleted"),
+):
+    """
+    Deletes the word from the database.
+
+    Args:
+        mastered (Optional[bool], optional): Deletes mastered words. Defaults to False.
+        learning (Optional[bool], optional): Deletes learning words. Defaults to False.
+        favorite (Optional[bool], optional): Deletes favorite words. Defaults to False.
+        tag (Optional[str], optional): Tag of words to be deleted. Defaults to None.
+        words (List[str], optional): Word to be deleted. Defaults to None.
+    """
+    for word in words:
+        if mastered:
+            delete_mastered()
+        elif learning:
+            delete_learning()
+        elif favorite:
+            delete_favorite()
+        elif tag:
+            delete_words_from_tag(tag)
+        elif word:
+            delete_word(word)
+        elif not any([mastered, learning, favorite, tag, word]):
+            delete_all()
+        else:
+            typer.echo("Invalid option")
+
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
+def random(
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
+    #how to pass tag as an argument in learning or mastered argument? or we should remove tag here?
+):
+    """
+    Gets a random word.
+
+    Args:
+        learning (Optional[bool], optional): Get a random learning word. Defaults to False.
+        mastered (Optional[bool], optional): Get a random mastered word. Defaults to False.
+    """
+
+    if learning:
+        get_random_word_from_learning_set()
+    elif mastered:
+        get_random_word_from_mastered_set()
+    elif not any([learning, mastered]):
+        get_random_word_definition_from_api()
+    else:
+        typer.echo("Invalid option")
 
 
 # todo: SPACY: paraphrase
@@ -483,6 +596,9 @@ def quiz(
 # todo: SPACY: sentiment analysis
 
 # todo: SPACY: check paraphrase
+
+# todo: commands to clear learning list, mastered list, favorite list, tag list and specific tag, all parameters of a word. (shouldn't be deleted from the database)
+
 
 if __name__ == "__main__":
     app()
