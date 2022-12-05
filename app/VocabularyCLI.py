@@ -412,37 +412,6 @@ def wordhistory(
     for word in words:
         fetch_word_history(word)
 
-# FIXME need to debug @atharva
-@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gives count of the words in yout list")
-def count(
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Count mastered words"),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Count learning words"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Count favorite words"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to count"),
-):
-    """
-    Gives count of the words in yout list.
-
-    Args:
-        mastered (Optional[bool], optional): Count mastered words. Defaults to False.
-        learning (Optional[bool], optional): Count learning words. Defaults to False.
-        favorite (Optional[bool], optional): Count favorite words. Defaults to False.
-        tag (Optional[str], optional): Tag of words to count. Defaults to None.
-    """
-
-    if mastered:
-        print(Panel(count_mastered()))
-    elif learning:
-        print(Panel(count_learning()))
-    elif favorite:
-        print(Panel(count_favorite()))
-    elif tag:
-        print(Panel(count_tag(tag)))
-    elif not any([mastered, learning, favorite, tag]):
-        print(Panel(count_all_words()))
-    else:
-        typer.echo("Invalid option")
-
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Deletes the word from the database")
 def delete(
