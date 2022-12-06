@@ -2,7 +2,11 @@ import sqlite3
 from sqlite3 import Error
 from datetime import datetime
 from rich import print
-
+import calendar
+import threading
+import requests
+from requests import exceptions
+import json
 
 def createConnection():
     """
@@ -57,3 +61,33 @@ def initializeDB():
 
     conn=createConnection()
     createTables(conn)
+
+
+
+# todo - complete this function. Make a command for this. Do not add this function in PyTest or IP may be blocked due to constant requests
+# NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
+def refresh_cache():
+    # check if cache is empty, if yes then do nothing
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT COUNT(*) FROM cache_words")
+    if not c.fetchone()[0]:
+        return
+
+    print("Refreshing cache...")
+    c.execute("SELECT word FROM cache_words")
+    rows=c.fetchall()
+    for row in rows:
+        word=row[0]
+        try:
+            response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}")
+            response.raise_for_status()
+
+        except exceptions.ConnectionError as error:
+            print(Panel("[bold red]Error: You are not connected to the internet.[/bold red] ❌"))
+
+        else:
+            if response.status_code == 200:
+                c.execute("UPDATE cache_words SET api_response=? WHERE word=?", (json.dumps(response.json()[0]), word))
+                conn.commit()
+    print("Cache refreshed successfully.")

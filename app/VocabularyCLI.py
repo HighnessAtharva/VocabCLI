@@ -4,7 +4,7 @@ from typing import *
 from rich import print
 from rich.console import Console
 from modules.Dictionary import (definition, say_aloud)
-from modules.Database import initializeDB
+from modules.Database import *
 from modules.Banner import print_banner
 from modules.Utils import *
 from modules.About import *
@@ -302,7 +302,7 @@ def rate(
 
 # todo homophones
 
-# todo synonyms
+
 @app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]synonyms[/bold pink] for a word")
 def synonym(
     words: List[str] = typer.Argument(..., help="Word to search synonyms for"),
@@ -317,7 +317,7 @@ def synonym(
     for word in words:
         find_synonym(word)
 
-# todo antonyms
+
 @app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]antonyms[/bold pink] for a word")
 def antonym(
     words: List[str] = typer.Argument(..., help="Word to search antonyms for"),
@@ -576,6 +576,13 @@ def random(
 
 # todo: commands to clear learning list, mastered list, favorite list, tag list and specific tag, all parameters of a word. (shouldn't be deleted from the database)
 
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
+def refresh():
+    """
+    Refreshes the cached content from the API.
+    """
+    refresh_cache()
 
 if __name__ == "__main__":
     app()
