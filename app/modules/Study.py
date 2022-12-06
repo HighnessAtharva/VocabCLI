@@ -37,14 +37,3 @@ def revise_words(
 
     else:
         print("No words to revise. Add some words to your learning list first by using 'learn' command.")
-
-
-# todo @anay: prepare some word collections from https://www.vocabulary.com/lists/ and put them in a text file to allow user to use ready-made word collections.
-    """
-    EG.
-    - 1000 SAT word List
-    - Most Common GRE Words
-    - 2500 Oxford Word List
-    - 1000 TOEFL Words
-    - Topic Based Lists will also be great- Science, Technology, Arts, Music, Everyday life, etc. (Domain specific terminology)
-    """

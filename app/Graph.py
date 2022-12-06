@@ -8,7 +8,6 @@ from datetime import datetime
 from modules.Database import *
 
 
-
 # function to visualize top N tags with the most words
 def viz_top_tags(N=10):
     """
@@ -50,7 +49,7 @@ def viz_top_tags(N=10):
     plt.show()
 
 
-# todo function to visualize top distribution of words by date [day, week, month]
+
 def words_distribution_week_util():
     """
     Returns the distribution of words by day of the week.
@@ -160,7 +159,6 @@ def viz_word_distribution_month():
 # viz_top_tags()
 # viz_words_distribution_week()
 # viz_word_distribution_month()
-
 
 
 def word_distribution_year():

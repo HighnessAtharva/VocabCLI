@@ -40,7 +40,6 @@ def refresh():
     refresh_cache()
 
 
-# todo add an flag to show examples
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
@@ -271,7 +270,7 @@ def about():
     print_banner(console)
     print_about_app()
 
-# todo conditionals need to be fixed
+
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
 def rate(
     today: Optional[bool] = typer.Option(False, "--today", "-t", help="Get learning rate today"),
@@ -301,16 +300,6 @@ def rate(
         # default is today
         get_lookup_rate(today=True)
 
-
-
-
-# todo @atharva: add a command to export flashcards (images)
-# OPTIONS/FLAGS will be (two or more can be used at once):
-# -t, --tag: export words of a particular tag
-
-# todo revise
-
-# todo homophones
 
 
 @app.command(rich_help_panel="Thesaurus", help="📚 Find [bold pink]synonyms[/bold pink] for a word")
@@ -506,6 +495,7 @@ def clear(
         else:
             print(f"OK, not clearning any words from the tag {tag}.")
 
+
 # todo - add more flags/options
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
 def random(
@@ -558,6 +548,7 @@ def quiz(
     pass
 
 
+# todo - command for homophones
 
 if __name__ == "__main__":
     app()

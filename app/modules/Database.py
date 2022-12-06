@@ -64,7 +64,6 @@ def initializeDB():
 
 
 
-# todo - complete this function. Make a command for this. Do not add this function in PyTest or IP may be blocked due to constant requests
 # NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
 def refresh_cache():
     # check if cache is empty, if yes then do nothing
