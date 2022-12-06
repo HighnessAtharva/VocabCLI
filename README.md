@@ -1,6 +1,5 @@
 # VocabularyBuilder CLI
 
-## Project Description
 
 > VocabularyCLI is a lightweight Command Line Interface that allows users to look up word definitions, examples, synonyms and antonyms directly via the command line. Powered with several utility based commands our CLI offers rapid and robust Knowledge Base capabilities like Flashcards, Tagging, Word Management, Graph Reporting, Bulk import and export of word lists and is a definitive software for linguaphiles.
 >
@@ -81,8 +80,9 @@ PythonCLI\app> coverage html
 - More to follow...
 
 
-![snap4](C:\Users\AtharvaShah\Downloads\snap4.png)
-![snap3](C:\Users\AtharvaShah\Downloads\snap3.png)
-![snap2](C:\Users\AtharvaShah\Downloads\snap2.png)
-![snap1](C:\Users\AtharvaShah\Downloads\snap1.png)
-![snap5](C:\Users\AtharvaShah\Downloads\snap5.png)
+
+![snap1](https://user-images.githubusercontent.com/68660002/205949431-a10bfb73-05a3-484c-9821-061ee3eddfa0.png)
+![snap2](https://user-images.githubusercontent.com/68660002/205949434-d3f3c567-a5ed-4c9c-a3a3-17aaefc22c50.png)
+![snap3](https://user-images.githubusercontent.com/68660002/205949437-23b90fd1-6023-4eb3-ba3f-dff735bb00ee.png)
+![snap4](https://user-images.githubusercontent.com/68660002/205949441-0ef5cacc-3bf4-48be-9b09-a9880e1cfef1.png)
+![snap5](https://user-images.githubusercontent.com/68660002/205949444-25b5ab53-f000-42dd-aac5-99c8013c8d76.png)
