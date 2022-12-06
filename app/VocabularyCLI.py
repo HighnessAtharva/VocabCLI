@@ -1,16 +1,17 @@
-import typer
 import sys
 from typing import *
+
+import typer
+from modules.About import *
+from modules.Banner import print_banner
+from modules.Database import *
+from modules.Dictionary import definition, say_aloud
+from modules.ImportExport import *
+from modules.Study import *
+from modules.Thesaurus import *
+from modules.Utils import *
 from rich import print
 from rich.console import Console
-from modules.Dictionary import (definition, say_aloud)
-from modules.Database import *
-from modules.Banner import print_banner
-from modules.Utils import *
-from modules.About import *
-from modules.ImportExport import *
-from modules.Thesaurus import *
-from modules.Study import *
 
 # app configuration
 app = typer.Typer(
@@ -25,10 +26,19 @@ app = typer.Typer(
 initializeDB()
 
 
-@app.command(rich_help_panel="Options", help="📚 [bold red]Exits[/bold red] the CLI")
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Exits[/bold red] the CLI")
 def bye():
     print(Panel(":wave: [bold green]Bye bye![/bold green]"))
     sys.exit(0)
+
+
+@app.command(rich_help_panel="Vocabulary Builder", help="📚 Update the JSON response in the cache")
+def refresh():
+    """
+    Refreshes the cached content from the API.
+    """
+    refresh_cache()
+
 
 # todo add an flag to show examples
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
@@ -370,36 +380,9 @@ def revise(
     revise_words()
 
 
-# todo - need to write the function
-@app.command(rich_help_panel="study", help="📚 Create flashcards for words in your learning list")
-def flashcard():
-    """
-    Create flashcards for words in your learning list.
-    """
-    pass
-
-
-
-# todo - need to write the function
-@app.command(rich_help_panel="study", help="📚 Take a quiz on words in your learning list")
-def quiz(
-    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to quiz on"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
-    timer: Optional[int] = typer.Option(15, "--timer", "-T", help="Countdown timer for each question"),
-):
-    """
-    Take a quiz on words in your learning list.
-
-    Args:
-        number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
-        tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
-        timer (Optional[int], optional): Countdown timer for each question. Defaults to 15.
-    """
-    pass
-
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Gives the word history of a word")
-def wordhistory(
+def history(
     words: List[str] = typer.Argument(..., help="Word to get history for"),
 ):
     """
@@ -461,7 +444,7 @@ def delete(
         else:
             print("OK, not deleting anything.")
 
-    elif word:
+    elif words:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
         if sure := typer.confirm(""):
             for word in words:
@@ -469,25 +452,20 @@ def delete(
         else:
             print("OK, not deleting anything.")
 
-    elif not any([mastered, learning, favorite, tag, word]):
+    elif not any([mastered, learning, favorite, tag, words]):
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
         if sure := typer.confirm(""):
             delete_all()
         else:
             print("OK, not deleting anything.")
 
-    else:
-        typer.echo("Invalid option")
-
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold red]Clears[/bold red] all lists")
 def clear(
-    all: Optional[bool] = typer.Option(False, "--all", "-a", help="Clears all the attributes of the word"),
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
     master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
-    words: List[str] = typer.Argument(None, help="Clear all statuses of a particular word"),
 ):
     """
     Clears all the words from the lists.
@@ -500,18 +478,7 @@ def clear(
         tag (Optional[str], optional): If True, clears all the words with a particular tag. Defaults to None.
     """
 
-    if all:
-        print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words in all lists?[/b]")
-        if sure := typer.confirm(""):
-            if words:
-                for word in words:
-                    clear_all(word)
-            else:
-                print("No words provided")
-        else:
-            print("OK, not clearing anything.")
-
-    elif learning:
+    if learning:
         print("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
         if sure := typer.confirm(""):
             clear_learning()
@@ -532,7 +499,6 @@ def clear(
         else:
             print("OK, not clearing anything.")
 
-    # todo write this function
     elif tag:
         print(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag {tag}[/b]?")
         if sure := typer.confirm(""):
@@ -540,15 +506,12 @@ def clear(
         else:
             print(f"OK, not clearning any words from the tag {tag}.")
 
-    else:
-        print(Panel("[bold red] you cannot combine options with clear command[/bold red] ❌"))
-
-
+# todo - add more flags/options
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
 def random(
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
     mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
-    #how to pass tag as an argument in learning or mastered argument? or we should remove tag here?
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a random word from a particular tag"),
 ):
     """
     Gets a random word.
@@ -562,10 +525,43 @@ def random(
         get_random_word_from_learning_set()
     elif mastered:
         get_random_word_from_mastered_set()
-    elif not any([learning, mastered]):
+    elif tag:
+        get_random_word_from_tag(tag)
+    elif not any([learning, mastered, tag]):
         get_random_word_definition_from_api()
-    else:
-        typer.echo("Invalid option")
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="study", help="📚 Create flashcards for words in your learning list")
+def flashcard():
+    """
+    Create flashcards for words in your learning list.
+    """
+    pass
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="study", help="📚 Take a quiz on words in your learning list")
+def quiz(
+    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to quiz on"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
+    timer: Optional[int] = typer.Option(15, "--timer", "-T", help="Countdown timer for each question"),
+):
+    """
+    Take a quiz on words in your learning list.
+
+    Args:
+        number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
+        tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
+        timer (Optional[int], optional): Countdown timer for each question. Defaults to 15.
+    """
+    pass
+
+
+
+if __name__ == "__main__":
+    app()
+
 
 
 # todo: SPACY: paraphrase
@@ -573,16 +569,3 @@ def random(
 # todo: SPACY: sentiment analysis
 
 # todo: SPACY: check paraphrase
-
-# todo: commands to clear learning list, mastered list, favorite list, tag list and specific tag, all parameters of a word. (shouldn't be deleted from the database)
-
-
-@app.command(rich_help_panel="Vocabulary Builder", help="📚 Gets a random word")
-def refresh():
-    """
-    Refreshes the cached content from the API.
-    """
-    refresh_cache()
-
-if __name__ == "__main__":
-    app()

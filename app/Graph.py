@@ -171,10 +171,10 @@ def word_distribution_year():
 # todo function to visualize most looked up words [top 10] with the number of times looked up
 
 
-# Graph of application usage time over various time periods [week, month, year]
-# Graph of words mastered over various time periods [week, month, year]
-# Graph of time taken to master words after first lookup/ set learning over various time periods [week, month, year]
-# Graph of words based on their frequency of lookup [top 10] with the number of times looked up
-# Graph of words based on their conceptual category (if possible with the libraries)
-# Graph related to complexity or difficulty?
-# Can show graphs related to flashcards after implementing them
+# Graph of application usage time over various time periods [week, month, year] Need Research
+# Graph of words mastered over various time periods [week, month, year] In Consideration
+# Graph of time taken to master words after first lookup/ set learning over various time periods [week, month, year] In Consideration
+# Graph of words based on their frequency of lookup [top 10] with the number of times looked up ✅
+# Graph of words based on their conceptual category (if possible with the libraries) ✅
+# Graph related to complexity or difficulty? ✅
+# Can show graphs related to flashcards after implementing them? ✅

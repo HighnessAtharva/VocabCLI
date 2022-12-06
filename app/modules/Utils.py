@@ -1,23 +1,25 @@
+
 import contextlib
-import os
 import json
-import requests
-from playsound import playsound
+import os
+from datetime import datetime, timedelta
 from pathlib import Path
-from requests import exceptions
+from sqlite3 import *
 from typing import *
-from rich import print
-from rich.panel import Panel
-from rich.columns import Columns
-from rich.console import Console
-from random_word import RandomWords
+
+import requests
 from Database import createConnection, createTables
-from rich.console import Console
-from rich.table import Table
 from Dictionary import *
 from Exceptions import *
-from datetime import datetime, timedelta
-from sqlite3 import *
+from playsound import playsound
+from random_word import RandomWords
+from requests import exceptions
+from rich import print
+from rich.columns import Columns
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+
 
 def check_word_exists(query: str):
     """
@@ -445,7 +447,6 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
             # definition(row[0])
 
 
-
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
     """
     Gets a random word with definition from the mastered words list.
@@ -470,7 +471,25 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
             # definition(row[0])
 
 
+def get_random_word_from_tag(tagName:str):
+    """
+    Gets a random word from the vocabulary builder list with a particular tag.
 
+    Args:
+        tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
+    """
+
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT DISTINCT word FROM words WHERE tag=? ORDER BY RANDOM() LIMIT 1", (tagName,))
+    rows=c.fetchall()
+    if len(rows) <= 0:
+        print(Panel(f"No words in your list with the tag {tagName}. 👀"))
+    else:
+        for row in rows:
+            print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
+            # Uncomment the below line to get the definition of the word as well
+            # definition(row[0])
 
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(
@@ -547,10 +566,6 @@ def show_list(
         success_message="Here is your list of words"
         error_message="You have no words in your vocabulary builder list. ❌"
 
-    else:
-        error_message="Invalid arguments passed. You cannot pair those together. ❌"
-
-
     rows=c.fetchall()
     if len(rows) <= 0:
         print(Panel(error_message))
@@ -572,7 +587,7 @@ def delete_all():
 
     c.execute("DELETE FROM words")
     conn.commit()
-    print(Panel(f"All words[{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
+    print(Panel(f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
 
 
 def delete_mastered():
@@ -588,7 +603,7 @@ def delete_mastered():
 
     c.execute("DELETE FROM words WHERE mastered=1")
     conn.commit()
-    print(Panel(f"All [bold green]mastered[/bold green] words[{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
+    print(Panel(f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
 
@@ -605,7 +620,7 @@ def delete_learning():
 
     c.execute("DELETE FROM words WHERE learning=1")
     conn.commit()
-    print(Panel(f"All [bold blue]learning[/bold blue] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+    print(Panel(f"All [bold blue]learning[/bold blue] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 def delete_favorite():
@@ -621,14 +636,14 @@ def delete_favorite():
 
     c.execute("DELETE FROM words WHERE favorite=1")
     conn.commit()
-    print(Panel(f"All [bold gold1]favorite[/bold gold1] words[{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+    print(Panel(f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 
 def delete_words_from_tag(tag: str):
     """
     Deletes all the words from a particular tag from the database.
-    
+
     Args:
         tag (str): The tag to delete words from.
     """
@@ -643,7 +658,7 @@ def delete_words_from_tag(tag: str):
 
     c.execute("DELETE FROM words WHERE tag=?", (tag,))
     conn.commit()
-    print(Panel(f"All words[{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
+    print(Panel(f"All words [{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
 def delete_word(query:List[str]):
@@ -666,6 +681,7 @@ def delete_word(query:List[str]):
         print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
 
 
+
 def clear_learning():
     """
     Clears all the words marked as learning.
@@ -674,12 +690,12 @@ def clear_learning():
     conn=createConnection()
     c=conn.cursor()
 
-    c.execute("UPDATE words SET learning=0")
+    c.execute("UPDATE words SET learning=0 WHERE learning=1")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
+        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
     else:
-        print(Panel("[bold red]No words[/bold red] were marked as [bold red]learning[/bold red]. ❌"))
+        print(Panel("[bold red]No words[/bold red] are marked as [bold red]learning[/bold red]. ❌"))
 
 
 def clear_mastered():
@@ -690,12 +706,12 @@ def clear_mastered():
     conn=createConnection()
     c=conn.cursor()
 
-    c.execute("UPDATE words SET mastered=0")
+    c.execute("UPDATE words SET mastered=0 WHERE mastered=1")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
+        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
     else:
-        print(Panel("[bold red]No words[/bold red] were marked as [bold red]mastered[/bold red]. ❌"))
+        print(Panel("[bold red]No words[/bold red] are marked as [bold red]mastered[/bold red]. ❌"))
 
 
 def clear_favorite():
@@ -706,12 +722,12 @@ def clear_favorite():
     conn=createConnection()
     c=conn.cursor()
 
-    c.execute("UPDATE words SET favorite=0")
+    c.execute("UPDATE words SET favorite=0 WHERE favorite=1")
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words [{c.rowcount}][/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
+        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
     else:
-        print(Panel("[bold red]No words [/bold red] were marked as [bold red]favorite[/bold red]. ❌"))
+        print(Panel("[bold red]No words[/bold red] are marked as [bold red]favorite[/bold red]. ❌"))
 
 
 def clear_all_words_from_tag(tagName:str):
@@ -725,30 +741,9 @@ def clear_all_words_from_tag(tagName:str):
     c.execute("UPDATE words SET tag=NULL where tag=?", (tagName,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold green]All words[{c.rowcount}][/bold green] have been removed from the tag {tagName}. ✅"))
+        print(Panel(f"[bold green]All words[/bold green] have been removed from the tag {tagName}. ✅"))
     else:
-        print(Panel("[bold red]No words[/bold red] were found. ❌"))
-
-
-def clear_all(word: str):
-    """
-    Clears all the word marked as learning, mastered and favorite.
-
-    Args:
-        word (str): Word which is to be cleared.
-    """
-
-    conn=createConnection()
-    c=conn.cursor()
-
-    check_word_exists(word)
-
-    c.execute("UPDATE words SET learning=0, mastered=0, favorite=0 WHERE word=?", (word,))
-    if c.rowcount > 0:
-        conn.commit()
-        print(Panel(f"[bold blue]{word}[/bold blue] has been removed from [bold blue]learning[/bold blue], [bold green]mastered[/bold green] and [bold gold1]favorite[/bold gold1]. ✅"))
-    else:
-        print(Panel(f"[bold red]{word}[/bold red] was not marked as [bold blue]learning[/bold blue], [bold green]mastered[/bold green] or [bold gold1]favorite[/bold gold1]. ❌"))
+        print(Panel(f"[bold red]No words[/bold red] with the tag {tagName} were found. ❌"))
 
 
 def get_lookup_rate(today=False, week=False, month=False, year=False):
