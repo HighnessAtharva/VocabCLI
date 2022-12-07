@@ -45,6 +45,7 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
         print(Panel(f"No synonyms found for {query}"))
 
 
+
 def find_antonym(query:str):  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word

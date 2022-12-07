@@ -1,4 +1,3 @@
-
 import contextlib
 import json
 import os
@@ -20,7 +19,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-
+#no tests for this function as it is not called anywhere in the command directly
 def check_word_exists(query: str):
     """
     Checks if the word exists in the database
@@ -310,6 +309,7 @@ def set_unfavorite(query:str):
         print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red]. ✅"))
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def count_all_words()->int:
     """
     Counts the distinct number of words in the database.
@@ -330,6 +330,7 @@ def count_all_words()->int:
         return 0
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def count_mastered()->int:
     """
     Counts the distinct number of mastered words in the database.
@@ -350,7 +351,7 @@ def count_mastered()->int:
         return 0
 
 
-
+#no tests for this function as it is not called anywhere in the command directly
 def count_learning()->int:
     """
     Counts the distinct number of learning words in the database.
@@ -371,6 +372,7 @@ def count_learning()->int:
         return 0
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def count_favorite()->int:
     """
     Counts the distinct number of favorite words in the database.
@@ -391,6 +393,7 @@ def count_favorite()->int:
         return 0
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def count_tag(tag:str)->int:
     """
     Counts the distinct number of words in the database with a particular tag.
@@ -497,7 +500,8 @@ def show_list(
     learning:Optional[bool]=False,
     mastered:Optional[bool]=False,
     tag:Optional[bool]=None,
-    date:Optional[int]=None,
+    days:Optional[str]=None,
+    date:Optional[str]=None,
     last:Optional[int]=None,
     most: Optional[int]=None,
     tagnames:Optional[bool]=False
@@ -510,6 +514,7 @@ def show_list(
         learning (bool, optional): If True, gets list of learning words. Defaults to False.
         mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
         tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
+        days (int, optional): Get a list of words from last n number of days. Defaults to None.
         date (string, optional): Get a list of words from a particular date. Defaults to None.
         last (string, optional):"Get a list of n last searched words. Defaults to None.
         most (string, optional): Get a list of n most searched words. Defaults to None.
@@ -534,14 +539,51 @@ def show_list(
         success_message="[bold gold1]Favorite[/bold gold1] words"
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
-    elif date:
-        c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{date} days')")
+    #handled an exception here, check it out @atharva
+    elif days:
+        try:
+            int(days)
+        except ValueError:
+            print(Panel("Please enter a valid number 😪"))
+            return
+
+        if int(days)<0:
+            print(Panel("Please enter a positive number ➕"))
+            return
+        
+        c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{days} days')")
         date_today=datetime.now().strftime("%d/%m/%Y")
-        date_before=datetime.now() - timedelta(days=int(date))
+        date_before=datetime.now() - timedelta(days=int(days))
         success_message=f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue]"
         error_message="No records found within this date range ❌"
 
+
+    # todo @atharva: not getting how to do date formatting here pls help me out
+    # elif date:
+    #     c.execute("SELECT DISTINCT word FROM words where datetime = ?", (date,))
+    #     success_message=f"Words added to the vocabulary builder list on [bold blue]{date}[/bold blue]"
+    #     error_message="No records found on this date ❌"
+
+    # FIXME @atharva if user searches for more number of words than the total number of words in the list, it shows all words yet the number in the success message is wrong
+    # same for most, if the user searches for more number of words than the total number of words in the list, it shows all words yet the number in the success message is wrong 
+    #success message should be realtime and use rowcount instead of user input variable for all the functions
+    # most searched words should also show the number of times it was searched
+    # last searched words should also show the date and time of the search
+    # if users searches for wrong tag another error message should be shown saying no such tag exists, make one or find from the list of tags (show the command or the list directly) also need to write tests for the same
+
+    
     elif last:
+
+        try:
+            int(last)
+        except ValueError:
+            print(Panel("Please enter a valid number 😪"))
+            return
+
+        if int(last)<=0:
+            print(Panel("Please enter a positive number ➕"))
+            return
+        
         c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
         success_message=f"Last [bold blue]{last}[/bold blue] words searched"
         error_message="You haven't searched for any words yet. ❌"
@@ -552,13 +594,24 @@ def show_list(
         error_message=f"No words found with the tag {tag}. ❌"
 
     elif most:
+
+        try:
+            int(most)
+        except ValueError:
+            print(Panel("Please enter a valid number 😪"))
+            return
+
+        if int(most)<=0:
+            print(Panel("Please enter a positive number ➕"))
+            return
+
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
         success_message=f"Top [bold blue]{most}[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
 
     elif tagnames:
         c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL")
-        success_message = "[bold magenta]YOUR TAGS[/bold magenta]"
+        success_message = "[bold magenta]YOUR TAGS :[/bold magenta]"
         error_message="You haven't added any tags to your words yet. ❌"
 
     elif favorite is False and learning is False and mastered is False and tag is None and date is None and last is None and most is None and tagnames is False:
@@ -606,7 +659,6 @@ def delete_mastered():
     print(Panel(f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
-
 def delete_learning():
     """Deletes all the learning words from the database."""
 
@@ -637,7 +689,6 @@ def delete_favorite():
     c.execute("DELETE FROM words WHERE favorite=1")
     conn.commit()
     print(Panel(f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
-
 
 
 def delete_words_from_tag(tag: str):
@@ -679,7 +730,6 @@ def delete_word(query:List[str]):
     if c.rowcount>0:
         conn.commit()
         print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
-
 
 
 def clear_learning():
@@ -733,6 +783,9 @@ def clear_favorite():
 def clear_all_words_from_tag(tagName:str):
     """
     Clears all the words with specific tag.
+
+    Args:
+        tagName (str): The tag to clear words from.
     """
 
     conn=createConnection()

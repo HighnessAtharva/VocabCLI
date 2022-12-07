@@ -8,6 +8,8 @@ import requests
 from requests import exceptions
 import json
 
+
+#no tests for this function as it is not called anywhere in the command directly
 def createConnection():
     """
     Creates a database connection to a SQLite database VocabularyBuilder.db
@@ -23,6 +25,7 @@ def createConnection():
     return conn
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def createTables(conn: sqlite3.Connection):
     """
     Creates tables in the database
@@ -63,6 +66,7 @@ def createTables(conn: sqlite3.Connection):
         print(e)
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def initializeDB():
     """ Initializes the database """
 

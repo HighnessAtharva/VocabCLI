@@ -6,6 +6,7 @@ from rich.text import Text
 from . import __app_name__, __version__
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def get_terminal_width() -> int:
     """
     Gets the width of the terminal.

@@ -586,15 +586,171 @@ class TestThesaurus:
         assert "Synonyms of large are" in result.stdout
         assert "Synonyms of drink are" in result.stdout
 
-
+# I have used 'delete' command everywhere, do you thik we need to implement it for all other tests in this file? As the setup create new database for every run but not for every test right?
 # todo @anay: write tests for list command and check coverage html report and see if any command is missing. Do not start writing tests for individual functions yet, only the commands.
 class TestList:
     def test_list_favorite(self):
-        runner.invoke(app, ["define", "math", "invoke"])
-        runner.invoke(app, ["favorite", "math", "invoke"])
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["favorite", "math", "school"])
         result= runner.invoke(app, ["list", "-f"])
         assert result.exit_code == 0
         assert "Favorite words" in result.stdout
+
+    def test_list_favorite_nonexistent(self):
+        runner.invoke(app, ["clear", "-f"])
+        result= runner.invoke(app, ["list", "-f"])
+        assert result.exit_code == 0
+        assert "You have not added any words to the favorite list" in result.stdout
+
+    def test_list_mastered(self):
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["master", "math", "school"])
+        result= runner.invoke(app, ["list", "-m"])
+        assert result.exit_code == 0
+        assert "Mastered words" in result.stdout
+
+    def test_list_mastered_nonexistent(self):
+        runner.invoke(app, ["clear", "-m"])
+        result= runner.invoke(app, ["list", "-m"])
+        assert result.exit_code == 0
+        assert "You have not mastered any words" in result.stdout
+
+    def test_list_learning(self):
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["learn", "math", "school"])
+        result= runner.invoke(app, ["list", "-l"])
+        assert result.exit_code == 0
+        assert "Learning words" in result.stdout
+
+    def test_list_learning_nonexistent(self):
+        runner.invoke(app, ["clear", "-l"])
+        result= runner.invoke(app, ["list", "-l"])
+        assert result.exit_code == 0
+        assert "You have not added any words to the learning list" in result.stdout
+
+    def test_list_days(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["list", "-d", "1"])
+        assert result.exit_code == 0
+        assert "Words added to the vocabulary builder list from" in result.stdout
+
+    def test_list_days_nonexistent(self):
+        runner.invoke(app, ["delete"])
+        result= runner.invoke(app, ["list", "-d", "1"])
+        assert result.exit_code == 0
+        assert "No records found within this date range" in result.stdout
+
+    def test_list_days_invalid(self):
+        result= runner.invoke(app, ["list", "-d", "efewq"])
+        assert result.exit_code == 0
+        assert "Please enter a valid number" in result.stdout
+
+    def test_list_days_negative(self):
+        result= runner.invoke(app, ["list", "-d", "-1"])
+        assert result.exit_code == 0
+        assert "Please enter a positive number" in result.stdout
+
+    # def test_list_date(self):
+    #     runner.invoke(app, ["define", "math", "school"])
+    #     result= runner.invoke(app, ["list", "-d", "2021-01-01"])
+    #     assert result.exit_code == 0
+    #     assert "Words added to the vocabulary builder list on" in result.stdout
+
+    # def test_list_date_nonexistent(self):
+    #     runner.invoke(app, ["delete"])
+    #     result= runner.invoke(app, ["list", "-d", "2021-01-01"])
+    #     assert result.exit_code == 0
+    #     assert "No records found within this date range" in result.stdout
+
+    # def test_list_date_invalid(self):
+    #     result= runner.invoke(app, ["list", "-d", "efewq"])
+    #     assert result.exit_code == 0
+    #     assert "Please enter a valid date" in result.stdout
+
+    def test_list_last(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["list", "-L", "2"])
+        assert result.exit_code == 0
+        assert "Last 2 words searched" in result.stdout
+
+    def test_list_last_nonexistent(self):
+        runner.invoke(app, ["delete"])
+        result= runner.invoke(app, ["list", "-L", "2"])
+        assert result.exit_code == 0
+        assert "You haven't searched for any words yet" in result.stdout
+
+    def test_list_last_invalid(self):
+        result= runner.invoke(app, ["list", "-L", "efewq"])
+        assert result.exit_code == 0
+        assert "Please enter a valid number" in result.stdout
+    
+    def test_list_last_negative(self):
+        result= runner.invoke(app, ["list", "-L", "-1"])
+        assert result.exit_code == 0
+        assert "Please enter a positive number" in result.stdout
+
+    def test_list_tag(self):
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["tag", "math", "school", "--name", "testtag"])
+        result= runner.invoke(app, ["list", "-t", "testtag"])
+        assert result.exit_code == 0
+        assert "Words with the tag testtag" in result.stdout
+
+    def test_list_tag_nonexistent(self):
+        runner.invoke(app, ["delete"])
+        result= runner.invoke(app, ["list", "-t", "testtag"])
+        assert result.exit_code == 0
+        assert "No words found with the tag testtag" in result.stdout
+
+    def test_list_most(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["list", "-M", "2"])
+        assert result.exit_code == 0
+        assert "Top 2 most searched words" in result.stdout
+
+    def test_list_most_nonexistent(self):
+        runner.invoke(app, ["delete"])
+        result= runner.invoke(app, ["list", "-M", "2"])
+        assert result.exit_code == 0
+        assert "You haven't searched for any words yet" in result.stdout
+
+    def test_list_most_invalid(self):
+        result= runner.invoke(app, ["list", "-M", "efewq"])
+        assert result.exit_code == 0
+        assert "Please enter a valid number" in result.stdout
+
+    def test_list_most_negative(self):
+        result= runner.invoke(app, ["list", "-M", "-1"])
+        assert result.exit_code == 0
+        assert "Please enter a positive number" in result.stdout
+
+    def test_list_tagnames(self):
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["tag", "math", "--name", "testtag1"])
+        runner.invoke(app, ["tag", "school", "--name", "testtag2"])
+        result= runner.invoke(app, ["list", "-T"])
+        assert result.exit_code == 0
+        assert "YOUR TAGS :" in result.stdout
+
+    def test_list_tagnames_nonexistent(self):
+        runner.invoke(app, ["delete"])
+        result= runner.invoke(app, ["list", "-T"])
+        assert result.exit_code == 0
+        assert "You haven't added any tags to your words yet" in result.stdout
+    
+    def test_list_all(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["list"])
+        assert result.exit_code == 0
+        assert "Here is your list of words" in result.stdout
+
+    def test_list_all_nonexistent(self):
+        runner.invoke(app, ["clear", "-a"])
+        result= runner.invoke(app, ["list"])
+        assert result.exit_code == 0
+        assert "You have no words in your vocabulary builder list" in result.stdout
+
+
 
 
 class TestRate:

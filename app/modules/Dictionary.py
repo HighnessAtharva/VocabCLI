@@ -15,7 +15,7 @@ from Database import createConnection
 import time
 
 
-
+#no tests for this function as it is not called anywhere in the command directly
 def connect_to_api(query:str="hello"):
     """
     Connects to the API and returns the response in JSON format.
@@ -64,6 +64,7 @@ def connect_to_api(query:str="hello"):
             return response.json()[0]
 
 
+#no tests for this function as it is not called anywhere in the command directly
 def phonetic(query: str):
     """
     Prints the phonetic of the word.
@@ -88,7 +89,7 @@ def phonetic(query: str):
     return(phonetic)
 
 
-
+#no tests for this function as it is not called anywhere in the command directly
 def insert_word_to_db(query: str):
     """
     Tags the word in the vocabulary builder list.
@@ -125,6 +126,7 @@ def insert_word_to_db(query: str):
 
 
 # TODO Rename this here and in `insert_word_to_db`
+#no tests for this function as it is not called anywhere in the command directly
 def insert_to_db_util(conn, query):
     c=conn.cursor()
 
@@ -205,6 +207,8 @@ def definition(query:str, short:Optional[bool]=False):
         print(table)
         print("\n")
 
+
+#no tests for this function as it is not called anywhere in the command directly
 def one_line_definition(query:str):
     """
     Prints the one line definition of the word.
@@ -220,8 +224,7 @@ def one_line_definition(query:str):
             return (meaning["definition"])
 
 
-
-
+#no tests for this function as it is not called anywhere in the command directly
 def say_aloud(query: str):
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
