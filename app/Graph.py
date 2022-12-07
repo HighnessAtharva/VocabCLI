@@ -1,4 +1,3 @@
-# import libraries
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -133,6 +132,8 @@ def word_distribution_month_util():
         word_count[index]=row[1]
 
     return dates, word_count
+
+
 
 def viz_word_distribution_month():
     """ Visualizes the distribution of words by dates of month. """

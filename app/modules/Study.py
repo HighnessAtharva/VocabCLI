@@ -37,3 +37,32 @@ def revise_words(
 
     else:
         print("No words to revise. Add some words to your learning list first by using 'learn' command.")
+
+
+def quiz():
+    pass
+    # import questionary
+
+    # something=questionary.rawselect(
+    #     "What do you want to do?",
+    #     choices=["Order a pizza", "Make a reservation", "Ask for opening hours"],
+    # ).ask()
+
+    # print(something==definition('after')):
+    #     point+=1
+
+    # questionary.checkbox(
+    #     "Select toppings", choices=["foo", "bar", "bazz"]
+    # ).ask()
+
+    # def remove_common(a, b):
+
+    #     print(len(a), len(b))
+    #     for i in a[:]:
+    #         if i in b:
+    #             a.remove(i)
+    #             b.remove(i)
+
+    #     print("list1 : ", a)
+    #     print("list2 : ", b)
+    #     print(len(a), len(b))

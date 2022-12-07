@@ -10,6 +10,7 @@ from modules.ImportExport import *
 from modules.Study import *
 from modules.Thesaurus import *
 from modules.Utils import *
+from modules.WordCollections import *
 from rich import print
 from rich.console import Console
 
@@ -25,6 +26,8 @@ app = typer.Typer(
 # initialize the database with the tables if not already existing
 initializeDB()
 
+# add all the collection words to the database if not already existing
+insert_collection_to_DB()
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold red]Exits[/bold red] the CLI")
 def bye():

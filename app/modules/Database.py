@@ -47,12 +47,19 @@ def createTables(conn: sqlite3.Connection):
 );
     """
 
+    collections="""CREATE TABLE IF NOT EXISTS "collections" (
+            "word"	TEXT NOT NULL,
+            "collection" TEXT NOT NULL
+            );
+        """
+
     try:
         c = conn.cursor()
         c.execute(words)
         c.execute(cache_words)
+        c.execute(collections)
 
-    except SQLException as e:
+    except Exception as e:
         print(e)
 
 

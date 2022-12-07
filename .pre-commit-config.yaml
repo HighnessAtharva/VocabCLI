@@ -9,14 +9,14 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
     -   id: check-ast
--   repo: https://github.com/codespell-project/codespell
-    rev: v1.16.0
-    hooks:
-    -   id: codespell
-        name: codespell
-        description: Checks for common misspellings in text files.
-        entry: codespell #--ignore-words ignore-spelling-words.txt readme.md code.py
-        language: python
-        types: [text]
+# -   repo: https://github.com/codespell-project/codespell
+#     rev: v1.16.0
+#     hooks:
+#     -   id: codespell
+#         name: codespell
+#         description: Checks for common misspellings in text files.
+#         entry: codespell #--ignore-words ignore-spelling-words.txt readme.md code.py
+#         language: python
+#         types: [text]
 
 #also run auto-update
