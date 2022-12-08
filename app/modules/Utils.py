@@ -530,7 +530,7 @@ def show_list(
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif days:
-        if days<0:
+        if days<1:
             print(Panel("Enter a positive number ➕"))
             return
 
@@ -544,65 +544,93 @@ def show_list(
     elif date:
 
         # accept inputs from prompt
-        year=typer.prompt("YYYY")
-        month=typer.prompt("MM")
         day=typer.prompt("DD")
+        month=typer.prompt("MM")
+        year=typer.prompt("YYYY")
 
+        if len(day)==1:
+            day="0"+day
+        
+        if len(month)==1:
+            month="0"+month
+            
+        
         # check if the inputs are integers
         try:
-            check_if_int=int(year)
-            check_if_int=int(month)
             check_if_int=int(day)
+            check_if_int=int(month)
+            check_if_int=int(year)
 
         except ValueError as e:
-            raise typer.BadParameter("Date values have to be integers") from e
+            print(Panel("Date values have to be integers ❌")) 
 
         # check if the inputs are of the correct length
         if len(str(year))!=4 and len(str(month))!=2 and len(str(day))!=2:
-            raise typer.BadParameter("Incorrect date format. Expected: [bold green]YYYY-MM-DD[/bold green]")
+            print(Panel("Incorrect date format ❌ Expected: [bold green]DD-MM-YYYY[/bold green]"))
+            return
 
         # check if days, months and years are fall in the correct range
-        if int(month) not in range(1,13) or int(day) not in range(1,32) or int(year) not in range(1900, 2100):
-            raise typer.BadParameter("Date must fall within calendar range. Expected: [bold green]YYYY-MM-DD[/bold green]")
-
+        if int(month) not in range(1,13) or int(day) not in range(1,32):
+            print(Panel("Date must fall within calendar range 📅 Expected: [bold green]DD-MM-YYYY[/bold green]"))
+            return
 
         # check if the date is not in the future
         date=f"{year}-{month}-{day}"
         checker=datetime.strptime(date, '%Y-%m-%d')
         if checker > datetime.now():
-            print("Date cannot be in the future.")
+            print(Panel("[red]Date cannot be in the future.[/red] ❌"))
             return
 
         # fetch records if all checks pass
         datefmt=f"{date}%"
-        print(datefmt)
         c.execute("SELECT DISTINCT word FROM words where datetime LIKE ?", (datefmt,))
-        success_message=f"Words added to the vocabulary builder list on [bold blue]{date}[/bold blue]"
+        success_message=f"Words added to the vocabulary builder list on [bold blue]{day}/{month}/{year}[/bold blue]"
         error_message="No records found on this date ❌"
 
 
     elif tag:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
         success_message=f"Words with tag [bold magenta]{tag}[/bold magenta]"
-        error_message=f"No words found with the tag {tag}. ❌"
+        error_message=f"Tag {tag} does not exist. ❌"
 
     elif last:
-        if last<=0:
+        
+        if last<1:
             print(Panel("Enter a positive number ➕"))
             return
 
-        c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
+        c.execute("SELECT DISTINCT (word), datetime FROM words ORDER BY datetime DESC LIMIT ?", (last,))
         success_message="[bold blue]Last[/bold blue] words searched"
         error_message="You haven't searched for any words yet. ❌"
 
+        # todo convert Panel to Table
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            print(Panel(error_message))
+        else:
+            print(Panel(f"Last [bold blue][{len(rows)}][/bold blue] words searched"))
+            rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4] [blue][Last Searched: {datetime.strptime(row[1],'%Y-%m-%d %H:%M:%S').strftime('%d %b %Y %H:%M')}][/blue]", expand=True) for row in rows]
+            print(Columns(rows, equal=True))
+        return
+    
     elif most:
-        if most<=0:
+        if most<1:
             print(Panel("Enter a positive number ➕"))
             return
 
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
         success_message="[bold blue]Top[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
+        
+        # todo convert Panel to Table
+        rows=c.fetchall()
+        if len(rows) <= 0:
+            print(Panel(error_message))
+        else:
+            print(Panel(f"{success_message} [bold blue][{len(rows)}][/bold blue]"))
+            rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4] [blue][{row[1]} times][/blue]", expand=True) for row in rows]
+            print(Columns(rows, equal=True))
+        return
 
     elif tagnames:
         c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL")
@@ -618,11 +646,11 @@ def show_list(
     if len(rows) <= 0:
         print(Panel(error_message))
     else:
-        print(Panel(f"{success_message} [bold blue][{len(rows)}][/bold blue]"))
+        print(Panel(f"{success_message} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
         print(Columns(rows, equal=True))
 
-
+ 
 def delete_all():
     """ Deletes all the words from the database. """
 

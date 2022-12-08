@@ -13,9 +13,6 @@ import pytest
 from typer.testing import CliRunner
 from VocabularyCLI import app
 
-# todo add whitespace before rowcount value [2]
-# todo @anay - remove edge test cases
-
 runner=CliRunner()
 
 
@@ -369,7 +366,7 @@ class TestDelete:
     @mock.patch("typer.confirm")
     def test_delete_multiple_words(self, mock_typer):
         runner.invoke(app, ["define", "hello", "world"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "hello", "world"])
         assert result.exit_code == 0
         assert "hello deleted from your lists." in result.stdout
@@ -377,7 +374,7 @@ class TestDelete:
     @mock.patch("typer.confirm")
     def test_delete_unadded_word(self, mock_typer):
         runner.invoke(app, ["define", "fakewordhaha"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "fakewordhaha"])
         assert result.exit_code == 0
         assert "was never tracked before" in result.stdout
@@ -386,7 +383,7 @@ class TestDelete:
     def test_delete_master_word(self, mock_typer):
         runner.invoke(app, ["define", "hello", "sky"])
         runner.invoke(app, ["master", "hello", "sky"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--mastered"])
         assert result.exit_code == 0
         assert "All mastered words [2] deleted" in result.stdout
@@ -394,7 +391,7 @@ class TestDelete:
 
     @mock.patch("typer.confirm")
     def test_delete_empty_mastered(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--mastered"])
         assert result.exit_code == 0
         assert "No words in your mastered list" in result.stdout
@@ -403,14 +400,14 @@ class TestDelete:
     def test_delete_favorite_word(self, mock_typer):
         runner.invoke(app, ["define", "hello", "sky"])
         runner.invoke(app, ["favorite", "hello", "sky"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--favorite"])
         assert result.exit_code == 0
         assert "All favorite words [2] deleted" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_empty_favorite(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-f"])
         assert result.exit_code == 0
         assert "No words in your favorite list" in result.stdout
@@ -419,14 +416,14 @@ class TestDelete:
     def test_delete_learning_word(self, mock_typer):
         runner.invoke(app, ["define", "hello", "sky"])
         runner.invoke(app, ["learn", "hello", "sky"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-l"])
         assert result.exit_code == 0
         assert "All learning words [2] deleted" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_empty_learning(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-l"])
         assert result.exit_code == 0
         assert "No words in your learning list" in result.stdout
@@ -435,14 +432,14 @@ class TestDelete:
     def test_delete_tag(self, mock_typer):
         runner.invoke(app, ["define", "hello", "sky"])
         runner.invoke(app, ["tag", "hello", "sky","--name", "soon" ])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-t", "soon"])
         assert result.exit_code == 0
         assert "All words [2] with tag soon" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_nonexistent_tag(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-t", "soon"])
         assert result.exit_code == 0
         assert "No words in tag soon" in result.stdout
@@ -451,7 +448,7 @@ class TestDelete:
     def test_delete_all(self, mock_typer):
         runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "sky"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete"])
         assert result.exit_code == 0
         assert "All words [2] deleted" in result.stdout
@@ -459,7 +456,7 @@ class TestDelete:
 
     @mock.patch("typer.confirm")
     def test_delete_no_words_exist(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["delete"])
         assert result.exit_code == 0
         assert "Nothing to delete" in result.stdout
@@ -470,7 +467,7 @@ class TestClear:
     def test_clear_learning(self, mock_typer):
         runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
         runner.invoke(app, ["learn", "hello", "world"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--learning"])
         assert result.exit_code == 0
         assert "All words have been removed from learning" in result.stdout
@@ -479,7 +476,7 @@ class TestClear:
     def test_clear_mastered(self, mock_typer):
         runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
         runner.invoke(app, ["master", "hello", "world"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--mastered"])
         assert result.exit_code == 0
         assert "All words have been removed from mastered" in result.stdout
@@ -488,7 +485,7 @@ class TestClear:
     def test_clear_favorite(self, mock_typer):
         runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
         runner.invoke(app, ["favorite", "hello", "world"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--favorite"])
         assert result.exit_code == 0
         assert "All words have been removed from favorite" in result.stdout
@@ -497,34 +494,34 @@ class TestClear:
     def test_clear_tag(self, mock_typer):
         runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
         runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--tag", "testtag"])
         assert result.exit_code == 0
         assert "All words have been removed from the tag testtag" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_clear_favorites_with_no_favorites(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         runner.invoke(app, ["clear", "-f"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "-f"])
         assert result.exit_code == 0
         assert "No words are marked as favorite" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_clear_mastered_with_no_mastered(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         runner.invoke(app, ["clear", "-m"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "-m"])
         assert result.exit_code == 0
         assert "No words are marked as mastered" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_clear_tag_with_no_tagged_words(self, mock_typer):
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         runner.invoke(app, ["clear", "-t", "testtag"])
-        mock_typer.return_value = True # mock the confirmation prompt [Y/N] -> Y
+        mock_typer.return_value = True 
         result=runner.invoke(app, ["clear", "-t", "testtag"])
         assert result.exit_code == 0
         assert "No words with the tag testtag were found" in result.stdout
@@ -586,8 +583,7 @@ class TestThesaurus:
         assert "Synonyms of large are" in result.stdout
         assert "Synonyms of drink are" in result.stdout
 
-# I have used 'delete' command everywhere, do you thik we need to implement it for all other tests in this file? As the setup create new database for every run but not for every test right?
-# todo @anay: write tests for list command and check coverage html report and see if any command is missing. Do not start writing tests for individual functions yet, only the commands.
+
 class TestList:
     def test_list_favorite(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -655,11 +651,14 @@ class TestList:
         assert "Enter a positive number" in result.stdout
 
     def test_list_date(self):
-        # use define command to add words to the database in today's date
-        # use datetime object to get current date and extract YYYY, MM, DD and then use it as input
-        # result= runner.invoke(app, ["list", "--date"], input="2022\n12\n01")
-        # assert result.exit_code == 0
-        # assert "Words added to the vocabulary builder list on" in result.stdout
+        runner.invoke(app, ["define", "world"])
+        day= datetime.now().day
+        month= datetime.now().month
+        year= datetime.now().year
+        
+        result= runner.invoke(app, ["list", "--date"], input=f"{day}\n{month}\n{year}")
+        assert result.exit_code == 0
+        assert "Words added to the vocabulary builder list on" in result.stdout
         pass
 
     def test_list_date_nonexistent(self):
@@ -676,7 +675,7 @@ class TestList:
         runner.invoke(app, ["define", "math", "school"])
         result= runner.invoke(app, ["list", "-L", "2"])
         assert result.exit_code == 0
-        assert "Last words searched [2]" in result.stdout
+        assert "Last [2] words searched" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_list_last_nonexistent(self, mock_typer):
@@ -696,7 +695,7 @@ class TestList:
         runner.invoke(app, ["tag", "math", "school", "--name", "testtag"])
         result= runner.invoke(app, ["list", "-t", "testtag"])
         assert result.exit_code == 0
-        assert "Words with tag testtag [2]" in result.stdout
+        assert "Words with tag testtag [2 word(s)]" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_list_tag_nonexistent(self, mock_typer):
@@ -704,7 +703,7 @@ class TestList:
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-t", "testtag"])
         assert result.exit_code == 0
-        assert "No words found with the tag testtag" in result.stdout
+        assert "does not exist" in result.stdout
 
     def test_list_most(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -719,7 +718,6 @@ class TestList:
         result= runner.invoke(app, ["list", "-M", "2"])
         assert result.exit_code == 0
         assert "You haven't searched for any words yet" in result.stdout
-
 
     def test_list_most_negative(self):
         result= runner.invoke(app, ["list", "-M", "-1"])
