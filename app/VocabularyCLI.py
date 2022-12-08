@@ -13,6 +13,7 @@ from modules.Utils import *
 from modules.WordCollections import *
 from rich import print
 from rich.console import Console
+from datetime import datetime
 
 # app configuration
 app = typer.Typer(
@@ -76,10 +77,10 @@ def list(
     learning: Optional[bool] = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
     mastered: Optional[bool] = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
-    days: Optional[str] = typer.Option(None, "--days", "-d", help="Get a list of words from last n number of days."),
-    date: Optional[str] = typer.Option(None, "--date", "-D", help="Get a list of words from a particular date."),
-    last: Optional[str] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
-    most: Optional[str] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
+    days: Optional[int] = typer.Option(None, "--days", "-d", help="Get a list of words from last n number of days."),
+    date: Optional[bool] = typer.Option(False, "--date", "-D", help="Get a list of words from a particular date."),
+    last: Optional[int] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
+    most: Optional[int] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
     tagnames: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
 ):
     """
@@ -108,7 +109,7 @@ def list(
     if days:
         show_list(days=days)
     if date:
-        show_list(date=date)
+            show_list(date=date)
     if last:
         show_list(last=last)
     if most:

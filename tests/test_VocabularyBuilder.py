@@ -596,8 +596,10 @@ class TestList:
         assert result.exit_code == 0
         assert "Favorite words" in result.stdout
 
-    def test_list_favorite_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_favorite_nonexistent(self, mock_typer):
         runner.invoke(app, ["clear", "-f"])
+        mock_typer.return_value = True
         result= runner.invoke(app, ["list", "-f"])
         assert result.exit_code == 0
         assert "You have not added any words to the favorite list" in result.stdout
@@ -609,7 +611,9 @@ class TestList:
         assert result.exit_code == 0
         assert "Mastered words" in result.stdout
 
-    def test_list_mastered_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_mastered_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["clear", "-m"])
         result= runner.invoke(app, ["list", "-m"])
         assert result.exit_code == 0
@@ -622,7 +626,9 @@ class TestList:
         assert result.exit_code == 0
         assert "Learning words" in result.stdout
 
-    def test_list_learning_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_learning_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["clear", "-l"])
         result= runner.invoke(app, ["list", "-l"])
         assert result.exit_code == 0
@@ -634,33 +640,32 @@ class TestList:
         assert result.exit_code == 0
         assert "Words added to the vocabulary builder list from" in result.stdout
 
-    def test_list_days_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_days_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-d", "1"])
         assert result.exit_code == 0
         assert "No records found within this date range" in result.stdout
 
-    def test_list_days_invalid(self):
-        result= runner.invoke(app, ["list", "-d", "efewq"])
-        assert result.exit_code == 0
-        assert "Please enter a valid number" in result.stdout
 
     def test_list_days_negative(self):
         result= runner.invoke(app, ["list", "-d", "-1"])
         assert result.exit_code == 0
-        assert "Please enter a positive number" in result.stdout
+        assert "Enter a positive number" in result.stdout
 
-    # def test_list_date(self):
-    #     runner.invoke(app, ["define", "math", "school"])
-    #     result= runner.invoke(app, ["list", "-d", "2021-01-01"])
-    #     assert result.exit_code == 0
-    #     assert "Words added to the vocabulary builder list on" in result.stdout
+    def test_list_date(self):
+        # use define command to add words to the database in today's date
+        # use datetime object to get current date and extract YYYY, MM, DD and then use it as input
+        # result= runner.invoke(app, ["list", "--date"], input="2022\n12\n01")
+        # assert result.exit_code == 0
+        # assert "Words added to the vocabulary builder list on" in result.stdout
+        pass
 
-    # def test_list_date_nonexistent(self):
-    #     runner.invoke(app, ["delete"])
-    #     result= runner.invoke(app, ["list", "-d", "2021-01-01"])
-    #     assert result.exit_code == 0
-    #     assert "No records found within this date range" in result.stdout
+    def test_list_date_nonexistent(self):
+        result= runner.invoke(app, ["list", "--date"], input="2022\n12\n01")
+        assert result.exit_code == 0
+        assert "No records found on this date" in result.stdout
 
     # def test_list_date_invalid(self):
     #     result= runner.invoke(app, ["list", "-d", "efewq"])
@@ -671,32 +676,31 @@ class TestList:
         runner.invoke(app, ["define", "math", "school"])
         result= runner.invoke(app, ["list", "-L", "2"])
         assert result.exit_code == 0
-        assert "Last 2 words searched" in result.stdout
+        assert "Last words searched [2]" in result.stdout
 
-    def test_list_last_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_last_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-L", "2"])
         assert result.exit_code == 0
         assert "You haven't searched for any words yet" in result.stdout
 
-    def test_list_last_invalid(self):
-        result= runner.invoke(app, ["list", "-L", "efewq"])
-        assert result.exit_code == 0
-        assert "Please enter a valid number" in result.stdout
-    
     def test_list_last_negative(self):
         result= runner.invoke(app, ["list", "-L", "-1"])
         assert result.exit_code == 0
-        assert "Please enter a positive number" in result.stdout
+        assert "Enter a positive number" in result.stdout
 
     def test_list_tag(self):
         runner.invoke(app, ["define", "math", "school"])
         runner.invoke(app, ["tag", "math", "school", "--name", "testtag"])
         result= runner.invoke(app, ["list", "-t", "testtag"])
         assert result.exit_code == 0
-        assert "Words with the tag testtag" in result.stdout
+        assert "Words with tag testtag [2]" in result.stdout
 
-    def test_list_tag_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_tag_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-t", "testtag"])
         assert result.exit_code == 0
@@ -706,23 +710,21 @@ class TestList:
         runner.invoke(app, ["define", "math", "school"])
         result= runner.invoke(app, ["list", "-M", "2"])
         assert result.exit_code == 0
-        assert "Top 2 most searched words" in result.stdout
+        assert "Top most searched words [2]" in result.stdout
 
-    def test_list_most_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_most_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-M", "2"])
         assert result.exit_code == 0
         assert "You haven't searched for any words yet" in result.stdout
 
-    def test_list_most_invalid(self):
-        result= runner.invoke(app, ["list", "-M", "efewq"])
-        assert result.exit_code == 0
-        assert "Please enter a valid number" in result.stdout
 
     def test_list_most_negative(self):
         result= runner.invoke(app, ["list", "-M", "-1"])
         assert result.exit_code == 0
-        assert "Please enter a positive number" in result.stdout
+        assert "Enter a positive number" in result.stdout
 
     def test_list_tagnames(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -732,20 +734,24 @@ class TestList:
         assert result.exit_code == 0
         assert "YOUR TAGS :" in result.stdout
 
-    def test_list_tagnames_nonexistent(self):
+    @mock.patch("typer.confirm")
+    def test_list_tagnames_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list", "-T"])
         assert result.exit_code == 0
         assert "You haven't added any tags to your words yet" in result.stdout
-    
+
     def test_list_all(self):
         runner.invoke(app, ["define", "math", "school"])
         result= runner.invoke(app, ["list"])
         assert result.exit_code == 0
         assert "Here is your list of words" in result.stdout
 
-    def test_list_all_nonexistent(self):
-        runner.invoke(app, ["clear", "-a"])
+    @mock.patch("typer.confirm")
+    def test_list_all_nonexistent(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         result= runner.invoke(app, ["list"])
         assert result.exit_code == 0
         assert "You have no words in your vocabulary builder list" in result.stdout

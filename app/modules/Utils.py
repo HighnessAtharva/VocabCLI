@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from sqlite3 import *
 from typing import *
-
+import typer
 import requests
 from Database import createConnection, createTables
 from Dictionary import *
@@ -310,7 +310,7 @@ def set_unfavorite(query:str):
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def count_all_words()->int:
+def count_all_words() -> int:
     """
     Counts the distinct number of words in the database.
 
@@ -322,16 +322,14 @@ def count_all_words()->int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words"
     c.execute(sql)
-    rows=c.fetchall()
-    if rows:
+    if rows := c.fetchall():
         return len(rows)
-    else:
-        print(Panel(f"There are no words in the database. 🤷‍♂️"))
-        return 0
+    print(Panel("There are no words in the database. 🤷‍♂️"))
+    return 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def count_mastered()->int:
+def count_mastered() -> int:
     """
     Counts the distinct number of mastered words in the database.
 
@@ -343,16 +341,14 @@ def count_mastered()->int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE mastered=1"
     c.execute(sql)
-    rows=c.fetchall()
-    if rows:
+    if rows := c.fetchall():
         return len(rows)
-    else:
-        print(Panel(f"There are no mastered words. 🤷‍♂️"))
-        return 0
+    print(Panel("There are no mastered words. 🤷‍♂️"))
+    return 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def count_learning()->int:
+def count_learning() -> int:
     """
     Counts the distinct number of learning words in the database.
 
@@ -364,16 +360,14 @@ def count_learning()->int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE learning=1"
     c.execute(sql)
-    rows=c.fetchall()
-    if rows:
+    if rows := c.fetchall():
         return len(rows)
-    else:
-        print(Panel("[bold red]No words are learning. 🤷‍♂️[/bold red]"))
-        return 0
+    print(Panel("[bold red]No words are learning. 🤷‍♂️[/bold red]"))
+    return 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def count_favorite()->int:
+def count_favorite() -> int:
     """
     Counts the distinct number of favorite words in the database.
 
@@ -385,16 +379,14 @@ def count_favorite()->int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE favorite=1"
     c.execute(sql)
-    rows=c.fetchall()
-    if rows:
+    if rows := c.fetchall():
         return len(rows)
-    else:
-        print(Panel("[bold red]There are no favorite words. 🤷‍♂️[/bold red]"))
-        return 0
+    print(Panel("[bold red]There are no favorite words. 🤷‍♂️[/bold red]"))
+    return 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def count_tag(tag:str)->int:
+def count_tag(tag:str) -> int:
     """
     Counts the distinct number of words in the database with a particular tag.
 
@@ -406,12 +398,10 @@ def count_tag(tag:str)->int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE tag=?"
     c.execute(sql, (tag,))
-    rows=c.fetchall()
-    if rows:
+    if rows := c.fetchall():
         return len(rows)
-    else:
-        print(Panel(f"[bold red]Tag {tag} does not exist. 🤷‍♂️[/bold red]"))
-        return 0
+    print(Panel(f"[bold red]Tag {tag} does not exist. 🤷‍♂️[/bold red]"))
+    return 0
 
 
 # todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
@@ -500,7 +490,7 @@ def show_list(
     learning:Optional[bool]=False,
     mastered:Optional[bool]=False,
     tag:Optional[bool]=None,
-    days:Optional[str]=None,
+    days:Optional[int]=None,
     date:Optional[str]=None,
     last:Optional[int]=None,
     most: Optional[int]=None,
@@ -539,18 +529,11 @@ def show_list(
         success_message="[bold gold1]Favorite[/bold gold1] words"
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
-    #handled an exception here, check it out @atharva
     elif days:
-        try:
-            int(days)
-        except ValueError:
-            print(Panel("Please enter a valid number 😪"))
+        if days<0:
+            print(Panel("Enter a positive number ➕"))
             return
 
-        if int(days)<0:
-            print(Panel("Please enter a positive number ➕"))
-            return
-        
         c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{days} days')")
         date_today=datetime.now().strftime("%d/%m/%Y")
         date_before=datetime.now() - timedelta(days=int(days))
@@ -558,55 +541,67 @@ def show_list(
         error_message="No records found within this date range ❌"
 
 
-    # todo @atharva: not getting how to do date formatting here pls help me out
-    # elif date:
-    #     c.execute("SELECT DISTINCT word FROM words where datetime = ?", (date,))
-    #     success_message=f"Words added to the vocabulary builder list on [bold blue]{date}[/bold blue]"
-    #     error_message="No records found on this date ❌"
+    elif date:
 
-    # FIXME @atharva if user searches for more number of words than the total number of words in the list, it shows all words yet the number in the success message is wrong
-    # same for most, if the user searches for more number of words than the total number of words in the list, it shows all words yet the number in the success message is wrong 
-    #success message should be realtime and use rowcount instead of user input variable for all the functions
-    # most searched words should also show the number of times it was searched
-    # last searched words should also show the date and time of the search
-    # if users searches for wrong tag another error message should be shown saying no such tag exists, make one or find from the list of tags (show the command or the list directly) also need to write tests for the same
+        # accept inputs from prompt
+        year=typer.prompt("YYYY")
+        month=typer.prompt("MM")
+        day=typer.prompt("DD")
 
-    
-    elif last:
-
+        # check if the inputs are integers
         try:
-            int(last)
-        except ValueError:
-            print(Panel("Please enter a valid number 😪"))
+            check_if_int=int(year)
+            check_if_int=int(month)
+            check_if_int=int(day)
+
+        except ValueError as e:
+            raise typer.BadParameter("Date values have to be integers") from e
+
+        # check if the inputs are of the correct length
+        if len(str(year))!=4 and len(str(month))!=2 and len(str(day))!=2:
+            raise typer.BadParameter("Incorrect date format. Expected: [bold green]YYYY-MM-DD[/bold green]")
+
+        # check if days, months and years are fall in the correct range
+        if int(month) not in range(1,13) or int(day) not in range(1,32) or int(year) not in range(1900, 2100):
+            raise typer.BadParameter("Date must fall within calendar range. Expected: [bold green]YYYY-MM-DD[/bold green]")
+
+
+        # check if the date is not in the future
+        date=f"{year}-{month}-{day}"
+        checker=datetime.strptime(date, '%Y-%m-%d')
+        if checker > datetime.now():
+            print("Date cannot be in the future.")
             return
 
-        if int(last)<=0:
-            print(Panel("Please enter a positive number ➕"))
-            return
-        
-        c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
-        success_message=f"Last [bold blue]{last}[/bold blue] words searched"
-        error_message="You haven't searched for any words yet. ❌"
+        # fetch records if all checks pass
+        datefmt=f"{date}%"
+        print(datefmt)
+        c.execute("SELECT DISTINCT word FROM words where datetime LIKE ?", (datefmt,))
+        success_message=f"Words added to the vocabulary builder list on [bold blue]{date}[/bold blue]"
+        error_message="No records found on this date ❌"
+
 
     elif tag:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
         success_message=f"Words with tag [bold magenta]{tag}[/bold magenta]"
         error_message=f"No words found with the tag {tag}. ❌"
 
-    elif most:
-
-        try:
-            int(most)
-        except ValueError:
-            print(Panel("Please enter a valid number 😪"))
+    elif last:
+        if last<=0:
+            print(Panel("Enter a positive number ➕"))
             return
 
-        if int(most)<=0:
-            print(Panel("Please enter a positive number ➕"))
+        c.execute("SELECT DISTINCT word FROM words ORDER BY datetime DESC LIMIT ?", (last,))
+        success_message="[bold blue]Last[/bold blue] words searched"
+        error_message="You haven't searched for any words yet. ❌"
+
+    elif most:
+        if most<=0:
+            print(Panel("Enter a positive number ➕"))
             return
 
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
-        success_message=f"Top [bold blue]{most}[/bold blue] most searched words"
+        success_message="[bold blue]Top[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
 
     elif tagnames:
