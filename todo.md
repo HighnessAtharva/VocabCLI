@@ -17,3 +17,11 @@ random
 ---
 
 We should rename unlearn to not-learning
+
+
+---
+
+Help command alignment
+Finishing of cmds: revise, quiz, random
+MOVCLI 
+Debug command prompt resizing issue 
