@@ -355,29 +355,6 @@ def history(
         fetch_word_history(word)
 
 
-
-# todo - need to write the function
-@app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
-def revise(
-    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to revise"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise"),
-    timer: Optional[int] = typer.Option(10, "--timer", "-T", help="Duration for each word"),
-    shuffle: Optional[bool] = typer.Option(False, "--shuffle", "-s", help="Shuffle the order of words"),
-):
-    """
-    Revise words from your learning list.
-
-    Args:
-        number (Optional[int], optional): Number of words to revise. Defaults to 10.
-        tag (Optional[str], optional): Tag of words to revise. Defaults to None.
-        timer (Optional[int], optional): Duration for each word. Defaults to 10.
-        shuffle (Optional[bool], optional): Shuffle the order of words. Defaults to False.
-    """
-
-    revise_words()
-
-
-
 @app.command(rich_help_panel="Vocabulary Builder", help="🚮 Deletes the word from the database")
 def delete(
     mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Deletes all mastered words"),
@@ -493,6 +470,7 @@ def clear(
 def random(
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
     mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a random favorite word"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a random word from a particular tag"),
 ):
     """
@@ -507,11 +485,34 @@ def random(
         get_random_word_from_learning_set()
     elif mastered:
         get_random_word_from_mastered_set()
+    elif favorite:
+        get_random_word_from_favorite_set()
     elif tag:
         get_random_word_from_tag(tag)
     elif not any([learning, mastered, tag]):
         get_random_word_definition_from_api()
 
+
+# todo - need to write the function
+@app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
+def revise(
+    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to revise"),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise"),
+    timer: Optional[int] = typer.Option(10, "--timer", "-T", help="Duration for each word"),
+    shuffle: Optional[bool] = typer.Option(False, "--shuffle", "-s", help="Shuffle the order of words"),
+):
+    """
+    Revise words from your learning list.
+
+    Args:
+        number (Optional[int], optional): Number of words to revise. Defaults to 10.
+        tag (Optional[str], optional): Tag of words to revise. Defaults to None.
+        timer (Optional[int], optional): Duration for each word. Defaults to 10.
+        shuffle (Optional[bool], optional): Shuffle the order of words. Defaults to False.
+    """
+
+    revise_words()
+    
 
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")

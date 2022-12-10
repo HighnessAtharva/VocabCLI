@@ -8,6 +8,7 @@ import shutil
 import sqlite3
 from pathlib import Path
 from unittest import mock
+from datetime import datetime
 
 import pytest
 from typer.testing import CliRunner
@@ -590,7 +591,7 @@ class TestList:
         runner.invoke(app, ["favorite", "math", "school"])
         result= runner.invoke(app, ["list", "-f"])
         assert result.exit_code == 0
-        assert "Favorite words" in result.stdout
+        assert "Favorite [" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_list_favorite_nonexistent(self, mock_typer):
@@ -605,7 +606,7 @@ class TestList:
         runner.invoke(app, ["master", "math", "school"])
         result= runner.invoke(app, ["list", "-m"])
         assert result.exit_code == 0
-        assert "Mastered words" in result.stdout
+        assert "Mastered [" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_list_mastered_nonexistent(self, mock_typer):
@@ -620,7 +621,7 @@ class TestList:
         runner.invoke(app, ["learn", "math", "school"])
         result= runner.invoke(app, ["list", "-l"])
         assert result.exit_code == 0
-        assert "Learning words" in result.stdout
+        assert "Learning [" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_list_learning_nonexistent(self, mock_typer):
@@ -659,17 +660,17 @@ class TestList:
         result= runner.invoke(app, ["list", "--date"], input=f"{day}\n{month}\n{year}")
         assert result.exit_code == 0
         assert "Words added to the vocabulary builder list on" in result.stdout
-        pass
+    
 
     def test_list_date_nonexistent(self):
-        result= runner.invoke(app, ["list", "--date"], input="2022\n12\n01")
+        result= runner.invoke(app, ["list", "--date"], input="01\n01\n2002")
         assert result.exit_code == 0
-        assert "No records found on this date" in result.stdout
+        assert "No records found for" in result.stdout
 
-    # def test_list_date_invalid(self):
-    #     result= runner.invoke(app, ["list", "-d", "efewq"])
-    #     assert result.exit_code == 0
-    #     assert "Please enter a valid date" in result.stdout
+    def test_list_date_outside_calendar_range(self):
+        result= runner.invoke(app, ["list", "--date"], input="20\n34\n2022")
+        assert result.exit_code == 0
+        assert "Date must fall within calendar range" in result.stdout
 
     def test_list_last(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -801,4 +802,96 @@ class TestRandom:
         assert " No words in your list with the tag" in result.stdout
 
 class TestRate:
-    pass
+    def test_rate_today(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["rate", "-t"])
+        assert result.exit_code == 0
+        assert "words today compared to yesterday" in result.stdout
+        
+    def test_rate_week(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["rate", "-w"])
+        assert result.exit_code == 0
+        assert "words this week compared to last week" in result.stdout
+        
+    def test_rate_month(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["rate", "-m"])
+        assert result.exit_code == 0
+        assert "words this month compared to last month" in result.stdout
+        
+    def test_rate_year(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["rate", "-y"])
+        assert result.exit_code == 0
+        assert "words this year compared to last year" in result.stdout
+
+
+class TestRandom:
+    def test_random_word_api(self):
+        result= runner.invoke(app, ["random"])
+        assert result.exit_code == 0
+        assert "A Random Word for You:" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_master(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-m"])
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["master", "math", "school"])
+        result= runner.invoke(app, ["random", "-m"])
+        assert result.exit_code == 0
+        assert "A Random word from your mastered words list: math" or "A Random word from your mastered words list: school" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_master_empty(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-m"])
+        result= runner.invoke(app, ["random", "-m"])
+        assert result.exit_code == 0
+        assert "You have not mastered any words yet" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_learning(self,  mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-m"])
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["learn", "math", "school"])
+        result= runner.invoke(app, ["random", "-l"])
+        assert result.exit_code == 0
+        assert "A Random word from your learning words list: math" or "A Random word from your learning words list: school" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_learning_empty(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-l"])
+        result= runner.invoke(app, ["random", "-l"])
+        assert result.exit_code == 0
+        assert "You have no words in your vocabulary builder learning list" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_favorite(self,  mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-m"])
+        runner.invoke(app, ["define", "math", "school"])
+        runner.invoke(app, ["favorite", "math", "school"])
+        result= runner.invoke(app, ["random", "-f"])
+        assert result.exit_code == 0
+        assert "A Random word from your favorite words list: math" or "A Random word from your favorite words list: school" in result.stdout
+    
+    @mock.patch("typer.confirm")
+    def test_random_word_favorite_empty(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-f"])
+        result= runner.invoke(app, ["random", "-f"])
+        assert result.exit_code == 0
+        assert "You have no favorite words" in result.stdout
+    
+class TestHistory:
+    def test_history(self):
+        runner.invoke(app, ["define", "math"])
+        runner.invoke(app, ["define", "math", "rock"])
+        result= runner.invoke(app, ["history", "math", "rock"])
+        assert result.exit_code == 0
+        assert "You have searched for math 2 time(s) before" in result.stdout
+        assert "You have searched for rock 1 time(s) before" in result.stdout

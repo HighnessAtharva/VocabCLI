@@ -5,9 +5,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#2D2D2D" />
-
+  
   <title>VocabularyCLI :: app package</title>
-
+  
 
   <link rel="icon" type="image/png" sizes="32x32" href="_static/img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="_static/img/favicon-16x16.png">
@@ -23,23 +23,23 @@
       <script type="text/javascript" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/sphinx_highlight.js"></script>
+  
 
-
-  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script>
+  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script> 
 </head>
 
 <body>
   <div id="insegel-container">
     <header>
       <div id="logo-container">
-
+          
           <h1>VocabularyCLI</h1>
-
+          
       </div>
       <div id="project-container">
-
+        
         <h1>Documentation</h1>
-
+        
       </div>
     </header>
 
@@ -47,7 +47,7 @@
 
       <div id="main-content-container">
         <div id="main-content" role="main">
-
+          
   <section id="app-package">
 <h1>app package<a class="headerlink" href="#app-package" title="Permalink to this heading">¶</a></h1>
 <section id="subpackages">
@@ -69,12 +69,15 @@
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.createConnection"><code class="docutils literal notranslate"><span class="pre">createConnection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.createTables"><code class="docutils literal notranslate"><span class="pre">createTables()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.initializeDB"><code class="docutils literal notranslate"><span class="pre">initializeDB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Database.refresh_cache"><code class="docutils literal notranslate"><span class="pre">refresh_cache()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Dictionary">app.modules.Dictionary module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.connect_to_api"><code class="docutils literal notranslate"><span class="pre">connect_to_api()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.definition"><code class="docutils literal notranslate"><span class="pre">definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.insert_to_db_util"><code class="docutils literal notranslate"><span class="pre">insert_to_db_util()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.insert_word_to_db"><code class="docutils literal notranslate"><span class="pre">insert_word_to_db()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.one_line_definition"><code class="docutils literal notranslate"><span class="pre">one_line_definition()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.phonetic"><code class="docutils literal notranslate"><span class="pre">phonetic()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Dictionary.say_aloud"><code class="docutils literal notranslate"><span class="pre">say_aloud()</span></code></a></li>
 </ul>
@@ -117,6 +120,10 @@
 <li class="toctree-l2"><a class="reference internal" href="app.modules.html#module-app.modules.Utils">app.modules.Utils module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.add_tag"><code class="docutils literal notranslate"><span class="pre">add_tag()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.check_word_exists"><code class="docutils literal notranslate"><span class="pre">check_word_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.clear_all_words_from_tag"><code class="docutils literal notranslate"><span class="pre">clear_all_words_from_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.clear_favorite"><code class="docutils literal notranslate"><span class="pre">clear_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.clear_learning"><code class="docutils literal notranslate"><span class="pre">clear_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.clear_mastered"><code class="docutils literal notranslate"><span class="pre">clear_mastered()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_all_words"><code class="docutils literal notranslate"><span class="pre">count_all_words()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_favorite"><code class="docutils literal notranslate"><span class="pre">count_favorite()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.count_learning"><code class="docutils literal notranslate"><span class="pre">count_learning()</span></code></a></li>
@@ -133,6 +140,7 @@
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_definition_from_api"><code class="docutils literal notranslate"><span class="pre">get_random_word_definition_from_api()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_from_learning_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_learning_set()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_from_mastered_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_mastered_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.get_random_word_from_tag"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_tag()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.remove_tag"><code class="docutils literal notranslate"><span class="pre">remove_tag()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_favorite"><code class="docutils literal notranslate"><span class="pre">set_favorite()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.modules.html#app.modules.Utils.set_learning"><code class="docutils literal notranslate"><span class="pre">set_learning()</span></code></a></li>
@@ -184,11 +192,11 @@
 
         <div id="side-menu" role="navigation">
 
-
-
-
-
-
+          
+  
+    
+  
+  
     <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">PythonCLI</a><ul class="current">
@@ -206,12 +214,12 @@
 </li>
 </ul>
 
-
+  
 
 
         </div>
 
-
+        
 
       </div>
 
@@ -220,24 +228,24 @@
 <footer>
     <div id="footer-info">
         <ul id="build-details">
-
+            
                 <li class="footer-element">
-
+                    
                         <a href="_sources/app.rst.txt" rel="nofollow"> source</a>
-
+                    
                 </li>
+            
 
+            
 
-
-
-
+            
         </ul>
 
-
+        
             <div id="copyright">
                 &copy; 2022, AtharvaShah, AnayDeshpande
             </div>
-
+        
 
         <div id="credit">
             created with <a href="http://sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/Autophagy/insegel">Insegel</a>
@@ -254,7 +262,7 @@
       });
     </script>
 
-</footer>
+</footer> 
 
 </div>
 
