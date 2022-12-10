@@ -12,7 +12,6 @@ history
 about
 revise
 quiz
-random
 
 ---
 

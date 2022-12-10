@@ -84,7 +84,7 @@ def refresh_cache():
     if not c.fetchone()[0]:
         return
 
-    print("Refreshing cache...")
+    print(Panel("Refreshing cache..."))
     c.execute("SELECT word FROM cache_words")
     rows=c.fetchall()
     for row in rows:
@@ -100,4 +100,4 @@ def refresh_cache():
             if response.status_code == 200:
                 c.execute("UPDATE cache_words SET api_response=? WHERE word=?", (json.dumps(response.json()[0]), word))
                 conn.commit()
-    print("Cache refreshed successfully.")
+    print(Panel("Cache refreshed successfully."))

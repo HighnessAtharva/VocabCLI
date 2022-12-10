@@ -184,7 +184,7 @@ def set_unmastered(query: str):
     c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]learning[/bold red]. Remember to practice it."))
+        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it."))
 
 
 
@@ -203,10 +203,14 @@ def set_learning(query: str):
     check_word_exists(query)
 
     # check if word is already mastered
-    c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 1))
+    c.execute("SELECT * FROM words WHERE word=? and mastered=1", (query,))
     if c.fetchone():
-        # TODO add a typer prompt to ask if the user wants to move word from mastered to learning
-        c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
+        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to move word from [b]mastered to learning[/b]?"))
+        if sure := typer.confirm(""):
+            c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
+        else:
+            print(Panel("OK, not moving to learning."))
+            return
 
     # check if word is already learning
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
@@ -426,18 +430,14 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
 
     conn=createConnection()
     c=conn.cursor()
-    if tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=0 ORDER BY RANDOM() LIMIT 1", (tag,))
-    if not tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
+    c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print(Panel("You have no words in your vocabulary builder learning list. 👀"))
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
-            # Uncomment the below line to get the definition of the word as well
-            # definition(row[0])
+            definition(row[0])
 
 
 def get_random_word_from_mastered_set(tag:Optional[str]=None):
@@ -450,18 +450,14 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
 
     conn=createConnection()
     c=conn.cursor()
-    if tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1 ORDER BY RANDOM() LIMIT 1", (tag,))
-    if not tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
+    c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print(Panel("You have not mastered any words yet. 👀"))
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
-            # Uncomment the below line to get the definition of the word as well
-            # definition(row[0])
+            definition(row[0])
 
 
 def get_random_word_from_tag(tagName:str):
@@ -481,8 +477,7 @@ def get_random_word_from_tag(tagName:str):
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
-            # Uncomment the below line to get the definition of the word as well
-            # definition(row[0])
+            definition(row[0])
 
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(
@@ -600,17 +595,20 @@ def show_list(
             return
 
         c.execute("SELECT DISTINCT (word), datetime FROM words ORDER BY datetime DESC LIMIT ?", (last,))
-        success_message="[bold blue]Last[/bold blue] words searched"
         error_message="You haven't searched for any words yet. ❌"
 
-        # todo convert Panel to Table
         rows=c.fetchall()
         if len(rows) <= 0:
             print(Panel(error_message))
         else:
+            table=Table(show_header=True, header_style="bold bright_cyan")
+            table.add_column("Word", style="cyan", width=15)
+            table.add_column("Last searched on", style="light_green")
             print(Panel(f"Last [bold blue][{len(rows)}][/bold blue] words searched"))
-            rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4] [blue][Last Searched: {datetime.strptime(row[1],'%Y-%m-%d %H:%M:%S').strftime('%d %b %Y %H:%M')}][/blue]", expand=True) for row in rows]
-            print(Columns(rows, equal=True))
+            for row in rows:
+                table.add_row(row[0], row[1])
+                table.add_section()
+            print(table)
         return
     
     elif most:
@@ -622,14 +620,18 @@ def show_list(
         success_message="[bold blue]Top[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
         
-        # todo convert Panel to Table
         rows=c.fetchall()
         if len(rows) <= 0:
             print(Panel(error_message))
         else:
+            table=Table(show_header=True, header_style="bold bright_cyan")
+            table.add_column("Word", style="cyan", width=15)
+            table.add_column("Times searched", style="light_green")
             print(Panel(f"{success_message} [bold blue][{len(rows)}][/bold blue]"))
-            rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4] [blue][{row[1]} times][/blue]", expand=True) for row in rows]
-            print(Columns(rows, equal=True))
+            for row in rows:
+                table.add_row(row[0], str(row[1]))
+                table.add_section()
+            print(table)
         return
 
     elif tagnames:

@@ -26,11 +26,11 @@ def viz_top_tags(N=10):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_tags:
-        print("No tags found")
+        print(Panel("No tags found"))
         return
 
     if len(top_tags) < N:
-        print("Not enough tags found. Showing graph for available tags only.")
+        print(Panel("Not enough tags found. Showing graph for available tags only."))
 
     # create a dataframe
     df = pd.DataFrame(list(zip(top_tags, count)), index=count, columns=['Tag', 'Count'])

@@ -36,7 +36,7 @@ def revise_words(
 
 
     else:
-        print("No words to revise. Add some words to your learning list first by using 'learn' command.")
+        print(Panel("No words to revise. Add some words to your learning list first by using 'learn' command."))
 
 
 def quiz():
