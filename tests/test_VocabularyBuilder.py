@@ -756,51 +756,6 @@ class TestList:
         assert "You have no words in your vocabulary builder list" in result.stdout
 
 
-class TestRandom:
-    def test_random(self):
-        result= runner.invoke(app, ["random"])
-        assert result.exit_code == 0
-        assert " A Random Word for You:" in result.stdout
-
-    def random_mastered(self):
-        runner.invoke(app, ["define", "math", "school"])
-        runner.invoke(app, ["master", "math", "school"])
-        result= runner.invoke(app, ["random", "-m"])
-        assert result.exit_code == 0
-        assert "A Random word from your mastered words list:" in result.stdout
-    
-    def random_mastered_nonexistent(self):
-        runner.invoke(app, ["delete"])
-        result= runner.invoke(app, ["random", "-m"])
-        assert result.exit_code == 0
-        assert "You have not mastered any words yet." in result.stdout
-
-    def random_learning(self):
-        runner.invoke(app, ["define", "math", "school"])
-        runner.invoke(app, ["learn", "math", "school"])
-        result= runner.invoke(app, ["random", "-l"])
-        assert result.exit_code == 0
-        assert "A Random word from your learning words list:" in result.stdout
-
-    def random_learning_nonexistent(self):
-        runner.invoke(app, ["delete"])
-        result= runner.invoke(app, ["random", "-l"])
-        assert result.exit_code == 0
-        assert "You have no words in your vocabulary builder learning list." in result.stdout
-
-    def random_tag(self):
-        runner.invoke(app, ["define", "math", "school"])
-        runner.invoke(app, ["tag", "math", "school", "--name", "testtag"])
-        result= runner.invoke(app, ["random", "-t", "testtag"])
-        assert result.exit_code == 0
-        assert " A Random word from your vocabulary builder list with the tag" in result.stdout
-
-    def random_tag_nonexistent(self):
-        runner.invoke(app, ["delete"])
-        result= runner.invoke(app, ["random", "-t", "testtag"])
-        assert result.exit_code == 0
-        assert " No words in your list with the tag" in result.stdout
-
 class TestRate:
     def test_rate_today(self):
         runner.invoke(app, ["define", "math", "school"])
