@@ -25,3 +25,26 @@ Help command alignment
 Finishing of cmds: revise, quiz, random
 MOVCLI 
 Debug command prompt resizing issue 
+
+---
+
+## Things to Do After Finishing the Project
+
+- Publishing to PyPI
+- Generate Requirements.txt
+- Generate the documentation, check formatting, correctness and theme and link it to website and PyPI
+- Generate the release notes
+- Generate an executable file and upload it to the release page on GitHub
+- Generate command list and attach it to readme and website
+- Add proper content and styling to VocabCLI.github.io
+- Record demo screenscasts using asciinema and publish them on the website
+- Draw UML Diagrams:
+  1. Context Level Diagram
+  2. Data Flow Diagram (First Level)
+  3. Class Diagram
+  4. Use Case Diagram
+  5. Activity Diagram
+  6. Sequence Diagram)
+- Split the test files into multiple files based on Classes or Modules
+- Final Project Report for College Submission
+

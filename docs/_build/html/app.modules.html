@@ -5,9 +5,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#2D2D2D" />
-
+  
   <title>VocabularyCLI :: app.modules package</title>
-
+  
 
   <link rel="icon" type="image/png" sizes="32x32" href="_static/img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="_static/img/favicon-16x16.png">
@@ -23,23 +23,23 @@
       <script type="text/javascript" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/sphinx_highlight.js"></script>
+  
 
-
-  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script>
+  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script> 
 </head>
 
 <body>
   <div id="insegel-container">
     <header>
       <div id="logo-container">
-
+          
           <h1>VocabularyCLI</h1>
-
+          
       </div>
       <div id="project-container">
-
+        
         <h1>Documentation</h1>
-
+        
       </div>
     </header>
 
@@ -47,7 +47,7 @@
 
       <div id="main-content-container">
         <div id="main-content" role="main">
-
+          
   <section id="app-modules-package">
 <h1>app.modules package<a class="headerlink" href="#app-modules-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
@@ -67,7 +67,11 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Banner.get_terminal_width">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Banner.</span></span><span class="sig-name descname"><span class="pre">get_terminal_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Banner.html#get_terminal_width"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Banner.get_terminal_width" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the width of the terminal</p>
+<dd><p>Gets the width of the terminal.</p>
+<dl class="simple">
+<dt>Returns: </dt><dd><p>int: width of the terminal.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -81,17 +85,32 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Database.createConnection">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Database.</span></span><span class="sig-name descname"><span class="pre">createConnection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Database.html#createConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Database.createConnection" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a database connection to a SQLite database VocabularyBuilder.db</p>
+<dd><p>Creates a database connection to a SQLite database VocabularyBuilder.db</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Connection object or None.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Database.createTables">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Database.</span></span><span class="sig-name descname"><span class="pre">createTables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Database.html#createTables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Database.createTables" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Creates tables in the database</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>conn (sqlite3.Connection): Connection object</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Database.initializeDB">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Database.</span></span><span class="sig-name descname"><span class="pre">initializeDB</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Database.html#initializeDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Database.initializeDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Database.refresh_cache">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Database.</span></span><span class="sig-name descname"><span class="pre">refresh_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Database.html#refresh_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Database.refresh_cache" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </section>
@@ -121,12 +140,27 @@ short (Optional[bool], optional): If True, it will print just the short definiti
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Dictionary.insert_to_db_util">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Dictionary.</span></span><span class="sig-name descname"><span class="pre">insert_to_db_util</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Dictionary.html#insert_to_db_util"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Dictionary.insert_to_db_util" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Dictionary.insert_word_to_db">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Dictionary.</span></span><span class="sig-name descname"><span class="pre">insert_word_to_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Dictionary.html#insert_word_to_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Dictionary.insert_word_to_db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tags the word in the vocabulary builder list.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>query (str): Word which is to be tagged.
 tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Dictionary.one_line_definition">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Dictionary.</span></span><span class="sig-name descname"><span class="pre">one_line_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Dictionary.html#one_line_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Dictionary.one_line_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the one line definition of the word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>query (str): Word which is meant to be defined.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -235,12 +269,14 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Report.generate_graph_report">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Report.</span></span><span class="sig-name descname"><span class="pre">generate_graph_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Report.html#generate_graph_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Report.generate_graph_report" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates a graph report</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Report.generate_text_report">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Report.</span></span><span class="sig-name descname"><span class="pre">generate_text_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Report.html#generate_text_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Report.generate_text_report" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generates a text report</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Report.learning_rate">
@@ -253,12 +289,22 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Thesaurus.find_antonym">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Thesaurus.</span></span><span class="sig-name descname"><span class="pre">find_antonym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Thesaurus.html#find_antonym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Thesaurus.find_antonym" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Finds the antonyms of the query word</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>query (str): Word to find antonyms for.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Thesaurus.find_synonym">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Thesaurus.</span></span><span class="sig-name descname"><span class="pre">find_synonym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Thesaurus.html#find_synonym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Thesaurus.find_synonym" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Finds the synonyms of the query word</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>query (str): Word to find synonyms for.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-app.modules.Utils">
@@ -277,14 +323,47 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.check_word_exists">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">check_word_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#check_word_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.check_word_exists" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if the word exists in the database</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>query (str): Word which is to be checked</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Utils.clear_all_words_from_tag">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">clear_all_words_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tagName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#clear_all_words_from_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.clear_all_words_from_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all the words with specific tag.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>tagName (str): The tag to clear words from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Utils.clear_favorite">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">clear_favorite</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#clear_favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.clear_favorite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all the words marked as favorite.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Utils.clear_learning">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">clear_learning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#clear_learning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.clear_learning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all the words marked as learning.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Utils.clear_mastered">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">clear_mastered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#clear_mastered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.clear_mastered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears all the words marked as mastered.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.count_all_words">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">count_all_words</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Utils.html#count_all_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.count_all_words" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts the distinct number of words in the database</p>
+<dd><p>Counts the distinct number of words in the database.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p>int: Total word count</p>
+<dt>Returns:</dt><dd><p>int: Total word count.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -292,9 +371,9 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.count_favorite">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">count_favorite</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Utils.html#count_favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.count_favorite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts the distinct number of favorite words in the database</p>
+<dd><p>Counts the distinct number of favorite words in the database.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p>int: Total favorite word count</p>
+<dt>Returns:</dt><dd><p>int: Total favorite word count.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -302,9 +381,9 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.count_learning">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">count_learning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Utils.html#count_learning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.count_learning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts the distinct number of learning words in the database</p>
+<dd><p>Counts the distinct number of learning words in the database.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p>int: Total learning word count</p>
+<dt>Returns:</dt><dd><p>int: Total learning word count.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -312,9 +391,9 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.count_mastered">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">count_mastered</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Utils.html#count_mastered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.count_mastered" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts the distinct number of mastered words in the database</p>
+<dd><p>Counts the distinct number of mastered words in the database.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p>int: Total mastered word count</p>
+<dt>Returns:</dt><dd><p>int: Total mastered word count.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,9 +401,9 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.count_tag">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">count_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/modules/Utils.html#count_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.count_tag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Counts the distinct number of words in the database with a particular tag</p>
+<dd><p>Counts the distinct number of words in the database with a particular tag.</p>
 <dl class="simple">
-<dt>Returns:</dt><dd><p>int: Total word count of specific tag</p>
+<dt>Returns:</dt><dd><p>int: Total word count of specific tag.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -355,10 +434,10 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.delete_word">
-<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">delete_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#delete_word"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.delete_word" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">delete_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#delete_word"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.delete_word" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a word from the database.</p>
 <dl class="simple">
-<dt>Args:</dt><dd><p>query (str): Word to be deleted</p>
+<dt>Args:</dt><dd><p>query (str): Word to be deleted.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -367,6 +446,10 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dt class="sig sig-object py" id="app.modules.Utils.delete_words_from_tag">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">delete_words_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#delete_words_from_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.delete_words_from_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes all the words from a particular tag from the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>tag (str): The tag to delete words from.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -383,6 +466,13 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dt class="sig sig-object py" id="app.modules.Utils.get_lookup_rate">
 <span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">get_lookup_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">today</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">week</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#get_lookup_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.get_lookup_rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the learning rate of the user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>today (bool, optional): If True, returns the lookup rate for today. Defaults to False.
+week (bool, optional): If True, returns the lookup rate for the week. Defaults to False.
+month (bool, optional): If True, returns the lookup rate for the month. Defaults to False.
+year (bool, optional): If True, returns the lookup rate for the year. Defaults to False.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -407,6 +497,16 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 <dd><p>Gets a random word with definition from the mastered words list.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>tag (Optional[str], optional): Tag from which the mastered word should be. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.modules.Utils.get_random_word_from_tag">
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">get_random_word_from_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tagName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#get_random_word_from_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.get_random_word_from_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a random word from the vocabulary builder list with a particular tag.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -483,18 +583,20 @@ tagName (Optional[str], optional): Tag name which is to be added to the word and
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.modules.Utils.show_list">
-<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">show_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favorite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagnames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#show_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.show_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the words in the vocabulary builder list.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
+<span class="sig-prename descclassname"><span class="pre">app.modules.Utils.</span></span><span class="sig-name descname"><span class="pre">show_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favorite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagnames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/modules/Utils.html#show_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.modules.Utils.show_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the words in the vocabulary builder list.
+Args:</p>
+<blockquote>
+<div><p>favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
 learning (bool, optional): If True, gets list of learning words. Defaults to False.
 mastered (bool, optional): If True, gets list of mastered words. Defaults to False.
 tag (string, optional): Gets the list of words of the mentioned tag. Defaults to None.
+days (int, optional): Get a list of words from last n number of days. Defaults to None.
 date (string, optional): Get a list of words from a particular date. Defaults to None.
 last (string, optional):”Get a list of n last searched words. Defaults to None.
-most (string, optional): Get a list of n most searched words. Defaults to None.</p>
-</dd>
-</dl>
+most (string, optional): Get a list of n most searched words. Defaults to None.
+tagnames (bool, optional): If True, gets list of all tags. Defaults to False.</p>
+</div></blockquote>
 </dd></dl>
 
 </section>
@@ -522,11 +624,11 @@ most (string, optional): Get a list of n most searched words. Defaults to None.<
 
         <div id="side-menu" role="navigation">
 
-
-
-
-
-
+          
+  
+    
+  
+  
     <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">PythonCLI</a><ul class="current">
@@ -544,12 +646,12 @@ most (string, optional): Get a list of n most searched words. Defaults to None.<
 </li>
 </ul>
 
-
+  
 
 
         </div>
 
-
+        
 
       </div>
 
@@ -558,24 +660,24 @@ most (string, optional): Get a list of n most searched words. Defaults to None.<
 <footer>
     <div id="footer-info">
         <ul id="build-details">
-
+            
                 <li class="footer-element">
-
+                    
                         <a href="_sources/app.modules.rst.txt" rel="nofollow"> source</a>
-
+                    
                 </li>
+            
 
+            
 
-
-
-
+            
         </ul>
 
-
+        
             <div id="copyright">
                 &copy; 2022, AtharvaShah, AnayDeshpande
             </div>
-
+        
 
         <div id="credit">
             created with <a href="http://sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/Autophagy/insegel">Insegel</a>
@@ -592,7 +694,7 @@ most (string, optional): Get a list of n most searched words. Defaults to None.<
       });
     </script>
 
-</footer>
+</footer> 
 
 </div>
 

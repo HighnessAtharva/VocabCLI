@@ -57,10 +57,8 @@ def fetch_word_history(word: str):  # sourcery skip: extract-method
         if len(rows) <= 0:
             raise WordNeverSearchedException(word)
         count=len(rows)
-        if count==1:
-            print(Panel(f"You have searched for [bold]{word}[/bold] {count} time before. 🔎"))
-        else:
-            print(Panel(f"You have searched for [bold]{word}[/bold] {count} times before. 🔎"))
+        print(Panel(f"You have searched for [bold]{word}[/bold] {count} time(s) before. 🔎"))
+        
         for row in rows:
             history=datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('\'%y %b %d %H:%M')
             table.add_row(history)
@@ -416,20 +414,15 @@ def get_random_word_definition_from_api():
 
 
 
-def get_random_word_from_learning_set(tag:Optional[str]=None):
+def get_random_word_from_learning_set():
     """
-    Gets a random word from the vocabulary builder list.
+    Gets a random word from the learning list.
 
-    Args:
-        tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
     """
 
     conn=createConnection()
     c=conn.cursor()
-    if tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=0 ORDER BY RANDOM() LIMIT 1", (tag,))
-    if not tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=0 ORDER BY RANDOM() LIMIT 1")
+    c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print(Panel("You have no words in your vocabulary builder learning list. 👀"))
@@ -440,7 +433,7 @@ def get_random_word_from_learning_set(tag:Optional[str]=None):
             # definition(row[0])
 
 
-def get_random_word_from_mastered_set(tag:Optional[str]=None):
+def get_random_word_from_mastered_set():
     """
     Gets a random word with definition from the mastered words list.
 
@@ -450,10 +443,7 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
 
     conn=createConnection()
     c=conn.cursor()
-    if tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=? AND mastered=1 ORDER BY RANDOM() LIMIT 1", (tag,))
-    if not tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
+    c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
         print(Panel("You have not mastered any words yet. 👀"))
@@ -463,6 +453,18 @@ def get_random_word_from_mastered_set(tag:Optional[str]=None):
             # Uncomment the below line to get the definition of the word as well
             # definition(row[0])
 
+def get_random_word_from_favorite_set():
+    """ Gets a random word from the favorite list."""
+    
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 ORDER BY RANDOM() LIMIT 1")
+    rows=c.fetchall()
+    if len(rows) <= 0:
+        print(Panel("You have no favorite words. 👀"))
+    else:
+        for row in rows:
+            print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {row[0]}"))
 
 def get_random_word_from_tag(tagName:str):
     """
@@ -477,7 +479,7 @@ def get_random_word_from_tag(tagName:str):
     c.execute("SELECT DISTINCT word FROM words WHERE tag=? ORDER BY RANDOM() LIMIT 1", (tagName,))
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel(f"No words in your list with the tag {tagName}. 👀"))
+        print(Panel(f"No words in your list with the tag {tagName}. ❌"))
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
@@ -516,17 +518,17 @@ def show_list(
 
     if mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
-        success_message = "[bold green]Mastered[/bold green] words"
+        success_message = "[bold green]Mastered[/bold green]"
         error_message="You have not [bold green]mastered[/bold green] any words yet. ❌"
 
     elif learning:
         c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
-        success_message="[bold blue]Learning[/bold blue] words"
+        success_message="[bold blue]Learning[/bold blue]"
         error_message="You have not added any words to the [bold blue]learning list[/bold blue] yet. ❌"
 
     elif favorite:
         c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
-        success_message="[bold gold1]Favorite[/bold gold1] words"
+        success_message="[bold gold1]Favorite[/bold gold1]"
         error_message="You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif days:
@@ -585,7 +587,7 @@ def show_list(
         datefmt=f"{date}%"
         c.execute("SELECT DISTINCT word FROM words where datetime LIKE ?", (datefmt,))
         success_message=f"Words added to the vocabulary builder list on [bold blue]{day}/{month}/{year}[/bold blue]"
-        error_message="No records found on this date ❌"
+        error_message=f"No records found for [bold blue]{date}[/bold blue] ❌"
 
 
     elif tag:
@@ -594,7 +596,6 @@ def show_list(
         error_message=f"Tag {tag} does not exist. ❌"
 
     elif last:
-        
         if last<1:
             print(Panel("Enter a positive number ➕"))
             return
@@ -844,9 +845,11 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         # get yesterdays learning words
         c.execute("SELECT COUNT(DISTINCT word) FROM words WHERE date(datetime)=date('now', '-1 day')")
         learning_count_yesterday=c.fetchone()[0]
-
-        percentage=round((learning_count_today)/(learning_count_today-learning_count_yesterday)*100, 2)
-        if percentage>0:
+        try:
+            percentage=round((learning_count_today)/(learning_count_today-learning_count_yesterday)*100, 2)
+        except ZeroDivisionError:
+            percentage=learning_count_today*100
+        if percentage>=0:
             print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words."))
         else:
             print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words."))
@@ -859,7 +862,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         learning_count_last_week=c.fetchone()[0]
 
         percentage=round((learning_count_week)/(learning_count_week-learning_count_last_week)*100, 2)
-        if percentage>0:
+        if percentage>=0:
             print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words."))
 
         else:
@@ -873,7 +876,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         learning_count_last_month=c.fetchone()[0]
 
         percentage=round((learning_count_month)/(learning_count_month-learning_count_last_month)*100, 2)
-        if percentage>0:
+        if percentage>=0:
             print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words."))
 
         else:
@@ -887,7 +890,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         learning_count_last_year=c.fetchone()[0]
 
         percentage=round((learning_count_year)/(learning_count_year-learning_count_last_year)*100, 2)
-        if percentage>0:
+        if percentage>=0:
             print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words."))
 
         else:
