@@ -146,7 +146,7 @@ def set_mastered(query: str):
         return
 
 
-    # check if word is set to learning
+    # check if word is set to learning and remove it from learning
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 1))
     if c.fetchone():
         c.execute("UPDATE words SET learning=0 WHERE word=?", (query,))
@@ -203,7 +203,7 @@ def set_learning(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=1", (query,))
     if c.fetchone():
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to move word from [b]mastered to learning[/b]?"))
+        print(Panel("🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word from [b]mastered to learning[/b]?"))
         if sure := typer.confirm(""):
             c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
         else:

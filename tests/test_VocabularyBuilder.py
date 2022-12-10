@@ -234,6 +234,7 @@ class TestLearn:
 class TestMaster:
     def test_master(self):
         runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["unmaster", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "has been set as mastered. Good work!" in result.stdout
@@ -243,7 +244,7 @@ class TestMaster:
 
     def test_master_multiple_words(self):
         runner.invoke(app, ["define", "hello", "world"])
-        runner.invoke(app, ["learn", "hello", "world"])
+        runner.invoke(app, ["unmaster", "hello", "world"])
         result = runner.invoke(app, ["master", "hello", "world"])
         assert result.exit_code == 0
         assert "hello has been set as mastered" in result.stdout
@@ -254,8 +255,8 @@ class TestMaster:
         runner.invoke(app, ["master", "hello", "world"])
         result = runner.invoke(app, ["unmaster", "hello", "world"])
         assert result.exit_code == 0
-        assert "hello has been set as learning" in result.stdout
-        assert "world has been set as learning" in result.stdout
+        assert "hello has been set as unmastered" in result.stdout
+        assert "world has been set as unmastered" in result.stdout
 
     def test_master_fake_word(self):
         result = runner.invoke(app, ["master", "fakewordhaha"])
@@ -267,17 +268,19 @@ class TestMaster:
         runner.invoke(app, ["master", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
-        assert "is already marked as mastered" in result.stdout
+        assert "hello is already marked as mastered" in result.stdout
 
     def test_unmaster(self):
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["master", "hello"])
         result = runner.invoke(app, ["unmaster", "hello"])
         assert result.exit_code == 0
-        assert "has been set as learning" in result.stdout
+        assert "hello has been set as unmastered" in result.stdout
 
     def test_unmaster_not_master(self):
         result = runner.invoke(app, ["unmaster", "hello"])
         assert result.exit_code == 0
-        assert "was never mastered" in result.stdout
+        assert "hello was never mastered" in result.stdout
 
     def test_unmaster_fake_word(self):
         result = runner.invoke(app, ["unmaster", "fakewordhaha"])
@@ -843,7 +846,10 @@ class TestRandom:
         assert "You have no favorite words" in result.stdout
     
 class TestHistory:
-    def test_history(self):
+    @mock.patch("typer.confirm")
+    def test_history(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete", "math", "school", "rock"])
         runner.invoke(app, ["define", "math"])
         runner.invoke(app, ["define", "math", "rock"])
         result= runner.invoke(app, ["history", "math", "rock"])
