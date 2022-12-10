@@ -496,10 +496,8 @@ def random(
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
 def revise(
-    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to revise"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise"),
-    timer: Optional[int] = typer.Option(10, "--timer", "-T", help="Duration for each word"),
-    shuffle: Optional[bool] = typer.Option(False, "--shuffle", "-s", help="Shuffle the order of words"),
+    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to revise in random order. If not specified, all words will be revised in alphabetical order."),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise in alphabetical order. Only shows the tagged words in the learning list."),
 ):
     """
     Revise words from your learning list.
@@ -507,28 +505,23 @@ def revise(
     Args:
         number (Optional[int], optional): Number of words to revise. Defaults to 10.
         tag (Optional[str], optional): Tag of words to revise. Defaults to None.
-        timer (Optional[int], optional): Duration for each word. Defaults to 10.
-        shuffle (Optional[bool], optional): Shuffle the order of words. Defaults to False.
     """
 
-    revise_words()
+    if tag and not number:
+        revise_words(tag=tag)
+    if number and not tag:
+        revise_words(number=number)
+    if tag and number:
+        revise_words(number=number, tag=tag)
+    if not any([number, tag]):
+        revise_words()
     
-
-# todo - need to write the function
-@app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
-def flashcard():
-    """
-    Create flashcards for words in your learning list.
-    """
-    pass
-
 
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
 def quiz(
-    number: Optional[int] = typer.Option(10, "--number", "-n", help="Number of words to quiz on"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on"),
-    timer: Optional[int] = typer.Option(15, "--timer", "-T", help="Countdown timer for each question"),
+    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order."),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
 ):
     """
     Take a quiz on words in your learning list.
@@ -536,7 +529,23 @@ def quiz(
     Args:
         number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
         tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
-        timer (Optional[int], optional): Countdown timer for each question. Defaults to 15.
+    """
+    if tag and not number:
+        start_quiz(tag=tag)
+    if number and not tag:
+        start_quiz(number=number)
+    if tag and number:
+        start_quiz(number=number, tag=tag)
+    if not any([number, tag]):
+        start_quiz()
+
+
+
+# todo - need to write the function
+@app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
+def flashcard():
+    """
+    Create flashcards for words in your learning list.
     """
     pass
 

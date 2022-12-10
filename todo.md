@@ -1,3 +1,15 @@
+### Retrospective Bug
+
+- Never use fetchone() when you want to get count of rows. Remove this wherever used.
+Use this code snippet instead:
+
+```py
+if rows := c.fetchall():
+  # do something
+else:
+  # print("No rows found")
+```
+
 We need to do error handling everywhere where user is typing incorrect input (example:wrong tag/ date/ days, etc)
 
 ---

@@ -203,11 +203,11 @@ def set_learning(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=1", (query,))
     if c.fetchone():
-        print(Panel("🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word from [b]mastered to learning[/b]?"))
+        print(Panel(f"🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word [bold blue]{query}[/bold blue] from [b]mastered to learning[/b]?"))
         if sure := typer.confirm(""):
             c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
         else:
-            print(Panel("OK, not moving to learning."))
+            print(Panel(f"OK, not moving [bold blue]{query}[/bold blue] to learning."))
             return
 
     # check if word is already learning
