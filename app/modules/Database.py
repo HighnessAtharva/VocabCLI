@@ -1,12 +1,12 @@
-import sqlite3
-from sqlite3 import Error
-from datetime import datetime
-from rich import print
 import calendar
+import json
+import sqlite3
 import threading
 import requests
+from datetime import datetime
+from sqlite3 import Error
 from requests import exceptions
-import json
+from rich import print
 
 
 #no tests for this function as it is not called anywhere in the command directly

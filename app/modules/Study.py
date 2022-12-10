@@ -2,22 +2,21 @@ import os
 import json
 import requests
 import typer
+import questionary
+import random
+import time
+from Dictionary import *
+from Exceptions import *
 from typing import *
+from Utils import *
+from Database import createConnection, createTables
 from rich import print
 from rich.panel import Panel
 from rich.columns import Columns
 from rich.console import Console
-from random_word import RandomWords
-from Database import createConnection, createTables
 from rich.console import Console
 from rich.table import Table
-from Dictionary import *
-from Exceptions import *
 from datetime import datetime, timedelta
-from Utils import *
-import questionary
-import random
-import time
 from questionary import Style
 
 

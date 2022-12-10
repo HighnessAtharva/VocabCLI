@@ -1,13 +1,55 @@
+from Database import *
+import calendar
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import pandas as pd
-import calendar
 import numpy as np
 from datetime import datetime
-from modules.Database import *
+from rich.panel import Panel
 
 
-# function to visualize top N tags with the most words
+
+def viz_top_words(N=10):
+    """_summary_
+
+    Args:
+        N (int, optional): _description_. Defaults to 10.
+    """
+    
+    # get top N words
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT word, COUNT(*) FROM words GROUP BY word ORDER BY COUNT(*) DESC LIMIT ?", (N,))
+    rows=c.fetchall()
+
+    top_words=[row[0] for row in rows if row[0] is not None]
+    count= [row[1] for row in rows if row[1] != 0]
+
+    if not top_words:
+        print(Panel("No tags found"))
+        return
+
+    if len(top_words) < N:
+        print(Panel("Not enough words found. Showing graph for available words only."))
+
+    # create a dataframe
+    df = pd.DataFrame(list(zip(top_words, count)), index=count, columns=['Word Lookup Count', 'Count'])
+
+    sns.set_style("dark")
+
+    # plot the dataframe
+    graph=sns.barplot(x='Word Lookup Count', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1])
+
+    # set the title
+    graph.set(title=f'Top {N} Most Looked Up Words', xlabel='Words', ylabel='Lookup Count')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right")
+
+    # show the plot
+    plt.grid()
+    plt.show()
+
+
 def viz_top_tags(N=10):
     """
     Visualizes the top N tags with the most words.
@@ -41,7 +83,8 @@ def viz_top_tags(N=10):
     graph=sns.barplot(x='Tag', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1])
 
     # set the title
-    graph.set(title=f'Top {N} Tags', xlabel='Tags', ylabel='Count')
+    graph.set(title=f'Top {N} Tags', xlabel='Tags', ylabel='Word Count')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right")
 
     # show the plot
     plt.grid()
@@ -77,7 +120,7 @@ def words_distribution_week_util():
 
     return days_of_week, word_count
 
-def viz_words_distribution_week():
+def viz_word_distribution_week():
     """ Visualizes the distribution of words by day of the week. """
 
     days_of_week, word_count=words_distribution_week_util()
@@ -113,6 +156,9 @@ def word_distribution_month_util():
     year=datetime.now().year
     month=datetime.now().month
     month_next=datetime.now().month+1
+    if month_next==13:
+        month_next=1
+        increment_year=True
 
     # determine total number of days in current month [INT]
     total_days=calendar.monthrange(year, month)[1]
@@ -120,10 +166,14 @@ def word_distribution_month_util():
 
     # get unformatted datestrings for each day in current month
     current_month = f"{str(year)}-{str(month)}"
-    next_month = f"{str(year)}-{str(month_next)}"
+    if len(str(month_next))==1:
+        month_next=f"0{str(month_next)}"
+    next_month = f"{str(year+1 if increment_year else year)}-{str(month_next)}"
+    #todo print(current_month, next_month)
     dates=np.arange(current_month, next_month, dtype='datetime64[D]').tolist()
+    
     dates=[date.strftime("%d %b, %Y") for date in dates]
-
+    
     # get word count for each day in current month
     c.execute("select strftime('%d', datetime) as date, count(word) as word_count from words WHERE date(datetime)>=date('now', 'start of month') GROUP BY date")
     rows=c.fetchall()
@@ -132,7 +182,6 @@ def word_distribution_month_util():
         word_count[index]=row[1]
 
     return dates, word_count
-
 
 
 def viz_word_distribution_month():
@@ -157,13 +206,45 @@ def viz_word_distribution_month():
     plt.show()
 
 
-# viz_top_tags()
-# viz_words_distribution_week()
-# viz_word_distribution_month()
-
-
-def word_distribution_year():
+def viz_word_distribution_year_util():
     pass
+
+def viz_word_distribution_year():
+    pass
+
+def viz_learning_vs_mastered():
+    """ Visualizes the distribution of words by learning and mastered. """    
+    conn=createConnection()
+    c=conn.cursor()
+    
+    c.execute("select count(DISTINCT word) from words WHERE learning = 1")
+    learning_count=c.fetchone()[0]
+    
+    c.execute("select count(DISTINCT word) from words WHERE mastered = 1")
+    mastered_count=c.fetchone()[0]
+    
+    print(learning_count, mastered_count)
+    # set plot style: grey grid in the background:
+    sns.set(style="dark")
+
+    # set the figure size
+    plt.figure(figsize=(14, 14))
+
+    # top bar -> sum all values(learning and mastered) to find y position of the bars
+    top_bar = [learning_count]
+    bottom_bar = [mastered_count]
+    
+    x = ['']
+    plt.bar(x, bottom_bar, color='darkblue')
+    plt.bar(x, top_bar, bottom=bottom_bar, color='lightblue')
+
+    # add legend
+    top_bar = mpatches.Patch(color='darkblue', label='mastered words')
+    bottom_bar = mpatches.Patch(color='lightblue', label='learning words')
+    plt.legend(handles=[top_bar, bottom_bar])
+
+    # show the graph
+    plt.show()
 
 # todo function to vizualize trend of learning and mastered words in a given time period [day, week, month] -> USE COMPOSITE BAR GRAPH
 

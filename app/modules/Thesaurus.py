@@ -1,10 +1,11 @@
-from nltk.corpus import wordnet
 import nltk
+from nltk.corpus import wordnet
+from Dictionary import *
 from rich import print
 from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
-from Dictionary import *
+
 
 # nltk.download('wordnet')
 # nltk.download('omw-1.4')

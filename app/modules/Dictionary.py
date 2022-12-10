@@ -1,18 +1,18 @@
 import os
 import json
 import requests
+import time
+from Database import createConnection
+from Exceptions import *
 from playsound import playsound
 from pathlib import Path
 from requests import exceptions
-from typing import *
 from datetime import datetime
 from rich import print
+from typing import *
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from Exceptions import *
-from Database import createConnection
-import time
 
 
 #no tests for this function as it is not called anywhere in the command directly

@@ -1,23 +1,24 @@
 import contextlib
 import json
 import os
-from datetime import datetime, timedelta
-from pathlib import Path
-from sqlite3 import *
-from typing import *
+import random
 import typer
 import requests
 from Database import createConnection, createTables
 from Dictionary import *
 from Exceptions import *
+from datetime import datetime, timedelta
+from pathlib import Path
+from sqlite3 import *
+from typing import *
 from playsound import playsound
-from random_word import RandomWords
 from requests import exceptions
 from rich import print
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+
 
 #no tests for this function as it is not called anywhere in the command directly
 def check_word_exists(query: str):
@@ -406,13 +407,12 @@ def count_tag(tag:str) -> int:
     return 0
 
 
-# todo @atharva: keep recalling function until dictionary definition is found. Do not return undefined words.
 def get_random_word_definition_from_api():
     """
-    Gets a random word from the random-words package.
+    Gets a random word from the text file and gets its definition from the API.
     """
-
-    random_word=RandomWords().get_random_word()
+    lines = open('modules/files/most_common_words.txt').read().splitlines()
+    random_word =random.choice(lines).strip()
     print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)
 
@@ -552,12 +552,12 @@ def show_list(
         year=typer.prompt("YYYY")
 
         if len(day)==1:
-            day="0"+day
-        
+            day = f"0{day}"
+
         if len(month)==1:
-            month="0"+month
-            
-        
+            month = f"0{month}"
+
+
         # check if the inputs are integers
         try:
             check_if_int=int(day)
@@ -617,7 +617,7 @@ def show_list(
                 table.add_section()
             print(table)
         return
-    
+
     elif most:
         if most<1:
             print(Panel("Enter a positive number ➕"))
@@ -626,7 +626,7 @@ def show_list(
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
         success_message="[bold blue]Top[/bold blue] most searched words"
         error_message="You haven't searched for any words yet. ❌"
-        
+
         rows=c.fetchall()
         if len(rows) <= 0:
             print(Panel(error_message))

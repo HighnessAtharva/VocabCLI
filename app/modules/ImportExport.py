@@ -1,8 +1,7 @@
-import csv
-from fpdf import FPDF
-from datetime import datetime
 from Database import createConnection
 from Exceptions import NoDataFoundException
+import csv
+from fpdf import FPDF
 from datetime import datetime
 from rich import print
 from rich.panel import Panel

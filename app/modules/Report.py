@@ -1,7 +1,7 @@
-from fpdf import FPDF
-from datetime import datetime
 from Database import createConnection
 from ImportExport import PDF
+from fpdf import FPDF
+from datetime import datetime
 
 
 def learning_rate():

@@ -856,3 +856,33 @@ class TestHistory:
         assert result.exit_code == 0
         assert "You have searched for math 2 time(s) before" in result.stdout
         assert "You have searched for rock 1 time(s) before" in result.stdout
+        
+
+class TestRevise:
+    def test_revise_default():
+    # no tags and no word limit 
+        pass
+    
+    def test_revise_tag():
+        pass
+    
+    def test_revise_word_limit():
+        pass
+    
+    def test_revise_tag_word_limit():
+        pass
+
+
+class TestQuiz:
+    def test_quiz_default():
+    # no tags and no word limit 
+        pass
+    
+    def test_quiz_tag():
+        pass
+    
+    def test_quiz_word_limit():
+        pass
+    
+    def test_quiz_tag_word_limit():
+        pass

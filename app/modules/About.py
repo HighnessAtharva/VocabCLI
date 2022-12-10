@@ -1,8 +1,8 @@
+from rich import print
+from rich import box
 from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
-from rich import print
-from rich import box
 from rich.align import Align
 
 
