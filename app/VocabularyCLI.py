@@ -543,11 +543,16 @@ def quiz(
 
 @app.command(rich_help_panel="report", help="📚 Generate Graphical Charts based on your vocabulary")
 def graph(
-    topWords: Optional[int] = typer.Option(None, "--topwords", "-tw", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
-    topTags: Optional[int] = typer.Option(None, "--toptags", "-tt", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
+    topWordsBar: Optional[int] = typer.Option(None, "--topwordsbar", "-twb", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
+    topTagsBar: Optional[int] = typer.Option(None, "--toptagsbar", "-ttb", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
+    
+    topWordsPie: Optional[int] = typer.Option(None, "--topwordspie", "-twp", help="Pie Chart of Top N Most Looked Up Words", max=25, min=1),
+    topTagsPie: Optional[int] = typer.Option(None, "--toptagspie", "-ttp", help="Pie Chart of Top N Tags with the most words.", max=25, min=1),
+    
     lookupWeek: Optional[bool] = typer.Option(False, "--lookupweek", "-lw", help="Bar Graph of the word count distribution for days in the past week."),
     lookupMonth: Optional[bool] = typer.Option(False, "--lookupmonth", "-lm", help="Bar Graph of the word count distribution for days in the past month."),
     lookupYear: Optional[bool] = typer.Option(False, "--lookupyear", "-ly", help="Bar Graph of the word count distribution for days in the past year."),
+    
     learnVSmaster: Optional[bool] = typer.Option(False, "--learnvsmaster", "-lvm", help="Stacked Graph the number of words in your learning list vs. your mastered list."),
 ):
     """
@@ -556,16 +561,24 @@ def graph(
     Args:
         tag (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
     """
-    if topWords:
-        viz_top_words(N=topWords)
-    if topTags:
-        viz_top_tags(N=topTags)
+    
+    if topWordsBar:
+        viz_top_words_bar(N=topWordsBar)
+    if topTagsBar:
+        viz_top_tags_bar(N=topTagsBar)
+    
+    if topWordsPie:
+        viz_top_words_pie(N=topWordsPie)
+    if topTagsPie:
+        viz_top_tags_pie(N=topTagsPie)
+    
     if lookupWeek:
         viz_word_distribution_week()
     if lookupMonth:
         viz_word_distribution_month()
     if lookupYear:
         viz_word_distribution_year()
+    
     if learnVSmaster:
         viz_learning_vs_mastered()
 

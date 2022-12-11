@@ -10,7 +10,7 @@ from rich.panel import Panel
 
 
 
-def viz_top_words(N=10):
+def viz_top_words_bar(N=10):
     """_summary_
 
     Args:
@@ -52,7 +52,7 @@ def viz_top_words(N=10):
     plt.show()
 
 
-def viz_top_tags(N=10):
+def viz_top_tags_bar(N=10):
     """
     Visualizes the top N tags with the most words.
 
@@ -85,9 +85,9 @@ def viz_top_tags(N=10):
     graph=sns.barplot(x='Tag', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1], edgecolor='0.4')
 
     
-    graph.set(title=f'Top {N} Tags', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
-    graph.set(xlabel='Tags', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic') 
-    graph.set(ylabel='Word Count',fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    graph.set_title(f'Top {N} Tags', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
+    graph.set_xlabel('Tags', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic') 
+    graph.set_ylabel('Word Count',fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black')
     graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
@@ -95,6 +95,12 @@ def viz_top_tags(N=10):
     plt.grid()
     plt.show()
 
+
+def viz_top_words_pie(N=10):
+    print("Will print a pie chart of the top N words")
+    
+def viz_top_tags_pie(N=10):
+    print("Will print a pie chart of the top N tags")
 
 
 def words_distribution_week_util():

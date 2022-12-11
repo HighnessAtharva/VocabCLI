@@ -886,3 +886,39 @@ class TestQuiz:
     
     def test_quiz_tag_word_limit():
         pass
+    
+class TestGraph:
+    # top words bar graph
+    def test_graph_top_words():
+        pass
+    
+    def test_graph_top_words_zero():
+        pass
+    
+    def test_graph_top_words_less_than_N():
+        pass
+    
+    # top words pie chart
+    
+    # top tags bar graph
+    
+    # top tags pie chart
+    
+    # lookup history week
+    
+    # lookup history month
+    
+    # lookup history year
+    
+    # learnVsMaster
+    def test_graph_learnVsMaster():
+        pass
+    
+    def test_graph_learnVsMaster_zero_both():
+        pass    
+    
+    def test_graph_learnVsMaster_zero_learn():
+        pass
+    
+    def test_graph_learnVsMaster_zero_master():
+        pass
