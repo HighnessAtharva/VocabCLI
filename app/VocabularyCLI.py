@@ -498,9 +498,13 @@ def random(
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
 def revise(
-    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to revise in random order. If not specified, all words will be revised in alphabetical order."),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to revise in alphabetical order. Only shows the tagged words in the learning list."),
-):
+    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to revise in random order."),
+    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Revise words in a particular tag."),
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Revise words in your learning list"),
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Revise words in your mastered list"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Revise words in your favorite list"),
+    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Revise words in a particular collection")
+):  # sourcery skip: remove-redundant-if
     """
     Revise words from your learning list.
 
@@ -509,14 +513,31 @@ def revise(
         tag (Optional[str], optional): Tag of words to revise. Defaults to None.
     """
 
-    if tag and not number:
-        revise_words(tag=tag)
-    if number and not tag:
-        revise_words(number=number)
-    if tag and number:
-        revise_words(number=number, tag=tag)
-    if not any([number, tag]):
-        revise_words()
+    if not any([learning, mastered, favorite, collection, tag]) and not number:
+        revise_all()
+        
+    elif number and not any([learning, mastered, favorite, collection, tag]):
+        revise_all(number=number)
+
+    elif tag and not number:
+        revise_tag(tag=tag)
+    elif tag and number:
+        revise_tag(number=number, tag=tag)
+
+    elif learning and not number:
+        revise_learning(learning=True)
+    elif learning and number:
+        revise_learning(number=number, learning=True)
+
+    elif mastered and not number:
+        revise_mastered(mastered=True)
+    elif mastered and number:
+        revise_mastered(number=number, mastered=True)
+    
+    elif favorite and not number:
+        revise_favorite(favorite=True)
+    elif favorite and number:
+        revise_favorite(number=number, favorite=True)
     
 
 # todo - need to write the function
@@ -524,7 +545,11 @@ def revise(
 def quiz(
     number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order."),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
-):
+    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Take a quiz on words in your learning list"),
+    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Take a quiz on words in your mastered list"),
+    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Take a quiz on words in your favorite list"),
+    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Take a quiz on words in a particular collection")
+):  # sourcery skip: remove-redundant-if
     """
     Take a quiz on words in your learning list.
 
@@ -532,14 +557,40 @@ def quiz(
         number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
         tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
     """
-    if tag and not number:
-        start_quiz(tag=tag)
-    if number and not tag:
-        start_quiz(number=number)
-    if tag and number:
-        start_quiz(number=number, tag=tag)
-    if not any([number, tag]):
-        start_quiz()
+    if not any([learning, mastered, favorite, collection, tag]) and not number:
+        quiz_all()
+        
+    elif number and not any([learning, mastered, favorite, collection, tag]):
+        quiz_all(number=number)
+
+    elif tag and not number:
+        quiz_tag(tag=tag)
+    elif tag and number:
+        quiz_tag(number=number, tag=tag)
+
+    elif learning and not number:
+        quiz_learning(learning=True)
+    elif learning and number:
+        quiz_learning(number=number, learning=True)
+
+    elif mastered and not number:
+        quiz_mastered(mastered=True)
+    elif mastered and number:
+        quiz_mastered(number=number, mastered=True)
+    
+    elif favorite and not number:
+        quiz_favorite(favorite=True)
+    elif favorite and number:
+        quiz_favorite(number=number, favorite=True)
+    
+    # todo - need to write the function
+    elif collection and not number:
+        quiz_collection(collection=collection)
+    elif collection and number: 
+        quiz_collection(number=number, collection=collection)
+        
+    else:
+        print(Panel("Cannot combine these arguments"))
 
 @app.command(rich_help_panel="report", help="📚 Generate Graphical Charts based on your vocabulary")
 def graph(
@@ -596,7 +647,7 @@ def flashcard():
 if __name__ == "__main__":
     app()
 
-
+    
 
 # todo: SPACY: paraphrase
 

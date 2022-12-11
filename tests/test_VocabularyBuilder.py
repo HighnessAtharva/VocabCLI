@@ -859,34 +859,161 @@ class TestHistory:
         
 
 class TestRevise:
-    def test_revise_default():
-    # no tags and no word limit 
-        pass
+    class TestReviseDefault:
+        def test_revise_default():
+        # all words and no word limit 
+            pass
+        
+        def test_revise_default_with_word_limit():
+        # all words and word limit    
+            pass
+        
+        def test_revise_default_zero():
+        # zero words in DB
+            pass
     
-    def test_revise_tag():
-        pass
     
-    def test_revise_word_limit():
-        pass
+    class TestReviseTag:
+        def test_revise_tag_correct():
+            pass
+        
+        def test_revise_tag_incorrect():
+            pass
+        
+        def test_revise_tag_with_word_limit():
+            pass
+        
+        def test_revise_tag_zero():
+            pass
+        
     
-    def test_revise_tag_word_limit():
-        pass
+    class TestReviseMastered:
+        def test_revise_mastered():
+            pass
+        
+        def test_revise_mastered_with_word_limit():
+            pass
+    
+        def test_revise_mastered_zero():
+            pass
+        
+    class TestReviseLearning:
+        def test_revise_learning():
+            pass
+        
+        def test_revise_learning_with_word_limit():
+            pass
+    
+        def test_revise_learning_zero():
+            pass
+        
+    class TestReviseFavorite:
+        def test_revise_favorite():
+            pass
+        
+        def test_revise_favorite_with_word_limit():
+            pass
+    
+        def test_revise_favorite_zero():
+            pass
+    
+    class TestReviseCollection:
+        def test_revise_collection():
+            pass
+        
+        def test_revise_collection_with_word_limit():
+            pass
+    
+        # no need to test for zero words in collection as no collection can be empty
+
 
 
 class TestQuiz:
-    def test_quiz_default():
-    # no tags and no word limit 
-        pass
+    class TestQuizDefault:
+        def test_quiz_default():
+        # all words and no word limit 
+            pass
+        
+        def test_quiz_default_with_word_limit():
+        # all words and word limit    
+            pass
+        
+        def test_quiz_default_zero():
+        # zero words in DB
+            pass
+        
+        def test_quiz_default_low_words():
+        # less than 4 words in DB
+            pass
     
-    def test_quiz_tag():
-        pass
     
-    def test_quiz_word_limit():
-        pass
+    class TestQuizTag:
+        def test_quiz_tag_correct():
+            pass
+        
+        def test_quiz_tag_incorrect():
+            pass
+        
+        def test_quiz_tag_with_word_limit():
+            pass
+        
+        def test_quiz_tag_zero():
+            pass
+        
+        def test_quiz_tag_low_words():
+            pass
     
-    def test_quiz_tag_word_limit():
-        pass
+    class TestQuizMastered:
+        def test_quiz_mastered():
+            pass
+        
+        def test_quiz_mastered_with_word_limit():
+            pass
     
+        def test_quiz_mastered_zero():
+            pass
+       
+        def test_quiz_mastered_low_words():
+            pass
+        
+    class TestQuizLearning:
+        def test_quiz_learning():
+            pass
+        
+        def test_quiz_learning_with_word_limit():
+            pass
+    
+        def test_quiz_learning_zero():
+            pass
+        
+        def test_quiz_learning_low_words():
+            pass
+        
+    class TestQuizFavorite:
+        def test_quiz_favorite():
+            pass
+        
+        def test_quiz_favorite_with_word_limit():
+            pass
+    
+        def test_quiz_favorite_zero():
+            pass
+    
+        def test_quiz_favorite_low_words():
+            pass
+        
+    class TestQuizCollection:
+        def test_quiz_collection():
+            pass
+        
+        def test_quiz_collection_with_word_limit():
+            pass
+    
+        def test_quiz_collection_zero():
+            pass
+        
+        # no need to test for low words as collections will always have more than 4 words
+        
 class TestGraph:
     # top words bar graph
     def test_graph_top_words():
