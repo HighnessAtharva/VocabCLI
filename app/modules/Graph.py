@@ -39,11 +39,13 @@ def viz_top_words(N=10):
     sns.set_style("dark")
 
     # plot the dataframe
-    graph=sns.barplot(x='Word Lookup Count', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1])
+    graph=sns.barplot(x='Word Lookup Count', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1], edgecolor='0.4')
 
-    # set the title
-    graph.set(title=f'Top {N} Most Looked Up Words', xlabel='Words', ylabel='Lookup Count')
-    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right")
+    graph.set_title(f'Top {N} Most Looked Up Words', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
+    graph.set_xlabel('Words', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic')
+    graph.set_ylabel('Lookup Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black')
+    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
     # show the plot
     plt.grid()
@@ -80,11 +82,14 @@ def viz_top_tags(N=10):
     sns.set_style("dark")
 
     # plot the dataframe
-    graph=sns.barplot(x='Tag', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1])
+    graph=sns.barplot(x='Tag', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1], edgecolor='0.4')
 
-    # set the title
-    graph.set(title=f'Top {N} Tags', xlabel='Tags', ylabel='Word Count')
-    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right")
+    
+    graph.set(title=f'Top {N} Tags', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
+    graph.set(xlabel='Tags', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic') 
+    graph.set(ylabel='Word Count',fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black')
+    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
     # show the plot
     plt.grid()
@@ -130,11 +135,14 @@ def viz_word_distribution_week():
 
     sns.set_style("dark")
     # plot the dataframe
-    graph=sns.barplot(x='Day', y='Count', data=df, palette='pastel', ax=plt.subplots(figsize=(12, 10))[1])
+    graph=sns.barplot(x='Day', y='Count', data=df, palette='pastel', ax=plt.subplots(figsize=(12, 10))[1], edgecolor='0.4')
 
-    # set the title
-    graph.set(title='Words Distribution by Week', xlabel='Day', ylabel='Count')
-
+    graph.set_title('Words Distribution by Week', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
+    graph.set_xlabel('Day', fontsize=15, fontweight='bold', labelpad=10, color='black', fontname='MS Gothic')
+    graph.set_ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    graph.set_xticklabels(graph.get_xticklabels(), fontname='Candara', color='black')
+    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    
     plt.grid()
     plt.show()
 
@@ -195,12 +203,15 @@ def viz_word_distribution_month():
 
     sns.set_style("dark")
     # plot the dataframe
-    graph=sns.barplot(x='Date', y='Count', data=df, palette='pastel', ax=plt.subplots(figsize=(12, 10))[1])
+    graph=sns.barplot(x='Date', y='Count', data=df, palette='pastel', ax=plt.subplots(figsize=(12, 8))[1], edgecolor='0.4')
 
-    # set the title
-    graph.set(title='Words Distribution by Month', xlabel='Date', ylabel='Count')
 
-    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right")
+    graph.set_title('Word Distribution by Month', fontsize=18, fontweight='bold', pad=5, color='black', loc='center', fontname='Constantia') 
+    graph.set_xlabel('Date', fontsize=15, fontweight='bold', labelpad=0, color='black', fontname='MS Gothic')
+    graph.set_ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right",fontname='Candara', color='black')
+    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    
     plt.tight_layout()
     plt.grid()
     plt.show()
@@ -243,6 +254,10 @@ def viz_learning_vs_mastered():
     bottom_bar = mpatches.Patch(color='lightblue', label='learning words')
     plt.legend(handles=[top_bar, bottom_bar])
 
+    plt.title('Word Distribution by Month', fontsize=18, fontweight='bold', pad=5, color='black', loc='center', fontname='Constantia') 
+    plt.xlabel('Date', fontsize=15, fontweight='bold', labelpad=0, color='black', fontname='MS Gothic')
+    plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    
     # show the graph
     plt.show()
 
