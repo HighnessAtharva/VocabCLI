@@ -12,18 +12,24 @@ Test cases for all the functions I have commented as:
 2. Debug command prompt resizing issue 
 3. We should rename unlearn to not-learning
 
-
+  
 # Priority
-1. Add Heading to Panels @Anay
-2. PyTest delete statement before all tests @Anay
-3. UML Links @Anay
-4. Generate Coverage Report, Add All Missing Tests for Existing Commands 
-5. Graphs @AtharvaShah
-6. Change Revise Words Panel as Heading @Anay
-7. FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
-8. Graph Download or View Options (Enable Carousel for viewing) @atharva
-9. Get Linux Installed @anay
-10. Github Pages Improvement @anay
+- [ ]  Add Heading to Panels @Anay
+- [x]  PyTest delete statement before all tests @Anay
+- [x]  UML Links @Anay
+- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands 
+- [ ]  Graphs @AtharvaShah
+- [x]  Change Revise Words Panel as Heading @Anay
+- [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+- [ ]  Graph Download or View Options (Enable Carousel for viewing) @atharva
+- [ ]  Get Linux Installed @anay
+- [ ]  Github Pages Improvement @anay
+- [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
+- [ ]  Add Collections Command
+- [ ]  Add Collection flag to other commands
+- [ ]  Add Progress Bar to Refresh Cache (takes a while)
+- [ ]  Club success messages if words > 1 (example: 3 words added successfully) Also need to modify test cases after implementation
+  
 ---
 
 ## Things to Do After Finishing the Project

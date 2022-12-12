@@ -6,6 +6,7 @@
 * [PyTest](https://www.youtube.com/playlist?list=PLyb_C2HpOQSBWGekd7PfhHnb9GnqDgrxS)
 * [Python OOP](https://www.youtube.com/watch?v=Ej_02ICOIgs)
 * [Python Type Hinting](https://www.youtube.com/watch?v=QORvB-_mbZ0)
+* [Python package creation PYPI](https://youtube.com/playlist?list=PLyb_C2HpOQSB3z_4WliKt56WyDgfXzzMz)
 
 ## Projects made with Typer
 * [Typer ToDo CLI](https://github.com/tddschn/todo-cli-tddschn)

@@ -130,21 +130,55 @@ class TestDefine:
 
 # test cases for favorite and unfavorite commands
 class TestFavorite:
-    def test_favorite(self):
+
+    @mock.patch("typer.confirm")
+    def test_favorite(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["favorite", "hello"])
         assert result.exit_code == 0
         assert "has been set as favorite" in result.stdout
 
-    def test_favorite_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_favorite_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
-        result = runner.invoke(app, ["unfavorite", "hello", "world"])
         result = runner.invoke(app, ["favorite", "hello", "world"])
         assert result.exit_code == 0
         assert "hello has been set as favorite" in result.stdout
         assert "world has been set as favorite" in result.stdout
 
-    def test_unfavorite_multiple_words(self):
+    def test_favorite_fake_word(self):
+        result = runner.invoke(app, ["favorite", "fakewordhaha"])
+        assert result.exit_code == 0
+        assert "was never tracked before. Add some words" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_favorite_already_favorite(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["favorite", "hello"])
+        result = runner.invoke(app, ["favorite", "hello"])
+        assert result.exit_code == 0
+        assert "is already marked as favorite" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_unfavorite(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["favorite", "hello"])
+        result = runner.invoke(app, ["unfavorite", "hello"])
+        assert result.exit_code == 0
+        assert "hello has been removed from favorite" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_unfavorite_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "calm", "morning"] )
         runner.invoke(app, ["favorite", "calm", "morning"])
         result = runner.invoke(app, ["unfavorite", "calm", "morning"])
@@ -152,28 +186,19 @@ class TestFavorite:
         assert "calm has been removed from favorite" in result.stdout
         assert "morning has been removed from favorite" in result.stdout
 
-    def test_favorite_fake_word(self):
-        result = runner.invoke(app, ["favorite", "fakewordhaha"])
-        assert result.exit_code == 0
-        assert "was never tracked before. Add some words" in result.stdout
-
-    def test_favorite_already_favorite(self):
-        result = runner.invoke(app, ["favorite", "hello"])
-        assert result.exit_code == 0
-        assert "is already marked as favorite" in result.stdout
-
-    def test_unfavorite(self):
-        result = runner.invoke(app, ["unfavorite", "hello"])
-        assert result.exit_code == 0
-        assert "has been removed from favorite" in result.stdout
-
-    def test_unfavorite_not_favorite(self):
+    @mock.patch("typer.confirm")
+    def test_unfavorite_not_favorite(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["unfavorite", "hello"])
         assert result.exit_code == 0
         assert "was never favorite" in result.stdout
 
-
-    def test_unfavorite_fake_word(self):
+    @mock.patch("typer.confirm")
+    def test_unfavorite_fake_word(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         result = runner.invoke(app, ["unfavorite", "fakewordhaha"])
         assert result.exit_code == 0
         assert "was never tracked before. Add some words" in result.stdout
@@ -181,49 +206,92 @@ class TestFavorite:
 
 # test cases for learn and unlearn commands
 class TestLearn:
-    def test_learn(self):
+
+    @mock.patch("typer.confirm")
+    def test_learn(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
-        runner.invoke(app, ["unlearn", "hello"])
         result = runner.invoke(app, ["learn", "hello"])
         assert result.exit_code == 0
         assert "has been set as learning. Keep revising!" in result.stdout
 
-    def test_learn_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_learn_mastered(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"]) 
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["master", "hello"])
+        mock_typer.return_value = True
+        result = runner.invoke(app, ["learn", "hello"])
+        assert result.exit_code == 0
+        assert "has been set as learning. Keep revising!" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_learn_mastered_false(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"]) 
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["master", "hello"])
+        mock_typer.return_value = False
+        result = runner.invoke(app, ["learn", "hello"])
+        assert result.exit_code == 0
+        assert "OK, not moving hello to learning." in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_learn_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
-        runner.invoke(app, ["unlearn", "hello", "world"])
         result = runner.invoke(app, ["learn", "hello", "world"])
         assert result.exit_code == 0
         assert "hello has been set as learning" in result.stdout
         assert "world has been set as learning" in result.stdout
+    
+    def test_learn_fake_word(self):
+        result = runner.invoke(app, ["learn", "fakewordhaha"])
+        assert result.exit_code == 0
+        assert "was never tracked before. Add some words" in result.stdout
 
-    def test_unlearn_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_learn_already_learn(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["learn", "hello"])
+        result = runner.invoke(app, ["learn", "hello"])
+        assert result.exit_code == 0
+        assert "is already marked as learning" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_unlearn(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["learn", "hello"])
+        result = runner.invoke(app, ["unlearn", "hello"])
+        assert result.exit_code == 0
+        assert "has been removed from learning" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_unlearn_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "white", "black"])
         runner.invoke(app, ["learn", "white", "black"])
         result = runner.invoke(app, ["unlearn", "white", "black"])
         assert result.exit_code == 0
         assert "white has been removed from learning" in result.stdout
         assert "black has been removed from learning" in result.stdout
-
-    def test_learn_fake_word(self):
-        result = runner.invoke(app, ["learn", "fakewordhaha"])
-        assert result.exit_code == 0
-        assert "was never tracked before. Add some words" in result.stdout
-
-    def test_learn_already_learn(self):
-        result = runner.invoke(app, ["learn", "hello"])
-        assert result.exit_code == 0
-        assert "is already marked as learning" in result.stdout
-
-    def test_unlearn(self):
-        result = runner.invoke(app, ["unlearn", "hello"])
-        assert result.exit_code == 0
-        assert "has been removed from learning" in result.stdout
-
-    def test_unlearn_not_learn(self):
+    
+    @mock.patch("typer.confirm")
+    def test_unlearn_not_learn(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["unlearn", "hello"])
         assert result.exit_code == 0
         assert "was never learning" in result.stdout
-
 
     def test_unlearn_fake_word(self):
         result = runner.invoke(app, ["unlearn", "fakewordhaha"])
@@ -232,25 +300,43 @@ class TestLearn:
 
 
 class TestMaster:
-    def test_master(self):
+
+    @mock.patch("typer.confirm")
+    def test_master(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
-        runner.invoke(app, ["unmaster", "hello"])
+        result = runner.invoke(app, ["master", "hello"])
+        assert result.exit_code == 0
+        assert "has been set as mastered. Good work!" in result.stdout
+
+    @mock.patch("typer.confirm")
+    def test_master_learning(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
+        runner.invoke(app, ["learn", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "has been set as mastered. Good work!" in result.stdout
         result=runner.invoke(app, ["unlearn", "hello"])
         assert result.exit_code == 0
         assert "was never learning" in result.stdout
-
-    def test_master_multiple_words(self):
+    
+    @mock.patch("typer.confirm")
+    def test_master_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
-        runner.invoke(app, ["unmaster", "hello", "world"])
         result = runner.invoke(app, ["master", "hello", "world"])
         assert result.exit_code == 0
         assert "hello has been set as mastered" in result.stdout
         assert "world has been set as mastered" in result.stdout
 
-    def test_unmaster_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_unmaster_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["master", "hello", "world"])
         result = runner.invoke(app, ["unmaster", "hello", "world"])
@@ -263,21 +349,31 @@ class TestMaster:
         assert result.exit_code == 0
         assert "was never tracked before. Add some words" in result.stdout
 
-    def test_master_already_master(self):
+    @mock.patch("typer.confirm")
+    def test_master_already_master(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["master", "hello"])
         result = runner.invoke(app, ["master", "hello"])
         assert result.exit_code == 0
         assert "hello is already marked as mastered" in result.stdout
 
-    def test_unmaster(self):
+    @mock.patch("typer.confirm")
+    def test_unmaster(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["master", "hello"])
         result = runner.invoke(app, ["unmaster", "hello"])
         assert result.exit_code == 0
         assert "hello has been set as unmastered" in result.stdout
 
-    def test_unmaster_not_master(self):
+    @mock.patch("typer.confirm")
+    def test_unmaster_not_master(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["unmaster", "hello"])
         assert result.exit_code == 0
         assert "hello was never mastered" in result.stdout
@@ -288,23 +384,30 @@ class TestMaster:
         assert "was never tracked before. Add some words" in result.stdout
 
 class TestTag:
-    def test_tag(self):  # sourcery skip: class-extract-method
-        runner.invoke(app, ["delete", "hello"])
+
+    @mock.patch("typer.confirm")
+    def test_tag(self, mock_typer):  # sourcery skip: class-extract-method
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
         result = runner.invoke(app, ["tag", "hello","--name", "testtag"])
         assert result.exit_code == 0
         assert "has been tagged as" in result.stdout
 
-    def test_tag_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_tag_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
-        runner.invoke(app, ["untag", "hello", "world"])
         result=runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
         assert result.exit_code == 0
         assert "hello has been tagged as" in result.stdout
         assert "world has been tagged as" in result.stdout
 
-
-    def test_untag_multiple_words(self):
+    @mock.patch("typer.confirm")
+    def test_untag_multiple_words(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
         result=runner.invoke(app, ["untag", "hello", "world"])
@@ -312,30 +415,36 @@ class TestTag:
         assert "Tags deleted for the word hello" in result.stdout
         assert "Tags deleted for the word world" in result.stdout
 
-    def test_tag_already_exists(self):
+    @mock.patch("typer.confirm")
+    def test_tag_already_exists(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["tag", "hello", "--name", "testtag"])
         result = runner.invoke(app, ["tag", "hello", "--name", "testtag2"])
         assert result.exit_code == 0
-        assert "tag has been changed to" in result.stdout
+        assert "has been changed to" in result.stdout
 
     def test_tag_fake_word(self):
         result=runner.invoke(app, ["tag", "fakeworkhaha", "--name", "testtag"])
-        assert result.exit_code == 0
+        assert result.exit_code == 0   # @atharva why is the exit code 0 here (and everywhere else where the word was not tagged) and not 1? We've wrote 1 in def test_untag_fake_word 
         assert "was never tracked before." in result.stdout
 
-    def test_untag(self):
-        runner.invoke(app, ["define", "hello"])
-        runner.invoke(app, ["delete", "hello"])
+    @mock.patch("typer.confirm")
+    def test_untag(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
         runner.invoke(app, ["tag", "hello", "--name", "testtag2"])
-
         result = runner.invoke(app, ["untag", "hello"])
         assert result.exit_code == 0
         assert "Tags deleted for the word" in result.stdout
 
-    def test_untag_not_tagged(self):
+    @mock.patch("typer.confirm")
+    def test_untag_not_tagged(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello"])
-        runner.invoke(app, ["untag", "hello"])
         result = runner.invoke(app, ["untag", "hello"])
         assert result.exit_code == 0
         assert "was not tagged" in result.stdout
@@ -374,10 +483,10 @@ class TestDelete:
         result = runner.invoke(app, ["delete", "hello", "world"])
         assert result.exit_code == 0
         assert "hello deleted from your lists." in result.stdout
+        assert "world deleted from your lists." in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_unadded_word(self, mock_typer):
-        runner.invoke(app, ["define", "fakewordhaha"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "fakewordhaha"])
         assert result.exit_code == 0
@@ -390,11 +499,13 @@ class TestDelete:
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--mastered"])
         assert result.exit_code == 0
-        assert "All mastered words [2] deleted" in result.stdout
+        assert "All mastered words" in result.stdout
 
 
     @mock.patch("typer.confirm")
     def test_delete_empty_mastered(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--mastered"])
         assert result.exit_code == 0
@@ -407,10 +518,12 @@ class TestDelete:
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "--favorite"])
         assert result.exit_code == 0
-        assert "All favorite words [2] deleted" in result.stdout
+        assert "All favorite words" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_empty_favorite(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-f"])
         assert result.exit_code == 0
@@ -423,10 +536,12 @@ class TestDelete:
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-l"])
         assert result.exit_code == 0
-        assert "All learning words [2] deleted" in result.stdout
+        assert "All learning words" in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_empty_learning(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-l"])
         assert result.exit_code == 0
@@ -439,10 +554,12 @@ class TestDelete:
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-t", "soon"])
         assert result.exit_code == 0
-        assert "All words [2] with tag soon" in result.stdout
+        assert " with tag soon deleted from your lists." in result.stdout
 
     @mock.patch("typer.confirm")
     def test_delete_nonexistent_tag(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete", "-t", "soon"])
         assert result.exit_code == 0
@@ -450,6 +567,7 @@ class TestDelete:
 
     @mock.patch("typer.confirm")
     def test_delete_all(self, mock_typer):
+        mock_typer.return_value = True
         runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "hello", "sky"])
         mock_typer.return_value = True 
@@ -457,19 +575,23 @@ class TestDelete:
         assert result.exit_code == 0
         assert "All words [2] deleted" in result.stdout
 
-
     @mock.patch("typer.confirm")
     def test_delete_no_words_exist(self, mock_typer):
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["delete"])
         assert result.exit_code == 0
         assert "Nothing to delete" in result.stdout
 
+
 class TestClear:
 
     @mock.patch("typer.confirm")
     def test_clear_learning(self, mock_typer):
-        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["learn", "hello", "world"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--learning"])
@@ -478,7 +600,9 @@ class TestClear:
 
     @mock.patch("typer.confirm")
     def test_clear_mastered(self, mock_typer):
-        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["master", "hello", "world"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--mastered"])
@@ -487,7 +611,9 @@ class TestClear:
 
     @mock.patch("typer.confirm")
     def test_clear_favorite(self, mock_typer):
-        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        mock_typer.return_value = True
+        runner.invoke(app, ["delete"])
+        runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["favorite", "hello", "world"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--favorite"])
@@ -496,7 +622,7 @@ class TestClear:
 
     @mock.patch("typer.confirm")
     def test_clear_tag(self, mock_typer):
-        runner.invoke(app, ["define", "hello", "world", "smash", "--short"])
+        runner.invoke(app, ["define", "hello", "world"])
         runner.invoke(app, ["tag", "hello", "world", "--name", "testtag"])
         mock_typer.return_value = True 
         result = runner.invoke(app, ["clear", "--tag", "testtag"])
@@ -588,6 +714,7 @@ class TestThesaurus:
         assert "Synonyms of drink are" in result.stdout
 
 
+
 class TestList:
     def test_list_favorite(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -598,8 +725,8 @@ class TestList:
 
     @mock.patch("typer.confirm")
     def test_list_favorite_nonexistent(self, mock_typer):
-        runner.invoke(app, ["clear", "-f"])
         mock_typer.return_value = True
+        runner.invoke(app, ["clear", "-f"])
         result= runner.invoke(app, ["list", "-f"])
         assert result.exit_code == 0
         assert "You have not added any words to the favorite list" in result.stdout
@@ -648,7 +775,6 @@ class TestList:
         assert result.exit_code == 0
         assert "No records found within this date range" in result.stdout
 
-
     def test_list_days_negative(self):
         result= runner.invoke(app, ["list", "-d", "-1"])
         assert result.exit_code == 0
@@ -659,11 +785,9 @@ class TestList:
         day= datetime.now().day
         month= datetime.now().month
         year= datetime.now().year
-        
         result= runner.invoke(app, ["list", "--date"], input=f"{day}\n{month}\n{year}")
         assert result.exit_code == 0
         assert "Words added to the vocabulary builder list on" in result.stdout
-    
 
     def test_list_date_nonexistent(self):
         result= runner.invoke(app, ["list", "--date"], input="01\n01\n2002")
@@ -759,6 +883,7 @@ class TestList:
         assert "You have no words in your vocabulary builder list" in result.stdout
 
 
+
 class TestRate:
     def test_rate_today(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -783,6 +908,7 @@ class TestRate:
         result= runner.invoke(app, ["rate", "-y"])
         assert result.exit_code == 0
         assert "words this year compared to last year" in result.stdout
+
 
 
 class TestRandom:
@@ -849,7 +975,7 @@ class TestHistory:
     @mock.patch("typer.confirm")
     def test_history(self, mock_typer):
         mock_typer.return_value = True
-        runner.invoke(app, ["delete", "math", "school", "rock"])
+        runner.invoke(app, ["delete"])
         runner.invoke(app, ["define", "math"])
         runner.invoke(app, ["define", "math", "rock"])
         result= runner.invoke(app, ["history", "math", "rock"])

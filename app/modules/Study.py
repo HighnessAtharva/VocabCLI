@@ -26,10 +26,17 @@ from questionary import Style
 def start_revision(c):
     if rows := c.fetchall():
         for count,row in enumerate(rows, start=1):
-            print(Panel(f"Revising word: [bold green]{count}[/bold green] / [bold green]{len(rows)}[/bold green]"))
+            print(Panel(
+            title=f"[reverse]Revising word: [bold green]{count} / {len(rows)}[/bold green][/reverse]",
+            title_align="center",
+            renderable=f"{len(rows)-1} word(s) to go. Keep revising! 🧠"
+            ))
             definition(row[0])
-            if typer.confirm(f"Set {row[0]} as mastered?"):
+            print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
+            if sure := typer.confirm(""):
                 set_mastered(row[0])
+            else:
+                print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
             
     else:
         print(Panel("No words to revise in the selected category. Look up some more words first by using 'define' command."))

@@ -97,7 +97,7 @@ def add_tag(query: str, tagName:str):
     if c.fetchone():
         c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] tag has been changed to [bold green]{tagName}[/bold green]. ✅"))
+        print(Panel(f"The tag of [bold blue]{query}[/bold blue] has been changed to [bold green]{tagName}[/bold green]. ✅"))
         return
 
 def remove_tag(query: str):
