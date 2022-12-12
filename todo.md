@@ -1,14 +1,4 @@
-### Retrospective Bug
 
-- Never use fetchone() when you want to get count of rows. Remove this wherever used.
-Use this code snippet instead:
-
-```py
-if rows := c.fetchall():
-  # do something
-else:
-  # print("No rows found")
-```
 
 We need to do error handling everywhere where user is typing incorrect input (example:wrong tag/ date/ days, etc)
 
@@ -17,26 +7,23 @@ We need to do error handling everywhere where user is typing incorrect input (ex
 Test cases for all the functions I have commented as:
 #no tests for this function as it is not called anywhere in the command directly
 
----
 
-Test cases for all other commands like:
-history
-about
-revise
-quiz
-
----
-
-We should rename unlearn to not-learning
+1. Help command alignment
+2. Debug command prompt resizing issue 
+3. We should rename unlearn to not-learning
 
 
----
-
-Help command alignment
-Finishing of cmds: revise, quiz, random
-MOVCLI 
-Debug command prompt resizing issue 
-
+# Priority
+1. Add Heading to Panels @Anay
+2. PyTest delete statement before all tests @Anay
+3. UML Links @Anay
+4. Generate Coverage Report, Add All Missing Tests for Existing Commands 
+5. Graphs @AtharvaShah
+6. Change Revise Words Panel as Heading @Anay
+7. FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+8. Graph Download or View Options (Enable Carousel for viewing) @atharva
+9. Get Linux Installed @anay
+10. Github Pages Improvement @anay
 ---
 
 ## Things to Do After Finishing the Project

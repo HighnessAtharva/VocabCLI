@@ -543,7 +543,7 @@ def revise(
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
 def quiz(
-    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order."),
+    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order.", min=4),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Take a quiz on words in your learning list"),
     mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Take a quiz on words in your mastered list"),

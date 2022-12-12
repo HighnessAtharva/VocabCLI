@@ -42,9 +42,9 @@ def viz_top_words_bar(N=10):
     graph=sns.barplot(x='Word Lookup Count', y='Count', data=df, palette='pastel',ax=plt.subplots(figsize=(12, 10))[1], edgecolor='0.4')
 
     graph.set_title(f'Top {N} Most Looked Up Words', fontsize=18, fontweight='bold', pad=20, color='black', loc='center', fontname='Constantia') 
-    graph.set_xlabel('Words', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic')
+    graph.set_xlabel('Words', fontsize=15, fontweight='bold', labelpad=-10, color='black', fontname='MS Gothic')
     graph.set_ylabel('Lookup Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
-    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black')
+    graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black', fontweight='700')
     graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
     # show the plot

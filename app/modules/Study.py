@@ -143,7 +143,7 @@ def start_quiz(c):    # sourcery skip: remove-redundant-if
         return
     # break out if -n < 4
     if len(rows) < 4:
-        print(Panel("Not enough words to start a quiz. Look up some more words first by using 'define' command."))
+        print(Panel("Not enough words to start a quiz."))
         return
 
 

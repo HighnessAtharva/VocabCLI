@@ -860,68 +860,68 @@ class TestHistory:
 
 class TestRevise:
     class TestReviseDefault:
-        def test_revise_default():
+        def test_revise_default(self):
         # all words and no word limit 
             pass
         
-        def test_revise_default_with_word_limit():
+        def test_revise_default_with_word_limit(self):
         # all words and word limit    
             pass
         
-        def test_revise_default_zero():
+        def test_revise_default_zero(self):
         # zero words in DB
             pass
     
     
     class TestReviseTag:
-        def test_revise_tag_correct():
+        def test_revise_tag_correct(self):
             pass
         
-        def test_revise_tag_incorrect():
+        def test_revise_tag_incorrect(self):
             pass
         
-        def test_revise_tag_with_word_limit():
+        def test_revise_tag_with_word_limit(self):
             pass
         
-        def test_revise_tag_zero():
+        def test_revise_tag_zero(self):
             pass
         
     
     class TestReviseMastered:
-        def test_revise_mastered():
+        def test_revise_mastered(self):
             pass
         
-        def test_revise_mastered_with_word_limit():
+        def test_revise_mastered_with_word_limit(self):
             pass
     
-        def test_revise_mastered_zero():
+        def test_revise_mastered_zero(self):
             pass
         
     class TestReviseLearning:
-        def test_revise_learning():
+        def test_revise_learning(self):
             pass
         
-        def test_revise_learning_with_word_limit():
+        def test_revise_learning_with_word_limit(self):
             pass
     
-        def test_revise_learning_zero():
+        def test_revise_learning_zero(self):
             pass
         
     class TestReviseFavorite:
-        def test_revise_favorite():
+        def test_revise_favorite(self):
             pass
         
-        def test_revise_favorite_with_word_limit():
+        def test_revise_favorite_with_word_limit(self):
             pass
     
-        def test_revise_favorite_zero():
+        def test_revise_favorite_zero(self):
             pass
     
     class TestReviseCollection:
-        def test_revise_collection():
+        def test_revise_collection(self):
             pass
         
-        def test_revise_collection_with_word_limit():
+        def test_revise_collection_with_word_limit(self):
             pass
     
         # no need to test for zero words in collection as no collection can be empty
@@ -930,99 +930,213 @@ class TestRevise:
 
 class TestQuiz:
     class TestQuizDefault:
-        def test_quiz_default():
+        def test_quiz_default(self):
         # all words and no word limit 
-            pass
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
+            
+        @mock.patch("typer.confirm")
+        def test_quiz_default_with_word_limit(self,mock_typer):
+            # all words and word limit    
+            mock_typer.return_value = True
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz","-n","4"])
+            assert result.exit_code == 0
+            assert "Question #4/4" in result.stdout
+            
+        @mock.patch("typer.confirm")
+        def test_quiz_default_zero(self, mock_typer):
+            # zero words in DB
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["quiz"])
+            assert result.exit_code == 0
+            assert "There are no words in the database" in result.stdout
         
-        def test_quiz_default_with_word_limit():
-        # all words and word limit    
-            pass
-        
-        def test_quiz_default_zero():
-        # zero words in DB
-            pass
-        
-        def test_quiz_default_low_words():
-        # less than 4 words in DB
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_default_low_words(self, mock_typer):
+            # less than 4 words in DB
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math"])
+            result = runner.invoke(app,["quiz","-n","4"])
+            assert result.exit_code == 0
+            assert "Not enough words to start a quiz." in result.stdout
     
     
     class TestQuizTag:
-        def test_quiz_tag_correct():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_tag_correct(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["tag","math", "rock", "class", "school", "interpret", "major", "--name", "testtag"])
+            result = runner.invoke(app,["quiz", "-t","testtag"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
         
-        def test_quiz_tag_incorrect():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_tag_incorrect(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz", "-t","diamonds"])
+            assert result.exit_code == 0
+            assert "There are no words in the database" in result.stdout
         
-        def test_quiz_tag_with_word_limit():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_tag_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["tag","math", "rock", "class", "school", "--name", "testtag"])
+            result = runner.invoke(app,["quiz", "-t","testtag", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Question #4/4" in result.stdout
         
-        def test_quiz_tag_zero():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_tag_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["quiz", "-t","diamonds"])
+            assert result.exit_code == 0
+            assert "There are no words in the database" in result.stdout
         
-        def test_quiz_tag_low_words():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_tag_low_words(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math"])
+            result = runner.invoke(app,["quiz", "-t","diamonds", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Not enough words to start a quiz." in result.stdout
     
     class TestQuizMastered:
-        def test_quiz_mastered():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_mastered(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["master","math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz", "-m"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
         
-        def test_quiz_mastered_with_word_limit():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_mastered_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["master","math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz", "-m", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
     
-        def test_quiz_mastered_zero():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_mastered_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["quiz", "-m", "-n", "4"])
+            assert result.exit_code == 0
+            assert "There are no words in the database" in result.stdout
        
-        def test_quiz_mastered_low_words():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_mastered_low_words(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class"])
+            runner.invoke(app, ["master","math", "rock", "class"])
+            result = runner.invoke(app,["quiz", "-m", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Not enough words to start a quiz." in result.stdout
         
     class TestQuizLearning:
-        def test_quiz_learning():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_learning(self):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["learn","math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz", "-l"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
+            
         
-        def test_quiz_learning_with_word_limit():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_learning_with_word_limit(self):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["learn","math", "rock", "class", "gems"])
+            result = runner.invoke(app,["quiz", "-l", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Question #4" in result.stdout
+            
     
-        def test_quiz_learning_zero():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_learning_zero(self):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["quiz", "-l", "-n", "4"])
+            assert result.exit_code == 0
+            assert "There are no words in the database" in result.stdout
+            
         
-        def test_quiz_learning_low_words():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_learning_low_words(self):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class"])
+            runner.invoke(app, ["learn","math", "rock", "class"])
+            result = runner.invoke(app,["quiz", "-l", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Not enough words to start a quiz." in result.stdout
+            
         
     class TestQuizFavorite:
-        def test_quiz_favorite():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_favorite(self):
+            mock_typer.return_value = True
+            
         
-        def test_quiz_favorite_with_word_limit():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_favorite_with_word_limit(self):
+            mock_typer.return_value = True
+            
     
-        def test_quiz_favorite_zero():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_favorite_zero(self):
+            mock_typer.return_value = True
+            
     
-        def test_quiz_favorite_low_words():
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_favorite_low_words(self):
+            mock_typer.return_value = True
+            
         
     class TestQuizCollection:
-        def test_quiz_collection():
+        def test_quiz_collection(self):
             pass
         
-        def test_quiz_collection_with_word_limit():
+        def test_quiz_collection_with_word_limit(self):
             pass
     
-        def test_quiz_collection_zero():
+        def test_quiz_collection_zero(self):
             pass
         
         # no need to test for low words as collections will always have more than 4 words
         
 class TestGraph:
     # top words bar graph
-    def test_graph_top_words():
+    def test_graph_top_words(self):
         pass
     
-    def test_graph_top_words_zero():
+    def test_graph_top_words_zero(self):
         pass
     
-    def test_graph_top_words_less_than_N():
+    def test_graph_top_words_less_than_N(self):
         pass
     
     # top words pie chart
@@ -1038,10 +1152,10 @@ class TestGraph:
     # lookup history year
     
     # learnVsMaster
-    def test_graph_learnVsMaster():
+    def test_graph_learnVsMaster(self):
         pass
     
-    def test_graph_learnVsMaster_zero_both():
+    def test_graph_learnVsMaster_zero_both(self):
         pass    
     
     def test_graph_learnVsMaster_zero_learn():
