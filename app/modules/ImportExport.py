@@ -16,7 +16,7 @@ def export_to_csv():
         words = c.fetchall()
         if len(words) <= 0:
             raise NoDataFoundException
-        with open('VocabularyBuilder.csv', 'w', newline='') as file:
+        with open('../exports/VocabularyBuilder.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)

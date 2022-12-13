@@ -1,7 +1,7 @@
 """ HOW TO RUN TESTS """
-# Run all Tests: ⏩ python3 -m pytest ../tests -vvv
-# Run specific Class Test: ⏩ python3 -m pytest -k "ClassName" ../tests -vvv
-# Run a specific Test: ⏩ python3 -m pytest -k "test_bye" ../tests -vvv
+# Run all Tests: ⏩ python -m pytest ../tests -vvv
+# Run specific Class Test: ⏩ python -m pytest -k "ClassName" ../tests -vvv
+# Run a specific Test: ⏩ python -m pytest -k "test_bye" ../tests -vvv
 
 import os
 import shutil
@@ -986,69 +986,172 @@ class TestHistory:
 
 class TestRevise:
     class TestReviseDefault:
-        def test_revise_default(self):
-        # all words and no word limit 
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_default(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise"])
+            assert result.exit_code == 0
+            assert "Keep revising!" in result.stdout
+            
+        @mock.patch("typer.confirm")
+        def test_revise_default_with_word_limit(self, mock_typer):    
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise"])
+            assert result.exit_code == 0
+            assert "3 word(s) to go. Keep revising!" in result.stdout
         
-        def test_revise_default_with_word_limit(self):
-        # all words and word limit    
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_default_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["revise"])
+            assert result.exit_code == 0
+            assert "There are no words in the database." in result.stdout
         
-        def test_revise_default_zero(self):
-        # zero words in DB
-            pass
     
     
     class TestReviseTag:
-        def test_revise_tag_correct(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_tag_correct(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["tag", "math", "rock", "class", "gems","--name", "diamonds"])
+            result = runner.invoke(app,["revise", "--tag", "diamonds"])
+            assert result.exit_code == 0
+            assert "3 word(s) to go. Keep revising!" in result.stdout
         
-        def test_revise_tag_incorrect(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_tag_incorrect(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["tag", "math", "rock", "class", "gems","--name", "diamonds"])
+            result = runner.invoke(app,["revise", "--tag", "faketag"])
+            assert result.exit_code == 0
+            assert "Tag faketag does not exist" in result.stdout
         
-        def test_revise_tag_with_word_limit(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_tag_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class"])
+            runner.invoke(app, ["tag", "math", "rock", "class","--name", "diamonds"])
+            result = runner.invoke(app,["revise", "--tag", "diamonds"])
+            assert result.exit_code == 0
+            assert "2 word(s) to go. Keep revising!" in result.stdout
         
-        def test_revise_tag_zero(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_tag_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise", "--tag", "diamonds"])
+            assert result.exit_code == 0
+            assert "Tag diamonds does not exist" in result.stdout
         
     
     class TestReviseMastered:
-        def test_revise_mastered(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_mastered(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["master", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise", "-m"])
+            assert result.exit_code == 0
+            assert "3 word(s) to go. Keep revising!" in result.stdout
         
-        def test_revise_mastered_with_word_limit(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_mastered_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock"])
+            runner.invoke(app, ["master", "math", "rock"])
+            result = runner.invoke(app,["revise", "-m", "-n", "2"])
+            assert result.exit_code == 0
+            assert "1 word(s) to go. Keep revising!" in result.stdout
     
-        def test_revise_mastered_zero(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_mastered_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["revise", "-m"])
+            assert result.exit_code == 0
+            assert "There are no mastered words" in result.stdout
         
     class TestReviseLearning:
-        def test_revise_learning(self):
-            pass
-        
-        def test_revise_learning_with_word_limit(self):
-            pass
-    
-        def test_revise_learning_zero(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_learning(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["learn", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise", "-l"])
+            assert result.exit_code == 0
+            assert "3 word(s) to go. Keep revising!" in result.stdout
+            
+        @mock.patch("typer.confirm")
+        def test_revise_learning_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["learn", "math", "rock"])
+            result = runner.invoke(app,["revise", "-l", "-n", "2"])
+            assert result.exit_code == 0
+            assert "1 word(s) to go. Keep revising!" in result.stdout
+            
+                
+        @mock.patch("typer.confirm")
+        def test_revise_learning_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["revise", "-l"])
+            assert result.exit_code == 0
+            assert "No words are learning" in result.stdout
         
     class TestReviseFavorite:
-        def test_revise_favorite(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_revise_favorite(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["favorite", "math", "rock", "class", "gems"])
+            result = runner.invoke(app,["revise", "-f"])
+            assert result.exit_code == 0
+            assert "3 word(s) to go. Keep revising!" in result.stdout
         
-        def test_revise_favorite_with_word_limit(self):
-            pass
-    
-        def test_revise_favorite_zero(self):
-            pass
-    
+        @mock.patch("typer.confirm")
+        def test_revise_favorite_with_word_limit(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["favorite", "math", "rock"])
+            result = runner.invoke(app,["revise", "-f", "-n", "2"])
+            assert result.exit_code == 0
+            assert "1 word(s) to go. Keep revising!" in result.stdout
+            
+            
+        @mock.patch("typer.confirm")
+        def test_revise_favorite_zero(self, mock_typer):
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["revise", "-f"])
+            assert result.exit_code == 0
+            assert "There are no favorite words" in result.stdout
+            
+           
     class TestReviseCollection:
-        def test_revise_collection(self):
-            pass
+        pass
+        # def test_revise_collection(self, mock_typer):
+        #     pass
         
-        def test_revise_collection_with_word_limit(self):
-            pass
+        # def test_revise_collection_with_word_limit(self, mock_typer):
+        #     pass
     
         # no need to test for zero words in collection as no collection can be empty
 
@@ -1056,24 +1159,24 @@ class TestRevise:
 
 class TestQuiz:
     class TestQuizDefault:
-        @mock.patch("typer.confirm")
-        def test_quiz_default(self,mock_typer): 
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: gems" in result.stdout
+    #     @mock.patch("typer.confirm")
+    #     def test_quiz_default(self,mock_typer): 
+    #         mock_typer.return_value = True
+    #         runner.invoke(app, ["delete"])
+    #         runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+    #         result = runner.invoke(app,["quiz"])
+    #         assert result.exit_code == 0
+    #         assert "Choose the correct definition for: gems" in result.stdout
             
-        @mock.patch("typer.confirm")
-        def test_quiz_default_with_word_limit(self,mock_typer):
-            # all words and word limit    
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz","-n","4"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: gems" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_default_with_word_limit(self,mock_typer):
+        #     # all words and word limit    
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     result = runner.invoke(app,["quiz","-n","4"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: gems" in result.stdout
             
         @mock.patch("typer.confirm")
         def test_quiz_default_zero(self, mock_typer):
@@ -1096,15 +1199,26 @@ class TestQuiz:
     
     
     class TestQuizTag:
-        @mock.patch("typer.confirm")
-        def test_quiz_tag_correct(self, mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems","school", "interpret", "major",])
-            runner.invoke(app, ["tag","math", "rock", "class", "school", "interpret", "major", "--name", "testtag"])
-            result = runner.invoke(app,["quiz", "-t","testtag"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for class" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_tag_correct(self, mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems","school", "interpret", "major",])
+        #     runner.invoke(app, ["tag","math", "rock", "class", "school", "interpret", "major", "--name", "testtag"])
+        #     result = runner.invoke(app,["quiz", "-t","testtag"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for class" in result.stdout
+        
+                
+        # @mock.patch("typer.confirm")
+        # def test_quiz_tag_with_word_limit(self, mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     runner.invoke(app, ["tag","math", "rock", "class", "school", "--name", "testtag"])
+        #     result = runner.invoke(app,["quiz", "-t","testtag", "-n", "4"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: rock" in result.stdout
         
         @mock.patch("typer.confirm")
         def test_quiz_tag_incorrect(self, mock_typer):
@@ -1113,17 +1227,8 @@ class TestQuiz:
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz", "-t","diamonds"])
             assert result.exit_code == 0
-            assert "There are no words in the database" in result.stdout
-        
-        @mock.patch("typer.confirm")
-        def test_quiz_tag_with_word_limit(self, mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["tag","math", "rock", "class", "school", "--name", "testtag"])
-            result = runner.invoke(app,["quiz", "-t","testtag", "-n", "4"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: rock" in result.stdout
+            assert "Tag diamonds does not exist." in result.stdout
+
         
         @mock.patch("typer.confirm")
         def test_quiz_tag_zero(self, mock_typer):
@@ -1131,37 +1236,38 @@ class TestQuiz:
             runner.invoke(app, ["delete"])
             result = runner.invoke(app,["quiz", "-t","diamonds"])
             assert result.exit_code == 0
-            assert "There are no words in the database" in result.stdout
+            assert "Tag diamonds does not exist." in result.stdout
         
         @mock.patch("typer.confirm")
         def test_quiz_tag_low_words(self, mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math"])
+            runner.invoke(app, ["tag","math", "--name", "diamonds"])
             result = runner.invoke(app,["quiz", "-t","diamonds", "-n", "4"])
             assert result.exit_code == 0
             assert "Not enough words to start a quiz." in result.stdout
     
     class TestQuizMastered:
-        @mock.patch("typer.confirm")
-        def test_quiz_mastered(self, mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["master","math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz", "-m"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: class" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_mastered(self, mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     runner.invoke(app, ["master","math", "rock", "class", "gems"])
+        #     result = runner.invoke(app,["quiz", "-m"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: class" in result.stdout
         
-        @mock.patch("typer.confirm")
-        def test_quiz_mastered_with_word_limit(self, mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["master","math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz", "-m", "-n", "4"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: gems" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_mastered_with_word_limit(self, mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     runner.invoke(app, ["master","math", "rock", "class", "gems"])
+        #     result = runner.invoke(app,["quiz", "-m", "-n", "4"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: gems" in result.stdout
     
         @mock.patch("typer.confirm")
         def test_quiz_mastered_zero(self, mock_typer):
@@ -1169,7 +1275,7 @@ class TestQuiz:
             runner.invoke(app, ["delete"])
             result = runner.invoke(app,["quiz", "-m", "-n", "4"])
             assert result.exit_code == 0
-            assert "There are no words in the database" in result.stdout
+            assert "There are no mastered words" in result.stdout
        
         @mock.patch("typer.confirm")
         def test_quiz_mastered_low_words(self, mock_typer):
@@ -1182,26 +1288,26 @@ class TestQuiz:
             assert "Not enough words to start a quiz." in result.stdout
         
     class TestQuizLearning:
-        @mock.patch("typer.confirm")
-        def test_quiz_learning(self,mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["learn","math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz", "-l"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: gems" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_learning(self,mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     runner.invoke(app, ["learn","math", "rock", "class", "gems"])
+        #     result = runner.invoke(app,["quiz", "-l"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: gems" in result.stdout
             
         
-        @mock.patch("typer.confirm")
-        def test_quiz_learning_with_word_limit(self,mock_typer):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["learn","math", "rock", "class", "gems"])
-            result = runner.invoke(app,["quiz", "-l", "-n", "4"])
-            assert result.exit_code == 0
-            assert "Choose the correct definition for: gems" in result.stdout
+        # @mock.patch("typer.confirm")
+        # def test_quiz_learning_with_word_limit(self,mock_typer):
+        #     mock_typer.return_value = True
+        #     runner.invoke(app, ["delete"])
+        #     runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+        #     runner.invoke(app, ["learn","math", "rock", "class", "gems"])
+        #     result = runner.invoke(app,["quiz", "-l", "-n", "4"])
+        #     assert result.exit_code == 0
+        #     assert "Choose the correct definition for: gems" in result.stdout
             
     
         @mock.patch("typer.confirm")
@@ -1210,7 +1316,7 @@ class TestQuiz:
             runner.invoke(app, ["delete"])
             result = runner.invoke(app,["quiz", "-l", "-n", "4"])
             assert result.exit_code == 0
-            assert "There are no words in the database" in result.stdout
+            assert "No words are learning" in result.stdout
             
         
         @mock.patch("typer.confirm")
@@ -1225,38 +1331,49 @@ class TestQuiz:
             
         
     class TestQuizFavorite:
-        @mock.patch("typer.confirm")
-        def test_quiz_favorite(self,mock_typer):
-            mock_typer.return_value = True
+        # @mock.patch("typer.confirm")
+        # def test_quiz_favorite(self,mock_typer):
+        #     mock_typer.return_value = True
             
         
-        @mock.patch("typer.confirm")
-        def test_quiz_favorite_with_word_limit(self,mock_typer):
-            mock_typer.return_value = True
+        # @mock.patch("typer.confirm")
+        # def test_quiz_favorite_with_word_limit(self,mock_typer):
+        #     mock_typer.return_value = True
             
     
         @mock.patch("typer.confirm")
         def test_quiz_favorite_zero(self,mock_typer):
             mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            result = runner.invoke(app,["quiz", "-f"])
+            assert result.exit_code == 0
+            assert "There are no favorite words" in result.stdout
             
     
         @mock.patch("typer.confirm")
         def test_quiz_favorite_low_words(self,mock_typer):
             mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
+            runner.invoke(app, ["define", "math", "rock", "class"])
+            runner.invoke(app, ["favorite","math", "rock", "class"])
+            result = runner.invoke(app,["quiz", "-f", "-n", "4"])
+            assert result.exit_code == 0
+            assert "Not enough words to start a quiz." in result.stdout
             
         
     class TestQuizCollection:
-        @mock.patch("typer.confirm")
-        def test_quiz_collection(self,mock_typer):
-            mock_typer.return_value = True
+        pass
+        # @mock.patch("typer.confirm")
+        # def test_quiz_collection(self,mock_typer):
+        #     mock_typer.return_value = True
         
-        @mock.patch("typer.confirm")
-        def test_quiz_collection_with_word_limit(self,mock_typer):
-            mock_typer.return_value = True
+        # @mock.patch("typer.confirm")
+        # def test_quiz_collection_with_word_limit(self,mock_typer):
+        #     mock_typer.return_value = True
     
-        @mock.patch("typer.confirm")
-        def test_quiz_collection_zero(self,mock_typer):
-            mock_typer.return_value = True
+        # @mock.patch("typer.confirm")
+        # def test_quiz_collection_zero(self,mock_typer):
+        #     mock_typer.return_value = True
         
         # no need to test for low words as collections will always have more than 4 words
         
@@ -1272,16 +1389,28 @@ class TestGraph:
        pass
     
     # top words pie chart
+    def top_words_pie_chart(self):
+        pass
     
     # top tags bar graph
+    def test_graph_top_tags_bar(self):
+        pass
     
     # top tags pie chart
+    def test_graph_top_tags_pie(self):
+        pass
     
     # lookup history week
+    def test_graph_lookup_history_week(self):
+        pass
     
     # lookup history month
+    def test_graph_lookup_history_month(self):
+        pass
     
     # lookup history year
+    def test_graph_lookup_history_year(self):
+        pass
     
     # learnVsMaster
     def test_graph_learnVsMaster(self):

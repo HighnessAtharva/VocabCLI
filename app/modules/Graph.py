@@ -1,133 +1,22 @@
-from Database import *
 import calendar
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import pandas as pd
-import numpy as np
-from datetime import datetime
-from rich.panel import Panel
-
-
-
-
-################################
-# GRAPH CAROUSEL
-################################
-
-import tkinter as Tk
-from tkinter import ttk
-from PIL import Image, ImageTk
 import glob
+from datetime import datetime
+from tkinter import *
 
-
-def show_all_graphs():
-    height = 700 # Window height
-    width = 1300 # Window Width
-
-    def show(event):
-        print(event.x,event.y)
-
-
-
-    class TKApp(Tk.Tk):
-        def __init__(self,title):
-            super().__init__()
-
-            # App Sizing and Title
-            geometry = f'{width}x{height}'
-            self.geometry(geometry)
-            self.title(title)
-            self.resizable(0,0)
-
-            self.bind('<Left>',moveImageLeft)
-            self.bind('<Right>',moveImageRight)
-
-
-
-
-    class Carousel(Tk.Canvas):
-        def __init__(self,master):
-            super().__init__()
-            self.config(width=width,height=height)
-            self.pack()
-            self.stitchImages()
-            self.showPhoto()
-            self.loadIndicator()
-            self.current = 1
-
-
-        def stitchImages(self):
-            # Stitch Image
-            images = [Image.open(file) for file in glob.glob('../exports/*.jpg')]
-            widths, heights = zip(*(i.size for i in images))
-            total_width = sum(widths)
-            max_height = max(heights)
-            self.stitched = Image.new('RGB', (total_width, max_height))
-            x_offset = 0
-            for im in images:
-                self.stitched.paste(im, (x_offset,0))
-                x_offset += im.size[0]
-            self.stitched = self.stitched.resize((len(images)*1300,700))
-            self.length = len(images)
-
-        def showPhoto(self):
-            # Show Stitched Image
-            self.stitched = ImageTk.PhotoImage(self.stitched)
-            self.Photo = self.create_image((0,0),image=self.stitched,anchor='nw')
-
-
-        def loadIndicator(self):
-            # Indicator
-            self.ind = self.create_rectangle(1,690,310,700,fill='white',outline='white')
-
-        def move_util(self, arg0, arg1):
-            self.after(1, self.move(self.Photo, arg0, 0))
-            self.after(1, self.move(self.ind, arg1, 0))
-            self.update()
-
-        def moveImageRight(self):
-            if self.current < 4:
-                for _ in range(25):
-                    # first argument is the number of pixels to move the image
-                    # second argument is the number of pixels to move the indicator
-                    self.move_util(-52, 15)
-                self.current += 1
-
-        def moveImageLeft(self):
-            if self.current > 0:
-                for _ in range(25):
-                    # first argument is the number of pixels to move the image
-                    # second argument is the number of pixels to move the indicator
-                    self.move_util(52, -15)
-                self.current -= 1
-
-        img_index = None
-
-    def moveImageRight(event):
-        global img_index
-        if img_index.current != 4:
-            img_index.moveImageRight()
-
-    def moveImageLeft(event):
-        global img_index
-        if img_index.current != 1:
-            img_index.moveImageLeft()
-
-    def start_carousel():
-        global img_index
-        tk_app = TKApp('Graphs')
-        img_index = Carousel(tk_app)
-        tk_app.mainloop()
-
-    start_carousel()
-
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from Database import *
+from PIL import Image, ImageTk
+from rich.panel import Panel
 
 
 ################################
 # VISUALIZATION FUNCTIONS
 ################################
-def viz_top_words_bar(N=10):
+def viz_top_words_bar(N=10, popup=False):
     """_summary_
 
     Args:
@@ -166,10 +55,12 @@ def viz_top_words_bar(N=10):
 
     # show the plot
     plt.grid()
-    plt.show()
+    plt.savefig('../exports/GRAPH-top_words_bar.png')
+    if popup:
+        plt.show()
 
 
-def viz_top_tags_bar(N=10):
+def viz_top_tags_bar(N=10, popup=False):
     """
     Visualizes the top N tags with the most words.
 
@@ -210,13 +101,15 @@ def viz_top_tags_bar(N=10):
 
     # show the plot
     plt.grid()
-    plt.show()
+    plt.savefig('../exports/GRAPH-top_tags_bar.png')
+    if popup:    
+        plt.show()
 
 
-def viz_top_words_pie(N=10):
+def viz_top_words_pie(N=10, popup=False):
     print("Will print a pie chart of the top N words")
     
-def viz_top_tags_pie(N=10):
+def viz_top_tags_pie(N=10, popup=False):
     print("Will print a pie chart of the top N tags")
 
 
@@ -248,7 +141,7 @@ def words_distribution_week_util():
 
     return days_of_week, word_count
 
-def viz_word_distribution_week():
+def viz_word_distribution_week(popup=False):
     """ Visualizes the distribution of words by day of the week. """
 
     days_of_week, word_count=words_distribution_week_util()
@@ -267,7 +160,10 @@ def viz_word_distribution_week():
     graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
     
     plt.grid()
-    plt.show()
+    
+    plt.savefig('../exports/GRAPH-words_distribution_week.png')
+    if popup:    
+        plt.show()
 
 
 
@@ -315,7 +211,7 @@ def word_distribution_month_util():
     return dates, word_count
 
 
-def viz_word_distribution_month():
+def viz_word_distribution_month(popup=False):
     """ Visualizes the distribution of words by dates of month. """
 
     dates, word_count=word_distribution_month_util()
@@ -337,16 +233,19 @@ def viz_word_distribution_month():
     
     plt.tight_layout()
     plt.grid()
-    plt.show()
+    
+    plt.savefig('../exports/GRAPH-word_distribution_month.png')
+    if popup:
+        plt.show()
 
 
 def viz_word_distribution_year_util():
     pass
 
-def viz_word_distribution_year():
+def viz_word_distribution_year(popup=False):
     pass
 
-def viz_learning_vs_mastered():
+def viz_learning_vs_mastered(popup=False):
     """ Visualizes the distribution of words by learning and mastered. """    
     conn=createConnection()
     c=conn.cursor()
@@ -356,8 +255,7 @@ def viz_learning_vs_mastered():
     
     c.execute("select count(DISTINCT word) from words WHERE mastered = 1")
     mastered_count=c.fetchone()[0]
-    
-    print(learning_count, mastered_count)
+   
     # set plot style: grey grid in the background:
     sns.set(style="dark")
 
@@ -382,17 +280,34 @@ def viz_learning_vs_mastered():
     plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     
     # show the graph
-    plt.show()
+    plt.savefig('../exports/GRAPH-learning_vs_mastered.png')
+    if popup:
+        plt.show()
+    
 
-# todo function to vizualize trend of learning and mastered words in a given time period [day, week, month] -> USE COMPOSITE BAR GRAPH
 
-# todo function to visualize most looked up words [top 10] with the number of times looked up
+# todo Graph of words based on their conceptual category (if possible with the libraries) ✅
+# todo Graph related to complexity or difficulty? ✅
+# todo Can show graphs related to flashcards after implementing them? ✅
 
 
-# Graph of application usage time over various time periods [week, month, year] Need Research
-# Graph of words mastered over various time periods [week, month, year] In Consideration
-# Graph of time taken to master words after first lookup/ set learning over various time periods [week, month, year] In Consideration
-# Graph of words based on their frequency of lookup [top 10] with the number of times looked up ✅
-# Graph of words based on their conceptual category (if possible with the libraries) ✅
-# Graph related to complexity or difficulty? ✅
-# Can show graphs related to flashcards after implementing them? ✅
+
+################################
+# GRAPH CAROUSEL
+################################
+
+def export_all_graphs():
+    """ Exports all graphs to a folder. """
+    viz_top_tags_bar(popup=False)
+    viz_top_words_bar(popup=False)
+    viz_word_distribution_week(popup=False)
+    viz_word_distribution_month(popup=False)
+    viz_word_distribution_year(popup=False)
+    viz_learning_vs_mastered(popup=False)    
+
+    
+    
+def show_all_graphs():
+    export_all_graphs()
+    # todo add all graphs to a carousel -> see Carousel.py
+    

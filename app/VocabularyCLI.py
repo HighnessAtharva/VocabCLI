@@ -617,24 +617,24 @@ def graph(
     if slider:
         show_all_graphs()
     if topWordsBar:
-        viz_top_words_bar(N=topWordsBar)
+        viz_top_words_bar(N=topWordsBar, popup=True)
     if topTagsBar:
-        viz_top_tags_bar(N=topTagsBar)
+        viz_top_tags_bar(N=topTagsBar,popup=True)
     
     if topWordsPie:
-        viz_top_words_pie(N=topWordsPie)
+        viz_top_words_pie(N=topWordsPie, popup=True)
     if topTagsPie:
-        viz_top_tags_pie(N=topTagsPie)
+        viz_top_tags_pie(N=topTagsPie, popup=True)
     
     if lookupWeek:
-        viz_word_distribution_week()
+        viz_word_distribution_week(popup=True)
     if lookupMonth:
-        viz_word_distribution_month()
+        viz_word_distribution_month(popup=True)
     if lookupYear:
-        viz_word_distribution_year()
+        viz_word_distribution_year(popup=True)
     
     if learnVSmaster:
-        viz_learning_vs_mastered()
+        viz_learning_vs_mastered(popup=True)
 
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")

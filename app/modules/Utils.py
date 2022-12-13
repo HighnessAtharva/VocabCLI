@@ -160,7 +160,21 @@ def set_mastered(query: str):
         print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work! ✅"))
 
 
+def check_mastered(query:str):
+    """
+    Checks if the word is mastered and returns a boolean value.
 
+    Args:
+        query (str): word which is to be checked for mastered status
+    """
+    conn=createConnection()
+    c=conn.cursor()
+
+    c.execute("SELECT mastered FROM words WHERE word=? and mastered=1", (query,))
+    return bool(row := c.fetchall())
+         
+    
+    
 def set_unmastered(query: str):
     """
     Sets the word as unmastered.

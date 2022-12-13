@@ -29,15 +29,26 @@ def start_revision(c):
             print(Panel(
             title=f"[reverse]Revising word: [bold green]{count} / {len(rows)}[/bold green][/reverse]",
             title_align="center",
-            renderable=f"{len(rows)-1} word(s) to go. Keep revising! 🧠"
+            renderable=f"{len(rows)-count} word(s) to go. Keep revising! 🧠"
             ))
             definition(row[0])
-            print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
-            if sure := typer.confirm(""):
-                set_mastered(row[0])
-            else:
-                print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
             
+            # if word is not mastered then prompt user to set it as mastered
+            if not check_mastered(row[0]):
+                print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
+                if sure := typer.confirm(""):
+                    set_mastered(row[0])
+                else:
+                    print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
+                    print("\n\n")
+            
+            else:
+                print("Press Y to Stop Revision. Enter to continue 📖")
+                if sure := typer.confirm(""):
+                    print(Panel("OK, stopping revision. 🛑"))
+                    break
+                else:
+                    continue
     else:
         print(Panel("No words to revise in the selected category. Look up some more words first by using 'define' command."))
         
@@ -47,7 +58,8 @@ def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant
     c=conn.cursor()
     
     # checks if there are any words in the database and breaks out if there are none
-    count_all_words()
+    if count_all_words()==0:
+        return
     
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
@@ -67,7 +79,8 @@ def revise_tag(
     
     # will stop the execution if tag is not found
     if tag:
-        count_tag(tag)     
+        if count_tag(tag) == 0:
+            return     
             
     if tag and not number:    
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM()", (tag,))
@@ -88,7 +101,8 @@ def revise_learning(
     
     # will stop the execution if no words learning
     if learning:
-        count_learning() 
+        if count_learning()==0:
+            return 
         
     if learning and not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
@@ -110,7 +124,8 @@ def revise_mastered(
     
     # will stop the execution if no words learning
     if mastered:
-        count_mastered() 
+        if count_mastered() ==0:
+            return
         
     if mastered and not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
@@ -131,7 +146,8 @@ def revise_favorite(
     
     # will stop the execution if no words learning
     if favorite:
-        count_favorite() 
+        if count_favorite() ==0:
+            return 
         
     if favorite and not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
@@ -223,14 +239,16 @@ def start_quiz(c):    # sourcery skip: remove-redundant-if
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"🎯 [bold bright_magenta u]Score[/bold bright_magenta u]: [bold green]{score}[/bold green] / [bold green]{len(rows)}[/bold green]\n⏰ [bold bright_magenta u]Time Elapsed[/bold bright_magenta u]: [blue]{minutes:0.0f}M {seconds:0.0f}S[/blue]")
-        )            
+        )   
+    c.close()         
         
 def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
     conn=createConnection()
     c=conn.cursor()
     
     # checks if there are any words in the database and breaks out if there are none
-    count_all_words()
+    if count_all_words()==0:
+        return
     
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
@@ -250,7 +268,8 @@ def quiz_tag(
     
     # will stop the execution if tag is not found
     if tag:
-        count_tag(tag)     
+        if count_tag(tag)==0:
+            return     
             
     if tag and not number:    
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM()", (tag,))
@@ -271,7 +290,8 @@ def quiz_learning(
     
     # will stop the execution if no words learning
     if learning:
-        count_learning() 
+        if count_learning() ==0:
+            return
         
     if learning and not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
@@ -293,7 +313,8 @@ def quiz_mastered(
     
     # will stop the execution if no words learning
     if mastered:
-        count_mastered() 
+        if count_mastered() == 0:
+            return
         
     if mastered and not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
@@ -314,7 +335,8 @@ def quiz_favorite(
     
     # will stop the execution if no words learning
     if favorite:
-        count_favorite() 
+        if count_favorite() ==0:
+            return
         
     if favorite and not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
