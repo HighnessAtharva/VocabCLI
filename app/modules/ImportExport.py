@@ -38,7 +38,7 @@ def import_from_csv():
     word_already_exists=0
 
     try:
-        with open ('VocabularyBuilder.csv', 'r') as file:
+        with open ('../exports/VocabularyBuilder.csv', 'r') as file:
             reader = csv.reader(file)
             next(reader) # skip header
 
@@ -143,7 +143,7 @@ def export_to_pdf():    # sourcery skip: extract-method
             favorite= "X" if row[5] == 1 else ""
             pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
-        pdf.output(f"VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
+        pdf.output(f"../exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
         print(Panel(f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF ✅"))
 
     except NoDataFoundException as e:

@@ -64,6 +64,7 @@ def find_antonym(query:str):  # sourcery skip: for-append-to-extend
                 if query not in antonym and ' ' not in antonym:
                         antonyms.append(antonym)
 
+    antonyms = list(set(antonyms))
     # if none returned from API, fallback to NLTK and append the list
     if not len(antonyms):
         for syn in wordnet.synsets(query):

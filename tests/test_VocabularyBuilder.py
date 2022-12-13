@@ -1,7 +1,7 @@
 """ HOW TO RUN TESTS """
-# Run all Tests: ⏩ python -m pytest ../tests -vvv
-# Run specific Class Test: ⏩ python -m pytest -k "ClassName" ../tests -vvv
-# Run a specific Test: ⏩ python -m pytest -k "test_bye" ../tests -vvv
+# Run all Tests: ⏩ python3 -m pytest ../tests -vvv
+# Run specific Class Test: ⏩ python3 -m pytest -k "ClassName" ../tests -vvv
+# Run a specific Test: ⏩ python3 -m pytest -k "test_bye" ../tests -vvv
 
 import os
 import shutil
@@ -1056,21 +1056,24 @@ class TestRevise:
 
 class TestQuiz:
     class TestQuizDefault:
-        def test_quiz_default(self):
-        # all words and no word limit 
+        @mock.patch("typer.confirm")
+        def test_quiz_default(self,mock_typer): 
+            mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for: gems" in result.stdout
             
         @mock.patch("typer.confirm")
         def test_quiz_default_with_word_limit(self,mock_typer):
             # all words and word limit    
             mock_typer.return_value = True
+            runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz","-n","4"])
             assert result.exit_code == 0
-            assert "Question #4/4" in result.stdout
+            assert "Choose the correct definition for: gems" in result.stdout
             
         @mock.patch("typer.confirm")
         def test_quiz_default_zero(self, mock_typer):
@@ -1097,11 +1100,11 @@ class TestQuiz:
         def test_quiz_tag_correct(self, mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "math", "rock", "class", "gems"])
+            runner.invoke(app, ["define", "math", "rock", "class", "gems","school", "interpret", "major",])
             runner.invoke(app, ["tag","math", "rock", "class", "school", "interpret", "major", "--name", "testtag"])
             result = runner.invoke(app,["quiz", "-t","testtag"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for class" in result.stdout
         
         @mock.patch("typer.confirm")
         def test_quiz_tag_incorrect(self, mock_typer):
@@ -1120,7 +1123,7 @@ class TestQuiz:
             runner.invoke(app, ["tag","math", "rock", "class", "school", "--name", "testtag"])
             result = runner.invoke(app,["quiz", "-t","testtag", "-n", "4"])
             assert result.exit_code == 0
-            assert "Question #4/4" in result.stdout
+            assert "Choose the correct definition for: rock" in result.stdout
         
         @mock.patch("typer.confirm")
         def test_quiz_tag_zero(self, mock_typer):
@@ -1148,7 +1151,7 @@ class TestQuiz:
             runner.invoke(app, ["master","math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz", "-m"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for: class" in result.stdout
         
         @mock.patch("typer.confirm")
         def test_quiz_mastered_with_word_limit(self, mock_typer):
@@ -1158,7 +1161,7 @@ class TestQuiz:
             runner.invoke(app, ["master","math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz", "-m", "-n", "4"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for: gems" in result.stdout
     
         @mock.patch("typer.confirm")
         def test_quiz_mastered_zero(self, mock_typer):
@@ -1180,29 +1183,29 @@ class TestQuiz:
         
     class TestQuizLearning:
         @mock.patch("typer.confirm")
-        def test_quiz_learning(self):
+        def test_quiz_learning(self,mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
             runner.invoke(app, ["learn","math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz", "-l"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for: gems" in result.stdout
             
         
         @mock.patch("typer.confirm")
-        def test_quiz_learning_with_word_limit(self):
+        def test_quiz_learning_with_word_limit(self,mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
             runner.invoke(app, ["learn","math", "rock", "class", "gems"])
             result = runner.invoke(app,["quiz", "-l", "-n", "4"])
             assert result.exit_code == 0
-            assert "Question #4" in result.stdout
+            assert "Choose the correct definition for: gems" in result.stdout
             
     
         @mock.patch("typer.confirm")
-        def test_quiz_learning_zero(self):
+        def test_quiz_learning_zero(self,mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             result = runner.invoke(app,["quiz", "-l", "-n", "4"])
@@ -1211,7 +1214,7 @@ class TestQuiz:
             
         
         @mock.patch("typer.confirm")
-        def test_quiz_learning_low_words(self):
+        def test_quiz_learning_low_words(self,mock_typer):
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class"])
@@ -1223,34 +1226,37 @@ class TestQuiz:
         
     class TestQuizFavorite:
         @mock.patch("typer.confirm")
-        def test_quiz_favorite(self):
+        def test_quiz_favorite(self,mock_typer):
             mock_typer.return_value = True
             
         
         @mock.patch("typer.confirm")
-        def test_quiz_favorite_with_word_limit(self):
+        def test_quiz_favorite_with_word_limit(self,mock_typer):
             mock_typer.return_value = True
             
     
         @mock.patch("typer.confirm")
-        def test_quiz_favorite_zero(self):
+        def test_quiz_favorite_zero(self,mock_typer):
             mock_typer.return_value = True
             
     
         @mock.patch("typer.confirm")
-        def test_quiz_favorite_low_words(self):
+        def test_quiz_favorite_low_words(self,mock_typer):
             mock_typer.return_value = True
             
         
     class TestQuizCollection:
-        def test_quiz_collection(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_collection(self,mock_typer):
+            mock_typer.return_value = True
         
-        def test_quiz_collection_with_word_limit(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_collection_with_word_limit(self,mock_typer):
+            mock_typer.return_value = True
     
-        def test_quiz_collection_zero(self):
-            pass
+        @mock.patch("typer.confirm")
+        def test_quiz_collection_zero(self,mock_typer):
+            mock_typer.return_value = True
         
         # no need to test for low words as collections will always have more than 4 words
         
@@ -1263,7 +1269,7 @@ class TestGraph:
         pass
     
     def test_graph_top_words_less_than_N(self):
-        pass
+       pass
     
     # top words pie chart
     
@@ -1284,8 +1290,8 @@ class TestGraph:
     def test_graph_learnVsMaster_zero_both(self):
         pass    
     
-    def test_graph_learnVsMaster_zero_learn():
+    def test_graph_learnVsMaster_zero_learn(self):
         pass
     
-    def test_graph_learnVsMaster_zero_master():
+    def test_graph_learnVsMaster_zero_master(self):
         pass

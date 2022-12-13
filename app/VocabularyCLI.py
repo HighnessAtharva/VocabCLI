@@ -605,6 +605,7 @@ def graph(
     lookupYear: Optional[bool] = typer.Option(False, "--lookupyear", "-ly", help="Bar Graph of the word count distribution for days in the past year."),
     
     learnVSmaster: Optional[bool] = typer.Option(False, "--learnvsmaster", "-lvm", help="Stacked Graph the number of words in your learning list vs. your mastered list."),
+    slider: Optional[bool] = typer.Option(False, "--slider", "-s", help="Shows all graphs one by one in a slider.")
 ):
     """
     Generate Graphical Charts based on your vocabulary.
@@ -613,6 +614,8 @@ def graph(
         tag (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
     """
     
+    if slider:
+        show_all_graphs()
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar)
     if topTagsBar:

@@ -27,8 +27,7 @@ setup(
         entry_points={
         'console_scripts': [
             'vocab = app.__main__:app',
-            'vocabulary = app.__main__:app',
-            'VocabularyCLI = app.__main__:app'
+            'vocabcli = app.__main__:app'
         ],
         },
 )

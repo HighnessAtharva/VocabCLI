@@ -7,6 +7,7 @@ from datetime import datetime
 from sqlite3 import Error
 from requests import exceptions
 from rich import print
+from rich.panel import Panel
 
 
 #no tests for this function as it is not called anywhere in the command directly
