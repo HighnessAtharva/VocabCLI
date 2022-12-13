@@ -8,11 +8,11 @@ root.geometry("1200x700")
 # root.iconbitmap("../assets/logos/VocabCLI.ico")
  
 # set up the images
-image1 = ImageTk.PhotoImage(Image.open("../../exports/GRAPH-learning_vs_mastered.png").resize((1200, 700)))
-image2 = ImageTk.PhotoImage(Image.open("../../exports/GRAPH-top_tags_bar.png").resize((1200, 700)))
-image3 = ImageTk.PhotoImage(Image.open("../../exports/GRAPH-top_words_bar.png").resize((1200, 700)))
-image4 = ImageTk.PhotoImage(Image.open("../../exports/GRAPH-word_distribution_month.png").resize((1200, 700)))
-image5 = ImageTk.PhotoImage(Image.open("../../exports/GRAPH-words_distribution_week.png").resize((1200, 700)))
+image1 = ImageTk.PhotoImage(Image.open("../exports/GRAPH-learning_vs_mastered.png").resize((1200, 700)))
+image2 = ImageTk.PhotoImage(Image.open("../exports/GRAPH-top_tags_bar.png").resize((1200, 700)))
+image3 = ImageTk.PhotoImage(Image.open("../exports/GRAPH-top_words_bar.png").resize((1200, 700)))
+image4 = ImageTk.PhotoImage(Image.open("../exports/GRAPH-word_distribution_month.png").resize((1200, 700)))
+image5 = ImageTk.PhotoImage(Image.open("../exports/GRAPH-words_distribution_week.png").resize((1200, 700)))
 image_list = [image1, image2, image3, image4, image5]
 counter = 0
 

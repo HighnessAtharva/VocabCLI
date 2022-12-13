@@ -615,7 +615,8 @@ def graph(
     """
     
     if slider:
-        show_all_graphs()
+        # importing this here will automatically open the slider window. DO NOT TOUCH.
+        import modules.Carousel
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar, popup=True)
     if topTagsBar:
