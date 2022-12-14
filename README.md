@@ -159,11 +159,13 @@ typer VocabularyCLI.py utils docs --name "VocabularyCLI" --output "../docs/user_
 ![snap4](https://user-images.githubusercontent.com/68660002/205949444-25b5ab53-f000-42dd-aac5-99c8013c8d76.png)
 
 <hr>
+
 ## Contributors ✨
 Thanks goes to these wonderful people: <br>
 ![](https://contrib.rocks/image?repo=VocabCLI/VocabCLI)
 
 <hr>
+
 ## License 📜
 This project follows the [MIT License](https://github.com/VocabCLI/VocabCLI/blob/main/LICENSE.md)
 Copyright (c) 2021 Atharva Shah, Anay Deshpande
