@@ -1,35 +1,53 @@
 
-
 We need to do error handling everywhere where user is typing incorrect input (example:wrong tag/ date/ days, etc)
 
 ---
 
-Test cases for all the functions I have commented as:
-#no tests for this function as it is not called anywhere in the command directly
+Test cases for all the functions I have commented as: no tests for this function as it is not called anywhere in the command directly
 
+# Priority (Finish Before 20th Dec)
 
-1. Help command alignment
-2. Debug command prompt resizing issue 
-3. We should rename unlearn to not-learning
-
-  
-# Priority
 - [ ]  Add Heading to Panels @Anay
-- [x]  PyTest delete statement before all tests @Anay
-- [x]  UML Links @Anay
-- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands 
-- [ ]  Graphs @AtharvaShah
-- [x]  Change Revise Words Panel as Heading @Anay
+- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
-- [ ]  Graph Download or View Options (Enable Carousel for viewing) @atharva
-- [ ]  Get Linux Installed @anay
+- [ ]  Get Linux Installed @anay and try out asciinema
 - [ ]  Github Pages Improvement @anay
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
 - [ ]  Add Collections Command
 - [ ]  Add Collection flag to other commands
 - [ ]  Add Progress Bar to Refresh Cache (takes a while)
-- [ ]  Club success messages if words > 1 (example: 3 words added successfully) Also need to modify test cases after implementation
+- [ ]  Genereate Requirements.txt and Dev-Requirements.txt @Atharva
   
+# College Related Submission/Work (Do This Before 20th Dec)
+
+- [ ] 100 page notebook, use it for rough work to show proof of work.
+- [ ] Handwriting and diagrams need not be fancy but should be readable. Use it to jot down ideas.
+- [ ] First few pages should be in the following order:-
+      -  Project Title and Members
+      -  Organization summary  
+      -  Project Scope
+- [ ] Diagrams (Rough Sketch)
+      - Context Level Diagram
+      -  Data Flow Diagram (First Level)
+      -  Use Case Diagram
+      -  Activity Diagram
+      -  Sequence Diagram
+As per Ma'am instruction, rough sketch is expected. You can cross out and redraw diagrams as many times as you want. Brainstorming and jotting down ideas and maintaining a log of progress is the main purpose of this notebook. The actual digital diagrams will serve as the final version so don't worry too much about drawing diagrams correctly in the notebook.
+
+# Low Priority (Do This Before 25th Dec)
+
+- [ ]  Generate User manual using Typer
+- [ ] Prepare a dummy database with lots of words (5000 words -> 500 fav, 500 learning, 500 mastered and 2000 words should have 200 tags) and test the performance of the application on a large scale.  (Use <https://www.mockaroo.com/> or <https://generatedata.com/> or <https://www.onlinedatagenerator.com/>)
+- [ ] Data Gathering - Collect 25 total paragraphs (5 x 5 different topics (like sports, politics, etc)) of 200 words each and save it in NLP.py in modules folder. This will be the test data for sentinment analysis, word processing and other NLP related tasks.
+
+---
+
+# To Handle Later
+
+1. Help command alignment
+2. Debug command prompt resizing issue
+3. We should rename unlearn to not-learning
+
 ---
 
 ## Things to Do After Finishing the Project
@@ -51,4 +69,3 @@ Test cases for all the functions I have commented as:
   6. Sequence Diagram)
 - Split the test files into multiple files based on Classes or Modules
 - Final Project Report for College Submission
-
