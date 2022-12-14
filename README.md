@@ -1,6 +1,9 @@
 
 ## About VocabCLI 📚
 
+![image](https://user-images.githubusercontent.com/68660002/207532026-a82ce199-51b8-4d11-8efd-01e37ec5564f.png)
+
+
 VocabularyCLI is a lightweight Command Line Interface that allows users to look up word definitions, examples, synonyms and antonyms directly via the command line. Powered with several utility based commands our CLI offers rapid and robust Knowledge Base capabilities like Flashcards, Tagging, Word Management, Graph Reporting, Bulk import and export of word lists and is a definitive software for linguaphiles.
 
 This application boasts a simple and intuitive interface that is easy to use and is a must have for anyone who wants to expand their vocabulary and improve their language skills. The app also offers advanced Text Classification and Processing via the use of Natural Language Processing and Machine Learning algorithms which will be discussed in detail in the "Scope and Features" section.
@@ -25,6 +28,9 @@ pip3 uninstall vocabcli
 
 <hr>
 
+## [Demo and Examples](https://vocabcli.github.io/) 💡
+
+
 ## Developed Using 🛠
 
 - **Primary Development Language**: Python 3.10
@@ -39,7 +45,7 @@ pip3 uninstall vocabcli
 
 ## Getting Started 🚀
 
-### For Development :arrow_right
+### For Development :arrow_right:
 
 ```powershell
 # Make a Virtual environment
@@ -55,7 +61,7 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
-### Running the Application :arrow_right
+### Running the Application :arrow_right:
 
 ```powershell
 # Move to source folder
@@ -65,7 +71,7 @@ cd app
 python -m VocabularyCLI --help
 ```
 
-### Run Tests :arrow_right
+### Run Tests :arrow_right:
 
 ```powershell
 # Move to source folder
@@ -154,9 +160,19 @@ typer VocabularyCLI.py utils docs --name "VocabularyCLI" --output "../docs/user_
 ## Screenshots 📸
 
 ![snap1](https://user-images.githubusercontent.com/68660002/205949431-a10bfb73-05a3-484c-9821-061ee3eddfa0.png)
+---
+
 ![snap2](https://user-images.githubusercontent.com/68660002/205949434-d3f3c567-a5ed-4c9c-a3a3-17aaefc22c50.png)
+---
+
 ![snap3](https://user-images.githubusercontent.com/68660002/205949437-23b90fd1-6023-4eb3-ba3f-dff735bb00ee.png)
+---
+
 ![snap4](https://user-images.githubusercontent.com/68660002/205949444-25b5ab53-f000-42dd-aac5-99c8013c8d76.png)
+---
+
+![snap5](https://user-images.githubusercontent.com/68660002/207532081-e088f7d5-f7ef-44fc-9152-c5b72283cb55.png)
+---
 
 <hr>
 
