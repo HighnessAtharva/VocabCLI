@@ -50,7 +50,11 @@ def start_revision(c):
                 else:
                     continue
     else:
-        print(Panel("No words to revise in the selected category. Look up some more words first by using 'define' command."))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
+        )
         
 
 def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
@@ -166,7 +170,11 @@ def start_quiz(c):    # sourcery skip: remove-redundant-if
         return
     # break out if -n < 4
     if len(rows) < 4:
-        print(Panel("Not enough words to start a quiz."))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Not enough words to start a quiz. ❌")
+        )
         return
 
 
@@ -192,9 +200,10 @@ def start_quiz(c):    # sourcery skip: remove-redundant-if
         # setting up question
         quiz_word=row[0]
 
-        print(Panel(
+        print(Panel.fit(
             title=f"[reverse]Question [bold green]#{count}/{len(rows)}[/bold green][/reverse]",
             title_align="center",
+            padding=(1, 1),
             renderable=f"Choose the correct definition for: [bold u blue]{quiz_word}[/bold u blue]"
             )
         )

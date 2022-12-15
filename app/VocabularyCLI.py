@@ -378,35 +378,56 @@ def delete(
 
 
     if mastered:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?")
+        )
+
         if sure := typer.confirm(""):
             delete_mastered()
         else:
             print(Panel("OK, not deleting anything."))
 
     elif learning:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?")
+        )
         if sure := typer.confirm(""):
             delete_learning()
         else:
             print(Panel("OK, not deleting anything."))
 
     elif favorite:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?")
+        )
         if sure := typer.confirm(""):
             delete_favorite()
         else:
             print(Panel("OK, not deleting anything."))
 
     elif tag:
-        print(Panel(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag {tag}[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag {tag}[/b]?")
+        )
         if sure := typer.confirm(""):
             delete_words_from_tag(tag)
         else:
             print(Panel("OK, not deleting anything."))
 
     elif words:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
+        )
         if sure := typer.confirm(""):
             for word in words:
                 delete_word(word)
@@ -414,11 +435,16 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif not any([mastered, learning, favorite, tag, words]):
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
+        )
         if sure := typer.confirm(""):
             delete_all()
         else:
             print(Panel("OK, not deleting anything."))
+
 
 # todo @atharva should add a function to clear tags of all the words
 @app.command(rich_help_panel="Vocabulary Builder", help="🧹 [bold red]Clears[/bold red] all lists")
@@ -439,28 +465,44 @@ def clear(
     """
 
     if learning:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
+        )
         if sure := typer.confirm(""):
             clear_learning()
         else:
             print(Panel("OK, not clearing anything."))
 
     elif master:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?")
+        )
         if sure := typer.confirm(""):
             clear_mastered()
         else:
             print(Panel("OK, not clearing anything."))
 
     elif favorite:
-        print(Panel("🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
+        )
         if sure := typer.confirm(""):
             clear_favorite()
         else:
             print(Panel("OK, not clearing anything."))
 
     elif tag:
-        print(Panel(f"🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag {tag}[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag {tag}[/b]?")
+        )
         if sure := typer.confirm(""):
             clear_all_words_from_tag(tag)
         else:
@@ -590,7 +632,11 @@ def quiz(
         quiz_collection(number=number, collection=collection)
         
     else:
-        print(Panel("Cannot combine these arguments"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Cannot combine these arguments")
+        ) 
 
 @app.command(rich_help_panel="report", help="📚 Generate Graphical Charts based on your vocabulary")
 def graph(

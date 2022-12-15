@@ -89,7 +89,11 @@ def add_tag(query: str, tagName:str):
     if c.fetchone():
         c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been tagged as [bold green]{tagName}[/bold green]. ✅")
+        )
         return
 
     # if word already exists in the database with tags, then overwrite the tags
@@ -97,7 +101,11 @@ def add_tag(query: str, tagName:str):
     if c.fetchone():
         c.execute("UPDATE words SET tag=? WHERE word=?", (tagName, query))
         conn.commit()
-        print(Panel(f"The tag of [bold blue]{query}[/bold blue] has been changed to [bold green]{tagName}[/bold green]. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"The tag of [bold blue]{query}[/bold blue] has been changed to [bold green]{tagName}[/bold green]. ✅")
+        )
         return
 
 def remove_tag(query: str):
@@ -116,9 +124,17 @@ def remove_tag(query: str):
             # word exists with tag
             c.execute("UPDATE words SET tag=NULL WHERE word=?", (query,))
             conn.commit()
-            print(Panel(f"Tags deleted for the word [bold blue]{query}[/bold blue]. ✅"))
+            print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Tags deleted for the word [bold blue]{query}[/bold blue]. ✅")
+        )
         else:
-            print(Panel(f"[bold blue]{query}[/bold blue] was not tagged. ❌"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] was not tagged. ❌")
+        )
     else:
         # word exits without tag
         raise WordNeverSearchedException(query)
@@ -157,7 +173,11 @@ def set_mastered(query: str):
     c.execute("UPDATE words SET mastered=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work! ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work! ✅")
+        )
 
 
 def check_mastered(query:str):
@@ -192,13 +212,21 @@ def set_unmastered(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=?", (query, 0))
     if c.fetchone():
-        print(Panel(f"[bold blue]{query}[/bold blue] was never mastered. ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] was never mastered. ❌")
+        )
         return
 
     c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it."))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been set as [bold red]unmastered[/bold red]. Remember to practice it. ✅")
+        )
 
 
 
@@ -219,7 +247,11 @@ def set_learning(query: str):
     # check if word is already mastered
     c.execute("SELECT * FROM words WHERE word=? and mastered=1", (query,))
     if c.fetchone():
-        print(Panel(f"🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word [bold blue]{query}[/bold blue] from [b]mastered to learning[/b]?"))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word [bold blue]{query}[/bold blue] from [b]mastered to learning[/b]?")
+        )
         if sure := typer.confirm(""):
             c.execute("UPDATE words SET mastered=0 WHERE word=?", (query,))
         else:
@@ -236,8 +268,11 @@ def set_learning(query: str):
     c.execute("UPDATE words SET learning=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising! 🧠"))
-
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising! 🧠")
+        )
 
 
 def set_unlearning(query: str):
@@ -257,7 +292,11 @@ def set_unlearning(query: str):
     # check if word is not already unlearned
     c.execute("SELECT * FROM words WHERE word=? and learning=?", (query, 0))
     if c.fetchone():
-        print(Panel(f"[bold blue]{query}[/bold blue] was never learning. ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] was never learning. ❌")
+        )
         return
 
     # check if word is already learning
@@ -267,7 +306,11 @@ def set_unlearning(query: str):
 
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]learning[/bold red].")    )
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been removed from [bold red]learning[/bold red]. ✅")
+        )
 
 
 
@@ -295,7 +338,11 @@ def set_favorite(query: str):
     c.execute("UPDATE words SET favorite=1 WHERE word=?", (query,))
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green]. 💙"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]favorite[/bold green]. 💙")
+        )
 
 
 
@@ -316,7 +363,11 @@ def set_unfavorite(query:str):
     # check if word was never favorited
     c.execute("SELECT * FROM words WHERE word=? and favorite=?", (query, 0))
     if c.fetchone():
-        print(Panel(f"[bold blue]{query}[/bold blue] was never favorite. ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] was never favorite. ❌")
+        )
         return
 
     # set word to favorite
@@ -324,7 +375,11 @@ def set_unfavorite(query:str):
 
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red]. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red]. ✅")
+        )
 
 
 #no tests for this function as it is not called anywhere in the command directly
@@ -342,7 +397,11 @@ def count_all_words() -> int:
     c.execute(sql)
     if rows := c.fetchall():
         return len(rows)
-    print(Panel("There are no words in the database. 🤷"))
+    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red] There are no words in the database. 🤷 [/bold red]")
+        )
     return 0
 
 
@@ -361,7 +420,11 @@ def count_mastered() -> int:
     c.execute(sql)
     if rows := c.fetchall():
         return len(rows)
-    print(Panel("There are no mastered words. 🤷"))
+    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red] There are no mastered words. 🤷 [/bold red]")
+        )
     return 0
 
 
@@ -380,7 +443,11 @@ def count_learning() -> int:
     c.execute(sql)
     if rows := c.fetchall():
         return len(rows)
-    print(Panel("[bold red]No words are learning. 🤷[/bold red]"))
+    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]No words are learning. 🤷[/bold red]")
+        )
     return 0
 
 
@@ -399,7 +466,11 @@ def count_favorite() -> int:
     c.execute(sql)
     if rows := c.fetchall():
         return len(rows)
-    print(Panel("[bold red]There are no favorite words. 🤷[/bold red]"))
+    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]There are no favorite words. 🤷[/bold red]")
+        )
     return 0
 
 
@@ -418,7 +489,11 @@ def count_tag(tag:str) -> int:
     c.execute(sql, (tag,))
     if rows := c.fetchall():
         return len(rows)
-    print(Panel(f"[bold red]Tag {tag} does not exist. 🤷[/bold red]"))
+    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold red]Tag {tag} does not exist. 🤷[/bold red]")
+        )
     return 0
 
 
@@ -444,7 +519,11 @@ def get_random_word_from_learning_set():
     c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel("You have no words in your vocabulary builder learning list. 👀"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="You have no words in your vocabulary builder learning list. 👀")
+        )
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
@@ -464,7 +543,11 @@ def get_random_word_from_mastered_set():
     c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel("You have not mastered any words yet. 👀"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="You have not mastered any words yet. 👀")
+        )
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
@@ -478,7 +561,11 @@ def get_random_word_from_favorite_set():
     c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel("You have no favorite words. 👀"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="You have no favorite words. 👀")
+        )
     else:
         for row in rows:
             print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {row[0]}"))
@@ -496,7 +583,11 @@ def get_random_word_from_tag(tagName:str):
     c.execute("SELECT DISTINCT word FROM words WHERE tag=? ORDER BY RANDOM() LIMIT 1", (tagName,))
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel(f"No words in your list with the tag {tagName}. ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"No words in your list with the tag {tagName}. ❌")
+        )
     else:
         for row in rows:
             print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
@@ -549,7 +640,11 @@ def show_list(
 
     elif days:
         if days<1:
-            print(Panel("Enter a positive number ➕"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Enter a positive number ➕")
+        )
             return
 
         c.execute(f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{days} days')")
@@ -580,23 +675,39 @@ def show_list(
             check_if_int=int(year)
 
         except ValueError as e:
-            print(Panel("Date values have to be integers ❌")) 
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Date values have to be integers ❌")
+        )
 
         # check if the inputs are of the correct length
         if len(str(year))!=4 and len(str(month))!=2 and len(str(day))!=2:
-            print(Panel("Incorrect date format ❌ Expected: [bold green]DD-MM-YYYY[/bold green]"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Incorrect date format ❌ Expected: [bold green]DD-MM-YYYY[/bold green]")
+        )
             return
 
         # check if days, months and years are fall in the correct range
         if int(month) not in range(1,13) or int(day) not in range(1,32):
-            print(Panel("Date must fall within calendar range 📅 Expected: [bold green]DD-MM-YYYY[/bold green]"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Date must fall within calendar range 📅 Expected: [bold green]DD-MM-YYYY[/bold green]")
+        )
             return
 
         # check if the date is not in the future
         date=f"{year}-{month}-{day}"
         checker=datetime.datetime.strptime(date, '%Y-%m-%d')
         if checker > datetime.datetime.now():
-            print(Panel("[red]Date cannot be in the future.[/red] ❌"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[red]Date cannot be in the future.[/red] ❌")
+        )
             return
 
         # fetch records if all checks pass
@@ -613,7 +724,11 @@ def show_list(
 
     elif last:
         if last<1:
-            print(Panel("Enter a positive number ➕"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Enter a positive number ➕")
+        )
             return
 
         c.execute("SELECT DISTINCT (word), datetime FROM words ORDER BY datetime DESC LIMIT ?", (last,))
@@ -621,7 +736,11 @@ def show_list(
 
         rows=c.fetchall()
         if len(rows) <= 0:
-            print(Panel(error_message))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=error_message)
+        )
         else:
             table=Table(show_header=True, header_style="bold bright_cyan")
             table.add_column("Word", style="cyan", width=15)
@@ -635,7 +754,11 @@ def show_list(
 
     elif most:
         if most<1:
-            print(Panel("Enter a positive number ➕"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Enter a positive number ➕")
+        )
             return
 
         c.execute("SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?", (most,))
@@ -644,7 +767,11 @@ def show_list(
 
         rows=c.fetchall()
         if len(rows) <= 0:
-            print(Panel(error_message))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=error_message)
+        )
         else:
             table=Table(show_header=True, header_style="bold bright_cyan")
             table.add_column("Word", style="cyan", width=15)
@@ -668,7 +795,11 @@ def show_list(
 
     rows=c.fetchall()
     if len(rows) <= 0:
-        print(Panel(error_message))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=error_message)
+        )
     else:
         print(Panel(f"{success_message} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
@@ -922,4 +1053,8 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
             print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.", title="[reverse]Yearly Learning Rate[/reverse]", title_align="center"))
 
     else:
-        print(Panel("[bold red] you cannot combine options with learning rate command[/bold red] ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold red] you cannot combine options with learning rate command[/bold red] ❌")
+        )

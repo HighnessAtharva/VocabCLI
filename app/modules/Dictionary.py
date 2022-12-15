@@ -44,13 +44,25 @@ def connect_to_api(query:str="hello"):
         response.raise_for_status()
 
     except exceptions.ConnectionError as error:
-        print(Panel("[bold red]Error: You are not connected to the internet.[/bold red] ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
+        ) 
 
     except exceptions.HTTPError as error:
-        print(Panel(f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")
+        )
 
     except exceptions.Timeout as error:
-        print(Panel("[bold red]Error: Timeout[/bold red] ⏳"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]Error: Timeout[/bold red] ⏳")
+        )
 
     else:
         if response.status_code == 200:
@@ -116,7 +128,11 @@ def insert_word_to_db(query: str):
         response.raise_for_status()
 
     except exceptions.HTTPError as error:
-        print(Panel(f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")
+        )
         return
 
     else:

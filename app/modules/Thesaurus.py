@@ -43,7 +43,11 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
         print(Columns(synonyms))
 
     else:
-        print(Panel(f"No synonyms found for {query}"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"No synonyms found for {query}")
+        )
 
 
 
@@ -79,4 +83,9 @@ def find_antonym(query:str):  # sourcery skip: for-append-to-extend
         print(Columns(antonyms))
 
     else:
-        print(Panel(f"No antonyms found for {query}"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"No antonyms found for {query}")
+        )
+

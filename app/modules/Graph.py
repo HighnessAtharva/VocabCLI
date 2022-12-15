@@ -33,11 +33,19 @@ def viz_top_words_bar(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_words:
-        print(Panel("No tags found"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="No tags found ❌")
+        )
         return
 
     if len(top_words) < N:
-        print(Panel("Not enough words found. Showing graph for available words only."))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Not enough words found. Showing graph for available words only.")
+        )
 
     # create a dataframe
     df = pd.DataFrame(list(zip(top_words, count)), index=count, columns=['Word Lookup Count', 'Count'])
@@ -78,11 +86,19 @@ def viz_top_tags_bar(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_tags:
-        print(Panel("No tags found"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="No tags found ❌")
+        )
         return
 
     if len(top_tags) < N:
-        print(Panel("Not enough tags found. Showing graph for available tags only."))
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Not enough words found. Showing graph for available words only.")
+        )
 
     # create a dataframe
     df = pd.DataFrame(list(zip(top_tags, count)), index=count, columns=['Tag', 'Count'])

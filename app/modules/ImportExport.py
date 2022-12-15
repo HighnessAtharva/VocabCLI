@@ -20,7 +20,11 @@ def export_to_csv():
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)
-        print(Panel(f"[bold green]EXPORTED[/bold green] [bold blue]{len(words)}[/bold blue] words to [bold blue]VocabularyBuilder.csv[/bold blue] file 📁"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(words)}[/bold blue] words to [bold blue]VocabularyBuilder.csv[/bold blue] file 📁")
+        )
     except NoDataFoundException as e:
         print(e)
 
@@ -57,20 +61,25 @@ def import_from_csv():
                 except Exception as e:
                     word_already_exists+=1
     except FileNotFoundError:
-        print(Panel("[bold red]FILE NOT FOUND[/bold red] ❌. Make sure you have a file named [bold red]VocabularyBuilder.csv[/bold red] in the same directory as the executable file. 📂"))
-
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]FILE NOT FOUND[/bold red] ❌. Make sure you have a file named [bold red]VocabularyBuilder.csv[/bold red] in the same directory as the executable file. 📂")
+        )
     finally:
         if word_already_exists>0:
-            if word_already_exists == 1:
-                print(Panel(f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORD WITH THE SAME TIMESTAMP ⏩"))
-            else:
-                print(Panel(f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORDS WITH THE SAME TIMESTAMP ⏩"))
+            print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORD(S) WITH THE SAME TIMESTAMP ⏩")
+        )
 
-
-        if added_words == 1:
-            print(Panel(f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORD ✅"))
-        else:
-            print(Panel(f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORDS ✅"))
+        if added_words>0:
+            print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORD(S) ✅")
+        )
 
 
 
@@ -144,7 +153,11 @@ def export_to_pdf():    # sourcery skip: extract-method
             pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
         pdf.output(f"../exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
-        print(Panel(f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF ✅")
+        )
 
     except NoDataFoundException as e:
         print(e)

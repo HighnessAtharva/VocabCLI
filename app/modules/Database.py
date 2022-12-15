@@ -95,10 +95,18 @@ def refresh_cache():
             response.raise_for_status()
 
         except exceptions.ConnectionError as error:
-            print(Panel("[bold red]Error: You are not connected to the internet.[/bold red] ❌"))
+            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
+        )
 
         else:
             if response.status_code == 200:
                 c.execute("UPDATE cache_words SET api_response=? WHERE word=?", (json.dumps(response.json()[0]), word))
                 conn.commit()
-    print(Panel("Cache refreshed successfully."))
+    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Cache refreshed successfully.")
+        ) 

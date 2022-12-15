@@ -6,16 +6,27 @@ class WordNeverSearchedException(Exception):
     word=None
     def __init__(self, word):
         self.word=word
-        print(Panel(f"The word [bold red]{self.word}[/bold red] was never tracked before. Add some words in your list using 'define' command first. 🔎"))
-        
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"The word [bold red]{self.word}[/bold red] was never tracked before. Add some words in your list using 'define' command first. 🔎")
+        ) 
         
 class AudioUnavailableException(Exception):
     """raised when the audio is not available for the word."""
     def __init__(self):
-        print(Panel("[bold red]Audio Unavailable[/bold red] ❌"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]Audio Unavailable[/bold red] ❌")
+        ) 
         
 
 class NoDataFoundException(Exception):
     """raised when the user attempts to export data but there is no data to export."""
     def __init__(self):
-        print(Panel("[bold red]No words to export ❌. Add some words in your list using 'define' command ➕. [/bold red]"))
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]No words to export ❌. Add some words in your list using 'define' command ➕. [/bold red]")
+        ) 
