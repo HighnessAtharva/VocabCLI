@@ -140,8 +140,6 @@ def insert_word_to_db(query: str):
             conn=createConnection()
             insert_to_db_util(conn, query)
 
-
-# TODO Rename this here and in `insert_word_to_db`
 #no tests for this function as it is not called anywhere in the command directly
 def insert_to_db_util(conn, query):
     c=conn.cursor()

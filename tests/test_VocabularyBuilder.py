@@ -714,7 +714,7 @@ class TestThesaurus:
         assert "Synonyms of drink are" in result.stdout
 
 
-
+# todo add tests for collection listing
 class TestList:
     def test_list_favorite(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -910,7 +910,7 @@ class TestRate:
         assert "words this year compared to last year" in result.stdout
 
 
-
+# todo add tests for getting random word from a collection
 class TestRandom:
     def test_random_word_api(self):
         result= runner.invoke(app, ["random"])
@@ -983,7 +983,7 @@ class TestHistory:
         assert "You have searched for math 2 time(s) before" in result.stdout
         assert "You have searched for rock 1 time(s) before" in result.stdout
         
-
+# todo add tests for collection revising
 class TestRevise:
     class TestReviseDefault:
         @mock.patch("typer.confirm")
@@ -1156,7 +1156,7 @@ class TestRevise:
         # no need to test for zero words in collection as no collection can be empty
 
 
-
+# todo add tests for collection Quizzing
 class TestQuiz:
     class TestQuizDefault:
     #     @mock.patch("typer.confirm")

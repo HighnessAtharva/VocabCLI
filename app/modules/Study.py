@@ -23,7 +23,7 @@ from questionary import Style
 # REVISE FUNCTIONS #         
 #####################
 
-def start_revision(c):
+def start_revision(c, is_collection: bool = False):
     if rows := c.fetchall():
         for count,row in enumerate(rows, start=1):
             print(Panel(
@@ -32,23 +32,30 @@ def start_revision(c):
             renderable=f"{len(rows)-count} word(s) to go. Keep revising! 🧠"
             ))
             definition(row[0])
-            
+
+            if is_collection and not check_learning(row[0]):
+                print( Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]learning[/bold green] ?"))
+                if sure := typer.confirm(""):
+                    set_learning(row[0])
+                else:
+                    print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as learning, you can always revise it via our collection ✍🏼"))
+                    print("\n\n")
+                
             # if word is not mastered then prompt user to set it as mastered
-            if not check_mastered(row[0]):
+            elif not check_mastered(row[0]):
                 print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
                 if sure := typer.confirm(""):
                     set_mastered(row[0])
                 else:
                     print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
                     print("\n\n")
-            
+
             else:
                 print("Press Y to Stop Revision. Enter to continue 📖")
-                if sure := typer.confirm(""):
-                    print(Panel("OK, stopping revision. 🛑"))
-                    break
-                else:
+                if not (sure := typer.confirm("")):
                     continue
+                print(Panel("OK, stopping revision. 🛑"))
+                break
     else:
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -160,11 +167,26 @@ def revise_favorite(
     elif number and favorite:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
+        
+def revise_collection(
+    number: Optional[int] = None,
+    collectionName: Optional[str] = None
+):
+    conn=createConnection()
+    c=conn.cursor()
+        
+    if collectionName and not number:
+        c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM()", (collectionName,))
+        start_revision(c, is_collection=True)
+        
+    elif number and collectionName:
+        c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM() LIMIT ?", (collectionName, number))
+        start_revision(c, is_collection=True)
 
 #####################
 # QUIZ FUNCTIONS #      
 #####################
-def start_quiz(c):    # sourcery skip: remove-redundant-if
+def start_quiz(c, collection=None):    # sourcery skip: remove-redundant-if
         
     if not (rows := c.fetchall()):
         return
@@ -214,8 +236,14 @@ def start_quiz(c):    # sourcery skip: remove-redundant-if
         # question list with the correct answer
         choices=[correct_definition]
 
-        # adding 3 fake choices from words in the database. 
-        c.execute("SELECT DISTINCT word FROM words where word!=? ORDER BY RANDOM() LIMIT 3", (quiz_word,))
+
+        # if taking quiz on a collection then only fake choices from the collection otherwise the answer will be obvious
+        if collection:
+            c.execute("SELECT DISTINCT word FROM collections where collection=? and word!=? ORDER BY RANDOM() LIMIT 3", (collection, quiz_word,))
+            
+        # adding 3 fake choices from words in the database.
+        else:
+            c.execute("SELECT DISTINCT word FROM words where word!=? ORDER BY RANDOM() LIMIT 3", (quiz_word,))
         choices.extend(one_line_definition(row[0]) for row in c.fetchall())
         random.shuffle(choices)
 
@@ -356,3 +384,22 @@ def quiz_favorite(
         start_quiz(c)
 
     
+# todo - quiz will break and throw an error if words in the collection are not available in the api definition. Also, quiz_collection will be generally slow because it has to fetch the definition for each word in the option, find a way to make it fast.     
+def quiz_collection(
+    number: Optional[int] = None,
+    collectionName: Optional[str] = None
+):
+    conn=createConnection()
+    c=conn.cursor()
+    
+        
+    if collectionName and not number:
+        c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM()", (collectionName,))
+        start_quiz(c, collection=collectionName)
+        
+    elif number and collectionName:
+        c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM() LIMIT ?", (collectionName, number))
+        if c.fetchone() is None:
+            print(f"Collection '{collectionName}' is empty")
+            return
+        start_quiz(c, collection=collectionName)

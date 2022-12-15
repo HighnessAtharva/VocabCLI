@@ -194,6 +194,18 @@ def check_mastered(query:str):
     return bool(row := c.fetchall())
          
     
+def check_learning(query:str):
+    """
+    Checks if the word is learning and returns a boolean value.
+
+    Args:
+        query (str): word which is to be checked for learning status
+    """
+    conn=createConnection()
+    c=conn.cursor()
+
+    c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
+    return bool(row := c.fetchall())
     
 def set_unmastered(query: str):
     """
@@ -990,8 +1002,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
     conn=createConnection()
     c=conn.cursor()
-
-    # todo fix formula
+    
     if today:
         # get today's learning words
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)=date('now')")

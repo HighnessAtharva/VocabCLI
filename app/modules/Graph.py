@@ -212,7 +212,7 @@ def word_distribution_month_util():
     if len(str(month_next))==1:
         month_next=f"0{str(month_next)}"
     next_month = f"{str(year+1 if increment_year else year)}-{str(month_next)}"
-    #todo print(current_month, next_month)
+
     dates=np.arange(current_month, next_month, dtype='datetime64[D]').tolist()
     
     dates=[date.strftime("%d %b, %Y") for date in dates]
@@ -305,25 +305,3 @@ def viz_learning_vs_mastered(popup=False):
 # todo Graph of words based on their conceptual category (if possible with the libraries) ✅
 # todo Graph related to complexity or difficulty? ✅
 # todo Can show graphs related to flashcards after implementing them? ✅
-
-
-
-################################
-# GRAPH CAROUSEL
-################################
-
-def export_all_graphs():
-    """ Exports all graphs to a folder. """
-    viz_top_tags_bar(popup=False)
-    viz_top_words_bar(popup=False)
-    viz_word_distribution_week(popup=False)
-    viz_word_distribution_month(popup=False)
-    viz_word_distribution_year(popup=False)
-    viz_learning_vs_mastered(popup=False)    
-
-    
-    
-def show_all_graphs():
-    export_all_graphs()
-    # todo add all graphs to a carousel -> see Carousel.py
-    

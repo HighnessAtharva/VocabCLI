@@ -29,6 +29,9 @@ app = typer.Typer(
 # initialize the database with the tables if not already existing
 initializeDB()
 
+#uncomment this to easily delete all words from collections table during testing
+#delete_collection_from_DB()
+
 # add all the collection words to the database if not already existing
 insert_collection_to_DB()
 
@@ -83,7 +86,9 @@ def list(
     date: Optional[bool] = typer.Option(False, "--date", "-D", help="Get a list of words from a particular date."),
     last: Optional[int] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
     most: Optional[int] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
-    tagnames: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
+    tags: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
+    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Get a list of words from a collection."),
+    collections: Optional[bool] = typer.Option(False, "--collectionName", "-C", help="Get a list of all the collections."),
 ):
     """
     Lists all the words looked up by the user.
@@ -116,9 +121,14 @@ def list(
         show_list(last=last)
     if most:
         show_list(most=most)
-    if tagnames:
+    if tags:
         show_list(tagnames=True)
-    elif not any([favorite, learning, mastered, tag, days, date, last, most]):
+    if collection:
+        show_words_from_collection(collectionName=collection)
+    if collections:
+        show_all_collections()
+        
+    elif not any([favorite, learning, mastered, tag, days, date, last, most, collection, collections, tags]):
         show_list()
 
 
@@ -446,7 +456,6 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
 
-# todo @atharva should add a function to clear tags of all the words
 @app.command(rich_help_panel="Vocabulary Builder", help="🧹 [bold red]Clears[/bold red] all lists")
 def clear(
     learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
@@ -516,6 +525,7 @@ def random(
     mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
     favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a random favorite word"),
     tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a random word from a particular tag"),
+    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Get a random word from a particular collection"),
 ):
     """
     Gets a random word.
@@ -533,11 +543,12 @@ def random(
         get_random_word_from_favorite_set()
     elif tag:
         get_random_word_from_tag(tag)
-    elif not any([learning, mastered, tag]):
+    elif collection:
+        get_random_word_from_collection(collection)
+    elif not any([learning, mastered, tag, collection]):
         get_random_word_definition_from_api()
 
 
-# todo - need to write the function
 @app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
 def revise(
     number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to revise in random order."),
@@ -581,8 +592,19 @@ def revise(
     elif favorite and number:
         revise_favorite(number=number, favorite=True)
     
+    elif collection and not number:
+        revise_collection(collectionName=collection)
+    elif collection and number:
+        revise_collection(number=number, collectionName=collection)
 
-# todo - need to write the function
+    else:
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="Cannot combine these arguments")
+        ) 
+        
+# todo - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word
 @app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
 def quiz(
     number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order.", min=4),
@@ -625,11 +647,10 @@ def quiz(
     elif favorite and number:
         quiz_favorite(number=number, favorite=True)
     
-    # todo - need to write the function
     elif collection and not number:
-        quiz_collection(collection=collection)
+        quiz_collection(collectionName=collection)
     elif collection and number: 
-        quiz_collection(number=number, collection=collection)
+        quiz_collection(number=number, collectionName=collection)
         
     else:
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
@@ -694,13 +715,14 @@ def flashcard():
 
 # todo - command for homophones
 
-if __name__ == "__main__":
-    app()
-
-    
-
 # todo: SPACY: paraphrase
 
 # todo: SPACY: sentiment analysis
 
 # todo: SPACY: check paraphrase
+if __name__ == "__main__":
+    app()
+
+    
+
+
