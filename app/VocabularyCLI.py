@@ -88,7 +88,7 @@ def list(
     most: Optional[int] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
     tags: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
     collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Get a list of words from a collection."),
-    collections: Optional[bool] = typer.Option(False, "--collectionName", "-C", help="Get a list of all the collections."),
+    collections: Optional[bool] = typer.Option(False, "--collections", "-C", help="Get a list of all the collections."),
 ):
     """
     Lists all the words looked up by the user.
@@ -515,7 +515,7 @@ def clear(
         if sure := typer.confirm(""):
             clear_all_words_from_tag(tag)
         else:
-            print(Panel(f"OK, not clearning any words from the tag {tag}."))
+            print(Panel(f"OK, not learning any words from the tag {tag}."))
 
 
 # todo - add more flags/options

@@ -1,3 +1,4 @@
+import contextlib
 import os
 import json
 import requests
@@ -24,58 +25,57 @@ from questionary import Style
 #####################
 
 def start_revision(c, is_collection: bool = False):
-    if rows := c.fetchall():
-        for count,row in enumerate(rows, start=1):
-            print(Panel(
-            title=f"[reverse]Revising word: [bold green]{count} / {len(rows)}[/bold green][/reverse]",
-            title_align="center",
-            renderable=f"{len(rows)-count} word(s) to go. Keep revising! 🧠"
-            ))
-            definition(row[0])
-
-            if is_collection and not check_learning(row[0]):
-                print( Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]learning[/bold green] ?"))
-                if sure := typer.confirm(""):
-                    set_learning(row[0])
-                else:
-                    print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as learning, you can always revise it via our collection ✍🏼"))
-                    print("\n\n")
-                
-            # if word is not mastered then prompt user to set it as mastered
-            elif not check_mastered(row[0]):
-                print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
-                if sure := typer.confirm(""):
-                    set_mastered(row[0])
-                else:
-                    print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
-                    print("\n\n")
-
+    rows = c.fetchall()
+    for count,row in enumerate(rows, start=1):
+        print(Panel(
+        title=f"[reverse]Revising word: [bold green]{count} / {len(rows)}[/bold green][/reverse]",
+        title_align="center",
+        renderable=f"{len(rows)-count} word(s) to go. Keep revising! 🧠"
+        ))
+        definition(row[0])
+        if is_collection and not check_learning(row[0]):
+            print( Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]learning[/bold green] ?"))
+            if sure := typer.confirm(""):
+                set_learning(row[0])
             else:
-                print("Press Y to Stop Revision. Enter to continue 📖")
-                if not (sure := typer.confirm("")):
-                    continue
-                print(Panel("OK, stopping revision. 🛑"))
-                break
-    else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
-        )
+                print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as learning, you can always revise it via our collection ✍🏼"))
+                print("\n\n")
+            
+        # if word is not mastered then prompt user to set it as mastered
+        elif not check_mastered(row[0]):
+            print(Panel(f"Set [bold blue]{row[0]}[/bold blue] as [bold green]mastered[/bold green] ?"))
+            if sure := typer.confirm(""):
+                set_mastered(row[0])
+            else:
+                print(Panel(f"OK, not setting [bold blue]{row[0]}[/bold blue] as mastered, keep learning. ✍🏼"))
+                print("\n\n")
+        else:
+            print("Press Y to Stop Revision. Enter to continue 📖")
+            if not (sure := typer.confirm("")):
+                continue
+            print(Panel("OK, stopping revision. 🛑"))
+            break
+    # else:
+    #     print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+    #             title_align="center",
+    #             padding=(1, 1),
+    #             renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
+    #     )
         
 
 def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
     conn=createConnection()
     c=conn.cursor()
-    
+
     # checks if there are any words in the database and breaks out if there are none
-    if count_all_words()==0:
-        return
-    
+    with contextlib.suppress(NoWordsInDB):
+        if count_all_words()==0:
+            raise NoWordsInDB()
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
+        c.execute(sql="SELECT DISTINCT word FROM words ORDER BY RANDOM()")
         start_revision(c)
-    
+
     elif number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
@@ -87,16 +87,16 @@ def revise_tag(
 
     conn=createConnection()
     c=conn.cursor()
-    
+
     # will stop the execution if tag is not found
     if tag:
-        if count_tag(tag) == 0:
-            return     
-            
+        with contextlib.suppress(NoSuchTagException):
+            if count_tag(tag) == 0:
+                raise NoSuchTagException(tag=tag)
     if tag and not number:    
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM()", (tag,))
         start_revision(c)
-    
+
     elif number and tag:           
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM() LIMIT ?", (tag, number))
         start_revision(c)
@@ -112,8 +112,9 @@ def revise_learning(
     
     # will stop the execution if no words learning
     if learning:
-        if count_learning()==0:
-            return 
+        with contextlib.suppress(NoWordsInLearningList):
+            if count_learning() ==0:
+                raise NoWordsInLearningList()
         
     if learning and not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
@@ -132,16 +133,17 @@ def revise_mastered(
     
     conn=createConnection()
     c=conn.cursor()
-    
+
     # will stop the execution if no words learning
     if mastered:
-        if count_mastered() ==0:
-            return
-        
+        with contextlib.suppress(NoWordsInMasteredList):
+            if count_mastered() ==0:
+                raise NoWordsInMasteredList()
+            
     if mastered and not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
         start_revision(c)
-        
+
     elif number and mastered:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
@@ -154,16 +156,17 @@ def revise_favorite(
     
     conn=createConnection()
     c=conn.cursor()
-    
+
     # will stop the execution if no words learning
     if favorite:
-        if count_favorite() ==0:
-            return 
-        
+        with contextlib.suppress(NoWordsInFavoriteList):
+            if count_favorite() ==0:
+                raise NoWordsInFavoriteList()
+            
     if favorite and not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
         start_revision(c)
-        
+
     elif number and favorite:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
@@ -284,8 +287,9 @@ def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-i
     c=conn.cursor()
     
     # checks if there are any words in the database and breaks out if there are none
-    if count_all_words()==0:
-        return
+    with contextlib.suppress(NoWordsInDB):
+        if count_all_words()==0:
+            raise NoWordsInDB()
     
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
@@ -305,8 +309,9 @@ def quiz_tag(
     
     # will stop the execution if tag is not found
     if tag:
-        if count_tag(tag)==0:
-            return     
+        with contextlib.suppress(NoSuchTagException):
+            if count_tag(tag) == 0:
+                raise NoSuchTagException(tag=tag)
             
     if tag and not number:    
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM()", (tag,))
@@ -324,16 +329,17 @@ def quiz_learning(
 
     conn=createConnection()
     c=conn.cursor()
-    
+
     # will stop the execution if no words learning
     if learning:
-        if count_learning() ==0:
-            return
-        
+        with contextlib.suppress(NoWordsInLearningList):
+            if count_learning() ==0:
+                raise NoWordsInLearningList()
+            
     if learning and not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
         start_quiz(c)
-        
+
     elif number and learning:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_quiz(c)
@@ -350,8 +356,9 @@ def quiz_mastered(
     
     # will stop the execution if no words learning
     if mastered:
-        if count_mastered() == 0:
-            return
+        with contextlib.suppress(NoWordsInMasteredList):
+            if count_mastered() ==0:
+                raise NoWordsInMasteredList()
         
     if mastered and not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
@@ -372,8 +379,9 @@ def quiz_favorite(
     
     # will stop the execution if no words learning
     if favorite:
-        if count_favorite() ==0:
-            return
+        with contextlib.suppress(NoWordsInFavoriteList):
+            if count_favorite() ==0:
+                raise NoWordsInFavoriteList()
         
     if favorite and not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
@@ -392,7 +400,12 @@ def quiz_collection(
     conn=createConnection()
     c=conn.cursor()
     
-        
+    if collectionName:
+        with contextlib.suppress(NoSuchCollectionException):
+            c.execute("SELECT word FROM collections where collection=?", (collectionName,))
+            if not c.fetchone():
+                raise NoSuchCollectionException(collection=collectionName)
+            
     if collectionName and not number:
         c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM()", (collectionName,))
         start_quiz(c, collection=collectionName)

@@ -1,9 +1,11 @@
+import contextlib
 from Database import *
 import pandas as pd
 import csv
 import os
-from rich.table import Table 
+from rich.table import Table
 from rich.columns import Columns
+from Exceptions import *
 
 
 def delete_collection_from_DB():
@@ -101,15 +103,12 @@ def get_random_word_from_collection(collectionName: str):
     c=conn.cursor()
     c.execute("SELECT word FROM collections WHERE collection=? ORDER BY RANDOM() LIMIT 1", (collectionName,))
     row=c.fetchone()
-    if row is None:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-            title_align="center",
-            padding=(1, 1),
-            renderable="That collection does not exist")
-        )
-    else:
-        print(Panel(title="[reverse blue]Random Word[/reverse blue]",
-                    title_align="center",
-                    padding=(1, 1),
-                    renderable=f"A random word from the [u green]{collectionName}[/u green] collection: [bold blue]{row[0]}[/bold blue]", expand=True))
+    with contextlib.suppress(NoSuchCollectionException):
+        if row is None:
+            raise NoSuchCollectionException(collection=collectionName)
+        else:
+            print(Panel(title="[reverse blue]Random Word[/reverse blue]",
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable=f"A random word from the [u green]{collectionName}[/u green] collection: [bold blue]{row[0]}[/bold blue]", expand=True))
 

@@ -630,6 +630,15 @@ class TestClear:
         assert "All words have been removed from the tag testtag" in result.stdout
 
     @mock.patch("typer.confirm")
+    def test_clear_learning_with_no_learning(self, mock_typer):
+        mock_typer.return_value = True 
+        runner.invoke(app, ["clear", "-l"])
+        mock_typer.return_value = True 
+        result = runner.invoke(app, ["clear", "-l"])
+        assert result.exit_code == 0
+        assert "No words are marked as learning" in result.stdout
+    
+    @mock.patch("typer.confirm")
     def test_clear_favorites_with_no_favorites(self, mock_typer):
         mock_typer.return_value = True 
         runner.invoke(app, ["clear", "-f"])

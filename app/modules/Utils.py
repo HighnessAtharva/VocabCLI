@@ -40,7 +40,7 @@ def check_word_exists(query: str):
         return True
 
 
-def fetch_word_history(word: str):  # sourcery skip: extract-method
+def fetch_word_history(word: str):    # sourcery skip: extract-method
     """
     Fetches all instances of timestamp for a word from the database
 
@@ -51,7 +51,7 @@ def fetch_word_history(word: str):  # sourcery skip: extract-method
     conn=createConnection()
     c=conn.cursor()
 
-    try:
+    with contextlib.suppress(WordNeverSearchedException):
         c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
         rows=c.fetchall()
         table=Table(show_header=True, header_style="bold green")
@@ -60,14 +60,12 @@ def fetch_word_history(word: str):  # sourcery skip: extract-method
             raise WordNeverSearchedException(word)
         count=len(rows)
         print(Panel(f"You have searched for [bold]{word}[/bold] {count} time(s) before. 🔎"))
-        
+
         for row in rows:
             history=datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('%d %b\' | %y %H:%M')
             table.add_row(history)
             table.add_section()
         print(table)
-    except WordNeverSearchedException as e:
-        pass
 
 
 def add_tag(query: str, tagName:str):
@@ -407,14 +405,7 @@ def count_all_words() -> int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words"
     c.execute(sql)
-    if rows := c.fetchall():
-        return len(rows)
-    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red] There are no words in the database. 🤷 [/bold red]")
-        )
-    return 0
+    return len(rows) if (rows := c.fetchall()) else 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
@@ -430,14 +421,7 @@ def count_mastered() -> int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE mastered=1"
     c.execute(sql)
-    if rows := c.fetchall():
-        return len(rows)
-    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red] There are no mastered words. 🤷 [/bold red]")
-        )
-    return 0
+    return len(rows) if (rows := c.fetchall()) else 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
@@ -453,14 +437,7 @@ def count_learning() -> int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE learning=1"
     c.execute(sql)
-    if rows := c.fetchall():
-        return len(rows)
-    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red]No words are learning. 🤷[/bold red]")
-        )
-    return 0
+    return len(rows) if (rows := c.fetchall()) else 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
@@ -476,14 +453,7 @@ def count_favorite() -> int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE favorite=1"
     c.execute(sql)
-    if rows := c.fetchall():
-        return len(rows)
-    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red]There are no favorite words. 🤷[/bold red]")
-        )
-    return 0
+    return len(rows) if (rows := c.fetchall()) else 0
 
 
 #no tests for this function as it is not called anywhere in the command directly
@@ -499,20 +469,11 @@ def count_tag(tag:str) -> int:
     c=conn.cursor()
     sql="SELECT DISTINCT word FROM words WHERE tag=?"
     c.execute(sql, (tag,))
-    if rows := c.fetchall():
-        return len(rows)
-    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"[bold red]Tag {tag} does not exist. 🤷[/bold red]")
-        )
-    return 0
+    return len(rows) if (rows := c.fetchall()) else 0
 
 
 def get_random_word_definition_from_api():
-    """
-    Gets a random word from the text file and gets its definition from the API.
-    """
+    """Gets a random word from the text file and gets its definition from the API."""
     lines = open('modules/most_common_words.txt').read().splitlines()
     random_word =random.choice(lines).strip()
     print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
@@ -521,49 +482,33 @@ def get_random_word_definition_from_api():
 
 
 def get_random_word_from_learning_set():
-    """
-    Gets a random word from the learning list.
-
-    """
+    """Gets a random word from the learning list."""
 
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
-    if len(rows) <= 0:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="You have no words in your vocabulary builder learning list. 👀")
-        )
-    else:
-        for row in rows:
-            print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
-            definition(row[0])
+    
+    with contextlib.suppress(NoWordsInLearningList):
+        if len(rows) <= 0:
+            raise NoWordsInLearningList()
+        print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
+        definition(row[0])
 
 
 def get_random_word_from_mastered_set():
-    """
-    Gets a random word with definition from the mastered words list.
-
-    Args:
-        tag (Optional[str], optional): Tag from which the mastered word should be. Defaults to None.
-    """
+    """Gets a random word with definition from the mastered words list."""
 
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
-    if len(rows) <= 0:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="You have not mastered any words yet. 👀")
-        )
-    else:
-        for row in rows:
-            print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
-            definition(row[0])
+    
+    with contextlib.suppress(NoWordsInMasteredList):
+        if len(rows) <= 0:
+            raise NoWordsInMasteredList()
+        print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
+        definition(row[0])
 
 def get_random_word_from_favorite_set():
     """ Gets a random word from the favorite list."""
@@ -572,16 +517,12 @@ def get_random_word_from_favorite_set():
     c=conn.cursor()
     c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
-    if len(rows) <= 0:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="You have no favorite words. 👀")
-        )
-    else:
-        for row in rows:
-            print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {row[0]}"))
-
+    with contextlib.suppress(NoWordsInFavoriteList):
+        if len(rows) <= 0:
+            raise NoWordsInFavoriteList()   
+        print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {row[0]}"))
+        definition(row[0])
+    
 def get_random_word_from_tag(tagName:str):
     """
     Gets a random word from the vocabulary builder list with a particular tag.
@@ -594,16 +535,11 @@ def get_random_word_from_tag(tagName:str):
     c=conn.cursor()
     c.execute("SELECT DISTINCT word FROM words WHERE tag=? ORDER BY RANDOM() LIMIT 1", (tagName,))
     rows=c.fetchall()
-    if len(rows) <= 0:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"No words in your list with the tag {tagName}. ❌")
-        )
-    else:
-        for row in rows:
-            print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
-            definition(row[0])
+    with contextlib.suppress(NoSuchTagException):
+        if len(rows) <= 0:
+            raise NoSuchTagException(tag=tagName)
+        print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
+        definition(row[0])
 
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(
@@ -824,13 +760,14 @@ def delete_all():
     conn=createConnection()
     c=conn.cursor()
     rowcount=count_all_words()
-    if rowcount==0:
-        print(Panel("[bold red]Nothing to delete.[/bold red] Look up some words first. 🔎"))
-        return
-
-    c.execute("DELETE FROM words")
-    conn.commit()
-    print(Panel(f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
+    
+    with contextlib.suppress(NoWordsInDB):
+        if rowcount==0:
+            raise NoWordsInDB()
+        
+        c.execute("DELETE FROM words")
+        conn.commit()
+        print(Panel(f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
 
 
 def delete_mastered():
@@ -840,13 +777,13 @@ def delete_mastered():
     c=conn.cursor()
 
     rowcount=count_mastered()
-    if rowcount==0:
-        print(Panel("[bold red]No words in your mastered list.[/bold red] Add some first. ➕"))
-        return
-
-    c.execute("DELETE FROM words WHERE mastered=1")
-    conn.commit()
-    print(Panel(f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
+    with contextlib.suppress(NoWordsInMasteredList):
+        if rowcount==0:
+            raise NoWordsInMasteredList()
+        
+        c.execute("DELETE FROM words WHERE mastered=1")
+        conn.commit()
+        print(Panel(f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
 
 
 def delete_learning():
@@ -856,13 +793,13 @@ def delete_learning():
     c=conn.cursor()
 
     rowcount=count_learning()
-    if rowcount==0:
-        print(Panel("[bold red]No words in your learning list.[/bold red] Add some first. ➕"))
-        return
-
-    c.execute("DELETE FROM words WHERE learning=1")
-    conn.commit()
-    print(Panel(f"All [bold blue]learning[/bold blue] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+    with contextlib.suppress(NoWordsInLearningList):
+        if rowcount==0:
+            raise NoWordsInLearningList()
+        
+        c.execute("DELETE FROM words WHERE learning=1")
+        conn.commit()
+        print(Panel(f"All [bold blue]learning[/bold blue] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 def delete_favorite():
@@ -872,13 +809,13 @@ def delete_favorite():
     c=conn.cursor()
 
     rowcount=count_favorite()
-    if rowcount==0:
-        print(Panel("[bold red]No words in your favorite list.[/bold red] Add some first. ➕"))
-        return
-
-    c.execute("DELETE FROM words WHERE favorite=1")
-    conn.commit()
-    print(Panel(f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+    with contextlib.suppress(NoWordsInFavoriteList):
+        if rowcount==0:
+            raise NoWordsInFavoriteList()
+        
+        c.execute("DELETE FROM words WHERE favorite=1")
+        conn.commit()
+        print(Panel(f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
 
 
 def delete_words_from_tag(tag: str):
@@ -893,10 +830,10 @@ def delete_words_from_tag(tag: str):
     c=conn.cursor()
 
     rowcount=count_tag(tag)
-    if rowcount==0:
-        print(Panel(f"[bold red]No words in tag {tag}.[/bold red] Add some first. ➕"))
-        return
-
+    with contextlib.suppress(NoSuchTagException):
+        if rowcount==0:
+            raise NoSuchTagException(tag=tag)
+        
     c.execute("DELETE FROM words WHERE tag=?", (tag,))
     conn.commit()
     print(Panel(f"All words [{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
@@ -923,51 +860,45 @@ def delete_word(query:List[str]):
 
 
 def clear_learning():
-    """
-    Clears all the words marked as learning.
-    """
+    """Clears all the words marked as learning."""
 
     conn=createConnection()
     c=conn.cursor()
-
     c.execute("UPDATE words SET learning=0 WHERE learning=1")
-    if c.rowcount > 0:
+    
+    with contextlib.suppress(NoWordsInLearningList):
+        if c.rowcount <= 0:
+            raise NoWordsInLearningList()
         conn.commit()
         print(Panel("[bold green]All words[/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
-    else:
-        print(Panel("[bold red]No words[/bold red] are marked as [bold red]learning[/bold red]. ❌"))
-
+    
 
 def clear_mastered():
-    """
-    Clears all the words marked as mastered.
-    """
+    """Clears all the words marked as mastered."""
 
     conn=createConnection()
     c=conn.cursor()
-
     c.execute("UPDATE words SET mastered=0 WHERE mastered=1")
-    if c.rowcount > 0:
+    
+    with contextlib.suppress(NoWordsInMasteredList):
+        if c.rowcount <= 0:
+            raise NoWordsInMasteredList()
         conn.commit()
         print(Panel("[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
-    else:
-        print(Panel("[bold red]No words[/bold red] are marked as [bold red]mastered[/bold red]. ❌"))
 
 
 def clear_favorite():
-    """
-    Clears all the words marked as favorite.
-    """
+    """Clears all the words marked as favorite."""
 
     conn=createConnection()
     c=conn.cursor()
-
     c.execute("UPDATE words SET favorite=0 WHERE favorite=1")
-    if c.rowcount > 0:
+    
+    with contextlib.suppress(NoWordsInFavoriteList):
+        if c.rowcount <= 0:
+            raise NoWordsInFavoriteList()
         conn.commit()
         print(Panel("[bold green]All words[/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
-    else:
-        print(Panel("[bold red]No words[/bold red] are marked as [bold red]favorite[/bold red]. ❌"))
 
 
 def clear_all_words_from_tag(tagName:str):
@@ -982,11 +913,11 @@ def clear_all_words_from_tag(tagName:str):
     c=conn.cursor()
 
     c.execute("UPDATE words SET tag=NULL where tag=?", (tagName,))
-    if c.rowcount > 0:
+    with contextlib.suppress(NoSuchTagException):
+        if c.rowcount <= 0:
+            raise NoSuchTagException(tage=tagName)
         conn.commit()
         print(Panel(f"[bold green]All words[/bold green] have been removed from the tag {tagName}. ✅"))
-    else:
-        print(Panel(f"[bold red]No words[/bold red] with the tag {tagName} were found. ❌"))
 
 
 def get_lookup_rate(today=False, week=False, month=False, year=False):
@@ -1002,7 +933,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
     conn=createConnection()
     c=conn.cursor()
-    
+
     if today:
         # get today's learning words
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)=date('now')")
@@ -1011,7 +942,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         # get yesterdays learning words
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)=date('now', '-1 day')")
         learning_count_yesterday=c.fetchone()[0]
-        
+
         try:
             percentage=round((learning_count_today-learning_count_yesterday)/(learning_count_yesterday)*100, 2)
         except ZeroDivisionError:
@@ -1064,8 +995,10 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
             print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.", title="[reverse]Yearly Learning Rate[/reverse]", title_align="center"))
 
     else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel.fit(
+                title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"[bold red] you cannot combine options with learning rate command[/bold red] ❌")
+                renderable="[bold red] you cannot combine options with learning rate command[/bold red] ❌",
+            )
         )
