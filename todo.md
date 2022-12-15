@@ -36,10 +36,8 @@ Test cases for all the functions I have commented as: no tests for this function
 
 # Low Priority (Do This Before 25th Dec)
 
-- [ ]  Generate User manual using Typer
 - [ ] Prepare a dummy database with lots of words (5000 words -> 500 fav, 500 learning, 500 mastered and 2000 words should have 200 tags) and test the performance of the application on a large scale.  (Use <https://www.mockaroo.com/> or <https://generatedata.com/> or <https://www.onlinedatagenerator.com/>)
 - [ ] Data Gathering - Collect 25 total paragraphs (5 x 5 different topics (like sports, politics, etc)) of 200 words each and save it in NLP.py in modules folder. This will be the test data for sentinment analysis, word processing and other NLP related tasks.
-- [ ] Allow users to add custom definitions and words to the database. (add WORD -d "definition")
 ---
 
 # To Handle Later
@@ -55,16 +53,16 @@ Test cases for all the functions I have commented as: no tests for this function
 
 Get 1000 words from each domain and add them to a CSV. Will be read into a DF later.
 From domain.csv remove all the rows which contain a space and hyphen in the word column. (This is because the words are not valid for the API)
-- Arts
-- Music
-- Entetainment
-- Space
+- Arts ✅ (can refine)
+- Music ✅
+- Entetainment  ✅
+- Astronomy ✅
 - Sports
 - Politics
 - History
-- Geography
+- Geography ✅
 - Medical
-- Law
+- Legal and Law ✅
 - Literature
 - Culture
 - Technology
@@ -72,7 +70,6 @@ From domain.csv remove all the rows which contain a space and hyphen in the word
 - Chemistry
 - Biology
 - Mathematics
-- Slangs
 
 
 ## Things to Do After Finishing the Project
@@ -123,3 +120,7 @@ for learning words: blue
 
 \[(bold.*?)\]
 \[/(bold.*?)\]
+
+
+
+
