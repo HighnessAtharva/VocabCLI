@@ -9,6 +9,7 @@ from modules.Utils import *
 from modules.Graph import *
 from modules.Flashcard import *
 from modules.WordCollections import *
+from modules.Carousel import *
 
 import sys
 import typer
@@ -681,9 +682,11 @@ def graph(
         tag (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
     """
     
+  
     if slider:
         # importing this here will automatically open the slider window. DO NOT TOUCH.
-        import modules.Carousel
+        show_slider()
+        
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar, popup=True)
     if topTagsBar:

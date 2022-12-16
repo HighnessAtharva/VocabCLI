@@ -5,21 +5,22 @@
 ### ANAY
 
 - [x]  Adding Panels Emojies and Rich Styling everywhere.
-- [ ]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions. @Atharva @Anay
+- [ ]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions.
 - [ ]  Generate Requirements.txt after reinstalling linux
 - [ ]  Add more words to domains.csv with the right topic name.
 - [ ]  Get Linux Installed and try out asciinema
 - [ ]  Github Pages Improvement
-- [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback. @Atharva @Anay
+- [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback.
 - [ ]  FlashCard Generation Code (for Export, and Slide Show)
 
 ### ATHARVA
 
-- [ ]  Flashcard Generation Design Template
+
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
 - [ ]  Add Progress Bar to Refresh Cache (takes a while)
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  Complete rest of the graph commands
+- [x]  Flashcard Generation Design Template
 - [x]  5 Graph Carousel
 - [x]  Basic NLP (Sentiment Analysis, Word Processing, etc)
 - [x]  Exception Refactoring
@@ -62,6 +63,7 @@
 [ ] Debug command prompt resizing issue
 [ ] Do error handling everywhere where user is typing incorrect input (example:wrong tag/ date/ days, etc)
 [ ] Test cases for all the functions I have commented as: no tests for this function as it is not called anywhere in the command directly
+[ ] Generate Markdown Articles based on the RSS feed added by the user. Support for multiple RSS feeds. Try with Pitchfork, Tor Publishing, The Guardian, Entertainment Weekly, IGN, etc.
 
 ---
 

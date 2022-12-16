@@ -60,7 +60,7 @@ def viz_top_words_bar(N=10, popup=False):
     graph.set_xlabel('Words', fontsize=15, fontweight='bold', labelpad=-10, color='black', fontname='MS Gothic')
     graph.set_ylabel('Lookup Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black', fontweight='700')
-    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    #graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
     # show the plot
     plt.grid()
@@ -114,7 +114,7 @@ def viz_top_tags_bar(N=10, popup=False):
     graph.set_xlabel('Tags', fontsize=15, fontweight='bold', labelpad=-8, color='black', fontname='MS Gothic') 
     graph.set_ylabel('Word Count',fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right", fontname='Candara', color='black')
-    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    #graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
     # show the plot
     plt.grid()
@@ -174,7 +174,7 @@ def viz_word_distribution_week(popup=False):
     graph.set_xlabel('Day', fontsize=15, fontweight='bold', labelpad=10, color='black', fontname='MS Gothic')
     graph.set_ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     graph.set_xticklabels(graph.get_xticklabels(), fontname='Candara', color='black')
-    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    #graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
     
     plt.grid()
     
@@ -246,7 +246,7 @@ def viz_word_distribution_month(popup=False):
     graph.set_xlabel('Date', fontsize=15, fontweight='bold', labelpad=0, color='black', fontname='MS Gothic')
     graph.set_ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     graph.set_xticklabels(graph.get_xticklabels(), rotation=40, ha="right",fontname='Candara', color='black')
-    graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
+    #graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
     
     plt.tight_layout()
     plt.grid()
@@ -294,7 +294,7 @@ def viz_learning_vs_mastered(popup=False):
 
     plt.title('Word Distribution by Month', fontsize=18, fontweight='bold', pad=5, color='black', loc='center', fontname='Constantia') 
     plt.xlabel('Date', fontsize=15, fontweight='bold', labelpad=0, color='black', fontname='MS Gothic')
-    plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
+    #plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     
     # show the graph
     plt.savefig('exports/GRAPH-learning_vs_mastered.png')
