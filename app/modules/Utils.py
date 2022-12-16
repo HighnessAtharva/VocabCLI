@@ -474,7 +474,7 @@ def count_tag(tag:str) -> int:
 
 def get_random_word_definition_from_api():
     """Gets a random word from the text file and gets its definition from the API."""
-    lines = open('modules/most_common_words.txt').read().splitlines()
+    lines = open('modules/_random_words.txt').read().splitlines()
     random_word =random.choice(lines).strip()
     print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)
