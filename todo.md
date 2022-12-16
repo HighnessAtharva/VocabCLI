@@ -16,6 +16,14 @@
 ### ATHARVA
 
 
+<<<<<<< Updated upstream
+=======
+- [x]  Add Heading to Panels @Anay
+- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
+- [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+- [x]  Get Linux Installed @anay and try out asciinema
+- [ ]  Github Pages Improvement @anay
+>>>>>>> Stashed changes
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
 - [ ]  Add Progress Bar to Refresh Cache (takes a while)
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
