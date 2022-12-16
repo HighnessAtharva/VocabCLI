@@ -10,6 +10,7 @@ Test cases for all the functions I have commented as: no tests for this function
 
 - [ ]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions. @Atharva @Anay 
 - [ ]  Generate Requirements.txt @Anay after reinstalling linux
+- [ ]  Add more words to domains.csv with the right topic name. @Atharva @Anay [at least 200 each]
 - [ ]  Get Linux Installed @anay and try out asciinema
 - [ ]  Github Pages Improvement @anay
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
@@ -17,6 +18,7 @@ Test cases for all the functions I have commented as: no tests for this function
 - [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback. 
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+
 
 
 # College Related Submission/Work (Do This Before 20th Dec)
