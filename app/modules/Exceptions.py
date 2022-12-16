@@ -33,9 +33,7 @@ class NoDataFoundException(Exception):
 
 class NoWordsInDB(Exception):
     """raised when the user attempts to perform some operation on a word which is not present in the database."""
-    word=None
     def __init__(self):
-        self.word=word
         print(Panel.fit(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
@@ -90,7 +88,7 @@ class NoSuchCollectionException(Exception):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"The collection [bold red]{self.collection}[/bold red] is not present in the list. See available collections using the 'list --collections' command. 📚")
+                renderable=f"The collection [bold red]{self.collection}[/bold red] is not available. See available collections using the 'list --collections' command. 📚")
         )    
         
 class NoSuchTagException(Exception):
@@ -101,5 +99,5 @@ class NoSuchTagException(Exception):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"The tag [bold red]{self.tag}[/bold red] is not present in the list. Add some tags in your list using 'tag' command first. To see currently added tags use the 'list --tags' command🔖")
+                renderable=f"The tag [bold red]{self.tag}[/bold red] does not exist. Add some tags in your list using 'tag' command first. To see currently added tags use the 'list --tags' command🔖")
         )

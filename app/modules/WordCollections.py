@@ -86,13 +86,10 @@ def show_words_from_collection(collectionName: str):
     c=conn.cursor()
     c.execute("SELECT word FROM collections WHERE collection=?", (collectionName,))
     rows=c.fetchall()
-    if len(rows) <= 0:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="That collection does not exist")
-        )
-    else:
+    with contextlib.suppress(NoSuchCollectionException):
+        if len(rows) <= 0:
+            raise NoSuchCollectionException(collection=collectionName)
+    
         print(Panel(f"Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
         print(Columns(rows, equal=True))

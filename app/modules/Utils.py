@@ -492,8 +492,8 @@ def get_random_word_from_learning_set():
     with contextlib.suppress(NoWordsInLearningList):
         if len(rows) <= 0:
             raise NoWordsInLearningList()
-        print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{row[0]}[/bold blue]"))
-        definition(row[0])
+        print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{rows[0][0]}[/bold blue]"))
+        definition(rows[0][0])
 
 
 def get_random_word_from_mastered_set():
@@ -507,8 +507,9 @@ def get_random_word_from_mastered_set():
     with contextlib.suppress(NoWordsInMasteredList):
         if len(rows) <= 0:
             raise NoWordsInMasteredList()
-        print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{row[0]}[/bold green]"))
-        definition(row[0])
+        
+        print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{rows[0][0]}[/bold green]"))
+        definition(rows[0][0])
 
 def get_random_word_from_favorite_set():
     """ Gets a random word from the favorite list."""
@@ -520,8 +521,8 @@ def get_random_word_from_favorite_set():
     with contextlib.suppress(NoWordsInFavoriteList):
         if len(rows) <= 0:
             raise NoWordsInFavoriteList()   
-        print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {row[0]}"))
-        definition(row[0])
+        print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}"))
+        definition(rows[0][0])
     
 def get_random_word_from_tag(tagName:str):
     """
@@ -538,8 +539,8 @@ def get_random_word_from_tag(tagName:str):
     with contextlib.suppress(NoSuchTagException):
         if len(rows) <= 0:
             raise NoSuchTagException(tag=tagName)
-        print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{row[0]}[/bold blue]"))
-        definition(row[0])
+        print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"))
+        definition(rows[0][0])
 
 # FIXME @atharva: debug only tag argument 🐞
 def show_list(
@@ -770,7 +771,7 @@ def delete_all():
         print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
+                renderable=f"All words [{c.rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
         )
 
 
@@ -951,7 +952,7 @@ def clear_all_words_from_tag(tagName:str):
     c.execute("UPDATE words SET tag=NULL where tag=?", (tagName,))
     with contextlib.suppress(NoSuchTagException):
         if c.rowcount <= 0:
-            raise NoSuchTagException(tage=tagName)
+            raise NoSuchTagException(tag=tagName)
         conn.commit()
         print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
