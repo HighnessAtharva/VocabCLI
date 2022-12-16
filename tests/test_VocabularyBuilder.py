@@ -14,6 +14,7 @@ import pytest
 from typer.testing import CliRunner
 from VocabularyCLI import app
 from modules.Database import *
+from modules.WordCollections import *
 
 runner=CliRunner()
 
@@ -33,33 +34,36 @@ def setup_module():
     parent_dir = Path(os.getcwd()).parents[0]
     shutil.move(app_DB_path, parent_dir)
 
-    # create a test database
-    conn = sqlite3.connect('./VocabularyBuilder.db')
-    c = conn.cursor()
-    words="""CREATE TABLE IF NOT EXISTS "words" (
-        "word"	TEXT,
-        "datetime"	timestamp NOT NULL UNIQUE,
-        "tag"	TEXT,
-        "mastered"	INTEGER NOT NULL DEFAULT 0,
-        "learning"	INTEGER NOT NULL DEFAULT 0,
-        "favorite"	INTEGER NOT NULL DEFAULT 0
-    );
-    """
-    cache_words="""CREATE TABLE IF NOT EXISTS "cache_words" (
-	"word"	TEXT NOT NULL UNIQUE,
-    "api_response" json NOT NULL
-);
-    """
-    
-    collections="""CREATE TABLE IF NOT EXISTS "collections" (
-            "word"	TEXT NOT NULL,
-            "collection" TEXT NOT NULL
-            );
-        """
+    initializeDB() # this is from Database.py
+    insert_collection_to_DB() # this is from WordCollections.py
 
-    c.execute(words)
-    c.execute(cache_words)
-    c.execute(collections)
+# create a test database
+#     conn = sqlite3.connect('./VocabularyBuilder.db')
+#     c = conn.cursor()
+#     words="""CREATE TABLE IF NOT EXISTS "words" (
+#         "word"	TEXT,
+#         "datetime"	timestamp NOT NULL UNIQUE,
+#         "tag"	TEXT,
+#         "mastered"	INTEGER NOT NULL DEFAULT 0,
+#         "learning"	INTEGER NOT NULL DEFAULT 0,
+#         "favorite"	INTEGER NOT NULL DEFAULT 0
+#     );
+#     """
+#     cache_words="""CREATE TABLE IF NOT EXISTS "cache_words" (
+# 	"word"	TEXT NOT NULL UNIQUE,
+#     "api_response" json NOT NULL
+# );
+#     """
+    
+#     collections="""CREATE TABLE IF NOT EXISTS "collections" (
+#             "word"	TEXT NOT NULL,
+#             "collection" TEXT NOT NULL
+#             );
+#         """
+
+#     c.execute(words)
+#     c.execute(cache_words)
+#     c.execute(collections)
 
 def teardown_module():
     """
@@ -896,8 +900,21 @@ class TestList:
         result= runner.invoke(app, ["list"])
         assert result.exit_code == 0
         assert "You have no words in your vocabulary builder list" in result.stdout
+        
+    def test_list_all_collection_names(self):
+        result=runner.invoke(app, ["list", "--collections"])
+        assert result.exit_code == 0
+        assert "1500 advanced words" and "music" in result.stdout
 
-
+    def test_list_words_in_collection(self):
+        result=runner.invoke(app, ["list", "--collection", "music"])
+        assert result.exit_code == 0
+        assert "Words from the collection music" and "accordian" and "blues" in result.stdout
+    
+    def test_list_words_in_collection_nonexistent(self):
+        result=runner.invoke(app, ["list", "--collection", "fakeCollection"])
+        assert result.exit_code == 0
+        assert "The collection fakeCollection is not available" in result.stdout
 
 class TestRate:
     def test_rate_today(self):

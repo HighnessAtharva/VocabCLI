@@ -88,7 +88,7 @@ class NoSuchCollectionException(Exception):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"The collection [bold red]{self.collection}[/bold red] is not present in the list. See available collections using the 'list --collections' command. 📚")
+                renderable=f"The collection [bold red]{self.collection}[/bold red] is not available. See available collections using the 'list --collections' command. 📚")
         )    
         
 class NoSuchTagException(Exception):
