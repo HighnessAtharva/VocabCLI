@@ -12,6 +12,7 @@ from Database import *
 from PIL import Image, ImageTk
 from rich.panel import Panel
 
+# todo - importing this file from app.py causes multiple warnings and prevents input for further commands. Actual functionality is not affected.
 
 ################################
 # VISUALIZATION FUNCTIONS
@@ -63,7 +64,7 @@ def viz_top_words_bar(N=10, popup=False):
 
     # show the plot
     plt.grid()
-    plt.savefig('../exports/GRAPH-top_words_bar.png')
+    plt.savefig('exports/GRAPH-top_words_bar.png')
     if popup:
         plt.show()
 
@@ -117,7 +118,7 @@ def viz_top_tags_bar(N=10, popup=False):
 
     # show the plot
     plt.grid()
-    plt.savefig('../exports/GRAPH-top_tags_bar.png')
+    plt.savefig('exports/GRAPH-top_tags_bar.png')
     if popup:    
         plt.show()
 
@@ -177,7 +178,7 @@ def viz_word_distribution_week(popup=False):
     
     plt.grid()
     
-    plt.savefig('../exports/GRAPH-words_distribution_week.png')
+    plt.savefig('exports/GRAPH-words_distribution_week.png')
     if popup:    
         plt.show()
 
@@ -250,12 +251,12 @@ def viz_word_distribution_month(popup=False):
     plt.tight_layout()
     plt.grid()
     
-    plt.savefig('../exports/GRAPH-word_distribution_month.png')
+    plt.savefig('exports/GRAPH-word_distribution_month.png')
     if popup:
         plt.show()
 
 
-def viz_word_distribution_year_util():
+def word_distribution_year_util():
     pass
 
 def viz_word_distribution_year(popup=False):
@@ -296,7 +297,7 @@ def viz_learning_vs_mastered(popup=False):
     plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     
     # show the graph
-    plt.savefig('../exports/GRAPH-learning_vs_mastered.png')
+    plt.savefig('exports/GRAPH-learning_vs_mastered.png')
     if popup:
         plt.show()
     

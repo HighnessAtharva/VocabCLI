@@ -16,7 +16,7 @@ def export_to_csv():
         words = c.fetchall()
         if len(words) <= 0:
             raise NoDataFoundException
-        with open('../exports/VocabularyBuilder.csv', 'w', newline='') as file:
+        with open('exports/VocabularyBuilder.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)
@@ -42,7 +42,7 @@ def import_from_csv():
     word_already_exists=0
 
     try:
-        with open ('../exports/VocabularyBuilder.csv', 'r') as file:
+        with open ('exports/VocabularyBuilder.csv', 'r') as file:
             reader = csv.reader(file)
             next(reader) # skip header
 
@@ -152,7 +152,7 @@ def export_to_pdf():    # sourcery skip: extract-method
             favorite= "X" if row[5] == 1 else ""
             pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
-        pdf.output(f"../exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
+        pdf.output(f"exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
         print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
