@@ -107,7 +107,7 @@ def get_random_word_from_collection(collectionName: str):
         if row is None:
             raise NoSuchCollectionException(collection=collectionName)
         else:
-            print(Panel(title="[reverse blue]Random Word[/reverse blue]",
+            print(Panel.fit(title="[reverse blue]Random Word[/reverse blue]",
                         title_align="center",
                         padding=(1, 1),
                         renderable=f"A random word from the [u green]{collectionName}[/u green] collection: [bold blue]{row[0]}[/bold blue]", expand=True))

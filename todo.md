@@ -7,7 +7,7 @@ Test cases for all the functions I have commented as: no tests for this function
 
 # Priority (Finish Before 20th Dec)
 
-- [ ]  Add Heading to Panels @Anay
+- [x]  Add Heading to Panels @Anay
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
 - [ ]  Get Linux Installed @anay and try out asciinema

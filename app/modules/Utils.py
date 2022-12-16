@@ -767,7 +767,11 @@ def delete_all():
         
         c.execute("DELETE FROM words")
         conn.commit()
-        print(Panel(f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"All words [{rowcount}] [bold red]deleted[/bold red] from all your lists. ✅")
+        )
 
 
 def delete_mastered():
@@ -783,7 +787,11 @@ def delete_mastered():
         
         c.execute("DELETE FROM words WHERE mastered=1")
         conn.commit()
-        print(Panel(f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅")
+        )
 
 
 def delete_learning():
@@ -799,7 +807,11 @@ def delete_learning():
         
         c.execute("DELETE FROM words WHERE learning=1")
         conn.commit()
-        print(Panel(f"All [bold blue]learning[/bold blue] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"All [bold blue]learning[/bold blue] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+        )
 
 
 def delete_favorite():
@@ -815,7 +827,11 @@ def delete_favorite():
         
         c.execute("DELETE FROM words WHERE favorite=1")
         conn.commit()
-        print(Panel(f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
+        )
 
 
 def delete_words_from_tag(tag: str):
@@ -836,7 +852,11 @@ def delete_words_from_tag(tag: str):
         
     c.execute("DELETE FROM words WHERE tag=?", (tag,))
     conn.commit()
-    print(Panel(f"All words [{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅"))
+    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"All words [{rowcount}] with tag [bold magenta]{tag}[/bold magenta] [bold red]deleted[/bold red] from your lists. ✅")
+        )
 
 
 def delete_word(query:List[str]):
@@ -856,7 +876,11 @@ def delete_word(query:List[str]):
     c.execute(sql, (query,))
     if c.rowcount>0:
         conn.commit()
-        print(Panel(f"[bold red]Word {query} deleted[/bold red] from your lists. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
+        )
 
 
 def clear_learning():
@@ -869,8 +893,12 @@ def clear_learning():
     with contextlib.suppress(NoWordsInLearningList):
         if c.rowcount <= 0:
             raise NoWordsInLearningList()
-        conn.commit()
-        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]learning[/bold red]. ✅"))
+        conn.commit() 
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold green]All words[/bold green] have been removed from [bold red]learning[/bold red]. ✅")
+        )
     
 
 def clear_mastered():
@@ -884,7 +912,11 @@ def clear_mastered():
         if c.rowcount <= 0:
             raise NoWordsInMasteredList()
         conn.commit()
-        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅")
+        )
 
 
 def clear_favorite():
@@ -898,7 +930,11 @@ def clear_favorite():
         if c.rowcount <= 0:
             raise NoWordsInFavoriteList()
         conn.commit()
-        print(Panel("[bold green]All words[/bold green] have been removed from [bold red]favorite[/bold red]. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold green]All words[/bold green] have been removed from [bold red]favorite[/bold red]. ✅")
+        )
 
 
 def clear_all_words_from_tag(tagName:str):
@@ -917,7 +953,11 @@ def clear_all_words_from_tag(tagName:str):
         if c.rowcount <= 0:
             raise NoSuchTagException(tage=tagName)
         conn.commit()
-        print(Panel(f"[bold green]All words[/bold green] have been removed from the tag {tagName}. ✅"))
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"[bold green]All words[/bold green] have been removed from the tag {tagName}. ✅")
+        )
 
 
 def get_lookup_rate(today=False, week=False, month=False, year=False):
@@ -948,9 +988,9 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         except ZeroDivisionError:
             percentage=learning_count_today*100
         if percentage>=0:
-            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words.", title="[reverse]Today's Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words.", title="[reverse]Today's Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
         else:
-            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words.", title="[reverse]Today's Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words.", title="[reverse]Today's Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
     elif week:
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-7 day')")
@@ -961,10 +1001,10 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         percentage=round((learning_count_last_week)/(learning_count_week)*100, 2)
         if percentage>=0:
-            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words.", title="[reverse]Weekly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words.", title="[reverse]Weekly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
         else:
-            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words.", title="[reverse]Weekly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words.", title="[reverse]Weekly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
     elif month:
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-1 month')")
@@ -975,10 +1015,10 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         percentage=round((learning_count_month-learning_count_last_month)/(learning_count_month)*100, 2)
         if percentage>=0:
-            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words.",title="[reverse]Monthly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words.",title="[reverse]Monthly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
         else:
-            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words.",title="[reverse]Monthly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words.",title="[reverse]Monthly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
     elif year:
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-1 year')")
@@ -989,10 +1029,10 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         percentage=round((learning_count_year-learning_count_last_year)/(learning_count_year)*100, 2)
         if percentage>=0:
-            print(Panel(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.",title="[reverse]Yearly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.",title="[reverse]Yearly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
         else:
-            print(Panel(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.", title="[reverse]Yearly Learning Rate[/reverse]", title_align="center"))
+            print(Panel.fit(f"😓 You have looked up [bold red]{percentage}%[/bold red] [u]LESS[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.", title="[reverse]Yearly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
     else:
         print(Panel.fit(
