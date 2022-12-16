@@ -7,17 +7,18 @@ Test cases for all the functions I have commented as: no tests for this function
 
 # Priority (Finish Before 20th Dec)
 
-- [x]  Add Heading to Panels @Anay
-- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
-- [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+
+- [ ]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions. @Atharva @Anay 
+- [ ]  Generate Requirements.txt @Anay after reinstalling linux
 - [ ]  Get Linux Installed @anay and try out asciinema
 - [ ]  Github Pages Improvement @anay
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
-- [ ]  Add Collections Command
-- [ ]  Add Collection flag to other commands
 - [ ]  Add Progress Bar to Refresh Cache (takes a while)
-- [ ]  Genereate Requirements.txt and Dev-Requirements.txt @Atharva
-  
+- [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback. 
+- [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
+- [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
+
+
 # College Related Submission/Work (Do This Before 20th Dec)
 
 - [ ] 100 page notebook, use it for rough work to show proof of work.
