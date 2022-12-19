@@ -62,7 +62,7 @@ def fetch_word_history(word: str):    # sourcery skip: extract-method
         print(Panel(f"You have searched for [bold]{word}[/bold] {count} time(s) before. 🔎"))
 
         for row in rows:
-            history=datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('%d %b\' | %y %H:%M')
+            history=datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
             table.add_row(history)
             table.add_section()
         print(table)

@@ -890,6 +890,12 @@ class TestList:
         assert "The collection fakeCollection is not available" in result.stdout
 
 class TestRate:
+    def test_rate_default(self):
+        runner.invoke(app, ["define", "math", "school"])
+        result= runner.invoke(app, ["rate"])
+        assert result.exit_code == 0
+        assert "words today compared to yesterday" in result.stdout
+        
     def test_rate_today(self):
         runner.invoke(app, ["define", "math", "school"])
         result= runner.invoke(app, ["rate", "-t"])
@@ -993,6 +999,10 @@ class TestRandom:
         result= runner.invoke(app, ["random", "-t", "diamonds"])
         assert result.exit_code == 0
         assert "The tag diamonds does not exist" in result.stdout
+        
+    def test_random_word_collection(self):
+        result= runner.invoke(app, ["random", "--collection", "music"])
+        assert "A random word from the music collection" in result.stdout
     
 class TestHistory:
     @mock.patch("typer.confirm")
@@ -1147,14 +1157,24 @@ class TestRevise:
             
            
     class TestReviseCollection:
-        pass
-        # def test_revise_collection(self, mock_typer):
-        #     pass
         
-        # def test_revise_collection_with_word_limit(self, mock_typer):
-        #     pass
+        # this test runs the revise command for all the 500 words and takes a long time, find a way to break out of the loop
+        # def test_revise_collection(self):
+        #     result= runner.invoke(app,["revise", "--collection", "500 SAT words"])
+        #     assert result.exit_code == 0
+        #     assert "499 word(s) to go. Keep revising!" in result.stdout
+            # break out
+            
+            
+        def test_revise_collection_with_word_limit(self):
+            result= runner.invoke(app,["revise", "--collection", "500 SAT words", "-n", "3"])
+            assert result.exit_code == 0
+            assert "2 word(s) to go. Keep revising!" in result.stdout
     
-        # no need to test for zero words in collection as no collection can be empty
+        def test_revise_fake_collection(self):
+            result = runner.invoke(app,["revise", "--collection", "fakeCollection"])
+            assert result.exit_code == 0
+            assert "The collection fakeCollection is not available" in result.stdout
 
 
 # todo add tests for collection Quizzing
@@ -1365,11 +1385,12 @@ class TestQuiz:
         # def test_quiz_collection_with_word_limit(self,mock_typer):
         #     mock_typer.return_value = True
     
-        # @mock.patch("typer.confirm")
-        # def test_quiz_collection_fake(self,mock_typer):
-        #     mock_typer.return_value = True
+        def test_quiz_fake_collection(self):
+            result = runner.invoke(app,["quiz", "--collection", "fakeCollection"])
+            assert result.exit_code == 0
+            assert "The collection fakeCollection is not available" in result.stdout
         
-        # no need to test for low words as collections will always have more than 4 words
+        
         
 class TestGraph:
     # top words bar graph

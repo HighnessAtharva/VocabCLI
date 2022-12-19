@@ -177,6 +177,12 @@ def revise_collection(
     conn=createConnection()
     c=conn.cursor()
         
+    if collectionName:
+        with contextlib.suppress(NoSuchCollectionException):
+            c.execute("SELECT word FROM collections where collection=?", (collectionName,))
+            if not c.fetchone():
+                raise NoSuchCollectionException(collection=collectionName)
+            
     if collectionName and not number:
         c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM()", (collectionName,))
         start_revision(c, is_collection=True)
