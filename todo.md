@@ -7,7 +7,7 @@
 - [x]  Adding Panels Emojies and Rich Styling everywhere.
 - [x]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions.
 - [ ]  Generate Requirements.txt after reinstalling linux
-- [ ]  Add more words to domains.csv with the right topic name.
+- [x]  Add more words to domains.csv with the right topic name.
 - [x]  Get Linux Installed and try out asciinema
 - [ ]  Github Pages Improvement
 - [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback.
