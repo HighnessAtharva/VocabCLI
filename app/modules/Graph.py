@@ -18,10 +18,11 @@ from rich.panel import Panel
 # VISUALIZATION FUNCTIONS
 ################################
 def viz_top_words_bar(N=10, popup=False):
-    """_summary_
-
+    """Visualize the top N words looked up by the user
+    
     Args:
-        N (int, optional): _description_. Defaults to 10.
+        N (int, optional): Number of words to visualize. Defaults to 10.
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.
     """
     
     # get top N words
@@ -75,6 +76,7 @@ def viz_top_tags_bar(N=10, popup=False):
 
     Args:
         N (int, optional): Number of top tags to visualize . Defaults to 10.
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.
     """
 
     # get top N tags
@@ -124,9 +126,11 @@ def viz_top_tags_bar(N=10, popup=False):
 
 
 def viz_top_words_pie(N=10, popup=False):
+
     print("Will print a pie chart of the top N words")
     
 def viz_top_tags_pie(N=10, popup=False):
+
     print("Will print a pie chart of the top N tags")
 
 
@@ -159,7 +163,12 @@ def words_distribution_week_util():
     return days_of_week, word_count
 
 def viz_word_distribution_week(popup=False):
-    """ Visualizes the distribution of words by day of the week. """
+    """
+    Visualizes the distribution of words by day of the week.
+
+    Args:
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.
+    """
 
     days_of_week, word_count=words_distribution_week_util()
 
@@ -229,7 +238,12 @@ def word_distribution_month_util():
 
 
 def viz_word_distribution_month(popup=False):
-    """ Visualizes the distribution of words by dates of month. """
+    """ 
+    Visualizes the distribution of words by dates of month. 
+    
+    Args:
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.    
+    """
 
     dates, word_count=word_distribution_month_util()
     # print(dates)
@@ -257,13 +271,21 @@ def viz_word_distribution_month(popup=False):
 
 
 def word_distribution_year_util():
+
     pass
 
 def viz_word_distribution_year(popup=False):
+    
     pass
 
 def viz_learning_vs_mastered(popup=False):
-    """ Visualizes the distribution of words by learning and mastered. """    
+    """ 
+    Visualizes the distribution of words by learning and mastered. 
+    
+    Args:
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.    
+    """    
+
     conn=createConnection()
     c=conn.cursor()
     

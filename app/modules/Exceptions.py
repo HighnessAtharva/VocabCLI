@@ -3,6 +3,7 @@ from rich.panel import Panel
 
 class WordNeverSearchedException(Exception):
     """raised when a word is never searched but user attempts to perform some operation on it."""
+
     word=None
     def __init__(self, word):
         self.word=word
@@ -14,6 +15,7 @@ class WordNeverSearchedException(Exception):
         
 class AudioUnavailableException(Exception):
     """raised when the audio is not available for the word."""
+
     def __init__(self):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -24,6 +26,7 @@ class AudioUnavailableException(Exception):
 
 class NoDataFoundException(Exception):
     """raised when the user attempts to export data but there is no data to export."""
+
     def __init__(self):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -33,6 +36,7 @@ class NoDataFoundException(Exception):
 
 class NoWordsInDB(Exception):
     """raised when the user attempts to perform some operation on a word which is not present in the database."""
+
     def __init__(self):
         print(Panel.fit(
                 title="[b reverse red]  Error!  [/b reverse red]",
@@ -44,6 +48,7 @@ class NoWordsInDB(Exception):
         
 class NoWordsInLearningList(Exception):
     """raised when the user attempts to start a learning session but there are no words in the list."""
+
     def __init__(self):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -53,6 +58,7 @@ class NoWordsInLearningList(Exception):
 
 class NoWordsInMasteredList(Exception):
     """raised when the user attempts to start a learning session but there are no words in the list."""
+
     def __init__(self):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -62,6 +68,7 @@ class NoWordsInMasteredList(Exception):
         
 class NoWordsInFavoriteList(Exception):
         """raised when the user attempts to start a learning session but there are no words in the list."""
+
         def __init__(self):
             print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                     title_align="center",
@@ -73,6 +80,7 @@ class NoWordsInFavoriteList(Exception):
          
 class NotEnoughWordsForQuizException(Exception):
     """raised when the user attempts to start a quiz but there are not enough words in the list."""
+
     def __init__(self):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
@@ -82,6 +90,7 @@ class NotEnoughWordsForQuizException(Exception):
         
 class NoSuchCollectionException(Exception):
     """raised when the user attempts to perform some operation on a collection which is not present in the list."""
+
     collection=None
     def __init__(self, collection):
         self.collection=collection
@@ -93,6 +102,7 @@ class NoSuchCollectionException(Exception):
         
 class NoSuchTagException(Exception):
     """raised when the user attempts to perform some operation on a tag which is not present in the list."""
+    
     tag=None
     def __init__(self, tag):
         self.tag=tag

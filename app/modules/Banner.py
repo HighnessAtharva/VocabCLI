@@ -26,6 +26,13 @@ def get_terminal_width() -> int:
 
 
 def print_banner(console):
+    """
+    Prints the banner of the application.
+
+    Args:
+        console (Console): Rich console object.
+    """
+    
     banner="""
              _    __                     __            __                       ____          _  __     __           
             | |  / /____   _____ ____ _ / /_   __  __ / /____ _ _____ __  __   / __ ) __  __ (_)/ /____/ /___   _____

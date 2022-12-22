@@ -5,10 +5,10 @@
 ### ANAY
 
 - [x]  Adding Panels Emojies and Rich Styling everywhere.
-- [ ]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions.
+- [x]  Update Docstrings based on new functions and arguments. Also mention data type and return type in all the functions.
 - [ ]  Generate Requirements.txt after reinstalling linux
 - [ ]  Add more words to domains.csv with the right topic name.
-- [ ]  Get Linux Installed and try out asciinema
+- [x]  Get Linux Installed and try out asciinema
 - [ ]  Github Pages Improvement
 - [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback.
 - [ ]  FlashCard Generation Code (for Export, and Slide Show)
@@ -16,14 +16,11 @@
 ### ATHARVA
 
 
-<<<<<<< Updated upstream
-=======
 - [x]  Add Heading to Panels @Anay
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
 - [x]  Get Linux Installed @anay and try out asciinema
 - [ ]  Github Pages Improvement @anay
->>>>>>> Stashed changes
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
 - [ ]  Add Progress Bar to Refresh Cache (takes a while)
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
@@ -39,7 +36,7 @@
 
 ### ANAY
 
-- [ ] 100 page notebook, use it for rough work to show proof of work.
+- [x] 100 page notebook, use it for rough work to show proof of work.
 - [ ] Handwriting and diagrams need not be fancy but should be readable. Use it to jot down ideas.
 - [ ] First few pages should be in the following order:-
       -  Project Title and Members
@@ -84,19 +81,19 @@ From domain.csv remove all the rows which contain a space and hyphen in the word
 - Music ✅
 - Entetainment  ✅
 - Astronomy ✅
-- Sports
-- Politics
-- History
+- Sports   ✅
+- Politics  ✅
+- History    ✅
 - Geography ✅
-- Medical
+- Medical   ✅
 - Legal and Law ✅
-- Literature
-- Culture
-- Technology
-- Business
-- Chemistry
-- Biology
-- Mathematics
+- Literature    ✅
+- Culture     ✅
+- Technology   ✅
+- Business    ✅
+- Chemistry   ✅
+- Biology     ✅
+- Mathematics   ✅
 
 ## Things to Do After Finishing the Project
 

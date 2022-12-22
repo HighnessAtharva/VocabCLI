@@ -28,6 +28,12 @@ def check_word_exists(query: str):
 
     Args:
         query (str): Word which is to be checked
+
+    Raises:
+        WordNeverSearchedException: If the word is not found in the database
+
+    Returns:
+        bool: True if word exists in the database
     """
 
     conn= createConnection()
@@ -46,6 +52,9 @@ def fetch_word_history(word: str):    # sourcery skip: extract-method
 
     Args:
         word (str): word for which history is to be fetched
+
+    Raises:
+        WordNeverSearchedException: If the word is not found in the database
     """
 
     conn=createConnection()
@@ -75,6 +84,9 @@ def add_tag(query: str, tagName:str):
     Args:
         query (str): Word which is to be tagged.
         tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.
+
+    Raises:
+        WordNeverSearchedException: If the word is not found in the database
     """
 
     conn=createConnection()
@@ -111,6 +123,9 @@ def remove_tag(query: str):
 
     Args:
         query (str): Word for which the tag is to be removed
+
+    Raises:
+        WordNeverSearchedException: If the word is not found in the database
     """
 
     conn=createConnection()
@@ -147,6 +162,9 @@ def set_mastered(query: str):
 
     Args:
         query (str): Word which is to be set as mastered.
+
+    Raises:
+        WordNeverSearchedException: If the word is not found in the database
     """
 
     conn=createConnection()
@@ -184,6 +202,9 @@ def check_mastered(query:str):
 
     Args:
         query (str): word which is to be checked for mastered status
+
+    Returns:
+        bool: True if the word is mastered, False otherwise
     """
     conn=createConnection()
     c=conn.cursor()
@@ -198,6 +219,9 @@ def check_learning(query:str):
 
     Args:
         query (str): word which is to be checked for learning status
+
+    Returns:
+        bool: True if the word is learning, False otherwise
     """
     conn=createConnection()
     c=conn.cursor()
@@ -474,6 +498,7 @@ def count_tag(tag:str) -> int:
 
 def get_random_word_definition_from_api():
     """Gets a random word from the text file and gets its definition from the API."""
+
     lines = open('modules/_random_words.txt').read().splitlines()
     random_word =random.choice(lines).strip()
     print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
@@ -482,7 +507,12 @@ def get_random_word_definition_from_api():
 
 
 def get_random_word_from_learning_set():
-    """Gets a random word from the learning list."""
+    """
+    Gets a random word from the learning list.
+    
+    Raises:
+        NoWordsInLearningList: If there are no words in the learning list.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -497,7 +527,12 @@ def get_random_word_from_learning_set():
 
 
 def get_random_word_from_mastered_set():
-    """Gets a random word with definition from the mastered words list."""
+    """
+    Gets a random word with definition from the mastered words list.
+
+    Raises:
+        NoWordsInMasteredList: If there are no words in the mastered list.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -512,7 +547,12 @@ def get_random_word_from_mastered_set():
         definition(rows[0][0])
 
 def get_random_word_from_favorite_set():
-    """ Gets a random word from the favorite list."""
+    """ 
+    Gets a random word from the favorite list.
+    
+    Raises:
+        NoWordsInFavoriteList: If there are no words in the favorite list.
+    """
     
     conn=createConnection()
     c=conn.cursor()
@@ -530,6 +570,9 @@ def get_random_word_from_tag(tagName:str):
 
     Args:
         tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
+
+    Raises:
+        NoSuchTagException: If the tag does not exist.
     """
 
     conn=createConnection()
@@ -756,7 +799,11 @@ def show_list(
 
  
 def delete_all():
-    """ Deletes all the words from the database. """
+    """ Deletes all the words from the database.
+     
+    Raises:
+        NoWordsInDB: If there are no words in the database.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -776,7 +823,11 @@ def delete_all():
 
 
 def delete_mastered():
-    """ Deletes all the mastered words from the database. """
+    """ Deletes all the mastered words from the database. 
+    
+    Raises:
+        NoWordsInMasteredList: If there are no mastered words in the database.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -796,7 +847,11 @@ def delete_mastered():
 
 
 def delete_learning():
-    """Deletes all the learning words from the database."""
+    """Deletes all the learning words from the database.
+    
+    Raises:
+        NoWordsInLearningList: If there are no learning words in the database.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -816,7 +871,11 @@ def delete_learning():
 
 
 def delete_favorite():
-    """Deletes all the favorite words from the database."""
+    """Deletes all the favorite words from the database.
+    
+    Raises:
+        NoWordsInFavoriteList: If there are no favorite words in the database.    
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -841,6 +900,9 @@ def delete_words_from_tag(tag: str):
 
     Args:
         tag (str): The tag to delete words from.
+
+    Raises:
+        NoSuchTagException: If the tag doesn't exist in the database.
     """
 
     conn=createConnection()
@@ -885,7 +947,11 @@ def delete_word(query:List[str]):
 
 
 def clear_learning():
-    """Clears all the words marked as learning."""
+    """Clears all the words marked as learning.
+    
+    Raises:
+        NoWordsInLearningList: If there are no words in the learning list.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -903,7 +969,11 @@ def clear_learning():
     
 
 def clear_mastered():
-    """Clears all the words marked as mastered."""
+    """Clears all the words marked as mastered.
+    
+    Raises:
+        NoWordsInMasteredList: If there are no words in the mastered list.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -921,7 +991,11 @@ def clear_mastered():
 
 
 def clear_favorite():
-    """Clears all the words marked as favorite."""
+    """Clears all the words marked as favorite.
+    
+    Raises:
+        NoWordsInFavoriteList: If there are no words in the favorite list.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -944,6 +1018,9 @@ def clear_all_words_from_tag(tagName:str):
 
     Args:
         tagName (str): The tag to clear words from.
+
+    Raises:
+        NoSuchTagException: If the tag doesn't exist in the database.
     """
 
     conn=createConnection()

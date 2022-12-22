@@ -25,6 +25,14 @@ from questionary import Style
 #####################
 
 def start_revision(c, is_collection: bool = False):
+    """ 
+    Starts the revision process. 
+    
+    Args:
+        c: cursor object
+        is_collection: boolean to check if the revision is from a collection, default is False.        
+    """
+
     rows = c.fetchall()
     for count,row in enumerate(rows, start=1):
         print(Panel(
@@ -64,6 +72,13 @@ def start_revision(c, is_collection: bool = False):
         
 
 def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
+    """ 
+    Revise all words in the database.
+
+    Args:
+        number: number of words to revise, default is None.
+    """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -83,6 +98,13 @@ def revise_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
     ):  # sourcery skip: remove-redundant-if
+    """ 
+    Revise words in a specific tag.
+
+    Args:
+        number: number of words to revise, default is None.
+        tag: tag to revise, default is None.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -104,7 +126,15 @@ def revise_tag(
 def revise_learning(
     number: Optional[int] = None,
     learning: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
+    """
+    Revise words in learning list.
+    
+    Args:
+        number: number of words to revise, default is None.
+        learning: boolean to check if the word is in learning list, default is False.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -128,7 +158,15 @@ def revise_learning(
 def revise_mastered(
     number: Optional[int] = None,
     mastered: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
+    """
+    Revise words in mastered list.
+
+    Args:
+        number: number of words to revise, default is None.
+        mastered: boolean to check if the word is in mastered list, default is False.
+    """
     
     conn=createConnection()
     c=conn.cursor()
@@ -151,8 +189,16 @@ def revise_mastered(
 def revise_favorite(
     number: Optional[int] = None,
     favorite: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
-    
+    """ 
+    Revise words in favorite list.
+
+    Args:
+        number: number of words to revise, default is None.
+        favorite: boolean to check if the word is in favorite list, default is False.
+    """
+
     conn=createConnection()
     c=conn.cursor()
 
@@ -174,6 +220,14 @@ def revise_collection(
     number: Optional[int] = None,
     collectionName: Optional[str] = None
 ):
+    """
+    Revise words in a collection.
+
+    Args:
+        number: number of words to revise, default is None.
+        collectionName: name of the collection, default is None.
+    """
+
     conn=createConnection()
     c=conn.cursor()
         
@@ -195,6 +249,13 @@ def revise_collection(
 # QUIZ FUNCTIONS #      
 #####################
 def start_quiz(c, collection=None):    # sourcery skip: remove-redundant-if
+    """
+    Starts the quiz.
+
+    Args:
+        c: cursor object.
+        collection: name of the collection, default is None.
+    """
         
     if not (rows := c.fetchall()):
         return
@@ -285,6 +346,13 @@ def start_quiz(c, collection=None):    # sourcery skip: remove-redundant-if
         c.close()         
         
 def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
+    """
+    Quiz all words in the database.
+
+    Args:
+        number: number of words to quiz, default is None.
+    """
+
     conn=createConnection()
     c=conn.cursor()
     
@@ -305,6 +373,13 @@ def quiz_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
     ):  # sourcery skip: remove-redundant-if
+    """
+    Quiz words with a specific tag.
+
+    Args:
+        number: number of words to quiz, default is None.
+        tag: tag to quiz, default is None.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -327,7 +402,15 @@ def quiz_tag(
 def quiz_learning(
     number: Optional[int] = None,
     learning: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
+    """
+    Quiz words in learning list.
+
+    Args:
+        number: number of words to quiz, default is None.
+        learning: True if words in learning list, default is False.
+    """
 
     conn=createConnection()
     c=conn.cursor()
@@ -351,7 +434,15 @@ def quiz_learning(
 def quiz_mastered(
     number: Optional[int] = None,
     mastered: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
+    """
+    Quiz words in mastered list.
+
+    Args:
+        number: number of words to quiz, default is None.
+        mastered: True if words in mastered list, default is False.
+    """
     
     conn=createConnection()
     c=conn.cursor()
@@ -374,8 +465,16 @@ def quiz_mastered(
 def quiz_favorite(
     number: Optional[int] = None,
     favorite: Optional[bool] = False
+    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
     ):  # sourcery skip: remove-redundant-if
-    
+    """
+    Quiz words in favorite list.
+
+    Args:
+        number: number of words to quiz, default is None.
+        favorite: True if words in favorite list, default is False.
+    """
+
     conn=createConnection()
     c=conn.cursor()
     
@@ -399,6 +498,14 @@ def quiz_collection(
     number: Optional[int] = None,
     collectionName: Optional[str] = None
 ):
+    """
+    Quiz words in a collection.
+
+    Args:
+        number: number of words to quiz, default is None.
+        collectionName: name of collection to quiz, default is None.
+    """
+    
     conn=createConnection()
     c=conn.cursor()
     

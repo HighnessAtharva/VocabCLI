@@ -5,6 +5,8 @@ from Graph import *
 import typer
 
 def show_slider():
+    """Show the slider"""
+    
     # set up the tkinter window
     root = Tk()
     root.title("VocabCLI Graphs")

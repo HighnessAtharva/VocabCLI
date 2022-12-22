@@ -95,7 +95,7 @@ def phonetic(query: str):
     else:
         for phonetics in response["phonetics"]:
             if "text" in phonetics and len(phonetics["text"])>0:
-                phonetic= phonetics["text"];
+                phonetic= phonetics["text"]
             else:
                 phonetic= "[bold red]Phonetic Unavailable[/bold red]"
     return(phonetic)
@@ -108,7 +108,6 @@ def insert_word_to_db(query: str):
 
     Args:
         query (str): Word which is to be tagged.
-        tagName (Optional[str], optional): Tag name which is to be added to the word and inserts it into the database. Defaults to None.
     """
 
     # check if word definitions exists. If yes, add to database otherwise do not do anything. Don't even print anything.
@@ -142,6 +141,14 @@ def insert_word_to_db(query: str):
 
 #no tests for this function as it is not called anywhere in the command directly
 def insert_to_db_util(conn, query):
+    """
+    Inserts the word into the database.
+
+    Args:
+        conn (sqlite3.Connection): Connection to the database.
+        query (str): Word to be inserted into the database.
+    """
+
     c=conn.cursor()
 
     c.execute("SELECT * FROM words WHERE word=? and tag is not NULL", (query,))
@@ -184,8 +191,9 @@ def definition(query:str, short:Optional[bool]=False):
 
     Args:
         query (str): Word which is meant to be defined.
-        short (Optional[bool], optional): If True, it will print just the short definition, if False it will print the whole definition. Defaults to False.
+        short (Optional[bool], optional): If True, it will print just the short definition. Defaults to False.
     """
+
     if not (response := connect_to_api(query)):
         return
 
@@ -230,6 +238,7 @@ def one_line_definition(query:str):
     Args:
         query (str): Word which is meant to be defined.
     """
+
     if not (response := connect_to_api(query)):
         return
 
@@ -247,6 +256,7 @@ def say_aloud(query: str):
         query (str): Word to be pronounced.
 
     """
+    
     if not (response := connect_to_api(query)):
         return
 

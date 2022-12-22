@@ -19,6 +19,7 @@ def delete_collection_from_DB():
 # todo once you have the final data in hand, comment this function (do not delete it, might be useful later. Just comment it out and don't call it anywhere)
 def clean_collection_csv_data():
     """Cleans the domains.csv file and writes the cleaned data to domains.csv"""
+
     df = pd.read_csv('modules/domains.csv') # Read the CSV Files 
     df['word']=df['word'].str.lower() # convert all words to lowercase
     df=df[df['word'].str.contains(' ')==False] # Remove the rows with spaces in the word column
@@ -47,6 +48,7 @@ def clean_collection_csv_data():
 
 def insert_collection_to_DB():
     """Inserts the cleaned data from domains.csv to the collections table in the database if the table is empty"""
+
     conn=createConnection()
     c=conn.cursor()
     
@@ -68,6 +70,7 @@ def insert_collection_to_DB():
 
 def show_all_collections():
     """Shows all the collections in the database"""
+
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT count(word), collection FROM collections GROUP BY collection ORDER BY count(word) DESC")
@@ -81,7 +84,15 @@ def show_all_collections():
         
 
 def show_words_from_collection(collectionName: str):
-    """Shows all the words in a collection"""
+    """Shows all the words in a collection
+    
+    Args:
+        collectionName (str): Name of the collection
+        
+        Raises:
+            NoSuchCollectionException: If the collection does not exist
+    """
+
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT word FROM collections WHERE collection=?", (collectionName,))
@@ -95,7 +106,15 @@ def show_words_from_collection(collectionName: str):
         print(Columns(rows, equal=True))
     
 def get_random_word_from_collection(collectionName: str):
-    """Shows a random word from a collection"""
+    """Shows a random word from a collection
+    
+    Args:
+        collectionName (str): Name of the collection
+        
+    Raises: 
+        NoSuchCollectionException: If the collection does not exist
+    """
+
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT word FROM collections WHERE collection=? ORDER BY RANDOM() LIMIT 1", (collectionName,))

@@ -27,6 +27,7 @@ def check_url_or_text(value:str)->bool:
     Returns:
         bool: True if the value is a URL, False if the value is a text
     """
+
     try:
         response = requests.get(value)
     except requests.exceptions.MissingSchema:
@@ -46,6 +47,7 @@ def clean_up_web_page(text:str)->str:
     Returns:
         str: cleaned up text
     """
+
     remove_words=['click', 'watch', 'advertisement', 'join', 'subscribe', 'register', 'login']
     # delete the words from the remove_Words list from the text string
     for word in text:
@@ -63,6 +65,7 @@ def parse_text_from_web(webURL):
     Returns:
         str: clean text from the web page
     """
+
     downloaded = trafilatura.fetch_url(webURL)
     return trafilatura.extract(downloaded)
 
@@ -97,6 +100,7 @@ def censor_bad_words_strict(text:str)->None:
     Args:
         text (str): text that needs to be censored
     """
+
     with open('_bad_words.txt', mode='r') as f:
         bad_words = f.read().splitlines()
     text=cleanup_text(text)
@@ -115,6 +119,7 @@ def censor_bad_words_not_strict(text:str)->None:
     Args:
         text (str): text that needs to be censored
     """
+
     with open('_bad_words.txt', mode='r') as f:
         bad_words = f.read().splitlines()
     
@@ -140,6 +145,7 @@ def readability_index(text:str)->None:
     Args:
         text (str): text to be analyzed
     """
+
     print(f"Lexicon Count {textstat.lexicon_count(text, removepunct=True)}")
     print(f"Character Count {textstat.char_count(text)}")
     print(f"Sentences Count {textstat.sentence_count(text)}")
@@ -172,8 +178,9 @@ def extract_difficult_words(text:str) -> None:
     """Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
 
     Args:
-        text (str): text to be analyzed
+        text (str): text/url to be analyzed
     """
+
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL:=check_url_or_text(text):
         print("URL detected")
@@ -221,6 +228,13 @@ extract_difficult_words("https://www.wikiwand.com/en/Wolfgang_Amadeus_Mozart")
 
 
 def sentiment_analysis(content):
+    """
+    Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
+
+    Args:
+        content (str): text/url to be analyzed
+    """
+
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL:=check_url_or_text(content):
         print("URL detected")
@@ -234,6 +248,16 @@ def sentiment_analysis(content):
         text=' '.join(text)
     
     def remove_long_sentences(text):
+        """
+        Removes sentences with more than 512 characters from the text
+
+        Args:
+            text (str): text to be cleaned
+
+        Returns:
+            str: cleaned text
+        """
+
         # remove sentences with more than 512 characters
         sentences = text.split('.')
         new_text = ''
@@ -243,6 +267,16 @@ def sentiment_analysis(content):
         return new_text
     
     def sentiment_score_to_summary(sentiment_score):
+        """
+        Converts the sentiment score to a summary
+
+        Args:
+            sentiment_score (int): sentiment score
+
+        Returns:
+            str: summary of the sentiment score
+        """
+
         if sentiment_score==1:
             return "Extremely Negative"
         elif sentiment_score==2:
@@ -266,6 +300,17 @@ def sentiment_analysis(content):
 
 
 def summarize_text_util(text, per):
+    """
+    Summarizes the text using the spacy library
+
+    Args:
+        text (str): text to be summarized
+        per (int): percentage of the text to be summarized
+
+    Returns:
+        str: summarized text
+    """
+
     nlp = spacy.load('en_core_web_sm')
     doc= nlp(text)
     tokens=[token.text for token in doc]
@@ -298,11 +343,13 @@ def summarize_text_util(text, per):
     return summary
 
 def summarize_text(content:str)->None:
-    """Print the summariezed text or internet article. 
+    """
+    Print the summariezed text or internet article. 
 
     Args:
         text (str): Text that is to be summarized
     """
+    
     if isWebURL:=check_url_or_text(content):
         print("URL detected")
         

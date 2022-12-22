@@ -104,6 +104,8 @@ def list(
         last (Optional[str], optional): If True, prints the list of last searched words. Defaults to None.
         most (Optional[str], optional): If True, prints the list of most searched words. Defaults to None.
         tagnames (Optional[bool], optional): If True, prints the list of all the tags. Defaults to False.
+        collection (Optional[str], optional): If True, prints the list of words from a collection. Defaults to None.
+        collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.
     """
 
     if favorite:
@@ -534,6 +536,9 @@ def random(
     Args:
         learning (Optional[bool], optional): Get a random learning word. Defaults to False.
         mastered (Optional[bool], optional): Get a random mastered word. Defaults to False.
+        favorite (Optional[bool], optional): Get a random favorite word. Defaults to False.
+        tag (Optional[str], optional): Get a random word from a particular tag. Defaults to None.
+        collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.
     """
 
     if learning:
@@ -563,8 +568,12 @@ def revise(
     Revise words from your learning list.
 
     Args:
-        number (Optional[int], optional): Number of words to revise. Defaults to 10.
+        number (Optional[int], optional): Number of words to revise. Defaults to None.
         tag (Optional[str], optional): Tag of words to revise. Defaults to None.
+        learning (Optional[bool], optional): Revise words in your learning list. Defaults to False.
+        mastered (Optional[bool], optional): Revise words in your mastered list. Defaults to False.
+        favorite (Optional[bool], optional): Revise words in your favorite list. Defaults to False.
+        collection (Optional[str], optional): Revise words in a particular collection. Defaults to None.
     """
 
     if not any([learning, mastered, favorite, collection, tag]) and not number:
@@ -621,6 +630,10 @@ def quiz(
     Args:
         number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
         tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
+        learning (Optional[bool], optional): Take a quiz on words in your learning list. Defaults to False.
+        mastered (Optional[bool], optional): Take a quiz on words in your mastered list. Defaults to False.
+        favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
+        collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.
     """
     if not any([learning, mastered, favorite, collection, tag]) and not number:
         quiz_all()
@@ -679,7 +692,15 @@ def graph(
     Generate Graphical Charts based on your vocabulary.
 
     Args:
-        tag (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
+        topWordsBar (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
+        topTagsBar (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
+        topWordsPie (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
+        topTagsPie (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
+        lookupWeek (Optional[bool], optional): Visualizes the word count distribution for days in the past week. Defaults to False.
+        lookupMonth (Optional[bool], optional): Visualizes the word count distribution for days in the past month. Defaults to False.
+        lookupYear (Optional[bool], optional): Visualizes the word count distribution for days in the past year. Defaults to False.
+        learnVSmaster (Optional[bool], optional): Visualizes the number of words in your learning list vs. your mastered list. Defaults to False.
+        slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.
     """
     
   

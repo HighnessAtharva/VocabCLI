@@ -78,6 +78,10 @@ def initializeDB():
 
 # NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
 def refresh_cache():
+    """
+    Refreshes the cache of the words in the database.
+    """
+    
     # check if cache is empty, if yes then do nothing
     conn=createConnection()
     c=conn.cursor()
