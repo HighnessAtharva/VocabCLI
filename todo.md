@@ -10,21 +10,21 @@
 - [x]  Add more words to domains.csv with the right topic name.
 - [x]  Get Linux Installed and try out asciinema
 - [ ]  Github Pages Improvement
-- [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback.
+- [ ]  Start with application promo on Reddit, Discord and other platforms to get early adopters and feedback. Call or message me about this.
 - [ ]  FlashCard Generation Code (for Export, and Slide Show)
 
 ### ATHARVA
 
+- [ ]  Make sure all files are UTF-8 encoded
+- [ ]  Use Black to format the code
 
 - [x]  Add Heading to Panels @Anay
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
 - [ ]  FlashCard Generation - Download or View Options (Enable Carousel for viewing) (Desing a Template First @AtharvaShah)
-- [x]  Get Linux Installed @anay and try out asciinema
-- [ ]  Github Pages Improvement @anay
 - [ ]  Maintain Quiz History (need a separate table-> Quiz Type | Count | Duration | Points | )
-- [ ]  Add Progress Bar to Refresh Cache (takes a while)
+- [x]  Add Progress Bar to Refresh Cache (takes a while) and spinner to define command
 - [ ]  Generate Coverage Report, Add All Missing Tests for Existing Commands
-- [ ]  Complete rest of the graph commands
+- [x]  Complete rest of the graph commands
 - [x]  Flashcard Generation Design Template
 - [x]  5 Graph Carousel
 - [x]  Basic NLP (Sentiment Analysis, Word Processing, etc)
@@ -115,6 +115,7 @@ From domain.csv remove all the rows which contain a space and hyphen in the word
   6. Sequence Diagram)
 [ ] Split the test files into multiple files based on Classes or Modules
 [ ] Final Project Report for College Submission
+[ ]  Make advertisement screenshots like so-> https://justfitness.io/download
 
 ## Notes
 

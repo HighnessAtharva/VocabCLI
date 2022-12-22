@@ -29,6 +29,11 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
                 if query not in synonym and ' ' not in synonym:
                         synonyms.append(synonym)
 
+    # remove special characters and numbers
+    for x in synonyms:
+        if x.isalpha() == False:
+            synonyms.remove(x)
+     
     # if none returned from API, fallback to NLTK and append the list
     if not len(synonyms):
         for syn in wordnet.synsets(query):
@@ -38,7 +43,7 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
 
     # finally print the list
     if len(synonyms):
-        print(Panel(f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are ⏭"))
+        print(Panel.fit(f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are 👇"))
         synonyms = [Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
         print(Columns(synonyms))
 
@@ -76,9 +81,14 @@ def find_antonym(query:str):  # sourcery skip: for-append-to-extend
             if antonyms := list(filter(lambda x: "_" not in x, antonyms)):
                 antonyms = list(filter(lambda x: x != query, antonyms))
 
+    # remove special characters and numbers
+    for x in antonyms:
+        if x.isalpha() == False:
+            antonyms.remove(x)
+            
     # finally print the list
     if len(antonyms):
-        print(Panel(f" [reverse bold green]Antonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are ⏭"))
+        print(Panel.fit(f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are 👇"))
         antonyms = [Panel(f"[red]{antonym}[red]", expand=True) for antonym in antonyms]
         print(Columns(antonyms))
 

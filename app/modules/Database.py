@@ -8,7 +8,8 @@ from sqlite3 import Error
 from requests import exceptions
 from rich import print
 from rich.panel import Panel
-
+# from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.progress import track
 
 #no tests for this function as it is not called anywhere in the command directly
 def createConnection():
@@ -85,32 +86,42 @@ def refresh_cache():
     # check if cache is empty, if yes then do nothing
     conn=createConnection()
     c=conn.cursor()
+
     c.execute("SELECT COUNT(*) FROM cache_words")
     if not c.fetchone()[0]:
         return
-
-    print(Panel("Refreshing cache..."))
     c.execute("SELECT word FROM cache_words")
     rows=c.fetchall()
+
+    total=0
     for row in rows:
-        word=row[0]
-        try:
-            response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}")
-            response.raise_for_status()
+        #----------------- Progress Bar -----------------#
+        for _ in track(range(len(rows)), description=" 🔃 Refreshing Cache "):
+            
+        #----------------- Progress Bar -----------------#
 
-        except exceptions.ConnectionError as error:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
-        )
+            
+                word=row[0]
+                try:
+                    response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}")
+                    response.raise_for_status()
 
-        else:
-            if response.status_code == 200:
-                c.execute("UPDATE cache_words SET api_response=? WHERE word=?", (json.dumps(response.json()[0]), word))
-                conn.commit()
+                except exceptions.ConnectionError as error:
+                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
+                )
+                else:
+                    if response.status_code == 200:
+                        c.execute("UPDATE cache_words SET api_response=? WHERE word=?", (json.dumps(response.json()[0]), word))
+                        conn.commit()
+                    
+                # update the progress bar
+                total += 1
+                
     print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="Cache refreshed successfully.")
+                     title_align="center",
+                     padding=(1, 1),
+                     renderable="Cache refreshed successfully.")
         ) 

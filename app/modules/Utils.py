@@ -19,7 +19,7 @@ from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-
+                
 
 #no tests for this function as it is not called anywhere in the command directly
 def check_word_exists(query: str):
@@ -585,7 +585,6 @@ def get_random_word_from_tag(tagName:str):
         print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"))
         definition(rows[0][0])
 
-# FIXME @atharva: debug only tag argument 🐞
 def show_list(
     favorite:Optional[bool]=False,
     learning:Optional[bool]=False,
@@ -1064,7 +1063,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         try:
             percentage=round((learning_count_today-learning_count_yesterday)/(learning_count_yesterday)*100, 2)
         except ZeroDivisionError:
-            percentage=learning_count_today*100
+            percentage=100
         if percentage>=0:
             print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words today compared to yesterday.\n[violet]Today[/violet]: {learning_count_today} words.\n[violet]Yesterday[/violet]: {learning_count_yesterday} words.", title="[reverse]Today's Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
         else:
@@ -1076,8 +1075,12 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-14 day') AND date(datetime)<date('now', '-7 day')")
         learning_count_last_week=c.fetchone()[0]
-
-        percentage=round((learning_count_last_week)/(learning_count_week)*100, 2)
+        
+        try:
+            percentage=round((learning_count_last_week)/(learning_count_week)*100, 2)
+        except ZeroDivisionError:
+            percentage=100
+        
         if percentage>=0:
             print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this week compared to last week.\n[violet]This week[/violet]: {learning_count_week} words.\n[violet]Last week[/violet]: {learning_count_last_week} words.", title="[reverse]Weekly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
@@ -1090,8 +1093,12 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-2 month') AND date(datetime)<date('now', '-1 month')")
         learning_count_last_month=c.fetchone()[0]
-
-        percentage=round((learning_count_month-learning_count_last_month)/(learning_count_month)*100, 2)
+        
+        try:
+            percentage=round((learning_count_month-learning_count_last_month)/(learning_count_month)*100, 2)
+        except ZeroDivisionError:
+            percentage=100
+        
         if percentage>=0:
             print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this month compared to last month.\n[violet]This month[/violet]: {learning_count_month} words.\n[violet]Last month[/violet]: {learning_count_last_month} words.",title="[reverse]Monthly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 
@@ -1104,8 +1111,12 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
 
         c.execute("SELECT COUNT(word) FROM words WHERE date(datetime)>=date('now', '-2 year') AND date(datetime)<date('now', '-1 year')")
         learning_count_last_year=c.fetchone()[0]
-
-        percentage=round((learning_count_year-learning_count_last_year)/(learning_count_year)*100, 2)
+        
+        try:
+            percentage=round((learning_count_year-learning_count_last_year)/(learning_count_year)*100, 2)
+        except ZeroDivisionError:
+            percentage=100
+            
         if percentage>=0:
             print(Panel.fit(f"🚀 You have looked up [bold green]{percentage}%[/bold green] [u]MORE[/u] words this year compared to last year.\n[violet]This year[/violet]: {learning_count_year} words.\n[violet]Last year[/violet]: {learning_count_last_year} words.",title="[reverse]Yearly Learning Rate[/reverse]", title_align="center",padding=(1, 1)))
 

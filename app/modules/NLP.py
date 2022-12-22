@@ -1,22 +1,29 @@
+from collections import Counter
+from heapq import nlargest
+from string import punctuation
+import nltk
 import pandas as pd
 import regex as re
 import requests
+import rich
 import spacy
 import textstat
-from bs4 import BeautifulSoup
-from spacytextblob.spacytextblob import SpacyTextBlob
-import trafilatura
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
-import nltk
-from spacy.lang.en.stop_words import STOP_WORDS
-from collections import Counter
-from string import punctuation
-from heapq import nlargest
-import rich 
+import trafilatura
+from bs4 import BeautifulSoup
 from rich.console import Console
 from rich.table import Table
+from spacy.lang.en.stop_words import STOP_WORDS
+from spacytextblob.spacytextblob import SpacyTextBlob
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from rich.panel import Panel
+from rich.table import Table
+from rich import print
+from typing import *
 
+# todo - revise docstrings and add wherever missing. @anay
+# todo - add type hints wherever missing and return types as well @anay
+# todo - add colours, formatting and emojis to the rich print statements @anay
 
 def check_url_or_text(value:str)->bool:
     """Checks if the value is a URL or a text
@@ -92,18 +99,28 @@ def cleanup_text(text:str)->str:
 
 
     
-
-# TODO - allow to pass an internet article url here and show percentage of offensive words in the article
+# TODO - show total count of censor words in the text for both strict and not strict
 def censor_bad_words_strict(text:str)->None:
     """Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
 
     Args:
         text (str): text that needs to be censored
     """
+    # check if the content is a URL, if yes, then parse the text from it and then use the model
+    if isWebURL:=check_url_or_text(text):
+        print("URL detected")
+        text=parse_text_from_web(text)
+        text=clean_up_web_page(text)    
 
-    with open('_bad_words.txt', mode='r') as f:
+    # if text and not URL, then directly use the model
+    if not isWebURL:
+        print("This is not a valid URL. Processing it as text...")
+        text=cleanup_text(text)
+        text=' '.join(text)
+    
+    
+    with open('modules/_bad_words.txt', mode='r') as f:
         bad_words = f.read().splitlines()
-    text=cleanup_text(text)
     new_text=''
     for word in text:
         if word in bad_words:
@@ -119,23 +136,41 @@ def censor_bad_words_not_strict(text:str)->None:
     Args:
         text (str): text that needs to be censored
     """
+    # check if the content is a URL, if yes, then parse the text from it and then use the model
+    if isWebURL:=check_url_or_text(text):
+        print("URL detected")
+        text=parse_text_from_web(text)
+        text=clean_up_web_page(text)    
 
-    with open('_bad_words.txt', mode='r') as f:
-        bad_words = f.read().splitlines()
+    # if text and not URL, then directly use the model
+    if not isWebURL:
+        print("This is not a valid URL. Processing it as text...")
+        text=cleanup_text(text)
+        text=' '.join(text)
     
+
+    
+    with open('modules/_bad_words.txt', mode='r') as f:
+        bad_words = f.read().splitlines()
+        bad_words_plural=[bad_words[i]+'s' for i in range(len(bad_words))]
+        bad_words= bad_words + bad_words_plural
     text=cleanup_text(text)
     new_text=''
     
     for word in text:
-        if word in bad_words:
+        word=str(word)
+        if word in bad_words:    
             if len(word) <= 3:
                 word=word.replace(word, '*' * len(word))
             elif len(word) <= 5:
-                word=word.replace(word[1:], '****')
+                # replace the middle character with asterisk
+                word=word.replace(word[1], '*')
+                word=word.replace(word[2], '*')
+                word=word.replace(word[3], '*')
             else:
-                word=word.replace(word[2:], '*'*len(word)-1)
+                word=word.replace(word[2:5], '***')
         new_text+= f'{word} '
-    print(new_text)
+    print(Panel(renderable=new_text, title="Censored Text"))
 
 
 
@@ -194,7 +229,7 @@ def extract_difficult_words(text:str) -> None:
         text=' '.join(text)
 
 
-    with open(file='_most_common_words.txt', mode='r') as f:
+    with open(file='modules/_most_common_words.txt', mode='r') as f:
         simple_words = f.read().splitlines()
     text=cleanup_text(text)
     article_word_count=len(text)
@@ -222,9 +257,6 @@ def extract_difficult_words(text:str) -> None:
     print(f"Extracted {len(difficult_words)} difficult words")
     for word in difficult_words:
         print(word)        
-
-
-extract_difficult_words("https://www.wikiwand.com/en/Wolfgang_Amadeus_Mozart")
 
 
 def sentiment_analysis(content):
@@ -342,9 +374,8 @@ def summarize_text_util(text, per):
     summary=''.join(final_summary)
     return summary
 
-def summarize_text(content:str)->None:
-    """
-    Print the summariezed text or internet article. 
+def summarize_text(content:str, file: Optional[bool]=False)->None:
+    """Print the summariezed text or internet article. 
 
     Args:
         text (str): Text that is to be summarized
@@ -373,13 +404,28 @@ def summarize_text(content:str)->None:
     # print(text)
     text_summary = summarize_text_util(text, 0.4)  
     
+    if not file:
+        print(f"Length of the article: {len(text)} characters", end="\n\n")
+        print(f"Length of the summary:{len(text_summary)} characters", end="\n\n")
+        
+        if isWebURL:
+            print(f"Headline:\n{headline}", end="\n\n")
+        
+        print(f"Summary:\n{text_summary}", end="\n\n")
     
-    print(f"Length of the article: {len(text)} characters", end="\n\n")
-    print(f"Length of the summary:{len(text_summary)} characters", end="\n\n")
-    
-    if isWebURL:
-        print(f"Headline:\n{headline}", end="\n\n")
-    
-    print(f"Summary:\n{text_summary}", end="\n\n")
+    if file:
+        with open("summary.txt", "w", encoding="utf-8") as f:
+            f.write(f"Length of the article: {len(text)} characters\n\n")
+       
+            f.write(f"Length of the summary:{len(text_summary)} characters\n\n")
+        
+            if isWebURL:
+                f.write(str(f"Headline:\n{headline}\n\n"))
+              
+            f.write("------------------------------------------------------------\n\n")
+          
+            f.write(f"Summary:\n{text_summary}\n\n")
+          
+        print("Summary saved to summary.txt")
         
         

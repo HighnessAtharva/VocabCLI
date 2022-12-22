@@ -13,8 +13,16 @@ from typing import *
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
-
+def display_theme(query: str):
+    conn=createConnection()
+    c=conn.cursor()
+    # join collection and words table to get the collection name for the word
+    c.execute("SELECT collection FROM collections JOIN words ON collections.word=words.word WHERE words.word=?", (query,))
+    if collection := c.fetchone():
+        print(Panel.fit(f"[bold cyan]Theme:[/bold cyan] {collection[0]}"))
+        
 #no tests for this function as it is not called anywhere in the command directly
 def connect_to_api(query:str="hello"):
     """
@@ -26,7 +34,7 @@ def connect_to_api(query:str="hello"):
     Returns:
         dict: Response in JSON format.
     """
-
+    
     try:
 
         # sql query to check if word exists in the cache_word table
@@ -193,41 +201,54 @@ def definition(query:str, short:Optional[bool]=False):
         query (str): Word which is meant to be defined.
         short (Optional[bool], optional): If True, it will print just the short definition. Defaults to False.
     """
+    
+    #----------------- Spinner -----------------#
+    with Progress(
+        SpinnerColumn(spinner_name="moon", style="bold violet"),
+        TextColumn("[progress.description]{task.description}", justify="left", style="bold cyan"),
+        transient=True,
+    ) as progress:
+        progress.add_task(description="Searching...", total=None)
+    #----------------- Spinner -----------------#
+        
+        if not (response := connect_to_api(query)):
+            return
 
-    if not (response := connect_to_api(query)):
-        return
+        # print(response)
+        print(Panel(f"[bold gold1]{query.upper()}[/bold gold1]\n{phonetic(query)}"))
 
-    # print(response)
-    print(Panel(f"[bold gold1]{query.upper()}[/bold gold1]\n{phonetic(query)}"))
+        table=Table(show_header=True, header_style="bold bright_cyan")
+        table.add_column("Part of Speech", style="cyan", width=15)
+        table.add_column("Definition", style="light_green")
 
-    table=Table(show_header=True, header_style="bold bright_cyan")
-    table.add_column("Part of Speech", style="cyan", width=15)
-    table.add_column("Definition", style="light_green")
+        # insert search word into DB
+        insert_word_to_db(query)
 
-    # insert search word into DB
-    insert_word_to_db(query)
+        if short:
+            for meaningNumber in response["meanings"]:
+                for meaning in meaningNumber["definitions"][:1]:
+                    table.add_row(meaningNumber["partOfSpeech"], meaning["definition"])
+                table.add_section()
+            print(table)
 
-    if short:
-        for meaningNumber in response["meanings"]:
-            for meaning in meaningNumber["definitions"][:1]:
-                table.add_row(meaningNumber["partOfSpeech"], meaning["definition"])
-            table.add_section()
-        print(table)
 
-    if not short:
-        for meaningNumber in response["meanings"]:
-            for count, meaning in enumerate(meaningNumber["definitions"], start=1):
+        if not short:            
+            # shows the associated collection for the word
+            display_theme(query)
+            
+            for meaningNumber in response["meanings"]:
+                for count, meaning in enumerate(meaningNumber["definitions"], start=1):
 
-                # if example available
-                if "example" in meaning:
-                    table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n[bold white u]Example:[/bold white u] [i white]{meaning['example']}[/i white]\n")
+                    # if example available
+                    if "example" in meaning:
+                        table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n[bold white u]Example:[/bold white u] [i white]{meaning['example']}[/i white]\n")
 
-                # if example not available
-                else:
-                    table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n")
-            table.add_section()
-        print(table)
-        print("\n")
+                    # if example not available
+                    else:
+                        table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n")
+                table.add_section()
+            print(table)
+            print("\n")
 
 
 #no tests for this function as it is not called anywhere in the command directly

@@ -1251,7 +1251,6 @@ class TestQuiz:
             assert "The tag diamonds does not exist" in result.stdout
 
         
-        
         @mock.patch("typer.confirm")
         def test_quiz_tag_low_words(self, mock_typer):
             mock_typer.return_value = True
@@ -1393,49 +1392,73 @@ class TestQuiz:
         
         
 class TestGraph:
-    # top words bar graph
-    def test_graph_top_words(self):
-        pass
+    class Test_Top_Words_Bar_Graph:
+        # top words bar graph
+        def test_graph_bar_top_words(self):
+            pass
+        
+        def test_graph_bar_top_words_zero(self):
+            pass
+        
+        def test_graph_bar_top_words_less_than_N(self):
+            pass
     
-    def test_graph_top_words_zero(self):
-        pass
+    class Test_Top_Words_Pie_Chart:
+        def top_words_pie_chart(self):
+            pass
+        
+        def top_words_pie_chart_zero(self):
+            pass
+        
+        def test_graph_top_words_less_than_N(self):
+            pass
     
-    def test_graph_top_words_less_than_N(self):
-       pass
+    class Test_Top_Tags_Bar_Graph:
+        def test_graph_top_tags_bar(self):
+            pass
+        
+        def test_graph_top_tags_bar_zero(self):
+            pass
+        
+        def test_graph_top_tags_bar_less_than_N(self):
+            pass
     
-    # top words pie chart
-    def top_words_pie_chart(self):
-        pass
+    class Test_Top_Tags_Pie_Chart:
+        def test_graph_top_tags_pie(self):
+            pass
+        
+        def test_graph_top_tags_pie_zero(self):
+            pass
+        
+        def test_graph_top_tags_pie_less_than_N(self):
+            pass
     
-    # top tags bar graph
-    def test_graph_top_tags_bar(self):
-        pass
+    class Test_LearnVsMaster:
+        def test_graph_learnVsMaster(self):
+            pass
+        
+        def test_graph_learnVsMaster_zero_both(self):
+            pass    
+        
+        def test_graph_learnVsMaster_zero_learn(self):
+            pass
+        
+        def test_graph_learnVsMaster_zero_master(self):
+            pass
+        
+    class Test_Lookup_History:
+        def test_graph_lookup_history_week(self):
+            pass
+        
+        def test_graph_lookup_history_month(self):
+            pass
+        
+        def test_graph_lookup_history_year(self):
+            pass
     
-    # top tags pie chart
-    def test_graph_top_tags_pie(self):
-        pass
-    
-    # lookup history week
-    def test_graph_lookup_history_week(self):
-        pass
-    
-    # lookup history month
-    def test_graph_lookup_history_month(self):
-        pass
-    
-    # lookup history year
-    def test_graph_lookup_history_year(self):
-        pass
-    
-    # learnVsMaster
-    def test_graph_learnVsMaster(self):
-        pass
-    
-    def test_graph_learnVsMaster_zero_both(self):
-        pass    
-    
-    def test_graph_learnVsMaster_zero_learn(self):
-        pass
-    
-    def test_graph_learnVsMaster_zero_master(self):
-        pass
+    class Test_Word_Category:
+        def test_graph_word_category(self):
+            pass
+        
+        def test_graph_word_category_zero_words_in_DB(self):
+            pass

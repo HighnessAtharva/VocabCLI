@@ -10,8 +10,9 @@ from modules.Graph import *
 from modules.Flashcard import *
 from modules.WordCollections import *
 from modules.Carousel import *
-
+from modules.NLP import *
 import sys
+import pyperclip
 import typer
 from typing import *
 from rich import print
@@ -31,7 +32,8 @@ app = typer.Typer(
 initializeDB()
 
 #uncomment this to easily delete all words from collections table during testing
-#delete_collection_from_DB()
+# delete_collection_from_DB()
+# clean_collection_csv_data()
 
 # add all the collection words to the database if not already existing
 insert_collection_to_DB()
@@ -53,16 +55,16 @@ def refresh():
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
-    short: Optional[bool] = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
-    pronounce: Optional[bool] = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
+    short: bool = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
+    pronounce: bool = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
 ):
     """
     Looks up a word in the dictionary.
 
     Args:
         words (List[str]): Word which is to be defined.
-        short (Optional[bool], optional): If True, prints the short definition of the word. Defaults to False.
-        pronounce (Optional[bool], optional): If True, plays the pronunciation of the word. Defaults to False.
+        short (bool, optional): If True, prints the short definition of the word. Defaults to False.
+        pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.
     """
 
     for word in words:
@@ -79,31 +81,31 @@ def define(
 # todo @anay: add flag to show words with one line def. Call the flag as --showDefs: Optional[boolean]
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
 def list(
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
-    learning: Optional[bool] = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
-    mastered: Optional[bool] = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
-    days: Optional[int] = typer.Option(None, "--days", "-d", help="Get a list of words from last n number of days."),
-    date: Optional[bool] = typer.Option(False, "--date", "-D", help="Get a list of words from a particular date."),
-    last: Optional[int] = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
-    most: Optional[int] = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
-    tags: Optional[bool] = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Get a list of words from a collection."),
-    collections: Optional[bool] = typer.Option(False, "--collections", "-C", help="Get a list of all the collections."),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
+    learning: bool = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
+    mastered: bool = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
+    tag: str = typer.Option(None, "--tag", "-t", help="Get a list of words with a particular tag."),
+    days: int = typer.Option(None, "--days", "-d", help="Get a list of words from last n number of days."),
+    date: bool = typer.Option(False, "--date", "-D", help="Get a list of words from a particular date."),
+    last: int = typer.Option(None, "--last", "-L", help="Get a list of last searched words."),
+    most: int = typer.Option(None, "--most", "-M", help="Get a list of most searched words."),
+    tags: bool = typer.Option(False, "--tagnames", "-T", help="Get a list of all the tags."),
+    collection: str = typer.Option(None, "--collection", "-c", help="Get a list of words from a collection."),
+    collections: bool = typer.Option(False, "--collections", "-C", help="Get a list of all the collections."),
 ):
     """
     Lists all the words looked up by the user.
 
     Args:
-        favorite (Optional[bool], optional): If True, prints the list of favorite words. Defaults to False.
-        learning (Optional[bool], optional): If True, prints the list of words in learning list. Defaults to False.
-        mastered (Optional[bool], optional): If True, prints the list of words in mastered list. Defaults to False.
-        tag (Optional[str], optional): If True, prints the list of words with a particular tag. Defaults to None.
-        days (Optional[str], optional): If True, prints the list of words from last n number of days. Defaults to None.
-        date (Optional[str], optional):  If True, prints the list of words from a particular date. Defaults to None.
-        last (Optional[str], optional): If True, prints the list of last searched words. Defaults to None.
-        most (Optional[str], optional): If True, prints the list of most searched words. Defaults to None.
-        tagnames (Optional[bool], optional): If True, prints the list of all the tags. Defaults to False.
+        favorite (bool, optional): If True, prints the list of favorite words. Defaults to False.
+        learning (bool, optional): If True, prints the list of words in learning list. Defaults to False.
+        mastered (bool, optional): If True, prints the list of words in mastered list. Defaults to False.
+        tag (str, optional): If True, prints the list of words with a particular tag. Defaults to None.
+        days (str, optional): If True, prints the list of words from last n number of days. Defaults to None.
+        date (str, optional):  If True, prints the list of words from a particular date. Defaults to None.
+        last (str, optional): If True, prints the list of last searched words. Defaults to None.
+        most (str, optional): If True, prints the list of most searched words. Defaults to None.
+        tagnames (bool, optional): If True, prints the list of all the tags. Defaults to False.
         collection (Optional[str], optional): If True, prints the list of words from a collection. Defaults to None.
         collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.
     """
@@ -227,13 +229,13 @@ def unmaster(
 
 @app.command(rich_help_panel="Import / Export", help="📂 [bold blue]Exports[/bold blue] a list of all your looked up words")
 def export(
-    pdf: Optional[bool] = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
+    pdf: bool = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
     """
     Exports a list of all your looked up words.
 
     Args:
-        pdf (Optional[bool], optional): If True, exports a list of your looked up words in PDF format. Defaults to False.
+        pdf (bool, optional): If True, exports a list of your looked up words in PDF format. Defaults to False.
     """
 
     if pdf:
@@ -296,19 +298,19 @@ def about():
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📊 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
 def rate(
-    today: Optional[bool] = typer.Option(False, "--today", "-t", help="Get learning rate today"),
-    week: Optional[bool] = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
-    month: Optional[bool] = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
-    year: Optional[bool] = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
+    today: bool = typer.Option(False, "--today", "-t", help="Get learning rate today"),
+    week: bool = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
+    month: bool = typer.Option(False, "--month", "-m", help="Get learning rate this month"),
+    year: bool = typer.Option(False, "--year", "-y", help="Get learning rate this year"),
 ):
     """
     Gives the number of words you have learned in a particular time period with a comparison of a previous time period.
 
     Args:
-        today (Optional[bool], optional): If True, get learning rate today. Defaults to False.
-        week (Optional[bool], optional): If True, get learning rate this week. Defaults to False.
-        month (Optional[bool], optional): If True, get learning rate this month. Defaults to False.
-        year (Optional[bool], optional): If True, get learning rate this year. Defaults to False.
+        today (bool, optional): If True, get learning rate today. Defaults to False.
+        week (bool, optional): If True, get learning rate this week. Defaults to False.
+        month (bool, optional): If True, get learning rate this month. Defaults to False.
+        year (bool, optional): If True, get learning rate this year. Defaults to False.
     """
 
     if today:
@@ -372,20 +374,20 @@ def history(
 
 @app.command(rich_help_panel="Vocabulary Builder", help="🚮 Deletes the word from the database")
 def delete(
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Deletes all mastered words"),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Deletes all learning words"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Deletes all favorite words"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to be deleted"),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Deletes all mastered words"),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Deletes all learning words"),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Deletes all favorite words"),
+    tag: str = typer.Option(None, "--tag", "-t", help="Tag of words to be deleted"),
     words: List[str] = typer.Argument(None, help="Word to be deleted"),
 ):
     """
     Deletes the word from the database.
 
     Args:
-        mastered (Optional[bool], optional): Deletes all mastered words. Defaults to False.
-        learning (Optional[bool], optional): Deletes all learning words. Defaults to False.
-        favorite (Optional[bool], optional): Deletes all favorite words. Defaults to False.
-        tag (Optional[str], optional): Tag of words to be deleted. Defaults to None.
+        mastered (bool, optional): Deletes all mastered words. Defaults to False.
+        learning (bool, optional): Deletes all learning words. Defaults to False.
+        favorite (bool, optional): Deletes all favorite words. Defaults to False.
+        tag (str, optional): Tag of words to be deleted. Defaults to None.
         words (List[str], optional): Word to be deleted. Defaults to None.
     """
 
@@ -461,19 +463,19 @@ def delete(
 
 @app.command(rich_help_panel="Vocabulary Builder", help="🧹 [bold red]Clears[/bold red] all lists")
 def clear(
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
-    master: Optional[bool]= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
+    master: bool= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Clear all words in your favorite list"),
+    tag: str = typer.Option(None, "--tag", "-t", help="Clear all words with a particular tag"),
 ):
     """
     Clears all the words from the lists.
 
     Args:
-        learning (Optional[bool], optional): If True, clears all the words from the learning list. Defaults to False.
-        master (Optional[bool], optional): If True, clears all the words from the mastered list. Defaults to False.
-        favorite (Optional[bool], optional): If True, clears all the words from the favorite list. Defaults to False.
-        tag (Optional[str], optional): If True, clears all the words with a particular tag. Defaults to None.
+        learning (bool, optional): If True, clears all the words from the learning list. Defaults to False.
+        master (bool, optional): If True, clears all the words from the mastered list. Defaults to False.
+        favorite (bool, optional): If True, clears all the words from the favorite list. Defaults to False.
+        tag (str, optional): If True, clears all the words with a particular tag. Defaults to None.
     """
 
     if learning:
@@ -519,23 +521,26 @@ def clear(
             clear_all_words_from_tag(tag)
         else:
             print(Panel(f"OK, not learning any words from the tag {tag}."))
+    
+    else:
+        raise typer.BadParameter(message="Please specify a list to clear. Use --help for more info.")
 
 
 # todo - add more flags/options
 @app.command(rich_help_panel="Vocabulary Builder", help="🔀 Gets a random word")
 def random(
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Get a random favorite word"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Get a random word from a particular tag"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Get a random word from a particular collection"),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Get a random mastered word"),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Get a random favorite word"),
+    tag: str = typer.Option(None, "--tag", "-t", help="Get a random word from a particular tag"),
+    collection: str = typer.Option(None, "--collection", "-c", help="Get a random word from a particular collection"),
 ):
     """
     Gets a random word.
 
     Args:
-        learning (Optional[bool], optional): Get a random learning word. Defaults to False.
-        mastered (Optional[bool], optional): Get a random mastered word. Defaults to False.
+        learning (bool, optional): Get a random learning word. Defaults to False.
+        mastered (bool, optional): Get a random mastered word. Defaults to False.
         favorite (Optional[bool], optional): Get a random favorite word. Defaults to False.
         tag (Optional[str], optional): Get a random word from a particular tag. Defaults to None.
         collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.
@@ -551,25 +556,25 @@ def random(
         get_random_word_from_tag(tag)
     elif collection:
         get_random_word_from_collection(collection)
-    elif not any([learning, mastered, tag, collection]):
+    elif not any([learning, mastered, tag, collection, favorite]):
         get_random_word_definition_from_api()
 
 
 @app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
 def revise(
-    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to revise in random order."),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Revise words in a particular tag."),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Revise words in your learning list"),
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Revise words in your mastered list"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Revise words in your favorite list"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Revise words in a particular collection")
+    number: int = typer.Option(None, "--number", "-n", help="Number of words to revise in random order."),
+    tag: str = typer.Option(None, "--tag", "-t", help="Revise words in a particular tag."),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Revise words in your learning list"),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Revise words in your mastered list"),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Revise words in your favorite list"),
+    collection: str = typer.Option(None, "--collection", "-c", help="Revise words in a particular collection")
 ):  # sourcery skip: remove-redundant-if
     """
     Revise words from your learning list.
 
     Args:
-        number (Optional[int], optional): Number of words to revise. Defaults to None.
-        tag (Optional[str], optional): Tag of words to revise. Defaults to None.
+        number (int, optional): Number of words to revise. Defaults to None.
+        tag (str, optional): Tag of words to revise. Defaults to None.
         learning (Optional[bool], optional): Revise words in your learning list. Defaults to False.
         mastered (Optional[bool], optional): Revise words in your mastered list. Defaults to False.
         favorite (Optional[bool], optional): Revise words in your favorite list. Defaults to False.
@@ -617,19 +622,19 @@ def revise(
 # todo - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word
 @app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
 def quiz(
-    number: Optional[int] = typer.Option(None, "--number", "-n", help="Number of words to quiz on. If not specified, all words will be included in the quiz in alphabetical order.", min=4),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
-    learning: Optional[bool] = typer.Option(False, "--learning", "-l", help="Take a quiz on words in your learning list"),
-    mastered: Optional[bool] = typer.Option(False, "--mastered", "-m", help="Take a quiz on words in your mastered list"),
-    favorite: Optional[bool] = typer.Option(False, "--favorite", "-f", help="Take a quiz on words in your favorite list"),
-    collection: Optional[str] = typer.Option(None, "--collection", "-c", help="Take a quiz on words in a particular collection")
+    number: int = typer.Option(None, "--number", "-n", help="Limit the number of words to quiz on.", min=4),
+    tag: str = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Take a quiz on words in your learning list"),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Take a quiz on words in your mastered list"),
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Take a quiz on words in your favorite list"),
+    collection: str = typer.Option(None, "--collection", "-c", help="Take a quiz on words in a particular collection")
 ):  # sourcery skip: remove-redundant-if
     """
     Take a quiz on words in your learning list.
 
     Args:
-        number (Optional[int], optional): Number of words to quiz on. Defaults to 10.
-        tag (Optional[str], optional): Tag of words to quiz on. Defaults to None.
+        number (int, optional): Number of words to quiz on. Defaults to 10.
+        tag (str, optional): Tag of words to quiz on. Defaults to None.
         learning (Optional[bool], optional): Take a quiz on words in your learning list. Defaults to False.
         mastered (Optional[bool], optional): Take a quiz on words in your mastered list. Defaults to False.
         favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
@@ -675,25 +680,27 @@ def quiz(
 
 @app.command(rich_help_panel="report", help="📚 Generate Graphical Charts based on your vocabulary")
 def graph(
-    topWordsBar: Optional[int] = typer.Option(None, "--topwordsbar", "-twb", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
-    topTagsBar: Optional[int] = typer.Option(None, "--toptagsbar", "-ttb", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
+    topWordsBar: int = typer.Option(None, "--topwordsbar", "-twb", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
+    topTagsBar: int = typer.Option(None, "--toptagsbar", "-ttb", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
     
-    topWordsPie: Optional[int] = typer.Option(None, "--topwordspie", "-twp", help="Pie Chart of Top N Most Looked Up Words", max=25, min=1),
-    topTagsPie: Optional[int] = typer.Option(None, "--toptagspie", "-ttp", help="Pie Chart of Top N Tags with the most words.", max=25, min=1),
+    topWordsPie: bool = typer.Option(False, "--topwordspie", "-twp", help="Pie Chart of Top 10 Most Looked Up Words"),
+    topTagsPie: bool = typer.Option(False, "--toptagspie", "-ttp", help="Pie Chart of Top 10 Tags with the most words."),
     
-    lookupWeek: Optional[bool] = typer.Option(False, "--lookupweek", "-lw", help="Bar Graph of the word count distribution for days in the past week."),
-    lookupMonth: Optional[bool] = typer.Option(False, "--lookupmonth", "-lm", help="Bar Graph of the word count distribution for days in the past month."),
-    lookupYear: Optional[bool] = typer.Option(False, "--lookupyear", "-ly", help="Bar Graph of the word count distribution for days in the past year."),
+    lookupWeek: bool = typer.Option(False, "--lookupweek", "-lw", help="Bar Graph of the word count distribution for days in the past week."),
+    lookupMonth: bool = typer.Option(False, "--lookupmonth", "-lm", help="Bar Graph of the word count distribution for days in the past month."),
+    lookupYear: bool = typer.Option(False, "--lookupyear", "-ly", help="Bar Graph of the word count distribution for days in the past year."),
     
-    learnVSmaster: Optional[bool] = typer.Option(False, "--learnvsmaster", "-lvm", help="Stacked Graph the number of words in your learning list vs. your mastered list."),
-    slider: Optional[bool] = typer.Option(False, "--slider", "-s", help="Shows all graphs one by one in a slider.")
+    learnVSmaster: bool = typer.Option(False, "--learnvsmaster", "-lvm", help="Stacked Graph the number of words in your learning list vs. your mastered list."),
+    
+    wordCountByCollection: bool = typer.Option(False, "--wordcategories", "-wc", help="Bar Graph of the number of words in a category domain."),
+    # slider: bool = typer.Option(False, "--slider", "-s", help="Shows all graphs one by one in a slider.")
 ):
     """
     Generate Graphical Charts based on your vocabulary.
 
     Args:
         topWordsBar (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
-        topTagsBar (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
+        topTagsBar (int, optional): Visualizes the top N tags with the most words. Defaults to None.
         topWordsPie (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
         topTagsPie (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
         lookupWeek (Optional[bool], optional): Visualizes the word count distribution for days in the past week. Defaults to False.
@@ -702,31 +709,127 @@ def graph(
         learnVSmaster (Optional[bool], optional): Visualizes the number of words in your learning list vs. your mastered list. Defaults to False.
         slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.
     """
-    
-  
-    if slider:
-        # importing this here will automatically open the slider window. DO NOT TOUCH.
-        show_slider()
         
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar, popup=True)
-    if topTagsBar:
+    elif topTagsBar:
         viz_top_tags_bar(N=topTagsBar,popup=True)
     
-    if topWordsPie:
-        viz_top_words_pie(N=topWordsPie, popup=True)
-    if topTagsPie:
-        viz_top_tags_pie(N=topTagsPie, popup=True)
+    elif topWordsPie:
+        viz_top_words_pie(popup=True)
+    elif topTagsPie:
+        viz_top_tags_pie(popup=True)
     
-    if lookupWeek:
+    elif lookupWeek:
         viz_word_distribution_week(popup=True)
-    if lookupMonth:
+    elif lookupMonth:
         viz_word_distribution_month(popup=True)
-    if lookupYear:
+    elif lookupYear:
         viz_word_distribution_year(popup=True)
     
-    if learnVSmaster:
+    elif learnVSmaster:
         viz_learning_vs_mastered(popup=True)
+    
+    elif wordCountByCollection:
+        viz_word_distribution_category(popup=True)
+    
+    # by default, show all graphs in a GUI slider window
+    else:
+        # BUG 🐞 - slider will work as expected, after closing the termial will freeze up and not respond to any input 
+        show_slider()
+
+
+
+# TODO - some testing required
+@app.command(rich_help_panel="Text Processing & NLP", help="Filter out explicit words in a text or a webpage. Make it SFW!")
+def clean(
+    strict: bool = typer.Option(False, "--strict", "-s", help="Completely replace all bad words with asterisks."),
+):
+    check_clipboard=pyperclip.paste()
+    if check_clipboard:
+        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
+        if confirm:
+            text=check_clipboard
+        else:
+            text=typer.prompt("Enter Text or URL to clean")
+    
+    if not check_clipboard:
+        text=typer.prompt("Enter Text or URL to clean")
+    
+    if strict:
+        censor_bad_words_strict(text)
+    else:
+        censor_bad_words_not_strict(text)
+        
+
+# todo - not tested at all, manual testing necessary
+@app.command(rich_help_panel="Text Processing & NLP", help="📝 Generate a summary of a text or a webpage.")
+def summary(
+    file: bool = typer.Option(False, "--file", "-f", help="Save the summary to a text file."),
+):
+    check_clipboard=pyperclip.paste()
+    if check_clipboard:
+        if confirm := typer.confirm(
+            "📋 Clipboard text detected. Do you want to paste the content?"
+        ):
+            text=check_clipboard
+
+        else:
+            text=typer.prompt("Enter Text or URL to summarize")
+
+    if not check_clipboard:
+        text=typer.prompt("Enter Text or URL to summarize")
+    if file:
+        summarize_text(text, file=True)
+    else:
+        summarize_text(text)
+        
+# todo - not tested at all, manual testing necessary
+@app.command(rich_help_panel="Text Processing & NLP", help="📝 Extract Difficult Words from a text or a webpage.")
+def hardcore():
+    if check_clipboard := pyperclip.paste():
+        if confirm := typer.confirm(
+            "📋 Clipboard text detected. Do you want to paste the content?"
+        ):
+            text=check_clipboard
+
+        else:
+            text=typer.prompt("Enter Text or URL to extract difficult words")
+        
+    if not check_clipboard:
+        text=typer.prompt("Enter Text or URL to extract difficult words")
+    extract_difficult_words(text)
+    
+    
+# todo - not tested at all, manual testing necessary
+@app.command(rich_help_panel="Text Processing & NLP", help="📝 Get the Sentiment Analysis of a text or a webpage.")
+def sentiment():
+    check_clipboard=pyperclip.paste()
+    if check_clipboard:
+        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
+        if confirm:
+            text=check_clipboard
+    
+        else:
+            text=typer.prompt("Enter Text or URL to get the sentiment analysis")
+
+    if not check_clipboard:
+        text=typer.prompt("Enter Text or URL to get the sentiment analysis")
+            
+    sentiment_analysis(text)
+    
+@app.command(rich_help_panel="Text Processing & NLP", help="📝 Get readability score of a text or a webpage.")
+def readability():
+    check_clipboard=pyperclip.paste()
+    if check_clipboard:
+        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
+        if confirm:
+            text=check_clipboard
+    
+        else:
+            text=typer.prompt("Enter Text or URL to summarize")
+    
+    readability_index(text)
 
 # todo - need to write the function
 @app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
