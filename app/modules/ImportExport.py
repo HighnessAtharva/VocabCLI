@@ -97,17 +97,15 @@ class PDF(FPDF):
 
     def footer(self):
         """Page footer."""
-        self.set_y(-15)
+        self.set_y(-12)
         self.set_font('helvetica', 'I', 10)
 
         # Page number
         self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
 
 
-
 def export_to_pdf():    # sourcery skip: extract-method
     """Export words to pdf file."""
-
     try:
         pdf=PDF('P', 'mm', 'A4')
         pdf.set_fill_color(r=152, g=251, b=152)
@@ -116,17 +114,17 @@ def export_to_pdf():    # sourcery skip: extract-method
         pdf.set_font("Arial","B", 12)
         conn= createConnection()
         c=conn.cursor()
-        c.execute("SELECT * FROM words")
+        c.execute("SELECT DISTINCT (word), tag, mastered, learning, favorite from words")
         rows = c.fetchall()
         if len(rows) <= 0:
             raise NoDataFoundException
         pdf.cell(10,8, txt="#",border=True, align='L', fill=True)
         pdf.cell(40,8, txt="Word",border=True, align='L', fill=True)
-        pdf.cell(40,8, txt="Lookup Date",border=True, align='L', fill=True)
-        pdf.cell(30,8, txt="Tag",border=True, align='L', fill=True)
-        pdf.cell(20,8, txt="Mastered",border=True, align='L', fill=True)
-        pdf.cell(20,8, txt="Learning ",border=True, align='L', fill=True)
-        pdf.cell(20,8, txt="Favorite",border=True, align='L', fill=True)
+        # pdf.cell(40,8, txt="Lookup Date",border=True, align='L', fill=True)
+        pdf.cell(40,8, txt="Tag",border=True, align='L', fill=True)
+        pdf.cell(30,8, txt="Mastered",border=True, align='L', fill=True)
+        pdf.cell(30,8, txt="Learning ",border=True, align='L', fill=True)
+        pdf.cell(30,8, txt="Favorite",border=True, align='L', fill=True)
         pdf.ln()
 
         #reset font
@@ -136,21 +134,17 @@ def export_to_pdf():    # sourcery skip: extract-method
             pdf.cell(10,8, txt=str(sr_no),border=True, align='L') # Sr No.
             pdf.cell(40,8, txt=str(row[0]),border=True, align='L') # Word
 
-            date=datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S')
-            date=date.strftime('%b %d \'%y | %H:%M')
-            pdf.cell(40,8, txt=str(date),border=True, align='L') # Lookup Date
+            tag = row[2] if row[1] != None else ""
+            pdf.cell(40,8, txt=str(tag),border=True, align='L') # Tag
 
-            tag = row[2] if row[2] != None else ""
-            pdf.cell(30,8, txt=str(tag),border=True, align='L') # Tag
+            mastered= "X" if row[2] == 1 else ""
+            pdf.cell(30,8, txt=mastered ,border=True, align='C') # Mastered
 
-            mastered= "X" if row[3] == 1 else ""
-            pdf.cell(20,8, txt=mastered ,border=True, align='C') # Mastered
+            learning= "X" if row[3] == 1 else ""
+            pdf.cell(30,8, txt=learning,border=True, align='C') # Learning
 
-            learning= "X" if row[4] == 1 else ""
-            pdf.cell(20,8, txt=learning,border=True, align='C') # Learning
-
-            favorite= "X" if row[5] == 1 else ""
-            pdf.cell(20,8, txt=favorite,border=True, align='C')  # Favorite
+            favorite= "X" if row[4] == 1 else ""
+            pdf.cell(30,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
         pdf.output(f"exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
         print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 

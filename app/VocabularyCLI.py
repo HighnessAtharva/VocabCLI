@@ -78,7 +78,7 @@ def define(
             say_aloud(query=word)
 
 
-# todo @anay: add flag to show words with one line def. Call the flag as --showDefs: Optional[boolean]
+
 @app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
 def list(
     favorite: bool = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
@@ -593,19 +593,19 @@ def revise(
         revise_tag(number=number, tag=tag)
 
     elif learning and not number:
-        revise_learning(learning=True)
+        revise_learning()
     elif learning and number:
-        revise_learning(number=number, learning=True)
+        revise_learning(number=number)
 
     elif mastered and not number:
-        revise_mastered(mastered=True)
+        revise_mastered()
     elif mastered and number:
-        revise_mastered(number=number, mastered=True)
+        revise_mastered(number=number)
     
     elif favorite and not number:
-        revise_favorite(favorite=True)
+        revise_favorite()
     elif favorite and number:
-        revise_favorite(number=number, favorite=True)
+        revise_favorite(number=number)
     
     elif collection and not number:
         revise_collection(collectionName=collection)
@@ -652,19 +652,19 @@ def quiz(
         quiz_tag(number=number, tag=tag)
 
     elif learning and not number:
-        quiz_learning(learning=True)
+        quiz_learning()
     elif learning and number:
-        quiz_learning(number=number, learning=True)
+        quiz_learning(number=number)
 
     elif mastered and not number:
-        quiz_mastered(mastered=True)
+        quiz_mastered()
     elif mastered and number:
-        quiz_mastered(number=number, mastered=True)
+        quiz_mastered(number=number)
     
     elif favorite and not number:
-        quiz_favorite(favorite=True)
+        quiz_favorite()
     elif favorite and number:
-        quiz_favorite(number=number, favorite=True)
+        quiz_favorite(number=number)
     
     elif collection and not number:
         quiz_collection(collectionName=collection)
@@ -747,15 +747,16 @@ def clean(
 ):
     check_clipboard=pyperclip.paste()
     if check_clipboard:
-        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
-        if confirm:
+        if confirm := typer.confirm(
+            "📋 Clipboard text detected. Do you want to paste the content?"
+        ):
             text=check_clipboard
         else:
             text=typer.prompt("Enter Text or URL to clean")
-    
+
     if not check_clipboard:
         text=typer.prompt("Enter Text or URL to clean")
-    
+
     if strict:
         censor_bad_words_strict(text)
     else:
@@ -786,7 +787,7 @@ def summary(
         
 # todo - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Extract Difficult Words from a text or a webpage.")
-def hardcore():
+def hardwords():
     if check_clipboard := pyperclip.paste():
         if confirm := typer.confirm(
             "📋 Clipboard text detected. Do you want to paste the content?"
@@ -806,16 +807,17 @@ def hardcore():
 def sentiment():
     check_clipboard=pyperclip.paste()
     if check_clipboard:
-        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
-        if confirm:
+        if confirm := typer.confirm(
+            "📋 Clipboard text detected. Do you want to paste the content?"
+        ):
             text=check_clipboard
-    
+
         else:
             text=typer.prompt("Enter Text or URL to get the sentiment analysis")
 
     if not check_clipboard:
         text=typer.prompt("Enter Text or URL to get the sentiment analysis")
-            
+
     sentiment_analysis(text)
     
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Get readability score of a text or a webpage.")
@@ -840,13 +842,7 @@ def flashcard():
     pass
 
 
-# todo - command for homophones
 
-# todo: SPACY: paraphrase
-
-# todo: SPACY: sentiment analysis
-
-# todo: SPACY: check paraphrase
 if __name__ == "__main__":
     app()
 

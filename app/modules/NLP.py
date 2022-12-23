@@ -20,6 +20,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import print
 from typing import *
+# todo - add proper response headers and browser details to prevent false IP blocks.
 
 # todo - revise docstrings and add wherever missing. @anay
 # todo - add type hints wherever missing and return types as well @anay
@@ -45,24 +46,7 @@ def check_url_or_text(value:str)->bool:
         return False
     return True
 
-def clean_up_web_page(text:str)->str:
-    """Clean up the text by removing certain ad words
-
-    Args:
-        text (str): text to be cleaned up
-
-    Returns:
-        str: cleaned up text
-    """
-
-    remove_words=['click', 'watch', 'advertisement', 'join', 'subscribe', 'register', 'login']
-    # delete the words from the remove_Words list from the text string
-    for word in text:
-        if word in remove_words:
-            text.remove(word)
-    return text
          
-
 def parse_text_from_web(webURL):
     """Extracts the text from the main content of the web page. Removes the ads, comments, navigation bar, footer, html tags, etc
 
@@ -109,8 +93,7 @@ def censor_bad_words_strict(text:str)->None:
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL:=check_url_or_text(text):
         print("URL detected")
-        text=parse_text_from_web(text)
-        text=clean_up_web_page(text)    
+        text=parse_text_from_web(text)   
 
     # if text and not URL, then directly use the model
     if not isWebURL:
@@ -118,9 +101,10 @@ def censor_bad_words_strict(text:str)->None:
         text=cleanup_text(text)
         text=' '.join(text)
     
-    
+    # todo handle plurals as substring
     with open('modules/_bad_words.txt', mode='r') as f:
         bad_words = f.read().splitlines()
+    text=cleanup_text(text)
     new_text=''
     for word in text:
         if word in bad_words:
@@ -139,8 +123,7 @@ def censor_bad_words_not_strict(text:str)->None:
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL:=check_url_or_text(text):
         print("URL detected")
-        text=parse_text_from_web(text)
-        text=clean_up_web_page(text)    
+        text=parse_text_from_web(text)  
 
     # if text and not URL, then directly use the model
     if not isWebURL:
@@ -220,7 +203,6 @@ def extract_difficult_words(text:str) -> None:
     if isWebURL:=check_url_or_text(text):
         print("URL detected")
         text=parse_text_from_web(text)
-        text=clean_up_web_page(text)    
 
     # if text and not URL, then directly use the model
     if not isWebURL:
@@ -271,7 +253,6 @@ def sentiment_analysis(content):
     if isWebURL:=check_url_or_text(content):
         print("URL detected")
         text=parse_text_from_web(content)
-        text=clean_up_web_page(text)    
         
     # if text and not URL, then directly use the model
     if not isWebURL:
@@ -356,6 +337,8 @@ def summarize_text_util(text, per):
                 word_frequencies[word.text] += 1
             else:
                 word_frequencies[word.text] = 1
+                
+        
     max_frequency=max(word_frequencies.values())
     for word in word_frequencies:
         word_frequencies[word]=word_frequencies[word]/max_frequency
@@ -389,10 +372,8 @@ def summarize_text(content:str, file: Optional[bool]=False)->None:
         soup = BeautifulSoup(r.content, "html.parser")
         headline = soup.find('h1').get_text()
         
-        
         # this gets the body of the article.
         text=parse_text_from_web(content)
-        text=clean_up_web_page(text)
         
         
     # if text and not URL, then directly use the model

@@ -125,31 +125,27 @@ def revise_tag(
 
 def revise_learning(
     number: Optional[int] = None,
-    learning: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    ): 
     """
     Revise words in learning list.
     
     Args:
         number: number of words to revise, default is None.
-        learning: boolean to check if the word is in learning list, default is False.
     """
 
     conn=createConnection()
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    if learning:
-        with contextlib.suppress(NoWordsInLearningList):
-            if count_learning() ==0:
-                raise NoWordsInLearningList()
+    with contextlib.suppress(NoWordsInLearningList):
+        if count_learning() ==0:
+            raise NoWordsInLearningList()
         
-    if learning and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
         start_revision(c)
         
-    elif number and learning:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
         
@@ -157,62 +153,56 @@ def revise_learning(
 
 def revise_mastered(
     number: Optional[int] = None,
-    mastered: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    ):
     """
     Revise words in mastered list.
 
     Args:
         number: number of words to revise, default is None.
-        mastered: boolean to check if the word is in mastered list, default is False.
     """
     
     conn=createConnection()
     c=conn.cursor()
 
     # will stop the execution if no words learning
-    if mastered:
-        with contextlib.suppress(NoWordsInMasteredList):
-            if count_mastered() ==0:
-                raise NoWordsInMasteredList()
+  
+    with contextlib.suppress(NoWordsInMasteredList):
+        if count_mastered() ==0:
+            raise NoWordsInMasteredList()
             
-    if mastered and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
         start_revision(c)
 
-    elif number and mastered:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
         
         
 def revise_favorite(
     number: Optional[int] = None,
-    favorite: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    ): 
     """ 
     Revise words in favorite list.
 
     Args:
         number: number of words to revise, default is None.
-        favorite: boolean to check if the word is in favorite list, default is False.
     """
 
     conn=createConnection()
     c=conn.cursor()
 
-    # will stop the execution if no words learning
-    if favorite:
-        with contextlib.suppress(NoWordsInFavoriteList):
-            if count_favorite() ==0:
-                raise NoWordsInFavoriteList()
+    
+    
+    with contextlib.suppress(NoWordsInFavoriteList):
+        if count_favorite() ==0:
+            raise NoWordsInFavoriteList()
             
-    if favorite and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
         start_revision(c)
 
-    elif number and favorite:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
         
@@ -400,95 +390,84 @@ def quiz_tag(
     
 
 def quiz_learning(
-    number: Optional[int] = None,
-    learning: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    number: Optional[int] = None
+    ): 
     """
     Quiz words in learning list.
 
     Args:
         number: number of words to quiz, default is None.
-        learning: True if words in learning list, default is False.
     """
 
     conn=createConnection()
     c=conn.cursor()
 
     # will stop the execution if no words learning
-    if learning:
-        with contextlib.suppress(NoWordsInLearningList):
-            if count_learning() ==0:
-                raise NoWordsInLearningList()
+    
+    with contextlib.suppress(NoWordsInLearningList):
+        if count_learning() ==0:
+            raise NoWordsInLearningList()
             
-    if learning and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
         start_quiz(c)
 
-    elif number and learning:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_quiz(c)
         
         
 
 def quiz_mastered(
-    number: Optional[int] = None,
-    mastered: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    number: Optional[int] = None
+    ): 
     """
     Quiz words in mastered list.
 
     Args:
         number: number of words to quiz, default is None.
-        mastered: True if words in mastered list, default is False.
     """
     
     conn=createConnection()
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    if mastered:
-        with contextlib.suppress(NoWordsInMasteredList):
-            if count_mastered() ==0:
-                raise NoWordsInMasteredList()
+    with contextlib.suppress(NoWordsInMasteredList):
+        if count_mastered() ==0:
+            raise NoWordsInMasteredList()
         
-    if mastered and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
         start_quiz(c)
         
-    elif number and mastered:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_quiz(c)
         
         
 def quiz_favorite(
     number: Optional[int] = None,
-    favorite: Optional[bool] = False
-    # FIXME @atharva I guess we don't need this parameter as it is always True, need to change docstring too
-    ):  # sourcery skip: remove-redundant-if
+    ):  
     """
     Quiz words in favorite list.
 
     Args:
         number: number of words to quiz, default is None.
-        favorite: True if words in favorite list, default is False.
     """
 
     conn=createConnection()
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    if favorite:
-        with contextlib.suppress(NoWordsInFavoriteList):
-            if count_favorite() ==0:
-                raise NoWordsInFavoriteList()
+    with contextlib.suppress(NoWordsInFavoriteList):
+        if count_favorite() ==0:
+            raise NoWordsInFavoriteList()
         
-    if favorite and not number:
+    if not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
         start_quiz(c)
         
-    elif number and favorite:
+    if number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_quiz(c)
 

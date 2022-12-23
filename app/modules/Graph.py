@@ -464,6 +464,5 @@ def viz_word_distribution_category(popup=False):
         plt.show()
 
 
-# todo Graph of words based on their conceptual category (if possible with the libraries) ✅
 # todo Graph related to complexity or difficulty? ✅
-# todo Can show graphs related to flashcards after implementing them? ✅
+

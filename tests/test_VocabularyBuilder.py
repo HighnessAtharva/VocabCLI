@@ -19,7 +19,6 @@ from modules.WordCollections import *
 runner=CliRunner()
 
 
-
 def setup_module():
     """
     Will run before any test.
@@ -706,7 +705,6 @@ class TestThesaurus:
         assert "Synonyms of drink are" in result.stdout
 
 
-# todo add tests for collection listing
 class TestList:
     def test_list_favorite(self):
         runner.invoke(app, ["define", "math", "school"])
@@ -921,7 +919,6 @@ class TestRate:
         assert "words this year compared to last year" in result.stdout
 
 
-# todo add tests for getting random word from a collection
 class TestRandom:
     def test_random_word_api(self):
         result= runner.invoke(app, ["random"])
@@ -1390,7 +1387,7 @@ class TestQuiz:
             assert "The collection fakeCollection is not available" in result.stdout
         
         
-        
+# todo complete Graph Tests        
 class TestGraph:
     class Test_Top_Words_Bar_Graph:
         # top words bar graph
@@ -1462,3 +1459,7 @@ class TestGraph:
         
         def test_graph_word_category_zero_words_in_DB(self):
             pass
+        
+
+
+# todo write and test all the NLP functions

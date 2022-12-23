@@ -15,6 +15,7 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
+
 def display_theme(query: str):
     conn=createConnection()
     c=conn.cursor()
@@ -192,7 +193,6 @@ def insert_to_db_util(conn, query):
         conn.commit()
 
 
-# FIXME @atharva: Print part of speech only once in the first column for every table section 🐞
 def definition(query:str, short:Optional[bool]=False):
     """
     Prints the definition of the word.
@@ -201,7 +201,7 @@ def definition(query:str, short:Optional[bool]=False):
         query (str): Word which is meant to be defined.
         short (Optional[bool], optional): If True, it will print just the short definition. Defaults to False.
     """
-    
+    query=query.lower()
     #----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="moon", style="bold violet"),
