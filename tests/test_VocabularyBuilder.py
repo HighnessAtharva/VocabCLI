@@ -1457,9 +1457,11 @@ class TestGraph:
         def test_graph_word_category(self):
             pass
         
+        
+        
         def test_graph_word_category_zero_words_in_DB(self):
             pass
         
 
-
+    
 # todo write and test all the NLP functions
