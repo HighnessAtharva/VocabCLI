@@ -6,11 +6,11 @@ from rich.text import Text
 from . import __app_name__, __version__
 
 
-#no tests for this function as it is not called anywhere in the command directly
+# no tests for this function as it is not called anywhere in the command directly
 def get_terminal_width() -> int:
     """
     Gets the width of the terminal.
-    
+
     Returns: 
         int: width of the terminal.
     """
@@ -32,8 +32,8 @@ def print_banner(console):
     Args:
         console (Console): Rich console object.
     """
-    
-    banner="""
+
+    banner = """
              _    __                     __            __                       ____          _  __     __           
             | |  / /____   _____ ____ _ / /_   __  __ / /____ _ _____ __  __   / __ ) __  __ (_)/ /____/ /___   _____
             | | / // __ \ / ___// __ `// __ \ / / / // // __ `// ___// / / /  / __  |/ / / // // // __  // _ \ / ___/
@@ -41,8 +41,8 @@ def print_banner(console):
             |___/ \____/ \___/ \__,_//_.___/ \__,_//_/ \__,_//_/    \__, /  /_____/ \__,_//_//_/ \__,_/ \___//_/     
                                                                    /____/                                            
             """
-    width=get_terminal_width()
-    height=10
+    width = get_terminal_width()
+    height = 10
 
     panel = Panel(
         Align(

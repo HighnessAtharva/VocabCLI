@@ -6,28 +6,30 @@ LONG_DESCRIPTION = 'Lightweight CLI for Dictionary Lookups, Vocabulary Building,
 
 
 setup(
-       # the name must match the folder name 'verysimplemodule'
-        name="VocabularyCLI",
-        version=VERSION,
-        author="Atharva Shah, Anay Deshpande",
-        author_email="<HighnessAtharva@gmail.com>, <anaydesh1234@gmail.com>",
-        description=DESCRIPTION,
-        long_description=LONG_DESCRIPTION,
-        packages=find_packages(),
-        # add any additional packages that
-        install_requires=['typer', 'rich', 'matplotlib', 'pytest', 'random_word', 'playsound'],
+    # the name must match the folder name 'verysimplemodule'
+    name="VocabularyCLI",
+    version=VERSION,
+    author="Atharva Shah, Anay Deshpande",
+    author_email="<HighnessAtharva@gmail.com>, <anaydesh1234@gmail.com>",
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    packages=find_packages(),
+    # add any additional packages that
+    install_requires=['typer', 'rich', 'matplotlib',
+                      'pytest', 'random_word', 'playsound'],
 
-        keywords=['python', 'vocabulary', 'cli', 'dictionary', 'flashcards', 'quotes', 'knowledgebase', 'rich', 'richmarkup', 'graph', 'reporting', 'flashcard'],
-        classifiers= [
-            "Development Status :: 1 - Alpha",
-            "Intended Audience :: Education",
-            "Programming Language :: Python :: 3",
-            "Operating System :: Microsoft :: Windows",
-        ],
-        entry_points={
+    keywords=['python', 'vocabulary', 'cli', 'dictionary', 'flashcards', 'quotes',
+              'knowledgebase', 'rich', 'richmarkup', 'graph', 'reporting', 'flashcard'],
+    classifiers=[
+        "Development Status :: 1 - Alpha",
+        "Intended Audience :: Education",
+        "Programming Language :: Python :: 3",
+        "Operating System :: Microsoft :: Windows",
+    ],
+    entry_points={
         'console_scripts': [
             'vocab = app.__main__:app',
             'vocabcli = app.__main__:app'
         ],
-        },
+    },
 )

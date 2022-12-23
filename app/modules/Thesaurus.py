@@ -10,7 +10,7 @@ from rich.panel import Panel
 # nltk.download('wordnet')
 # nltk.download('omw-1.4')
 
-def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redundant-if
+def find_synonym(query: str):  # sourcery skip: for-append-to-extend, remove-redundant-if
     """
     Finds the synonyms of the query word
 
@@ -22,18 +22,17 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
     if not (response := connect_to_api(query)):
         return
 
-
     # check from api and add to list
     for meaningNumber in response["meanings"]:
         for synonym in (meaningNumber["synonyms"]):
-                if query not in synonym and ' ' not in synonym:
-                        synonyms.append(synonym)
+            if query not in synonym and ' ' not in synonym:
+                synonyms.append(synonym)
 
     # remove special characters and numbers
     for x in synonyms:
         if x.isalpha() == False:
             synonyms.remove(x)
-     
+
     # if none returned from API, fallback to NLTK and append the list
     if not len(synonyms):
         for syn in wordnet.synsets(query):
@@ -43,20 +42,21 @@ def find_synonym(query:str):  # sourcery skip: for-append-to-extend, remove-redu
 
     # finally print the list
     if len(synonyms):
-        print(Panel.fit(f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are 👇"))
-        synonyms = [Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
+        print(Panel.fit(
+            f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are 👇"))
+        synonyms = [
+            Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
         print(Columns(synonyms))
 
     else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"No synonyms found for {query}")
-        )
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]",
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable=f"No synonyms found for {query}")
+              )
 
 
-
-def find_antonym(query:str):  # sourcery skip: for-append-to-extend
+def find_antonym(query: str):  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word
 
@@ -70,8 +70,8 @@ def find_antonym(query:str):  # sourcery skip: for-append-to-extend
 
     for meaningNumber in response["meanings"]:
         for antonym in (meaningNumber["antonyms"]):
-                if query not in antonym and ' ' not in antonym:
-                        antonyms.append(antonym)
+            if query not in antonym and ' ' not in antonym:
+                antonyms.append(antonym)
 
     antonyms = list(set(antonyms))
     # if none returned from API, fallback to NLTK and append the list
@@ -85,17 +85,18 @@ def find_antonym(query:str):  # sourcery skip: for-append-to-extend
     for x in antonyms:
         if x.isalpha() == False:
             antonyms.remove(x)
-            
+
     # finally print the list
     if len(antonyms):
-        print(Panel.fit(f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are 👇"))
-        antonyms = [Panel(f"[red]{antonym}[red]", expand=True) for antonym in antonyms]
+        print(Panel.fit(
+            f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are 👇"))
+        antonyms = [Panel(f"[red]{antonym}[red]", expand=True)
+                    for antonym in antonyms]
         print(Columns(antonyms))
 
     else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"No antonyms found for {query}")
-        )
-
+        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]",
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable=f"No antonyms found for {query}")
+              )
