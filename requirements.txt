@@ -33,3 +33,4 @@ tomli==2.0.1
 typer==0.3.2
 typer-cli==0.0.12
 urllib3==1.26.12
+black==20.8b1
