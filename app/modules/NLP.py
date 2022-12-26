@@ -20,11 +20,11 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import print
 from typing import *
-# todo - add proper response headers and browser details to prevent false IP blocks.
-
-# todo - revise docstrings and add wherever missing. @anay
-# todo - add type hints wherever missing and return types as well @anay
-# todo - add colours, formatting and emojis to the rich print statements @anay
+# TODO: @atharva - add proper response headers and browser details to prevent false IP blocks.
+# TODO: - revise docstrings and add wherever missing. @anay
+# TODO: - add type hints wherever missing and return types as well @anay
+# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement.
+# TODO: @anay - Beautify Panels
 
 
 def check_url_or_text(value: str) -> bool:
@@ -85,7 +85,7 @@ def cleanup_text(text: str) -> str:
     return text
 
 
-# TODO - show total count of censor words in the text for both strict and not strict
+# TODO: - show total count of censor words in the text for both strict and not strict
 def censor_bad_words_strict(text: str) -> None:
     """Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
 
@@ -103,8 +103,8 @@ def censor_bad_words_strict(text: str) -> None:
         text = cleanup_text(text)
         text = ' '.join(text)
 
-    # todo handle plurals as substring
-    with open('modules/_bad_words.txt', mode='r') as f:
+    # TODO: handle plurals as substring
+    with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
         bad_words = f.read().splitlines()
     text = cleanup_text(text)
     new_text = ''
@@ -115,7 +115,7 @@ def censor_bad_words_strict(text: str) -> None:
     print(new_text)
 
 
-# TODO - allow to pass an internet article url here and show percentage of offensive words in the article
+# TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
 def censor_bad_words_not_strict(text: str) -> None:
     """Removes the bad words from the text and replaces them with asterisks partially and prints the censor text
 
@@ -133,7 +133,7 @@ def censor_bad_words_not_strict(text: str) -> None:
         text = cleanup_text(text)
         text = ' '.join(text)
 
-    with open('modules/_bad_words.txt', mode='r') as f:
+    with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
         bad_words = f.read().splitlines()
         bad_words_plural = [bad_words[i]+'s' for i in range(len(bad_words))]
         bad_words = bad_words + bad_words_plural
@@ -189,7 +189,7 @@ def readability_index(text: str) -> None:
         f"Readability Index {textstat.flesch_reading_ease(text)}\nSummary: The text is {index_desc} to read")
 
 
-# TODO - allow to pass an internet article url here and show percentage of difficult words in the article
+# TODO: - allow to pass an internet article url here and show percentage of difficult words in the article
 def extract_difficult_words(text: str) -> None:
     """Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
 
@@ -208,7 +208,7 @@ def extract_difficult_words(text: str) -> None:
         text = cleanup_text(text)
         text = ' '.join(text)
 
-    with open(file='modules/_most_common_words.txt', mode='r') as f:
+    with open(file='modules/_most_common_words.txt', mode='r', encoding='utf-8') as f:
         simple_words = f.read().splitlines()
     text = cleanup_text(text)
     article_word_count = len(text)

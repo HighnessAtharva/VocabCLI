@@ -16,7 +16,7 @@ def delete_collection_from_DB():
     conn.commit()
 
 
-# todo once you have the final data in hand, comment this function (do not delete it, might be useful later. Just comment it out and don't call it anywhere)
+# TODO: once you have the final data in hand, comment this function (do not delete it, might be useful later. Just comment it out and don't call it anywhere)
 def clean_collection_csv_data():
     """Cleans the domains.csv file and writes the cleaned data to domains.csv"""
 

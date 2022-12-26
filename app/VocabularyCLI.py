@@ -11,6 +11,8 @@ from modules.Flashcard import *
 from modules.WordCollections import *
 from modules.Carousel import *
 from modules.NLP import *
+from modules.RSS import *
+from modules.Quotes import *
 import sys
 import pyperclip
 import typer
@@ -27,16 +29,6 @@ app = typer.Typer(
     help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
 )
 
-
-# initialize the database with the tables if not already existing
-initializeDB()
-
-#uncomment this to easily delete all words from collections table during testing
-# delete_collection_from_DB()
-# clean_collection_csv_data()
-
-# add all the collection words to the database if not already existing
-insert_collection_to_DB()
 
 @app.command(rich_help_panel="Vocabulary Builder", help="👋🏼 [bold red]Exits[/bold red] the CLI")
 def bye():
@@ -441,7 +433,7 @@ def delete(
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
+                renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete these [b]{len(words)} words from your list[/b]?")
         )
         if sure := typer.confirm(""):
             for word in words:
@@ -526,7 +518,7 @@ def clear(
         raise typer.BadParameter(message="Please specify a list to clear. Use --help for more info.")
 
 
-# todo - add more flags/options
+# TODO: - add more flags/options
 @app.command(rich_help_panel="Vocabulary Builder", help="🔀 Gets a random word")
 def random(
     learning: bool = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
@@ -619,7 +611,7 @@ def revise(
                 renderable="Cannot combine these arguments")
         ) 
         
-# todo - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word
+# TODO: - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word
 @app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
 def quiz(
     number: int = typer.Option(None, "--number", "-n", help="Limit the number of words to quiz on.", min=4),
@@ -627,7 +619,8 @@ def quiz(
     learning: bool = typer.Option(False, "--learning", "-l", help="Take a quiz on words in your learning list"),
     mastered: bool = typer.Option(False, "--mastered", "-m", help="Take a quiz on words in your mastered list"),
     favorite: bool = typer.Option(False, "--favorite", "-f", help="Take a quiz on words in your favorite list"),
-    collection: str = typer.Option(None, "--collection", "-c", help="Take a quiz on words in a particular collection")
+    collection: str = typer.Option(None, "--collection", "-c", help="Take a quiz on words in a particular collection"),
+    history: bool = typer.Option(False, "--history", "-h", help="Show quiz history and stats")
 ):  # sourcery skip: remove-redundant-if
     """
     Take a quiz on words in your learning list.
@@ -640,10 +633,10 @@ def quiz(
         favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
         collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.
     """
-    if not any([learning, mastered, favorite, collection, tag]) and not number:
+    if not any([learning, mastered, favorite, collection, tag, history]) and not number:
         quiz_all()
         
-    elif number and not any([learning, mastered, favorite, collection, tag]):
+    elif number and not any([learning, mastered, favorite, collection, tag, history]):
         quiz_all(number=number)
 
     elif tag and not number:
@@ -670,6 +663,9 @@ def quiz(
         quiz_collection(collectionName=collection)
     elif collection and number: 
         quiz_collection(number=number, collectionName=collection)
+        
+    elif history:
+        show_quiz_history()
         
     else:
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
@@ -740,7 +736,7 @@ def graph(
 
 
 
-# TODO - some testing required
+# TODO: - some testing required
 @app.command(rich_help_panel="Text Processing & NLP", help="Filter out explicit words in a text or a webpage. Make it SFW!")
 def clean(
     strict: bool = typer.Option(False, "--strict", "-s", help="Completely replace all bad words with asterisks."),
@@ -763,7 +759,7 @@ def clean(
         censor_bad_words_not_strict(text)
         
 
-# todo - not tested at all, manual testing necessary
+# TODO: - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Generate a summary of a text or a webpage.")
 def summary(
     file: bool = typer.Option(False, "--file", "-f", help="Save the summary to a text file."),
@@ -785,7 +781,7 @@ def summary(
     else:
         summarize_text(text)
         
-# todo - not tested at all, manual testing necessary
+# TODO: - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Extract Difficult Words from a text or a webpage.")
 def hardwords():
     if check_clipboard := pyperclip.paste():
@@ -802,7 +798,7 @@ def hardwords():
     extract_difficult_words(text)
     
     
-# todo - not tested at all, manual testing necessary
+# TODO: - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Get the Sentiment Analysis of a text or a webpage.")
 def sentiment():
     check_clipboard=pyperclip.paste()
@@ -822,18 +818,66 @@ def sentiment():
     
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Get readability score of a text or a webpage.")
 def readability():
-    check_clipboard=pyperclip.paste()
-    if check_clipboard:
-        confirm=typer.confirm("📋 Clipboard text detected. Do you want to paste the content?")
-        if confirm:
+    if check_clipboard := pyperclip.paste():
+        if confirm := typer.confirm(
+            "📋 Clipboard text detected. Do you want to paste the content?"
+        ):
             text=check_clipboard
-    
+
         else:
             text=typer.prompt("Enter Text or URL to summarize")
-    
+
     readability_index(text)
 
-# todo - need to write the function
+
+@app.command(rich_help_panel="Text Processing & NLP", help="📝 Add, View or Delete RSS feeds")
+def rss(
+    add: str = typer.Option(None, "--add", "-a", help="Add a new RSS feed."),
+    view: bool = typer.Option(False, "--view", "-v", help="View all RSS feeds."),
+    delete: bool = typer.Option(False, "--delete", "-d", help="Delete an RSS feed."),
+    read: str = typer.Option(None, "--read", "-r", help="Read an RSS feed."),
+):
+    if add:
+        add_feed(url=add)
+    elif view:
+        get_all_feeds()
+    elif delete:
+        remove_feed()
+    elif read:
+        check_feed_for_new_content(title=read)
+    else:
+        typer.echo("🤷‍♀️ No option selected. Please select an option to continue.")
+
+
+@app.command(rich_help_panel="Quotes", help="📝 Add, View, Search or Delete Delete Quotes")
+def quote(
+    random: bool = typer.Option(False, "--show", "-s", help="Show a random quote from the saved list."),
+    list: bool = typer.Option(False, "--list", "-l", help="Display all saved quotes."),
+    delete: bool = typer.Option(False, "--delete", "-d", help="Delete a quote from the saved list."),
+    add: bool = typer.Option(False, "--add", "-a", help="Add a new quote."),
+    search: str = typer.Option(None, "--search", "-S", help="Search for a quote."),
+):
+    if random:
+        get_random_quote()
+    elif list:
+        get_quotes()
+    elif search:
+        search_quote(quoteText=search)
+    elif delete:
+        delete_quote()
+    elif add:
+        print("📝 Enter the quote to add.")
+        my_quote=typer.prompt("")
+        print("Do you want to add the author of the quote? (y/n)")
+        
+        if typer.confirm(""):
+            print("📝 Enter the author of the quote. (Optional)")    
+            my_author=typer.prompt("")
+            add_quote(quote=my_quote, author=my_author)
+        else:
+            add_quote(quote=my_quote)
+        
+# TODO: - need to write the function
 @app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
 def flashcard():
     """
@@ -844,6 +888,20 @@ def flashcard():
   
 
 if __name__ == "__main__":
+    
+    # check if Vocabulary.db exists, if not create it
+    if not os.path.exists("VocabularyBuilder.db"):
+        
+        # initialize the database with the tables if not already existing
+        initializeDB()
+
+        # uncomment this to easily delete all words from collections table during testing
+        delete_collection_from_DB()
+        clean_collection_csv_data()
+
+        # add all the collection words to the database if not already existing
+        insert_collection_to_DB()
+   
     app()
 
     

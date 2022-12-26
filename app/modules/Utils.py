@@ -941,7 +941,7 @@ def delete_word(query:List[str]):
         print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"[bold red]Word {query} deleted[/bold red] from your lists. ✅")
+                renderable=f"Word [bold u]{query}[/bold u][bold red] deleted[/bold red] from your lists. ✅")
         )
 
 

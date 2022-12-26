@@ -12,9 +12,10 @@ from Database import *
 from PIL import Image, ImageTk
 from rich.panel import Panel
 
-# todo - revise docstrings and add wherever missing. 
-# todo - add type hints wherever missing and return types as well
-# todo - add colours, formatting and emojis to the rich print statements
+# TODO: - revise docstrings and add wherever missing. 
+# TODO: - add type hints wherever missing and return types as well
+# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
+
 
 ################################
 # VISUALIZATION FUNCTIONS
@@ -464,5 +465,5 @@ def viz_word_distribution_category(popup=False):
         plt.show()
 
 
-# todo Graph related to complexity or difficulty? ✅
+# TODO: Graph related to complexity or difficulty? ✅
 

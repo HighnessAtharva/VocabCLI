@@ -16,7 +16,7 @@ def export_to_csv():
         words = c.fetchall()
         if len(words) <= 0:
             raise NoDataFoundException
-        with open('exports/VocabularyBuilder.csv', 'w', newline='') as file:
+        with open('exports/VocabularyBuilder.csv', 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)
@@ -42,7 +42,7 @@ def import_from_csv():
     word_already_exists=0
 
     try:
-        with open ('exports/VocabularyBuilder.csv', 'r') as file:
+        with open ('exports/VocabularyBuilder.csv', 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             next(reader) # skip header
 

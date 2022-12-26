@@ -111,3 +111,16 @@ class NoSuchTagException(Exception):
                 padding=(1, 1),
                 renderable=f"The tag [bold red]{self.tag}[/bold red] does not exist. Add some tags in your list using 'tag' command first. To see currently added tags use the 'list --tags' command🔖")
         )
+        
+class NoQuotesException(Exception):
+    """raised when the user attempts to perform some operation on a quote which is not present in the list."""
+    
+    def __init__(self):
+        print(
+            Panel.fit(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="There are no quotes in your list. Add some quotes in your list using 'quote' command first. 🔖",
+            )
+        )

@@ -57,13 +57,34 @@ def createTables(conn: sqlite3.Connection):
             "collection" TEXT NOT NULL
             );
         """
-
+    
+    quiz_history="""CREATE TABLE IF NOT EXISTS "quiz_history" (
+            "type" TEXT NOT NULL,
+            "datetime" timestamp NOT NULL,
+            "question_count" INTEGER NOT NULL,
+            "points" INTEGER NOT NULL,
+            "duration" INTEGER NOT NULL
+            );
+        """
+        
+    quotes=""" CREATE TABLE IF NOT EXISTS "quotes" (
+            "quote" TEXT NOT NULL,
+            "author" TEXT,
+            "datetime" timestamp NOT NULL
+            );
+            """
+            
+    rss=""" CREATE TABLE IF NOT EXISTS "rss" (
+            "title" TEXT NOT NULL,
+            "link" TEXT NOT NULL UNIQUE,
+            "description" TEXT,
+            "datetime" timestamp NOT NULL
+            );
+            """
+             
     try:
         c = conn.cursor()
-        c.execute(words)
-        c.execute(cache_words)
-        c.execute(collections)
-
+        c.executescript(words + cache_words + collections + quiz_history + quotes + rss)  # execute multiple statements
     except Exception as e:
         print(e)
 

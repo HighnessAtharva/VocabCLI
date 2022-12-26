@@ -238,15 +238,16 @@ def revise_collection(
 #####################
 # QUIZ FUNCTIONS #      
 #####################
-def start_quiz(c, collection=None):    # sourcery skip: remove-redundant-if
+def start_quiz(c, collection=None, quizType:str=None):    # sourcery skip: remove-redundant-if
     """
     Starts the quiz.
 
     Args:
         c: cursor object.
+        type: type of the quiz. Must be one of "all words", "learning words", "mastered words", "favorite words", "collection: collectionName", "tag:tagName".
         collection: name of the collection, default is None.
     """
-        
+
     if not (rows := c.fetchall()):
         return
     
@@ -333,6 +334,9 @@ def start_quiz(c, collection=None):    # sourcery skip: remove-redundant-if
                     padding=(1, 1),
                     renderable=f"🎯 [bold bright_magenta u]Score[/bold bright_magenta u]: [bold green]{score}[/bold green] / [bold green]{len(rows)}[/bold green]\n⏰ [bold bright_magenta u]Time Elapsed[/bold bright_magenta u]: [blue]{minutes:0.0f}M {seconds:0.0f}S[/blue]")
             )
+        
+        # inserting quiz history into the database
+        c.execute("INSERT INTO quiz_history (type, datetime, question_count,points,duration) values (?, ?, ?, ?, ?)", (quizType, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), len(rows), score, diff.seconds))
         c.close()         
         
 def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
@@ -353,16 +357,19 @@ def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-i
     
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
-        start_quiz(c)
+        start_quiz(c, quizType="all words")
+        conn.commit()
+        
     
     elif number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM() LIMIT ?", (number,))
-        start_quiz(c)
+        start_quiz(c, quizType="all words")
+        conn.commit()
 
 def quiz_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
-    ):  # sourcery skip: remove-redundant-if
+    ):    # sourcery skip: remove-redundant-if
     """
     Quiz words with a specific tag.
 
@@ -373,20 +380,22 @@ def quiz_tag(
 
     conn=createConnection()
     c=conn.cursor()
-    
+
     # will stop the execution if tag is not found
     if tag:
         with contextlib.suppress(NoSuchTagException):
             if count_tag(tag) == 0:
                 raise NoSuchTagException(tag=tag)
-            
-    if tag and not number:    
+
+    if tag and not number:
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM()", (tag,))
-        start_quiz(c)
-    
+        start_quiz(c, quizType=f"tag: {tag}")
+        conn.commit()
+
     elif number and tag:           
         c.execute("SELECT DISTINCT word FROM words where tag=? ORDER BY RANDOM() LIMIT ?", (tag, number))
-        start_quiz(c)
+        start_quiz(c, quizType=f"tag: {tag}")
+        conn.commit()
     
 
 def quiz_learning(
@@ -410,11 +419,13 @@ def quiz_learning(
             
     if not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
-        start_quiz(c)
+        start_quiz(c, quizType="learning words")
+        conn.commit()
 
     if number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM() LIMIT ?", (number,))
-        start_quiz(c)
+        start_quiz(c, quizType="learning words")
+        conn.commit()
         
         
 
@@ -438,11 +449,13 @@ def quiz_mastered(
         
     if not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
-        start_quiz(c)
+        start_quiz(c, quizType="mastered words")
+        conn.commit()
         
     if number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM() LIMIT ?", (number,))
-        start_quiz(c)
+        start_quiz(c, quizType="mastered words")
+        conn.commit()
         
         
 def quiz_favorite(
@@ -465,14 +478,16 @@ def quiz_favorite(
         
     if not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
-        start_quiz(c)
+        start_quiz(c, quizType="favorite words")
+        conn.commit()
         
     if number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
-        start_quiz(c)
+        start_quiz(c, quizType="favorite words")
+        conn.commit()
 
     
-# todo - quiz will break and throw an error if words in the collection are not available in the api definition. Also, quiz_collection will be generally slow because it has to fetch the definition for each word in the option, find a way to make it fast.     
+# TODO: - quiz will break and throw an error if words in the collection are not available in the api definition. Also, quiz_collection will be generally slow because it has to fetch the definition for each word in the option, find a way to make it fast.     
 def quiz_collection(
     number: Optional[int] = None,
     collectionName: Optional[str] = None
@@ -496,11 +511,38 @@ def quiz_collection(
             
     if collectionName and not number:
         c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM()", (collectionName,))
-        start_quiz(c, collection=collectionName)
+        start_quiz(c, collection=collectionName, quizType=f"collection: {collectionName}")
+        conn.commit()
         
     elif number and collectionName:
         c.execute("SELECT word FROM collections where collection=? ORDER BY RANDOM() LIMIT ?", (collectionName, number))
         if c.fetchone() is None:
             print(f"Collection '{collectionName}' is empty")
             return
-        start_quiz(c, collection=collectionName)
+        start_quiz(c, collection=collectionName, quizType=f"collection: {collectionName}")
+        conn.commit()
+        
+def show_quiz_history():
+
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT * FROM quiz_history ORDER BY datetime DESC")
+    rows=c.fetchall()
+    if not rows:
+        print("No quiz attempts yet. Take a quiz to see your quiz history.")
+        return
+    # for row in rows:
+    #     print(row)
+    table=Table(show_header=True, header_style="bold green")
+    table.add_column("Quiz Type", style="cyan")
+    table.add_column("Date & Time of Attempt")
+    table.add_column("Score")
+    table.add_column("Duration")
+    
+    for row in rows:
+        history=datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
+        score=f"{row[3]}/{row[2]}"
+        duration=f"{row[4]} seconds"
+        table.add_row(row[0], history, score, duration)
+        table.add_section()
+    print(table)
