@@ -1131,3 +1131,46 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
                 renderable="[bold red] you cannot combine options with learning rate command[/bold red] ❌",
             )
         )
+
+# get conseuctive dates from list of dates
+def get_consecutive_dates(dates):
+    """Returns list of consecutive dates from list of dates"""
+    consecutive_dates=[]
+    start_date=dates[0]
+
+    for i in range(len(dates)-1):
+        if dates[i+1]-dates[i]==datetime.timedelta(days=1):
+            continue
+        consecutive_dates.append((start_date, dates[i]))
+        start_date=dates[i+1]
+
+    consecutive_dates.append((start_date, dates[-1]))
+    
+    # return the item with the longest time difference
+    return max(consecutive_dates, key=lambda x: x[1]-x[0])
+
+
+def show_streak():
+    """Shows streak of days user has looked up words"""
+    
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT DISTINCT(date(datetime)) FROM words")
+    dates=c.fetchall()
+    
+    # convert dates to datetime objects
+    for i in range(len(dates)):
+        dates[i]=datetime.datetime.strptime(dates[i][0], "%Y-%m-%d")    
+    
+    # sort dates
+    dates.sort()
+    
+    max_streak=get_consecutive_dates(dates)
+    streak_days=max_streak[1]-max_streak[0]
+    
+    # convert streak_days to days
+    streak_days=int(streak_days.days)+1
+     
+    
+    print(Panel.fit(f"🔥 Your longest word lookup streak is [bold green]{streak_days}[/bold green] days.\n[violet]Start Date[/violet]: {max_streak[0].strftime('%d %B %Y')}\n[violet]End Date[/violet]: {max_streak[1].strftime('%d %B %Y')}", title="[reverse]Streak[/reverse]", title_align="center",padding=(1, 1)))
+         

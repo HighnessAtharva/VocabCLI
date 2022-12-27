@@ -877,6 +877,11 @@ def quote(
         else:
             add_quote(quote=my_quote)
         
+        
+@app.command(rich_help_panel="Word Management", help="📝Get the streak of days you have looked up words.")
+def streak():
+    show_streak()
+
 # TODO: - need to write the function
 @app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
 def flashcard():

@@ -179,6 +179,19 @@ typer VocabularyCLI.py utils docs
 typer VocabularyCLI.py utils docs --name "VocabularyCLI" --output "../docs/user_manual.md"
 ```
 
+### Get Code Stats 📊
+
+```powershell
+# Move to source folder
+cd app
+ 
+# install pygount
+pip3 install pygount
+
+# Run the following command to get the code stats
+pygount --suffix=py --format=summary
+```
+
 ---
 
 ## Contributors ✨

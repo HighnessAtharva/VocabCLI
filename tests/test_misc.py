@@ -1,5 +1,6 @@
 import pytest
 from VocabularyCLI import app
+from unittest import mock
 
 
 def test_bye(runner):
@@ -11,4 +12,8 @@ def test_bye(runner):
 
 
 def test_about(runner):
+    pass
+
+
+def test_streak(runner):
     pass
