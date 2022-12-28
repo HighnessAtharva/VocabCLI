@@ -16,6 +16,7 @@ from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
+
 def display_theme(query: str):
     conn=createConnection()
     c=conn.cursor()
@@ -299,3 +300,14 @@ def say_aloud(query: str):
 
     except AudioUnavailableException as e:
         print(e)
+
+
+# TODO: add a main command and link it to this function
+def get_word_of_the_day():
+    """Get a word of the day from a public API and print its definition."""
+    # NOTE @atharvashah: Check back here for a API key, should not take more than a week to be available. 
+    # https://www.wordnik.com/users/vocabcli/API
+    response = requests.get("https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=YOUR_API").json()
+    word = response["word"]
+    definition(word)
+     

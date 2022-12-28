@@ -1174,3 +1174,43 @@ def show_streak():
     
     print(Panel.fit(f"🔥 Your longest word lookup streak is [bold green]{streak_days}[/bold green] days.\n[violet]Start Date[/violet]: {max_streak[0].strftime('%d %B %Y')}\n[violet]End Date[/violet]: {max_streak[1].strftime('%d %B %Y')}", title="[reverse]Streak[/reverse]", title_align="center",padding=(1, 1)))
          
+
+def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
+    """Predicts when user will reach a milestone"""
+    
+    conn=createConnection()
+    c=conn.cursor()
+    c.execute("SELECT COUNT(DISTINCT word) FROM words")
+    learning_count=c.fetchone()[0]
+    
+    # if user has already reached milestone
+    if milestone-learning_count<=0:
+        print(Panel.fit(f"🤔 You have already reached [bold green]{milestone}[/bold green] words.", title="[reverse]Milestone Prediction[/reverse]", title_align="center",padding=(1, 1)))
+    else:
+        # get the date of the most recent word looked up
+        c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")
+        last_date=c.fetchone()[0]
+        last_date=datetime.datetime.strptime(last_date, "%Y-%m-%d")
+        
+        # get the date of the first word looked up
+        c.execute("SELECT date(datetime) FROM words ORDER BY datetime ASC LIMIT 1")
+        first_date=c.fetchone()[0]
+        first_date=datetime.datetime.strptime(first_date, "%Y-%m-%d")
+        
+        
+        # average words per day
+        average_words_per_day=learning_count/(datetime.datetime.now()-first_date).days
+        average_words_per_day=round(average_words_per_day, 2)
+        
+        # calculate date to reach milestone based on average words per day
+        milestone_date=datetime.datetime.now()+datetime.timedelta(days=(milestone-learning_count)/average_words_per_day)
+        
+        # print average words per day
+        print(
+            Panel(
+                f"🤔 You have been learning [bold green]{average_words_per_day}[/bold green] words on average per day.\n\n Based on your current word lookup rate, you will reach [bold green]{milestone}[/bold green] words on [bold green]{milestone_date.strftime('%d %B %Y')}[/bold green].", title="[reverse]Milestone Prediction[/reverse]", 
+                title_align="center",
+                padding=(1, 1)
+                )
+            )
+        

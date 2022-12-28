@@ -5,6 +5,7 @@ from Database import createConnection, createTables
 from datetime import datetime, timedelta
 from pathlib import Path
 from sqlite3 import *
+import requests
 from typing import *
 from rich import print
 from rich.columns import Columns
@@ -260,3 +261,24 @@ def get_random_quote():
         print(
             f"[bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}"
             )
+        
+def get_quote_of_the_day():
+    """Get a random quote from a public API"""
+    # get the quote of the day from the API
+    quote = requests.get("https://quotes.rest/qod?language=en").json()["contents"]["quotes"][0]
+
+    # print the quote
+    quote_text = quote["quote"]
+    quote_author = quote["author"] if quote["author"] is not None else "-"
+    quote_date = quote["date"]
+    quote_date=datetime.datetime.strptime(quote_date, '%Y-%m-%d').strftime('%d %b \'%y')
+
+    # print using Panel
+    print(
+        Panel.fit(
+            title=f"[b reverse green]  Quote of the Day - {quote_date} [/b reverse green]",
+            renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}",
+            title_align="center",
+            padding=(1, 1),
+        )
+    )

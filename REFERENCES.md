@@ -64,3 +64,8 @@
 **Summarize Text**
 
 **Check if Text Contains Offensive Language or Slurs and censor/filter them out**
+'
+
+## Config Files
+
+**https://tutswiki.com/read-write-config-files-in-python/**

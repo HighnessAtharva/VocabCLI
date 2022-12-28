@@ -20,6 +20,7 @@ from typing import *
 from rich import print
 from rich.console import Console
 from datetime import datetime
+from spellchecker import SpellChecker
 
 # app configuration
 app = typer.Typer(
@@ -30,13 +31,13 @@ app = typer.Typer(
 )
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="👋🏼 [bold red]Exits[/bold red] the CLI")
+@app.command(rich_help_panel="Miscellaneous", help="👋🏼 [bold red]Exits[/bold red] the CLI")
 def bye():
     print(Panel(":wave: [bold green]Bye bye![/bold green]"))
     sys.exit(0)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🔄 Update the JSON response in the cache")
+@app.command(rich_help_panel="Miscellaneous", help="🔄 Update the JSON response in the cache")
 def refresh():
     """
     Refreshes the cached content from the API.
@@ -49,7 +50,7 @@ def define(
     words: List[str] = typer.Argument(..., help="Word to search"),
     short: bool = typer.Option(False, "--short", "-s", help="Lightweight definitions."),
     pronounce: bool = typer.Option(False, "--pronounce",  "-p", help="Pronounce the word."),
-):
+):  # sourcery skip: use-named-expression
     """
     Looks up a word in the dictionary.
 
@@ -59,20 +60,49 @@ def define(
         pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.
     """
 
+    spell=SpellChecker()    
     for word in words:
-        if short:
-            definition(word, short=True)
+        
+        # check if the word is mispelled
+        mispelled = spell.unknown([word])
+        if mispelled:
+            # store other possible correct words
+            for x in mispelled:
+                candidates=spell.candidates(x)
+                # if there are other possible correct words then ask the user if they meant any of them
+                if candidates:
+                    candidates = ', '.join(candidates)
+                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                            title_align="center",
+                            padding=(1, 1),
+                            renderable=f"The word {word} was not found. Did you mean [u blue]{candidates}[/u blue]? 🤔")
+                    )
+                    break
+                
+                # otherwise, print the word unavailable message
+                else:
+                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                            title_align="center",
+                            padding=(1, 1),
+                            renderable=f"The word [bold red]{word}[/bold red] is not a valid word. Please check the spelling. 🤔")
+                    )
 
-        if not short:
-            definition(word, short=False)
+        else:
+            if short:
+                definition(word, short=True)
 
-        if pronounce:
-            say_aloud(query=word)
+            if not short:
+                definition(word, short=False)
+
+            if pronounce:
+                say_aloud(query=word)
+     
+            
 
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
-def list(
+@app.command("list", rich_help_panel="Word Management", help="📝 [bold blue]Lists [/bold blue] of all your looked up words")
+def ListCMD(
     favorite: bool = typer.Option(False, "--favorite", "-f", help="Get a list of your favorite words."),
     learning: bool = typer.Option(False, "--learning",  "-l", help="Get a list of words in your learning list."),
     mastered: bool = typer.Option(None, "--mastered", "-m", help="Get a list of words in your mastered list."),
@@ -129,7 +159,7 @@ def list(
         show_list()
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="💙 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
+@app.command(rich_help_panel="Word Management", help="💙 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]")
 def favorite(
     words: List[str] = typer.Argument(..., help="Word to add to favorites."),
 ):
@@ -144,7 +174,7 @@ def favorite(
         set_favorite(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="💔 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
+@app.command(rich_help_panel="Word Management", help="💔 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]")
 def unfavorite(
     words: List[str] = typer.Argument(..., help="Word to remove from favorites"),
 ):
@@ -159,7 +189,7 @@ def unfavorite(
         set_unfavorite(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="✍🏼 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
+@app.command(rich_help_panel="Word Management", help="✍🏼 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
     words: List[str] = typer.Argument(..., help="Word to add to learning."),
 ):
@@ -174,7 +204,7 @@ def learn(
         set_learning(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="😪 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
+@app.command(rich_help_panel="Word Management", help="😪 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]")
 def unlearn(
     words: List[str] = typer.Argument(..., help="Word to remove from learning"),
 ):
@@ -189,7 +219,7 @@ def unlearn(
         set_unlearning(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🧠 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
+@app.command(rich_help_panel="Word Management", help="🧠 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]")
 def master(
     words: List[str] = typer.Argument(..., help="Word to add to mastered."),
 ):
@@ -204,7 +234,7 @@ def master(
         set_mastered(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🤔 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
+@app.command(rich_help_panel="Word Management", help="🤔 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]")
 def unmaster(
     words: List[str] = typer.Argument(..., help="Word to remove from mastered"),
 ):
@@ -219,7 +249,7 @@ def unmaster(
         set_unmastered(word)
 
 
-@app.command(rich_help_panel="Import / Export", help="📂 [bold blue]Exports[/bold blue] a list of all your looked up words")
+@app.command(rich_help_panel="Import & Export", help="📂 [bold blue]Exports[/bold blue] a list of all your looked up words")
 def export(
     pdf: bool = typer.Option(False, "--pdf", "-P", help="Export a list of your looked up words in PDF format."),
 ):
@@ -236,7 +266,7 @@ def export(
         export_to_csv()
 
 
-@app.command("import", rich_help_panel="Import / Export", help="🔼 [bold blue]Imports[/bold blue] a list words in the application")
+@app.command("import", rich_help_panel="Import & Export", help="🔼 [bold blue]Imports[/bold blue] a list words in the application")
 def Import():
     """
     Imports a list of words in the application.
@@ -245,7 +275,7 @@ def Import():
     import_from_csv()
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🔖 [bold blue]Tags[/bold blue] a word")
+@app.command(rich_help_panel="Word Management", help="🔖 [bold blue]Tags[/bold blue] a word")
 def tag(
     words: List[str] = typer.Argument(..., help="Words to tagged"),
     tag: str = typer.Option(..., "--name", "-n", help="Tag to add to the words"),
@@ -262,7 +292,7 @@ def tag(
         add_tag(word, tag)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="✂ [bold red] Removes[/bold red] tag of a word in the dictionary")
+@app.command(rich_help_panel="Word Management", help="✂ [bold red] Removes[/bold red] tag of a word in the dictionary")
 def untag(
     words: List[str] = typer.Argument(..., help="Word to remove tag from"),
 ):
@@ -277,7 +307,7 @@ def untag(
         remove_tag(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="💻 [bold blue]About[/bold blue] the software")
+@app.command(rich_help_panel="Miscellaneous", help="💻 [bold blue]About[/bold blue] the software")
 def about():
     """
     Print information about the software.
@@ -319,7 +349,7 @@ def rate(
 
 
 
-@app.command(rich_help_panel="Thesaurus", help="🔎 Find [bold pink]synonyms[/bold pink] for a word")
+@app.command(rich_help_panel="Vocabulary Builder", help="🔎 Find [bold pink]synonyms[/bold pink] for a word")
 def synonym(
     words: List[str] = typer.Argument(..., help="Word to search synonyms for"),
 ):
@@ -334,7 +364,7 @@ def synonym(
         find_synonym(word)
 
 
-@app.command(rich_help_panel="Thesaurus", help="❌ Find [bold pink]antonyms[/bold pink] for a word")
+@app.command(rich_help_panel="Vocabulary Builder", help="❌ Find [bold pink]antonyms[/bold pink] for a word")
 def antonym(
     words: List[str] = typer.Argument(..., help="Word to search antonyms for"),
 ):
@@ -364,7 +394,7 @@ def history(
         fetch_word_history(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🚮 Deletes the word from the database")
+@app.command(rich_help_panel="Word Management", help="🚮 Deletes the word from the database")
 def delete(
     mastered: bool = typer.Option(False, "--mastered", "-m", help="Deletes all mastered words"),
     learning: bool = typer.Option(False, "--learning", "-l", help="Deletes all learning words"),
@@ -453,7 +483,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="🧹 [bold red]Clears[/bold red] all lists")
+@app.command(rich_help_panel="Word Management", help="🧹 [bold red]Clears[/bold red] all lists")
 def clear(
     learning: bool = typer.Option(False, "--learning", "-l", help="Clear all words in your learning list"),
     master: bool= typer.Option(False, "--mastered", "-m", help="Clear all words in your mastered list"),
@@ -552,7 +582,7 @@ def random(
         get_random_word_definition_from_api()
 
 
-@app.command(rich_help_panel="study", help="💡 Revise words from your learning list")
+@app.command(rich_help_panel="Vocabulary Builder", help="💡 Revise words from your learning list")
 def revise(
     number: int = typer.Option(None, "--number", "-n", help="Number of words to revise in random order."),
     tag: str = typer.Option(None, "--tag", "-t", help="Revise words in a particular tag."),
@@ -612,7 +642,7 @@ def revise(
         ) 
         
 # TODO: - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word
-@app.command(rich_help_panel="study", help="❓ Take a quiz on words in your learning list")
+@app.command(rich_help_panel="Vocabulary Builder", help="❓ Take a quiz on words in your learning list")
 def quiz(
     number: int = typer.Option(None, "--number", "-n", help="Limit the number of words to quiz on.", min=4),
     tag: str = typer.Option(None, "--tag", "-t", help="Tag of words to quiz on."),
@@ -674,7 +704,7 @@ def quiz(
                 renderable="Cannot combine these arguments")
         ) 
 
-@app.command(rich_help_panel="report", help="📚 Generate Graphical Charts based on your vocabulary")
+@app.command(rich_help_panel="Stats", help="📚 Generate Graphical Charts based on your vocabulary")
 def graph(
     topWordsBar: int = typer.Option(None, "--topwordsbar", "-twb", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
     topTagsBar: int = typer.Option(None, "--toptagsbar", "-ttb", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
@@ -830,7 +860,7 @@ def readability():
     readability_index(text)
 
 
-@app.command(rich_help_panel="Text Processing & NLP", help="📝 Add, View or Delete RSS feeds")
+@app.command(rich_help_panel="Miscellaneous", help="📝 Add, View or Delete RSS feeds")
 def rss(
     add: str = typer.Option(None, "--add", "-a", help="Add a new RSS feed."),
     view: bool = typer.Option(False, "--view", "-v", help="View all RSS feeds."),
@@ -849,7 +879,7 @@ def rss(
         typer.echo("🤷‍♀️ No option selected. Please select an option to continue.")
 
 
-@app.command(rich_help_panel="Quotes", help="📝 Add, View, Search or Delete Delete Quotes")
+@app.command(rich_help_panel="Miscellaneous", help="📝 Add, View, Search or Delete Delete Quotes")
 def quote(
     random: bool = typer.Option(False, "--show", "-s", help="Show a random quote from the saved list."),
     list: bool = typer.Option(False, "--list", "-l", help="Display all saved quotes."),
@@ -878,17 +908,29 @@ def quote(
             add_quote(quote=my_quote)
         
         
-@app.command(rich_help_panel="Word Management", help="📝Get the streak of days you have looked up words.")
+@app.command(rich_help_panel="Stats", help="📝Get the streak of days you have looked up words.")
 def streak():
     show_streak()
-
+    
+    
+@app.command(rich_help_panel="Stats", help="📝Predict the milestone of words looked up via the app.")
+def milestone(
+    milestone_number: int = typer.Argument(...,help="Number of words that marks a milestone."),
+):
+    predict_milestone(milestone_number)
+    
+@app.command("qotd", rich_help_panel="Miscellaneous", help="📝 Get quote of the day.")
+def quote_of_the_day():
+    get_quote_of_the_day()
+    
 # TODO: - need to write the function
-@app.command(rich_help_panel="study", help="📇 Create flashcards for words in your learning list")
+@app.command(rich_help_panel="Vocabulary Builder", help="📇 Create flashcards for words in your learning list")
 def flashcard():
     """
     Create flashcards for words in your learning list.
     """
     pass
+
 
   
 
