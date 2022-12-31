@@ -41,7 +41,7 @@ def viz_top_words_bar(N=10, popup=False):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="No tags found ❌")
+                renderable="No words found ❌")
         )
         return
 
@@ -147,7 +147,7 @@ def viz_top_words_pie(N=10, popup=False):
         print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="No tags found ❌")
+                renderable="No words found ❌")
         )
         return
 
@@ -155,7 +155,7 @@ def viz_top_words_pie(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough words found. Showing graph for available words only.")
+                renderable="Not enough words found. Showing pie chart for available words only.")
         )
 
     # create a dataframe
@@ -203,7 +203,7 @@ def viz_top_tags_pie(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough tags found. Showing graph for available tags only.")
+                renderable="Not enough tags found. Showing Pie Chart for available tags only.")
         )
 
     # create a dataframe
