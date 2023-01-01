@@ -11,6 +11,8 @@ spell = SpellChecker()
 string = "I havv goood speling! The age of the Universe is 13.8 billion years. I am 13 years old. knownsd is a surname."
 
 
+# todo @anay - formatting can be improved, add color, styles and emojis.
+
 # split based on punctuation
 tokenized = string.split()
 tokenized = nltk.regexp_tokenize(string, r"\w+|\$[\d\.]+|\S+")

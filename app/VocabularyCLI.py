@@ -22,10 +22,11 @@ from rich.console import Console
 from datetime import datetime
 from spellchecker import SpellChecker
 
+
 # app configuration
 app = typer.Typer(
     name="Vocabulary Builder",
-    add_completion=True,
+    add_completion=False,
     rich_markup_mode="rich",
     help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
 )
@@ -863,13 +864,13 @@ def readability():
 @app.command(rich_help_panel="Miscellaneous", help="📝 Add, View or Delete RSS feeds")
 def rss(
     add: str = typer.Option(None, "--add", "-a", help="Add a new RSS feed."),
-    view: bool = typer.Option(False, "--view", "-v", help="View all RSS feeds."),
+    list: bool = typer.Option(False, "--list", "-l", help="View all RSS feeds."),
     delete: bool = typer.Option(False, "--delete", "-d", help="Delete an RSS feed."),
     read: str = typer.Option(None, "--read", "-r", help="Read an RSS feed."),
 ):
     if add:
         add_feed(url=add)
-    elif view:
+    elif list:
         get_all_feeds()
     elif delete:
         remove_feed()
@@ -881,11 +882,12 @@ def rss(
 
 @app.command(rich_help_panel="Miscellaneous", help="📝 Add, View, Search or Delete Delete Quotes")
 def quote(
-    random: bool = typer.Option(False, "--show", "-s", help="Show a random quote from the saved list."),
+    random: bool = typer.Option(False, "--random", "-r", help="Show a random quote from the saved list."),
     list: bool = typer.Option(False, "--list", "-l", help="Display all saved quotes."),
     delete: bool = typer.Option(False, "--delete", "-d", help="Delete a quote from the saved list."),
     add: bool = typer.Option(False, "--add", "-a", help="Add a new quote."),
     search: str = typer.Option(None, "--search", "-S", help="Search for a quote."),
+    delete_all: bool = typer.Option(False, "--delete-all", "-D", help="Delete all quotes."),
 ):
     if random:
         get_random_quote()
@@ -895,6 +897,8 @@ def quote(
         search_quote(quoteText=search)
     elif delete:
         delete_quote()
+    elif delete_all:
+        delete_all_quotes()
     elif add:
         print("📝 Enter the quote to add.")
         my_quote=typer.prompt("")

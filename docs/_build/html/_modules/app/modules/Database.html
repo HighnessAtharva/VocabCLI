@@ -155,12 +155,11 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">PythonCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">VocabCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../app.html">app package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../app.modules.html">app.modules package</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../setup.html">setup module</a></li>
 </ul>
 </li>
 </ul>
@@ -207,7 +206,8 @@
 <span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">exceptions</span>
 <span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
 <span class="kn">from</span> <span class="nn">rich.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
-
+<span class="c1"># from rich.progress import Progress, SpinnerColumn, TextColumn</span>
+<span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">track</span>
 
 <span class="c1">#no tests for this function as it is not called anywhere in the command directly</span>
 <div class="viewcode-block" id="createConnection"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Database.createConnection">[docs]</a><span class="k">def</span> <span class="nf">createConnection</span><span class="p">():</span>
@@ -255,13 +255,34 @@
 <span class="s2">            &quot;collection&quot; TEXT NOT NULL</span>
 <span class="s2">            );</span>
 <span class="s2">        &quot;&quot;&quot;</span>
-
+    
+    <span class="n">quiz_history</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS &quot;quiz_history&quot; (</span>
+<span class="s2">            &quot;type&quot; TEXT NOT NULL,</span>
+<span class="s2">            &quot;datetime&quot; timestamp NOT NULL,</span>
+<span class="s2">            &quot;question_count&quot; INTEGER NOT NULL,</span>
+<span class="s2">            &quot;points&quot; INTEGER NOT NULL,</span>
+<span class="s2">            &quot;duration&quot; INTEGER NOT NULL</span>
+<span class="s2">            );</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        
+    <span class="n">quotes</span><span class="o">=</span><span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS &quot;quotes&quot; (</span>
+<span class="s2">            &quot;quote&quot; TEXT NOT NULL,</span>
+<span class="s2">            &quot;author&quot; TEXT,</span>
+<span class="s2">            &quot;datetime&quot; timestamp NOT NULL</span>
+<span class="s2">            );</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            
+    <span class="n">rss</span><span class="o">=</span><span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS &quot;rss&quot; (</span>
+<span class="s2">            &quot;title&quot; TEXT NOT NULL,</span>
+<span class="s2">            &quot;link&quot; TEXT NOT NULL UNIQUE,</span>
+<span class="s2">            &quot;description&quot; TEXT,</span>
+<span class="s2">            &quot;datetime&quot; timestamp NOT NULL</span>
+<span class="s2">            );</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+             
     <span class="k">try</span><span class="p">:</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cache_words</span><span class="p">)</span>
-        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">collections</span><span class="p">)</span>
-
+        <span class="n">c</span><span class="o">.</span><span class="n">executescript</span><span class="p">(</span><span class="n">words</span> <span class="o">+</span> <span class="n">cache_words</span> <span class="o">+</span> <span class="n">collections</span> <span class="o">+</span> <span class="n">quiz_history</span> <span class="o">+</span> <span class="n">quotes</span> <span class="o">+</span> <span class="n">rss</span><span class="p">)</span>  <span class="c1"># execute multiple statements</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
@@ -277,30 +298,52 @@
 
 <span class="c1"># NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse</span>
 <div class="viewcode-block" id="refresh_cache"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Database.refresh_cache">[docs]</a><span class="k">def</span> <span class="nf">refresh_cache</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refreshes the cache of the words in the database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="c1"># check if cache is empty, if yes then do nothing</span>
     <span class="n">conn</span><span class="o">=</span><span class="n">createConnection</span><span class="p">()</span>
     <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
     <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM cache_words&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="k">return</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Refreshing cache...&quot;</span><span class="p">))</span>
     <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT word FROM cache_words&quot;</span><span class="p">)</span>
     <span class="n">rows</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="n">total</span><span class="o">=</span><span class="mi">0</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
-        <span class="n">word</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.dictionaryapi.dev/api/v2/entries/en/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="c1">#----------------- Progress Bar -----------------#</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">track</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot; 🔃 Refreshing Cache &quot;</span><span class="p">):</span>
+            
+        <span class="c1">#----------------- Progress Bar -----------------#</span>
 
-        <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;[bold red]Error: You are not connected to the internet.[/bold red] ❌&quot;</span><span class="p">))</span>
+            
+                <span class="n">word</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.dictionaryapi.dev/api/v2/entries/en/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-                <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE cache_words SET api_response=? WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">word</span><span class="p">))</span>
-                <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Cache refreshed successfully.&quot;</span><span class="p">))</span></div>
+                <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span> 
+                        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                        <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;[bold red]Error: You are not connected to the internet.[/bold red] ❌&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE cache_words SET api_response=? WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">word</span><span class="p">))</span>
+                        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                    
+                <span class="c1"># update the progress bar</span>
+                <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse green]  Success!  [/b reverse green]&quot;</span><span class="p">,</span> 
+                     <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                     <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                     <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;Cache refreshed successfully.&quot;</span><span class="p">)</span>
+        <span class="p">)</span> </div>
 </pre></div>
         </article>
       </div>

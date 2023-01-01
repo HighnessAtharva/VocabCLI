@@ -75,6 +75,8 @@ def insert_collection_to_DB():
     conn.commit()
 
 
+
+# todo @anay - formatting can be improved, add color, styles and emojis
 def show_all_collections():
     """Shows all the collections in the database"""
 
@@ -93,6 +95,8 @@ def show_all_collections():
     print(table)
 
 
+
+# todo @anay - formatting can be improved, add color, styles and emojis
 def show_words_from_collection(collectionName: str):
     """Shows all the words in a collection
 
@@ -119,6 +123,8 @@ def show_words_from_collection(collectionName: str):
         print(Columns(rows, equal=True))
 
 
+
+# todo @anay - formatting can be improved, add color, styles and emojis
 def get_random_word_from_collection(collectionName: str):
     """Shows a random word from a collection
 

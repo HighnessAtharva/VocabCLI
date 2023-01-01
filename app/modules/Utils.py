@@ -1150,6 +1150,7 @@ def get_consecutive_dates(dates):
     return max(consecutive_dates, key=lambda x: x[1]-x[0])
 
 
+# todo @anay - formatting can be improved, add color, styles and emojis
 def show_streak():
     """Shows streak of days user has looked up words"""
     
@@ -1175,6 +1176,7 @@ def show_streak():
     print(Panel.fit(f"🔥 Your longest word lookup streak is [bold green]{streak_days}[/bold green] days.\n[violet]Start Date[/violet]: {max_streak[0].strftime('%d %B %Y')}\n[violet]End Date[/violet]: {max_streak[1].strftime('%d %B %Y')}", title="[reverse]Streak[/reverse]", title_align="center",padding=(1, 1)))
          
 
+# todo @anay - formatting can be improved, add color, styles and emojis
 def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
     """Predicts when user will reach a milestone"""
     
@@ -1189,13 +1191,11 @@ def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
     else:
         # get the date of the most recent word looked up
         c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")
-        last_date=c.fetchone()[0]
-        last_date=datetime.datetime.strptime(last_date, "%Y-%m-%d")
+        last_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
         
         # get the date of the first word looked up
         c.execute("SELECT date(datetime) FROM words ORDER BY datetime ASC LIMIT 1")
-        first_date=c.fetchone()[0]
-        first_date=datetime.datetime.strptime(first_date, "%Y-%m-%d")
+        first_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
         
         
         # average words per day
@@ -1208,9 +1208,14 @@ def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
         # print average words per day
         print(
             Panel(
-                f"🤔 You have been learning [bold green]{average_words_per_day}[/bold green] words on average per day.\n\n Based on your current word lookup rate, you will reach [bold green]{milestone}[/bold green] words on [bold green]{milestone_date.strftime('%d %B %Y')}[/bold green].", title="[reverse]Milestone Prediction[/reverse]", 
+                f"You have been learning [bold green]{average_words_per_day}[/bold green] words on average per day. 🤔\n\nYou have learnt: {learning_count} words. Just {milestone-learning_count} more to go! 🚵🏻\n\nBased on your current word lookup rate, you will reach [bold green]{milestone}[/bold green] words on [bold green]{milestone_date.strftime('%d %B %Y')}[/bold green].", title="[reverse]Milestone Prediction[/reverse]", 
                 title_align="center",
                 padding=(1, 1)
                 )
             )
         
+
+    
+            
+
+            

@@ -12,26 +12,10 @@ Subpackages
 Submodules
 ----------
 
-app.Graph module
-----------------
+app.VocabularyCLI module
+------------------------
 
-.. automodule:: app.Graph
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-app.VocabularyBuilder module
-----------------------------
-
-.. automodule:: app.VocabularyBuilder
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-app.tempCodeRunnerFile module
------------------------------
-
-.. automodule:: app.tempCodeRunnerFile
+.. automodule:: app.VocabularyCLI
    :members:
    :undoc-members:
    :show-inheritance:

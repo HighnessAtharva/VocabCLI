@@ -1,8 +1,8 @@
-PythonCLI
-=========
+VocabCLI
+========
 
 .. toctree::
    :maxdepth: 4
 
    app
-   setup
+   

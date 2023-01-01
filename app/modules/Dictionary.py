@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import time
+import csv
 from Database import createConnection
 from Exceptions import *
 from playsound import playsound
@@ -24,7 +25,19 @@ def display_theme(query: str):
     c.execute("SELECT collection FROM collections JOIN words ON collections.word=words.word WHERE words.word=?", (query,))
     if collection := c.fetchone():
         print(Panel.fit(f"[bold cyan]Theme:[/bold cyan] {collection[0]}"))
-        
+  
+
+def show_commonly_confused(word:str):
+    """Check if the word is commonly confused with other words, if yes, show them"""
+    
+    with open("modules/commonly_confused.csv", "r") as file:
+        reader=csv.reader(file)
+        for row in reader:
+            if word in row:
+                confused_list = [i for i in row if i!=word]                
+                print(Panel.fit(f"❕ [bold green]{word}[/bold green] is commonly confused with [bold green]{', '.join(confused_list)}[/bold green].", title="[reverse]Commonly Confused[/reverse]", title_align="center",padding=(1, 1)))    
+                
+                      
 #no tests for this function as it is not called anywhere in the command directly
 def connect_to_api(query:str="hello"):
     """
@@ -236,6 +249,7 @@ def definition(query:str, short:Optional[bool]=False):
         if not short:            
             # shows the associated collection for the word
             display_theme(query)
+            show_commonly_confused(query)
             
             for meaningNumber in response["meanings"]:
                 for count, meaning in enumerate(meaningNumber["definitions"], start=1):
@@ -307,7 +321,7 @@ def get_word_of_the_day():
     """Get a word of the day from a public API and print its definition."""
     # NOTE @atharvashah: Check back here for a API key, should not take more than a week to be available. 
     # https://www.wordnik.com/users/vocabcli/API
-    response = requests.get("https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=YOUR_API").json()
-    word = response["word"]
-    definition(word)
+    # response = requests.get("https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=YOUR_API").json()    
+    # word = response["word"]
+    # definition(word)
      

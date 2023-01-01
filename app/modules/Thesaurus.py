@@ -10,6 +10,7 @@ from rich.panel import Panel
 # nltk.download('wordnet')
 # nltk.download('omw-1.4')
 
+# todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.
 def find_synonym(query: str):  # sourcery skip: for-append-to-extend, remove-redundant-if
     """
     Finds the synonyms of the query word
@@ -65,6 +66,7 @@ def find_synonym(query: str):  # sourcery skip: for-append-to-extend, remove-red
                   )
 
 
+# todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.
 def find_antonym(query: str):  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word

@@ -16,10 +16,10 @@ copyright = '2022, AtharvaShah, AnayDeshpande'
 author = 'AtharvaShah, AnayDeshpande'
 release = '0.0.1'
 
-extensions = ["sphinx.ext.todo","sphinx.ext.viewcode", "sphinx.ext.autodoc"]
+extensions = ["sphinx.ext.todo", "sphinx.ext.viewcode", "sphinx.ext.autodoc"]
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', "tempcoderunner"]
 
 
 html_theme = 'furo'

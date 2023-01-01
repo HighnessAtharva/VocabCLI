@@ -3,6 +3,9 @@ from ImportExport import PDF
 from fpdf import FPDF
 from datetime import datetime
 
+# todo @anay - formatting can be improved, add color, styles and emojis.
+# todo @anay - complete the functions below
+
 
 def learning_rate():
     pass

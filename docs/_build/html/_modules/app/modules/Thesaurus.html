@@ -155,12 +155,11 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">PythonCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">VocabCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../app.html">app package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../app.modules.html">app.modules package</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../setup.html">setup module</a></li>
 </ul>
 </li>
 </ul>
@@ -209,44 +208,64 @@
 <span class="c1"># nltk.download(&#39;wordnet&#39;)</span>
 <span class="c1"># nltk.download(&#39;omw-1.4&#39;)</span>
 
-<div class="viewcode-block" id="find_synonym"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Thesaurus.find_synonym">[docs]</a><span class="k">def</span> <span class="nf">find_synonym</span><span class="p">(</span><span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>  <span class="c1"># sourcery skip: for-append-to-extend, remove-redundant-if</span>
+<span class="c1"># todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.</span>
+<div class="viewcode-block" id="find_synonym"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Thesaurus.find_synonym">[docs]</a><span class="k">def</span> <span class="nf">find_synonym</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># sourcery skip: for-append-to-extend, remove-redundant-if</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the synonyms of the query word</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        query (str): Word to find synonyms for.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ----------------- Spinner -----------------#</span>
+    <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
+        <span class="n">SpinnerColumn</span><span class="p">(</span><span class="n">spinner_name</span><span class="o">=</span><span class="s2">&quot;point&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold violet&quot;</span><span class="p">),</span>
+        <span class="n">TextColumn</span><span class="p">(</span>
+            <span class="s2">&quot;[progress.description]</span><span class="si">{task.description}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">justify</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">),</span>
+        <span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">progress</span><span class="p">:</span>
+        <span class="n">progress</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Searching Synonyms&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># ----------------- Spinner -----------------#</span>
 
-    <span class="n">synonyms</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
-        <span class="k">return</span>
+        <span class="n">synonyms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
+            <span class="k">return</span>
 
-
-    <span class="c1"># check from api and add to list</span>
-    <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">synonym</span> <span class="ow">in</span> <span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;synonyms&quot;</span><span class="p">]):</span>
+        <span class="c1"># check from api and add to list</span>
+        <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">synonym</span> <span class="ow">in</span> <span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;synonyms&quot;</span><span class="p">]):</span>
                 <span class="k">if</span> <span class="n">query</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">synonym</span> <span class="ow">and</span> <span class="s1">&#39; &#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">synonym</span><span class="p">:</span>
-                        <span class="n">synonyms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synonym</span><span class="p">)</span>
+                    <span class="n">synonyms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">synonym</span><span class="p">)</span>
 
-    <span class="c1"># if none returned from API, fallback to NLTK and append the list</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">synonyms</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">wordnet</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
-            <span class="n">synonyms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">syn</span><span class="o">.</span><span class="n">lemmas</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">synonyms</span> <span class="o">:=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">synonyms</span><span class="p">)):</span>
-                <span class="n">synonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">query</span><span class="p">,</span> <span class="n">synonyms</span><span class="p">))</span>
+        <span class="c1"># remove special characters and numbers</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">synonyms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">synonyms</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-    <span class="c1"># finally print the list</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">synonyms</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold blue underline] are ⏭&quot;</span><span class="p">))</span>
-        <span class="n">synonyms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[sea_green1]</span><span class="si">{</span><span class="n">synonym</span><span class="si">}</span><span class="s2">[sea_green1]&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">synonym</span> <span class="ow">in</span> <span class="n">synonyms</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Columns</span><span class="p">(</span><span class="n">synonyms</span><span class="p">))</span>
+        <span class="c1"># if none returned from API, fallback to NLTK and append the list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">synonyms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">wordnet</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+                <span class="n">synonyms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">syn</span><span class="o">.</span><span class="n">lemmas</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">synonyms</span> <span class="o">:=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">synonyms</span><span class="p">)):</span>
+                    <span class="n">synonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">query</span><span class="p">,</span> <span class="n">synonyms</span><span class="p">))</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No synonyms found for </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span></div>
+        <span class="c1"># finally print the list</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">synonyms</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot; [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold blue underline] are 👇&quot;</span><span class="p">))</span>
+            <span class="n">synonyms</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[sea_green1]</span><span class="si">{</span><span class="n">synonym</span><span class="si">}</span><span class="s2">[sea_green1]&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">synonym</span> <span class="ow">in</span> <span class="n">synonyms</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Columns</span><span class="p">(</span><span class="n">synonyms</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                            <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;No synonyms found for </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                  <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="find_antonym"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Thesaurus.find_antonym">[docs]</a><span class="k">def</span> <span class="nf">find_antonym</span><span class="p">(</span><span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>  <span class="c1"># sourcery skip: for-append-to-extend</span>
+<span class="c1"># todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.</span>
+<div class="viewcode-block" id="find_antonym"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Thesaurus.find_antonym">[docs]</a><span class="k">def</span> <span class="nf">find_antonym</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># sourcery skip: for-append-to-extend</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the antonyms of the query word</span>
 
@@ -254,31 +273,53 @@
 <span class="sd">        query (str): Word to find antonyms for.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">antonyms</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
-        <span class="k">return</span>
+    <span class="c1"># ----------------- Spinner -----------------#</span>
+    <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
+        <span class="n">SpinnerColumn</span><span class="p">(</span><span class="n">spinner_name</span><span class="o">=</span><span class="s2">&quot;point&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold violet&quot;</span><span class="p">),</span>
+        <span class="n">TextColumn</span><span class="p">(</span>
+            <span class="s2">&quot;[progress.description]</span><span class="si">{task.description}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">justify</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">),</span>
+        <span class="n">transient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">progress</span><span class="p">:</span>
+        <span class="n">progress</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Searching Antonyms&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="c1"># ----------------- Spinner -----------------#</span>
 
-    <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
-        <span class="k">for</span> <span class="n">antonym</span> <span class="ow">in</span> <span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;antonyms&quot;</span><span class="p">]):</span>
+        <span class="n">antonyms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span> <span class="o">:=</span> <span class="n">connect_to_api</span><span class="p">(</span><span class="n">query</span><span class="p">)):</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">antonym</span> <span class="ow">in</span> <span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;antonyms&quot;</span><span class="p">]):</span>
                 <span class="k">if</span> <span class="n">query</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">antonym</span> <span class="ow">and</span> <span class="s1">&#39; &#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">antonym</span><span class="p">:</span>
-                        <span class="n">antonyms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">antonym</span><span class="p">)</span>
+                    <span class="n">antonyms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">antonym</span><span class="p">)</span>
 
-    <span class="n">antonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">antonyms</span><span class="p">))</span>
-    <span class="c1"># if none returned from API, fallback to NLTK and append the list</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">antonyms</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">wordnet</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
-            <span class="n">antonyms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">syn</span><span class="o">.</span><span class="n">lemmas</span><span class="p">()</span> <span class="k">if</span> <span class="n">lm</span><span class="o">.</span><span class="n">antonyms</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">antonyms</span> <span class="o">:=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">antonyms</span><span class="p">)):</span>
-                <span class="n">antonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">query</span><span class="p">,</span> <span class="n">antonyms</span><span class="p">))</span>
+        <span class="n">antonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">antonyms</span><span class="p">))</span>
+        <span class="c1"># if none returned from API, fallback to NLTK and append the list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">antonyms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">syn</span> <span class="ow">in</span> <span class="n">wordnet</span><span class="o">.</span><span class="n">synsets</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+                <span class="n">antonyms</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lm</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+                                <span class="k">for</span> <span class="n">lm</span> <span class="ow">in</span> <span class="n">syn</span><span class="o">.</span><span class="n">lemmas</span><span class="p">()</span> <span class="k">if</span> <span class="n">lm</span><span class="o">.</span><span class="n">antonyms</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">antonyms</span> <span class="o">:=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span><span class="p">,</span> <span class="n">antonyms</span><span class="p">)):</span>
+                    <span class="n">antonyms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">query</span><span class="p">,</span> <span class="n">antonyms</span><span class="p">))</span>
 
-    <span class="c1"># finally print the list</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">antonyms</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [reverse bold green]Antonyms[/reverse bold green] of [bold blue underline]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold blue underline] are ⏭&quot;</span><span class="p">))</span>
-        <span class="n">antonyms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">antonym</span><span class="si">}</span><span class="s2">[red]&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">antonym</span> <span class="ow">in</span> <span class="n">antonyms</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Columns</span><span class="p">(</span><span class="n">antonyms</span><span class="p">))</span>
+        <span class="c1"># remove special characters and numbers</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">antonyms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">antonyms</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No antonyms found for </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span></div>
+        <span class="c1"># finally print the list</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">antonyms</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot; [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">[/bold blue underline] are 👇&quot;</span><span class="p">))</span>
+            <span class="n">antonyms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">antonym</span><span class="si">}</span><span class="s2">[red]&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">antonym</span> <span class="ow">in</span> <span class="n">antonyms</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Columns</span><span class="p">(</span><span class="n">antonyms</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                            <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;No antonyms found for </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                  <span class="p">)</span></div>
 </pre></div>
         </article>
       </div>

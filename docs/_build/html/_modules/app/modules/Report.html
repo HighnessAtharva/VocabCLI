@@ -155,12 +155,11 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">PythonCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">VocabCLI</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../app.html">app package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../app.modules.html">app.modules package</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../setup.html">setup module</a></li>
 </ul>
 </li>
 </ul>
@@ -202,33 +201,37 @@
 <span class="kn">from</span> <span class="nn">fpdf</span> <span class="kn">import</span> <span class="n">FPDF</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
+<span class="c1"># todo @anay - formatting can be improved, add color, styles and emojis.</span>
+<span class="c1"># todo @anay - complete the functions below</span>
+
 
 <div class="viewcode-block" id="learning_rate"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Report.learning_rate">[docs]</a><span class="k">def</span> <span class="nf">learning_rate</span><span class="p">():</span>
     <span class="k">pass</span></div>
 
+
 <div class="viewcode-block" id="generate_text_report"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Report.generate_text_report">[docs]</a><span class="k">def</span> <span class="nf">generate_text_report</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Generates a text report &quot;&quot;&quot;</span>
-    
-    <span class="n">pdf</span><span class="o">=</span><span class="n">PDF</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span>
+
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">PDF</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">set_auto_page_break</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
-    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;helvetica&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">conn</span><span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
-    <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;helvetica&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s2">&quot;TextReport.pdf&quot;</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="generate_graph_report"><a class="viewcode-back" href="../../../app.modules.html#app.modules.Report.generate_graph_report">[docs]</a><span class="k">def</span> <span class="nf">generate_graph_report</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Generates a graph report &quot;&quot;&quot;</span>
-    
-    <span class="n">pdf</span><span class="o">=</span><span class="n">PDF</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span>
+
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">PDF</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">set_auto_page_break</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
-    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;helvetica&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">conn</span><span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
-    <span class="n">c</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s2">&quot;helvetica&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s2">&quot;TextReport.pdf&quot;</span><span class="p">)</span>
     <span class="n">pdf</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="s2">&quot;GraphReport.pdf&quot;</span><span class="p">)</span></div>
-    
 </pre></div>
         </article>
       </div>

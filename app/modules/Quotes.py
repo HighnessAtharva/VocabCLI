@@ -57,11 +57,14 @@ def add_quote(quote: str, author: Optional[str] = None):
 
     # strip the quote and author of any leading or trailing whitespace
     quote = quote.strip()
-    
+
     # remove the quotes from the quote if they exist
     if quote.startswith('"') and quote.endswith('"'):
         quote = quote[1:-1]
-         
+
+    # remove the quotes from the quote if they exist
+    if author and author.startswith('"') and author.endswith('"'):
+        author = author[1:-1]
 
     # check if the quote does not only have whitespace
     if not quote:
@@ -75,7 +78,6 @@ def add_quote(quote: str, author: Optional[str] = None):
         )
         return
 
-     # check if the author does not only have whitespace
     if author and len(author.strip()) == 0:
         print(
             Panel.fit(
@@ -237,7 +239,7 @@ def delete_quote():
 
         # delete the quote from the database
         c.execute("DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete)-1][0],))
-        print(Panel.fit(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green] deleted successfully", title_align="center", padding=(1, 1)))
+        print(Panel.fit(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
         conn.commit()
         
 def get_random_quote():
@@ -245,11 +247,11 @@ def get_random_quote():
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
-    quotes = c.fetchall()
+    random_quote = c.fetchall()[0]
 
     # raise NoQuotesError if there are no quotes in the database
     with contextlib.suppress(NoQuotesException):
-        if len(quotes) == 0:
+        if len(random_quote) == 0:
             raise NoQuotesException
 
     
@@ -282,3 +284,50 @@ def get_quote_of_the_day():
             padding=(1, 1),
         )
     )
+
+
+def delete_all_quotes():
+    """_summary_"""
+    conn = createConnection()
+    c = conn.cursor()
+    c.execute("SELECT * FROM quotes ORDER BY quote ASC")
+    quotes = c.fetchall()
+
+    # raise NoQuotesError if there are no quotes in the database
+    with contextlib.suppress(NoQuotesException):
+        if len(quotes) == 0:
+            raise NoQuotesException
+
+        print(
+            Panel.fit(
+                title="[b reverse red]  Delete All Quotes  [/b reverse red]",
+                renderable="⚠ [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?",
+                title_align="center",
+                padding=(1, 1),
+            )
+        )
+
+        # prompt the user to select a quote index to delete
+        print("")
+        
+        
+        if typer.confirm(""):
+            c.execute("DELETE FROM quotes")
+            print(
+                Panel.fit(
+                    title="[b reverse green]  All Quotes Deleted  [/b reverse green]",
+                    renderable="All quotes deleted successfully",
+                    title_align="center",
+                    padding=(1, 1),
+                )
+            )
+            conn.commit()
+        else:
+            print(
+                Panel.fit(
+                    title="[b reverse green]  Your Quotes remain safe!  [/b reverse green]",
+                    renderable="None of the quotes were deleted",
+                    title_align="center",
+                    padding=(1, 1),
+                )
+            )

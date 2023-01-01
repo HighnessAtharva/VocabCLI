@@ -133,7 +133,7 @@ python -m pytest -k "ClassName" ../tests
 
 ```powershell
 # run the following command in the root directory to update the docs
-sphinx-apidoc -o docs
+sphinx-apidoc -o docs .
 
 # move to docs folder
 cd docs

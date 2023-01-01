@@ -20,6 +20,14 @@ app.modules.Banner module
    :undoc-members:
    :show-inheritance:
 
+app.modules.Carousel module
+---------------------------
+
+.. automodule:: app.modules.Carousel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 app.modules.Database module
 ---------------------------
 
@@ -52,6 +60,14 @@ app.modules.Flashcard module
    :undoc-members:
    :show-inheritance:
 
+app.modules.Graph module
+------------------------
+
+.. automodule:: app.modules.Graph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 app.modules.ImportExport module
 -------------------------------
 
@@ -60,10 +76,50 @@ app.modules.ImportExport module
    :undoc-members:
    :show-inheritance:
 
+app.modules.NLP module
+----------------------
+
+.. automodule:: app.modules.NLP
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.modules.Quotes module
+-------------------------
+
+.. automodule:: app.modules.Quotes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.modules.RSS module
+----------------------
+
+.. automodule:: app.modules.RSS
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 app.modules.Report module
 -------------------------
 
 .. automodule:: app.modules.Report
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.modules.Spelling module
+---------------------------
+
+.. automodule:: app.modules.Spelling
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+app.modules.Study module
+------------------------
+
+.. automodule:: app.modules.Study
    :members:
    :undoc-members:
    :show-inheritance:
@@ -84,10 +140,10 @@ app.modules.Utils module
    :undoc-members:
    :show-inheritance:
 
-app.modules.tempCodeRunnerFile module
--------------------------------------
+app.modules.WordCollections module
+----------------------------------
 
-.. automodule:: app.modules.tempCodeRunnerFile
+.. automodule:: app.modules.WordCollections
    :members:
    :undoc-members:
    :show-inheritance:
