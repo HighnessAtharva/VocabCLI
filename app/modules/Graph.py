@@ -49,7 +49,7 @@ def viz_top_words_bar(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough words found. Showing graph for available words only.")
+                renderable="Not enough words found. Showing graph for available words only. 📊")
         )
 
     # create a dataframe
@@ -71,7 +71,7 @@ def viz_top_words_bar(N=10, popup=False):
     plt.savefig('exports/GRAPH-top_words_bar.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-                        renderable=f"Displaying Bar graph of top {len(top_words)} words.",
+                        renderable=f"Displaying Bar graph of top {len(top_words)} words. 📊",
                         padding=(1, 1)))
         plt.show()
 
@@ -106,7 +106,7 @@ def viz_top_tags_bar(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough tags found. Showing graph for available tags only.")
+                renderable="Not enough tags found. Showing graph for available tags only. 📊")
         )
 
     # create a dataframe
@@ -129,7 +129,7 @@ def viz_top_tags_bar(N=10, popup=False):
     plt.savefig('exports/GRAPH-top_tags_bar.png')
     if popup:    
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-                    renderable=f"Displaying Bar graph of top {len(top_tags)} tags.",
+                    renderable=f"Displaying Bar graph of top {len(top_tags)} tags. 📊",
                     padding=(1, 1)))
         plt.show()
 
@@ -155,7 +155,7 @@ def viz_top_words_pie(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough words found. Showing pie chart for available words only.")
+                renderable="Not enough words found. Showing pie chart for available words only. 📊")
         )
 
     # create a dataframe
@@ -203,7 +203,7 @@ def viz_top_tags_pie(N=10, popup=False):
         print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="Not enough tags found. Showing Pie Chart for available tags only.")
+                renderable="Not enough tags found. Showing Pie Chart for available tags only. 📊")
         )
 
     # create a dataframe
@@ -220,7 +220,7 @@ def viz_top_tags_pie(N=10, popup=False):
     plt.savefig('exports/GRAPH-top_tags_pie.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-                    renderable=f"Displaying Pie Chart of top {len(top_tags)} tags.",
+                    renderable=f"Displaying Pie Chart of top {len(top_tags)} tags. 📊",
                     padding=(1, 1)))
         plt.show()
 
@@ -283,7 +283,7 @@ def viz_word_distribution_week(popup=False):
     plt.savefig('exports/GRAPH-words_distribution_week.png')
     if popup:    
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-                    renderable="Displaying Bar Graph of weekly word lookup distribution.",
+                    renderable="Displaying Bar Graph of weekly word lookup distribution. 📊",
                     padding=(1, 1)))
         plt.show()
 
@@ -364,7 +364,7 @@ def viz_word_distribution_month(popup=False):
     plt.savefig('exports/GRAPH-word_distribution_month.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-                    renderable="Displaying Bar Graph of monthly word lookup distribution.",
+                    renderable="Displaying Bar Graph of monthly word lookup distribution. 📊",
                     padding=(1, 1)))
         plt.show()
 
@@ -421,7 +421,7 @@ def viz_learning_vs_mastered(popup=False):
     plt.savefig('exports/GRAPH-learning_vs_mastered.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-            renderable="Displaying Stacked Bar Graph of mastered vs learning words.",
+            renderable="Displaying Stacked Bar Graph of mastered vs learning words. 📊",
             padding=(1, 1)))
         plt.show()
     
@@ -460,7 +460,7 @@ def viz_word_distribution_category(popup=False):
     plt.savefig('exports/GRAPH-word_distribution_category.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
-            renderable="Displaying Bar Graph of word distribution by category.",
+            renderable="Displaying Bar Graph of word distribution by category. 📊",
             padding=(1, 1)))
         plt.show()
 

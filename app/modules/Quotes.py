@@ -15,10 +15,13 @@ from rich.table import Table
 
 
 # TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
-# TODO: @anay - Remove Panel.fit() and replace it with Panel() where message text varies. For errors let it be Panel.fit().
+# TODO: @anay - Remove Panel.fit() and replace it with Panel() where message text varies. For errors let it be Panel.fit().   ✅
 
 def get_quotes() -> List[Tuple]:
-    """Returns a list of quotes from the database."""
+    """
+    Returns a list of quotes from the database.
+    """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes")
@@ -30,26 +33,40 @@ def get_quotes() -> List[Tuple]:
             raise NoQuotesException
 
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse green]  Your Quotes  [/b reverse green]", renderable=f"You have [bold green]{len(quotes)}[/bold green] quotes saved. 📚", title_align="center", padding=(1, 1)
             ))
+        table = Table(
+        show_header=True,
+        header_style="bold gold3",
+        border_style="white",
+        title="✍🏼 Quotes ",
+        title_style="bold magenta",
+        title_justify="center",
+        box=box.ROUNDED
+        )
+        table.add_column("Quote", width=30)
+        table.add_column("Author",  width=30, style="blue")
+        table.add_column("Date", width=18, style="magenta")
+
         for quote in quotes:
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
             quote_date = datetime.datetime.strptime(quote[2], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
-
-            # TODO: @anay, convert this to table
-            print(
-                f"[bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}")
+        
+            table.add_row(quote_text, quote_author, quote_date)
+            table.add_section()
+            print(table)
 
 
 def add_quote(quote: str, author: Optional[str] = None):
     # sourcery skip: remove-redundant-fstring
-    """_summary_
+    """
+    Adds a quote to the database.
 
     Args:
-        quote (str): _description_
-        author (Optional[str]): _description_
+        quote (str): The quote to be added.
+        author (str, optional): The author of the quote. Defaults to None.
     """
 
     conn = createConnection()
@@ -93,7 +110,7 @@ def add_quote(quote: str, author: Optional[str] = None):
     c.execute("SELECT * FROM quotes WHERE quote=?", (quote,))
     if c.fetchone() is not None:
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
@@ -119,11 +136,13 @@ def add_quote(quote: str, author: Optional[str] = None):
 
 
 def search_quote(quoteText: str):
-    """_summary_
+    """
+    Searches for a quote in the database.
 
     Args:
-        quote (str): _description_
+        quoteText (str): The quote to be searched.
     """
+
     conn = createConnection()
     c = conn.cursor()
 
@@ -156,7 +175,7 @@ def search_quote(quoteText: str):
     # if the quote does not exist
     if quotes is None:
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
@@ -165,22 +184,41 @@ def search_quote(quoteText: str):
         )
         return
             
+    print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b]")
+        )
 
-    print(f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b]")
+    table = Table(
+        show_header=True,
+        header_style="bold gold3",
+        border_style="white",
+        title="✍🏼 Quotes ",
+        title_style="bold magenta",
+        title_justify="center",
+        box=box.ROUNDED
+        )
+    table.add_column("Quote", width=30)
+    table.add_column("Author",  width=30, style="blue")
+    table.add_column("Date", width=18, style="magenta")
+
     for quote in quotes:
         # print the quote
         quote_text = quote[0]
         quote_author = quote[1] if quote[1] is not None else "-"
         quote_date = datetime.datetime.strptime(quote[2], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
 
-        # TODO: @anay, convert this to table
-        print(
-            f"[bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}"
-            )
+        table.add_row(quote_text, quote_author, quote_date)
+        table.add_section()
+        print(table)
 
 
 def delete_quote():
-    """_summary_"""
+    """
+    Deletes a quote from the database.
+    """
+    
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes ORDER BY quote ASC")
@@ -194,7 +232,7 @@ def delete_quote():
         print(
             Panel.fit(
                 title="[b reverse green]  Delete Quote  [/b reverse green]",
-                renderable=" Select a quote to delete",
+                renderable="Select a quote to delete",
                 title_align="center",
                 padding=(1, 1),
             )
@@ -239,11 +277,14 @@ def delete_quote():
 
         # delete the quote from the database
         c.execute("DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete)-1][0],))
-        print(Panel.fit(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
+        print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
         conn.commit()
         
 def get_random_quote():
-    """_summary_"""
+    """
+    Gets a random quote from the database.
+    """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
@@ -265,7 +306,10 @@ def get_random_quote():
             )
         
 def get_quote_of_the_day():
-    """Get a random quote from a public API"""
+    """
+    Get a random quote from a public API
+    """
+
     # get the quote of the day from the API
     quote = requests.get("https://quotes.rest/qod?language=en").json()["contents"]["quotes"][0]
 
@@ -277,7 +321,7 @@ def get_quote_of_the_day():
 
     # print using Panel
     print(
-        Panel.fit(
+        Panel(
             title=f"[b reverse green]  Quote of the Day - {quote_date} [/b reverse green]",
             renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}",
             title_align="center",
@@ -287,7 +331,10 @@ def get_quote_of_the_day():
 
 
 def delete_all_quotes():
-    """_summary_"""
+    """
+    Deletes all quotes from the database.
+    """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes ORDER BY quote ASC")
@@ -298,13 +345,10 @@ def delete_all_quotes():
         if len(quotes) == 0:
             raise NoQuotesException
 
-        print(
-            Panel.fit(
-                title="[b reverse red]  Delete All Quotes  [/b reverse red]",
-                renderable="⚠ [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?",
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-            )
+                renderable="🛑 [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?")
         )
 
         # prompt the user to select a quote index to delete
@@ -313,14 +357,11 @@ def delete_all_quotes():
         
         if typer.confirm(""):
             c.execute("DELETE FROM quotes")
-            print(
-                Panel.fit(
-                    title="[b reverse green]  All Quotes Deleted  [/b reverse green]",
-                    renderable="All quotes deleted successfully",
-                    title_align="center",
-                    padding=(1, 1),
-                )
-            )
+            print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="All quotes deleted successfully ✅")
+        )
             conn.commit()
         else:
             print(

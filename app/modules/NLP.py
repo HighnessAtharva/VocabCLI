@@ -94,12 +94,20 @@ def censor_bad_words_strict(text: str) -> None:
     """
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print("URL detected")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="URL detected")
+        )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print("This is not a valid URL. Processing it as text...")
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="This is not a valid URL. Processing it as text...")
+        )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -112,7 +120,7 @@ def censor_bad_words_strict(text: str) -> None:
         if word in bad_words:
             word = word.replace(word, '*' * len(word))
         new_text += f'{word} '
-    print(new_text)
+    print(Panel(renderable=new_text, title="Censored Text"))
 
 
 # TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
@@ -124,12 +132,20 @@ def censor_bad_words_not_strict(text: str) -> None:
     """
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print("URL detected")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="URL detected")
+        )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print("This is not a valid URL. Processing it as text...")
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="This is not a valid URL. Processing it as text...")
+        )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -199,12 +215,20 @@ def extract_difficult_words(text: str) -> None:
 
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print("URL detected")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="URL detected")
+        )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print("This is not a valid URL. Processing it as text...")
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="This is not a valid URL. Processing it as text...")
+        )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -234,7 +258,11 @@ def extract_difficult_words(text: str) -> None:
             difficult_words.remove(word)
 
     difficult_words.sort()
-    print(f"Content Length: {article_word_count} words")
+    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Content Length: {article_word_count} words")#how to givve linebreak here @atharva
+        )
     print(f"Extracted {len(difficult_words)} difficult words")
     for word in difficult_words:
         print(word)
@@ -250,12 +278,20 @@ def sentiment_analysis(content):
 
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(content):
-        print("URL detected")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="URL detected")
+        )
         text = parse_text_from_web(content)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print("This is not a valid URL. Processing it as text...")
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="This is not a valid URL. Processing it as text...")
+        )
         text = cleanup_text(content)
         text = ' '.join(text)
 
@@ -310,8 +346,11 @@ def sentiment_analysis(content):
     result.logits
     sentiment_score = int(torch.argmax(result.logits))+1
     outcome = sentiment_score_to_summary(sentiment_score)
-    print(
-        f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}")
+    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}")
+        )
 
 
 def summarize_text_util(text, per):
@@ -360,14 +399,18 @@ def summarize_text_util(text, per):
 
 
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
-    """Print the summariezed text or internet article. 
+    """Print the summarized text or internet article. 
 
     Args:
         text (str): Text that is to be summarized
     """
 
     if isWebURL := check_url_or_text(content):
-        print("URL detected")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="URL detected")
+        )
 
         # this is just get the headings
         r = requests.get(content)
@@ -379,7 +422,11 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print("This is not a valid URL. Processing it as text...")
+        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="This is not a valid URL. Processing it as text...")
+        )
         text = cleanup_text(content)
         text = ' '.join(text)
 
@@ -411,4 +458,8 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
             f.write(f"Summary:\n{text_summary}\n\n")
 
-        print("Summary saved to summary.txt")
+        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+                title_align="center",
+                padding=(1, 1),
+                renderable="[[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
+        )
