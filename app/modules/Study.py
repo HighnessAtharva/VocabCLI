@@ -64,7 +64,7 @@ def start_revision(c, is_collection: bool = False):
             print(Panel("OK, stopping revision. 🛑"))
             break
     # else:
-    #     print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+    #     print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
     #             title_align="center",
     #             padding=(1, 1),
     #             renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
@@ -279,7 +279,7 @@ def start_quiz(c, collection=None, quizType:str=None):    # sourcery skip: remov
             # setting up question
             quiz_word=row[0]
 
-            print(Panel.fit(
+            print(Panel(
                 title=f"[reverse]Question [bold green]#{count}/{len(rows)}[/bold green][/reverse]",
                 title_align="center",
                 padding=(1, 1),
@@ -329,7 +329,7 @@ def start_quiz(c, collection=None, quizType:str=None):    # sourcery skip: remov
         seconds = diff.seconds
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
-        print(Panel.fit(title="[b reverse white]  Quiz completed!  [/b reverse white]", 
+        print(Panel(title="[b reverse white]  Quiz completed!  [/b reverse white]", 
                     title_align="center",
                     padding=(1, 1),
                     renderable=f"🎯 [bold bright_magenta u]Score[/bold bright_magenta u]: [bold green]{score}[/bold green] / [bold green]{len(rows)}[/bold green]\n⏰ [bold bright_magenta u]Time Elapsed[/bold bright_magenta u]: [blue]{minutes:0.0f}M {seconds:0.0f}S[/blue]")

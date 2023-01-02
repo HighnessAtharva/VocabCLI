@@ -43,7 +43,7 @@ class TestQuotes:
             result = runner.invoke(app, ["quote", "--add"], input="\"hi there\"\n\"John Doe\"")
             assert result.exit_code == 0
             assert "Quote: hi there ✔" in result.stdout
-
+ 
 
     class Test_List_Quotes:
         def test_list_quotes(self, runner):
@@ -58,6 +58,8 @@ class TestQuotes:
             result = runner.invoke(app, ["quote", "--list"])
             assert result.exit_code == 0
             assert "There are no quotes in your list. Add some quotes in your list" in result.stdout
+            
+        
 
     class Test_Delete_Quote:
         @mock.patch("typer.confirm")
@@ -153,3 +155,5 @@ class TestQuotes:
         result= runner.invoke(app, ["quote", "--random"])
         assert result.exit_code == 0
         assert "Lorem ipsum x2" in result.stdout
+        
+     

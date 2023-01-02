@@ -19,7 +19,9 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from rich.panel import Panel
 from rich.table import Table
 from rich import print
+from rich import box
 from typing import *
+
 # TODO: @atharva - add proper response headers and browser details to prevent false IP blocks.
 # TODO: - revise docstrings and add wherever missing. @anay
 # TODO: - add type hints wherever missing and return types as well @anay
@@ -94,20 +96,20 @@ def censor_bad_words_strict(text: str) -> None:
     """
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="URL detected")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected")
+              )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="This is not a valid URL. Processing it as text...")
-        )
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text...")
+              )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -132,20 +134,20 @@ def censor_bad_words_not_strict(text: str) -> None:
     """
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="URL detected")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected")
+              )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="This is not a valid URL. Processing it as text...")
-        )
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text...")
+              )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -172,6 +174,7 @@ def censor_bad_words_not_strict(text: str) -> None:
     print(Panel(renderable=new_text, title="Censored Text"))
 
 
+# TODO: @atharva, debug webpage parsing
 def readability_index(text: str) -> None:
     """Prints the readability index of the text and the summary of the index 
 
@@ -215,20 +218,20 @@ def extract_difficult_words(text: str) -> None:
 
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(text):
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="URL detected")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected")
+              )
         text = parse_text_from_web(text)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="This is not a valid URL. Processing it as text...")
-        )
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text...")
+              )
         text = cleanup_text(text)
         text = ' '.join(text)
 
@@ -258,12 +261,13 @@ def extract_difficult_words(text: str) -> None:
             difficult_words.remove(word)
 
     difficult_words.sort()
-    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+    print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Content Length: {article_word_count} words")#how to givve linebreak here @atharva
-        )
-    print(f"Extracted {len(difficult_words)} difficult words")
+                renderable=f"Content Length: {article_word_count} words\nExtracted {len(difficult_words)} difficult words")
+          )
+
+    # TODO: @anay: convert to column layout
     for word in difficult_words:
         print(word)
 
@@ -278,41 +282,22 @@ def sentiment_analysis(content):
 
     # check if the content is a URL, if yes, then parse the text from it and then use the model
     if isWebURL := check_url_or_text(content):
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="URL detected")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected")
+              )
         text = parse_text_from_web(content)
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="This is not a valid URL. Processing it as text...")
-        )
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text...")
+              )
         text = cleanup_text(content)
         text = ' '.join(text)
-
-    def remove_long_sentences(text):
-        """
-        Removes sentences with more than 512 characters from the text
-
-        Args:
-            text (str): text to be cleaned
-
-        Returns:
-            str: cleaned text
-        """
-
-        # remove sentences with more than 512 characters
-        sentences = text.split('.')
-        new_text = ''
-        for sentence in sentences:
-            if len(sentence) <= 500:
-                new_text += sentence + '.'
-        return new_text
 
     def sentiment_score_to_summary(sentiment_score):
         """
@@ -346,11 +331,11 @@ def sentiment_analysis(content):
     result.logits
     sentiment_score = int(torch.argmax(result.logits))+1
     outcome = sentiment_score_to_summary(sentiment_score)
-    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+    print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}")
-        )
+          )
 
 
 def summarize_text_util(text, per):
@@ -406,11 +391,11 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
     """
 
     if isWebURL := check_url_or_text(content):
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="URL detected")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected")
+              )
 
         # this is just get the headings
         r = requests.get(content)
@@ -422,16 +407,16 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
     # if text and not URL, then directly use the model
     if not isWebURL:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="This is not a valid URL. Processing it as text...")
-        )
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text...")
+              )
         text = cleanup_text(content)
         text = ' '.join(text)
 
     # print(text)
-    text_summary = summarize_text_util(text, 0.4)
+    text_summary = summarize_text_util(text, 0.2)
 
     if not file:
         print(f"Length of the article: {len(text)} characters", end="\n\n")
@@ -458,8 +443,8 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
             f.write(f"Summary:\n{text_summary}\n\n")
 
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
-        )
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="[[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
+              )

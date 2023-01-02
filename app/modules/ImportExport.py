@@ -20,7 +20,7 @@ def export_to_csv():
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(words)}[/bold blue] words to [bold blue]VocabularyBuilder.csv[/bold blue] file 📁")
@@ -61,21 +61,21 @@ def import_from_csv():
                 except Exception as e:
                     word_already_exists+=1
     except FileNotFoundError:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="[bold red]FILE NOT FOUND[/bold red] ❌. Make sure you have a file named [bold red]VocabularyBuilder.csv[/bold red] in the same directory as the executable file. 📂")
         )
     finally:
         if word_already_exists>0:
-            print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold red]SKIPPED[/bold red] [bold blue]{word_already_exists}[/bold blue] DUPLICATE WORD(S) WITH THE SAME TIMESTAMP ⏩")
         )
 
         if added_words>0:
-            print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+            print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORD(S) ✅")
@@ -147,7 +147,7 @@ def export_to_pdf():    # sourcery skip: extract-method
             pdf.cell(30,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
         pdf.output(f"exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
-        print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF ✅")

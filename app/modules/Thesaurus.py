@@ -52,17 +52,17 @@ def find_synonym(query: str):  # sourcery skip: for-append-to-extend, remove-red
 
         # finally print the list
         if len(synonyms):
-            print(Panel.fit(
+            print(Panel(
                 f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are 👇"))
             synonyms = [
                 Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
             print(Columns(synonyms))
 
         else:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]",
-                            title_align="center",
-                            padding=(1, 1),
-                            renderable=f"No synonyms found for {query}")
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]",
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable=f"No synonyms found for {query}")
                   )
 
 
@@ -110,15 +110,15 @@ def find_antonym(query: str):  # sourcery skip: for-append-to-extend
 
         # finally print the list
         if len(antonyms):
-            print(Panel.fit(
+            print(Panel(
                 f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are 👇"))
             antonyms = [Panel(f"[red]{antonym}[red]", expand=True)
                         for antonym in antonyms]
             print(Columns(antonyms))
 
         else:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]",
-                            title_align="center",
-                            padding=(1, 1),
-                            renderable=f"No antonyms found for {query}")
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]",
+                        title_align="center",
+                        padding=(1, 1),
+                        renderable=f"No antonyms found for {query}")
                   )

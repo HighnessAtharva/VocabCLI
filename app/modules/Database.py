@@ -128,7 +128,7 @@ def refresh_cache():
                     response.raise_for_status()
 
                 except exceptions.ConnectionError as error:
-                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                    print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                         title_align="center",
                         padding=(1, 1),
                         renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
@@ -141,7 +141,7 @@ def refresh_cache():
                 # update the progress bar
                 total += 1
                 
-    print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+    print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                      title_align="center",
                      padding=(1, 1),
                      renderable="Cache refreshed successfully.")

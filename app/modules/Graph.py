@@ -38,7 +38,7 @@ def viz_top_words_bar(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_words:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="No words found ❌")
@@ -46,7 +46,7 @@ def viz_top_words_bar(N=10, popup=False):
         return
 
     if len(top_words) < N:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Not enough words found. Showing graph for available words only. 📊")
@@ -95,7 +95,7 @@ def viz_top_tags_bar(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_tags:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="No tags found ❌")
@@ -103,7 +103,7 @@ def viz_top_tags_bar(N=10, popup=False):
         return
 
     if len(top_tags) < N:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Not enough tags found. Showing graph for available tags only. 📊")
@@ -144,7 +144,7 @@ def viz_top_words_pie(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_words:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="No words found ❌")
@@ -152,7 +152,7 @@ def viz_top_words_pie(N=10, popup=False):
         return
 
     if len(top_words) < N:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Not enough words found. Showing pie chart for available words only. 📊")
@@ -192,7 +192,7 @@ def viz_top_tags_pie(N=10, popup=False):
     count= [row[1] for row in rows if row[1] != 0]
 
     if not top_tags:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="No tags found ❌")
@@ -200,7 +200,7 @@ def viz_top_tags_pie(N=10, popup=False):
         return
 
     if len(top_tags) < N:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Not enough tags found. Showing Pie Chart for available tags only. 📊")

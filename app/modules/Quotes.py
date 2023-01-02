@@ -12,10 +12,10 @@ from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-
+from rich import box
 
 # TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
-# TODO: @anay - Remove Panel.fit() and replace it with Panel() where message text varies. For errors let it be Panel.fit().   ✅
+# TODO: @anay - Remove Panel() and replace it with Panel() where message text varies. For errors let it be Panel().   ✅
 
 def get_quotes() -> List[Tuple]:
     """
@@ -56,7 +56,7 @@ def get_quotes() -> List[Tuple]:
         
             table.add_row(quote_text, quote_author, quote_date)
             table.add_section()
-            print(table)
+        print(table)
 
 
 def add_quote(quote: str, author: Optional[str] = None):
@@ -74,6 +74,7 @@ def add_quote(quote: str, author: Optional[str] = None):
 
     # strip the quote and author of any leading or trailing whitespace
     quote = quote.strip()
+    # quote= quote.lower()
 
     # remove the quotes from the quote if they exist
     if quote.startswith('"') and quote.endswith('"'):
@@ -86,7 +87,7 @@ def add_quote(quote: str, author: Optional[str] = None):
     # check if the quote does not only have whitespace
     if not quote:
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
@@ -97,7 +98,7 @@ def add_quote(quote: str, author: Optional[str] = None):
 
     if author and len(author.strip()) == 0:
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
@@ -107,7 +108,7 @@ def add_quote(quote: str, author: Optional[str] = None):
         return
 
     # check if the quote already exists in the database
-    c.execute("SELECT * FROM quotes WHERE quote=?", (quote,))
+    c.execute("SELECT * FROM quotes WHERE LOWER(quote)=?", (quote.lower(),))
     if c.fetchone() is not None:
         print(
             Panel(
@@ -159,7 +160,7 @@ def search_quote(quoteText: str):
     # check if the quote does not only have whitespace
     if not quoteText:
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
@@ -169,7 +170,7 @@ def search_quote(quoteText: str):
         return
 
     # search for the quote in the database whiile LOWERING all the quotes in the database
-    c.execute("SELECT * FROM quotes WHERE LOWER(quote) LIKE ? OR LOWER(author) LIKE ?", (f'%{quoteText}%',f'%{quoteText}%'))
+    c.execute("SELECT * FROM quotes WHERE LOWER(quote) LIKE ? OR LOWER(author) LIKE ?", (f'%{quoteText.lower()}%',f'%{quoteText.lower()}%'))
     quotes = c.fetchall()
 
     # if the quote does not exist
@@ -211,7 +212,7 @@ def search_quote(quoteText: str):
 
         table.add_row(quote_text, quote_author, quote_date)
         table.add_section()
-        print(table)
+    print(table)
 
 
 def delete_quote():
@@ -230,7 +231,7 @@ def delete_quote():
             raise NoQuotesException
 
         print(
-            Panel.fit(
+            Panel(
                 title="[b reverse green]  Delete Quote  [/b reverse green]",
                 renderable="Select a quote to delete",
                 title_align="center",
@@ -254,7 +255,7 @@ def delete_quote():
         # check if the quoteToDelete is a number
         if not quoteToDelete.isdigit():
             print(
-                Panel.fit(
+                Panel(
                     title="[b reverse red]  Error!  [/b reverse red]",
                     title_align="center",
                     padding=(1, 1),
@@ -266,7 +267,7 @@ def delete_quote():
         # check if the quoteToDelete is within the range of the quotes
         if int(quoteToDelete) not in range(1, len(quotes)+1):
             print(
-                Panel.fit(
+                Panel(
                     title="[b reverse red]  Error!  [/b reverse red]",
                     title_align="center",
                     padding=(1, 1),
@@ -345,7 +346,7 @@ def delete_all_quotes():
         if len(quotes) == 0:
             raise NoQuotesException
 
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?")
@@ -357,7 +358,7 @@ def delete_all_quotes():
         
         if typer.confirm(""):
             c.execute("DELETE FROM quotes")
-            print(Panel.fit(title="[b reverse green]  Success!  [/b reverse green]", 
+            print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="All quotes deleted successfully ✅")
@@ -365,7 +366,7 @@ def delete_all_quotes():
             conn.commit()
         else:
             print(
-                Panel.fit(
+                Panel(
                     title="[b reverse green]  Your Quotes remain safe!  [/b reverse green]",
                     renderable="None of the quotes were deleted",
                     title_align="center",

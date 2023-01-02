@@ -18,7 +18,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 # TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement.
-# TODO: @anay - Remove Panel.fit() and replace it with Panel() where message text varies. For errors let it be Panel.fit().
+# TODO: @anay - Remove Panel() and replace it with Panel() where message text varies. For errors let it be Panel().
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis.
@@ -39,14 +39,14 @@ def add_feed(url):
 
             # if URL is not a feed URL or does not return a 200 status code, print error message
             if feed.status != 200 or feed.bozo:
-                print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Feed not found ❌")
         )
                 return
         except Exception as e:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Feed not found ❌")
@@ -59,7 +59,7 @@ def add_feed(url):
         # check if feed exists in the database
         c.execute("SELECT * from rss where link=?", (url,))
         if c.fetchone():
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=" Feed already exists ✅")
@@ -100,7 +100,7 @@ def get_all_feeds():
 
         # if no feeds exist, print error message
         if not rows:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="No feeds added yet. Use [bold red]rss[/bold red] command to add a feed. ➕")
@@ -140,13 +140,15 @@ def remove_feed():
     c.execute("SELECT * from rss")
     rows = c.fetchall()
     if not rows:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Feed does not exist ❌")
         )
         return
+    
     for idx, row in enumerate(rows, start=1):
+        print("Index:", idx)
         print("Title: ", row[0])
         print("Link: ", row[1])
         print("Summary:", row[2])
@@ -158,14 +160,14 @@ def remove_feed():
     try:
         index = int(input("Index: "))
     except ValueError:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="index should be a number 🔢")
         )
         return
     if index > len(rows):
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Invalid index, out of range ❌")
@@ -205,7 +207,7 @@ def check_feed_for_new_content(title):
         # check if feed exists in the database
         rows = c.fetchall()
         if not rows:
-            print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+            print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="This feed is not added to your list. Use 'rss' command to add a feed. ➕")

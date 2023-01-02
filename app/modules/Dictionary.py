@@ -24,7 +24,7 @@ def display_theme(query: str):
     # join collection and words table to get the collection name for the word
     c.execute("SELECT collection FROM collections JOIN words ON collections.word=words.word WHERE words.word=?", (query,))
     if collection := c.fetchone():
-        print(Panel.fit(f"[bold cyan]Theme:[/bold cyan] {collection[0]}"))
+        print(Panel(f"[bold cyan]Theme:[/bold cyan] {collection[0]}"))
   
 
 def show_commonly_confused(word:str):
@@ -35,7 +35,7 @@ def show_commonly_confused(word:str):
         for row in reader:
             if word in row:
                 confused_list = [i for i in row if i!=word]                
-                print(Panel.fit(f"❕ [bold green]{word}[/bold green] is commonly confused with [bold green]{', '.join(confused_list)}[/bold green].", title="[reverse]Commonly Confused[/reverse]", title_align="center",padding=(1, 1)))    
+                print(Panel(f"❕ [bold green]{word}[/bold green] is commonly confused with [bold green]{', '.join(confused_list)}[/bold green].", title="[reverse]Commonly Confused[/reverse]", title_align="center",padding=(1, 1)))    
                 
                       
 #no tests for this function as it is not called anywhere in the command directly
@@ -67,21 +67,21 @@ def connect_to_api(query:str="hello"):
         response.raise_for_status()
 
     except exceptions.ConnectionError as error:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌")
         ) 
 
     except exceptions.HTTPError as error:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")
         )
 
     except exceptions.Timeout as error:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="[bold red]Error: Timeout[/bold red] ⏳")
@@ -150,7 +150,7 @@ def insert_word_to_db(query: str):
         response.raise_for_status()
 
     except exceptions.HTTPError as error:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")

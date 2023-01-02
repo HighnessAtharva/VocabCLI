@@ -17,3 +17,9 @@ def test_about(runner):
 
 def test_streak(runner):
     pass
+
+def test_milestone(runner):
+    pass
+
+def test_qotd(runner):
+    pass

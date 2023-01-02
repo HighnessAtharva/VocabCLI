@@ -73,7 +73,7 @@ def define(
                 # if there are other possible correct words then ask the user if they meant any of them
                 if candidates:
                     candidates = ', '.join(candidates)
-                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                    print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                             title_align="center",
                             padding=(1, 1),
                             renderable=f"The word {word} was not found. Did you mean [u blue]{candidates}[/u blue]? 🤔")
@@ -82,7 +82,7 @@ def define(
                 
                 # otherwise, print the word unavailable message
                 else:
-                    print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+                    print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                             title_align="center",
                             padding=(1, 1),
                             renderable=f"The word [bold red]{word}[/bold red] is not a valid word. Please check the spelling. 🤔")
@@ -416,7 +416,7 @@ def delete(
 
 
     if mastered:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?")
@@ -428,7 +428,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif learning:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?")
@@ -439,7 +439,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif favorite:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?")
@@ -450,7 +450,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif tag:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag {tag}[/b]?")
@@ -461,7 +461,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif words:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to delete these [b]{len(words)} words from your list[/b]?")
@@ -473,7 +473,7 @@ def delete(
             print(Panel("OK, not deleting anything."))
 
     elif not any([mastered, learning, favorite, tag, words]):
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?")
@@ -502,7 +502,7 @@ def clear(
     """
 
     if learning:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?")
@@ -513,7 +513,7 @@ def clear(
             print(Panel("OK, not clearing anything."))
 
     elif master:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?")
@@ -524,7 +524,7 @@ def clear(
             print(Panel("OK, not clearing anything."))
 
     elif favorite:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?")
@@ -535,7 +535,7 @@ def clear(
             print(Panel("OK, not clearing anything."))
 
     elif tag:
-        print(Panel.fit(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag {tag}[/b]?")
@@ -636,7 +636,7 @@ def revise(
         revise_collection(number=number, collectionName=collection)
 
     else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Cannot combine these arguments")
@@ -699,7 +699,7 @@ def quiz(
         show_quiz_history()
         
     else:
-        print(Panel.fit(title="[b reverse red]  Error!  [/b reverse red]", 
+        print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="Cannot combine these arguments")
