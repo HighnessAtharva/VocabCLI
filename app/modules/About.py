@@ -10,7 +10,7 @@ from rich.syntax import Syntax
 
 
 
-def print_about_app():
+def print_about_app()->None:
     """Prints the details of the app"""
 
     layout = Layout()  

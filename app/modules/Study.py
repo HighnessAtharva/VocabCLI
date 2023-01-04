@@ -24,7 +24,7 @@ from questionary import Style
 # REVISE FUNCTIONS #         
 #####################
 
-def start_revision(c, is_collection: bool = False):
+def start_revision(c: Cursor, is_collection: bool = False)->None:
     """ 
     Starts the revision process. 
     
@@ -71,7 +71,7 @@ def start_revision(c, is_collection: bool = False):
     #     )
         
 
-def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
+def revise_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redundant-if
     """ 
     Revise all words in the database.
 
@@ -97,7 +97,7 @@ def revise_all(number: Optional[int] = None):  # sourcery skip: remove-redundant
 def revise_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
-    ):  # sourcery skip: remove-redundant-if
+    )->None:  # sourcery skip: remove-redundant-if
     """ 
     Revise words in a specific tag.
 
@@ -125,7 +125,7 @@ def revise_tag(
 
 def revise_learning(
     number: Optional[int] = None,
-    ): 
+    )->None: 
     """
     Revise words in learning list.
     
@@ -153,7 +153,7 @@ def revise_learning(
 
 def revise_mastered(
     number: Optional[int] = None,
-    ):
+    )->None:
     """
     Revise words in mastered list.
 
@@ -181,7 +181,7 @@ def revise_mastered(
         
 def revise_favorite(
     number: Optional[int] = None,
-    ): 
+    )->None: 
     """ 
     Revise words in favorite list.
 
@@ -192,8 +192,7 @@ def revise_favorite(
     conn=createConnection()
     c=conn.cursor()
 
-    
-    
+
     with contextlib.suppress(NoWordsInFavoriteList):
         if count_favorite() ==0:
             raise NoWordsInFavoriteList()
@@ -209,7 +208,7 @@ def revise_favorite(
 def revise_collection(
     number: Optional[int] = None,
     collectionName: Optional[str] = None
-):
+)->None:
     """
     Revise words in a collection.
 
@@ -238,7 +237,7 @@ def revise_collection(
 #####################
 # QUIZ FUNCTIONS #      
 #####################
-def start_quiz(c, collection=None, quizType:str=None):    # sourcery skip: remove-redundant-if
+def start_quiz(c:Cursor, collection=None, quizType:str=None)->None:    # sourcery skip: remove-redundant-if
     """
     Starts the quiz.
 
@@ -339,7 +338,7 @@ def start_quiz(c, collection=None, quizType:str=None):    # sourcery skip: remov
         c.execute("INSERT INTO quiz_history (type, datetime, question_count,points,duration) values (?, ?, ?, ?, ?)", (quizType, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), len(rows), score, diff.seconds))
         c.close()         
         
-def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-if
+def quiz_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redundant-if
     """
     Quiz all words in the database.
 
@@ -369,7 +368,7 @@ def quiz_all(number: Optional[int] = None):  # sourcery skip: remove-redundant-i
 def quiz_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
-    ):    # sourcery skip: remove-redundant-if
+    )->None:    # sourcery skip: remove-redundant-if
     """
     Quiz words with a specific tag.
 
@@ -400,7 +399,7 @@ def quiz_tag(
 
 def quiz_learning(
     number: Optional[int] = None
-    ): 
+    )->None: 
     """
     Quiz words in learning list.
 
@@ -431,7 +430,7 @@ def quiz_learning(
 
 def quiz_mastered(
     number: Optional[int] = None
-    ): 
+    )->None: 
     """
     Quiz words in mastered list.
 
@@ -458,9 +457,7 @@ def quiz_mastered(
         conn.commit()
         
         
-def quiz_favorite(
-    number: Optional[int] = None,
-    ):  
+def quiz_favorite(number: Optional[int] = None)->None:  
     """
     Quiz words in favorite list.
 
@@ -491,7 +488,7 @@ def quiz_favorite(
 def quiz_collection(
     number: Optional[int] = None,
     collectionName: Optional[str] = None
-):
+)->None:
     """
     Quiz words in a collection.
 
@@ -522,8 +519,7 @@ def quiz_collection(
         start_quiz(c, collection=collectionName, quizType=f"collection: {collectionName}")
         conn.commit()
         
-def show_quiz_history():
-
+def show_quiz_history()->None:
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT * FROM quiz_history ORDER BY datetime DESC")

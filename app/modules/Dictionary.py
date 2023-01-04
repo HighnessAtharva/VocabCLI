@@ -18,7 +18,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 
-def display_theme(query: str):
+def display_theme(query: str)->None:
     conn=createConnection()
     c=conn.cursor()
     # join collection and words table to get the collection name for the word
@@ -27,7 +27,7 @@ def display_theme(query: str):
         print(Panel(f"[bold cyan]Theme:[/bold cyan] {collection[0]}"))
   
 
-def show_commonly_confused(word:str):
+def show_commonly_confused(word:str)->None:
     """Check if the word is commonly confused with other words, if yes, show them"""
     
     with open("modules/commonly_confused.csv", "r") as file:
@@ -39,7 +39,7 @@ def show_commonly_confused(word:str):
                 
                       
 #no tests for this function as it is not called anywhere in the command directly
-def connect_to_api(query:str="hello"):
+def connect_to_api(query:str="hello")->json:
     """
     Connects to the API and returns the response in JSON format.
 
@@ -100,7 +100,7 @@ def connect_to_api(query:str="hello"):
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def phonetic(query: str):
+def phonetic(query: str)-> str:
     """
     Prints the phonetic of the word.
 
@@ -125,7 +125,7 @@ def phonetic(query: str):
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def insert_word_to_db(query: str):
+def insert_word_to_db(query: str)->None:
     """
     Tags the word in the vocabulary builder list.
 
@@ -163,7 +163,7 @@ def insert_word_to_db(query: str):
             insert_to_db_util(conn, query)
 
 #no tests for this function as it is not called anywhere in the command directly
-def insert_to_db_util(conn, query):
+def insert_to_db_util(conn, query: str)->None:
     """
     Inserts the word into the database.
 
@@ -207,7 +207,7 @@ def insert_to_db_util(conn, query):
         conn.commit()
 
 
-def definition(query:str, short:Optional[bool]=False):
+def definition(query:str, short:Optional[bool]=False) -> None:
     """
     Prints the definition of the word.
 
@@ -267,7 +267,7 @@ def definition(query:str, short:Optional[bool]=False):
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def one_line_definition(query:str):
+def one_line_definition(query:str) -> str:
     """
     Prints the one line definition of the word.
 
@@ -283,8 +283,9 @@ def one_line_definition(query:str):
             return (meaning["definition"])
 
 
+
 #no tests for this function as it is not called anywhere in the command directly
-def say_aloud(query: str):
+def say_aloud(query: str) -> None:
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
 
@@ -317,11 +318,12 @@ def say_aloud(query: str):
 
 
 # TODO: add a main command and link it to this function
-def get_word_of_the_day():
+def get_word_of_the_day() -> None:
     """Get a word of the day from a public API and print its definition."""
-    # NOTE @atharvashah: Check back here for a API key, should not take more than a week to be available. 
-    # https://www.wordnik.com/users/vocabcli/API
-    # response = requests.get("https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=YOUR_API").json()    
-    # word = response["word"]
-    # definition(word)
-     
+
+    WORDNIK_API_KEY = os.getenv("WORDNIK_API_KEY")
+    response = requests.get(f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={WORDNIK_API_KEY}").json()    
+    word = response["word"]
+    print(Panel("[bold green]WORD OF THE DAY[/bold green]"))
+    
+    definition(query=word, short=True)

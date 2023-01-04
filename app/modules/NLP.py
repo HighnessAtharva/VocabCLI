@@ -50,7 +50,7 @@ def check_url_or_text(value: str) -> bool:
     return True
 
 
-def parse_text_from_web(webURL):
+def parse_text_from_web(webURL: str) -> str:
     """Extracts the text from the main content of the web page. Removes the ads, comments, navigation bar, footer, html tags, etc
 
     Args:
@@ -272,7 +272,7 @@ def extract_difficult_words(text: str) -> None:
         print(word)
 
 
-def sentiment_analysis(content):
+def sentiment_analysis(content: str)->None:
     """
     Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
 
@@ -299,7 +299,7 @@ def sentiment_analysis(content):
         text = cleanup_text(content)
         text = ' '.join(text)
 
-    def sentiment_score_to_summary(sentiment_score):
+    def sentiment_score_to_summary(sentiment_score: int) -> str:
         """
         Converts the sentiment score to a summary
 
@@ -338,7 +338,7 @@ def sentiment_analysis(content):
           )
 
 
-def summarize_text_util(text, per):
+def summarize_text_util(text:str, per:int)->str:
     """
     Summarizes the text using the spacy library
 

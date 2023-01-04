@@ -6,7 +6,7 @@ from datetime import datetime
 from rich import print
 from rich.panel import Panel
 
-def export_to_csv():
+def export_to_csv()->None:
     """Export words to csv file."""
 
     conn= createConnection()
@@ -29,7 +29,7 @@ def export_to_csv():
         print(e)
 
 
-def import_from_csv():
+def import_from_csv()->None:
     """Import words from csv file."""
 
     conn= createConnection()
@@ -104,7 +104,7 @@ class PDF(FPDF):
         self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
 
 
-def export_to_pdf():    # sourcery skip: extract-method
+def export_to_pdf()->None:    # sourcery skip: extract-method
     """Export words to pdf file."""
     try:
         pdf=PDF('P', 'mm', 'A4')

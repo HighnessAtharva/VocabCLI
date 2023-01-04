@@ -6,7 +6,7 @@ import typer
 import os
 
 
-def show_slider():
+def show_slider() -> None:
     """Show the slider"""
 
     # set up the tkinter window

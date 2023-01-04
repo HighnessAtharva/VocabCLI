@@ -22,7 +22,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis.
-def add_feed(url):
+def add_feed(url:str)->None:
     """Add the feed to the database"""
     # ----------------- Spinner -----------------#
     with Progress(
@@ -79,7 +79,7 @@ def add_feed(url):
         print("Summary:", feed.feed.description)
 
 
-def get_all_feeds():
+def get_all_feeds()->None:
     """Get the feed details from the database"""
     # ----------------- Spinner -----------------#
     with Progress(
@@ -131,7 +131,7 @@ def get_all_feeds():
         print(table)
 
 
-def remove_feed():
+def remove_feed()->None:
     """Remove the feed from the database"""
     conn = createConnection()
     c = conn.cursor()
@@ -181,7 +181,7 @@ def remove_feed():
     print(f"Feed {feed_name} removed successfully")
 
 
-def remove_html_tags(html):
+def remove_html_tags(html: str)->str:
     soup = BeautifulSoup(html, "html.parser")
     for data in soup(['style', 'script']):
         # Remove tags
@@ -189,7 +189,7 @@ def remove_html_tags(html):
     return ' '.join(soup.stripped_strings)
 
 
-def check_feed_for_new_content(title):
+def check_feed_for_new_content(title:str)->None:
     """Parse the feed and check for new content"""
     # ----------------- Spinner -----------------#
     with Progress(

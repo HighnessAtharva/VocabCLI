@@ -17,7 +17,7 @@ from rich import box
 # TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
 # TODO: @anay - Remove Panel() and replace it with Panel() where message text varies. For errors let it be Panel().   ✅
 
-def get_quotes() -> List[Tuple]:
+def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
     """
@@ -59,7 +59,7 @@ def get_quotes() -> List[Tuple]:
         print(table)
 
 
-def add_quote(quote: str, author: Optional[str] = None):
+def add_quote(quote: str, author: Optional[str] = None)->None:
     # sourcery skip: remove-redundant-fstring
     """
     Adds a quote to the database.
@@ -136,7 +136,7 @@ def add_quote(quote: str, author: Optional[str] = None):
     )
 
 
-def search_quote(quoteText: str):
+def search_quote(quoteText: str)->None:
     """
     Searches for a quote in the database.
 
@@ -215,7 +215,7 @@ def search_quote(quoteText: str):
     print(table)
 
 
-def delete_quote():
+def delete_quote()->None:
     """
     Deletes a quote from the database.
     """
@@ -281,7 +281,7 @@ def delete_quote():
         print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
         conn.commit()
         
-def get_random_quote():
+def get_random_quote()->None:
     """
     Gets a random quote from the database.
     """
@@ -306,7 +306,7 @@ def get_random_quote():
             f"[bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}"
             )
         
-def get_quote_of_the_day():
+def get_quote_of_the_day()->None:
     """
     Get a random quote from a public API
     """
@@ -331,7 +331,7 @@ def get_quote_of_the_day():
     )
 
 
-def delete_all_quotes():
+def delete_all_quotes()->None:
     """
     Deletes all quotes from the database.
     """

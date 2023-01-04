@@ -25,7 +25,7 @@ def get_terminal_width() -> int:
     return width
 
 
-def print_banner(console):
+def print_banner(console) -> None:
     """
     Prints the banner of the application.
 

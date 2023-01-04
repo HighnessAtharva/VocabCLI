@@ -28,7 +28,7 @@ def createConnection():
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def createTables(conn: sqlite3.Connection):
+def createTables(conn: sqlite3.Connection)->None:
     """
     Creates tables in the database
 
@@ -90,7 +90,7 @@ def createTables(conn: sqlite3.Connection):
 
 
 #no tests for this function as it is not called anywhere in the command directly
-def initializeDB():
+def initializeDB()->None:
     """ Initializes the database """
 
     conn=createConnection()
@@ -99,7 +99,7 @@ def initializeDB():
 
 
 # NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
-def refresh_cache():
+def refresh_cache()->None:
     """
     Refreshes the cache of the words in the database.
     """

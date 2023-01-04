@@ -923,10 +923,14 @@ def milestone(
 ):
     predict_milestone(milestone_number)
     
-@app.command("qotd", rich_help_panel="Miscellaneous", help="📝 Get quote of the day.")
-def quote_of_the_day():
+@app.command(rich_help_panel="Miscellaneous", help="📝 Get quote of the day.")
+def daily_quote():
     get_quote_of_the_day()
     
+@app.command(rich_help_panel="Miscellaneous", help="📝 Get word of the day.")
+def daily_word():
+    get_word_of_the_day()    
+
 # TODO: - need to write the function
 @app.command(rich_help_panel="Vocabulary Builder", help="📇 Create flashcards for words in your learning list")
 def flashcard():

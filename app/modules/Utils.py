@@ -22,7 +22,7 @@ from rich.table import Table
                 
 
 #no tests for this function as it is not called anywhere in the command directly
-def check_word_exists(query: str):
+def check_word_exists(query: str)->bool:
     """
     Checks if the word exists in the database
 
@@ -46,7 +46,7 @@ def check_word_exists(query: str):
         return True
 
 
-def fetch_word_history(word: str):    # sourcery skip: extract-method
+def fetch_word_history(word: str)-> None: 
     """
     Fetches all instances of timestamp for a word from the database
 
@@ -77,7 +77,7 @@ def fetch_word_history(word: str):    # sourcery skip: extract-method
         print(table)
 
 
-def add_tag(query: str, tagName:str):
+def add_tag(query: str, tagName:str)->None:
     """
     Tags the word in the vocabulary builder list.
 
@@ -118,7 +118,7 @@ def add_tag(query: str, tagName:str):
         )
         return
 
-def remove_tag(query: str):
+def remove_tag(query: str)->None:
     """Removes the tag from the word in the database
 
     Args:
@@ -156,7 +156,7 @@ def remove_tag(query: str):
 
 
 # word doesn't exist
-def set_mastered(query: str):
+def set_mastered(query: str)->None:
     """
     Sets the word as mastered.
 
@@ -196,7 +196,7 @@ def set_mastered(query: str):
         )
 
 
-def check_mastered(query:str):
+def check_mastered(query:str)->bool:
     """
     Checks if the word is mastered and returns a boolean value.
 
@@ -213,7 +213,7 @@ def check_mastered(query:str):
     return bool(row := c.fetchall())
          
     
-def check_learning(query:str):
+def check_learning(query:str)->bool:
     """
     Checks if the word is learning and returns a boolean value.
 
@@ -229,7 +229,7 @@ def check_learning(query:str):
     c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
     return bool(row := c.fetchall())
     
-def set_unmastered(query: str):
+def set_unmastered(query: str)->None:
     """
     Sets the word as unmastered.
 
@@ -264,7 +264,7 @@ def set_unmastered(query: str):
 
 
 
-def set_learning(query: str):
+def set_learning(query: str)->None:
     """
     Sets the word as learning.
 
@@ -309,7 +309,7 @@ def set_learning(query: str):
         )
 
 
-def set_unlearning(query: str):
+def set_unlearning(query: str)->None:
     """
     Sets the word as unlearning.
 
@@ -349,7 +349,7 @@ def set_unlearning(query: str):
 
 
 
-def set_favorite(query: str):
+def set_favorite(query: str)->None:
     """
     Sets the word as favorite.
 
@@ -380,7 +380,7 @@ def set_favorite(query: str):
 
 
 
-def set_unfavorite(query:str):
+def set_unfavorite(query:str)->None:
     """
     Remove the word from favorite list.
 
@@ -496,7 +496,7 @@ def count_tag(tag:str) -> int:
     return len(rows) if (rows := c.fetchall()) else 0
 
 
-def get_random_word_definition_from_api():
+def get_random_word_definition_from_api()->None:
     """Gets a random word from the text file and gets its definition from the API."""
 
     lines = open('modules/_random_words.txt').read().splitlines()
@@ -506,7 +506,7 @@ def get_random_word_definition_from_api():
 
 
 
-def get_random_word_from_learning_set():
+def get_random_word_from_learning_set()->None:
     """
     Gets a random word from the learning list.
     
@@ -526,7 +526,7 @@ def get_random_word_from_learning_set():
         definition(rows[0][0])
 
 
-def get_random_word_from_mastered_set():
+def get_random_word_from_mastered_set()->None:
     """
     Gets a random word with definition from the mastered words list.
 
@@ -546,7 +546,7 @@ def get_random_word_from_mastered_set():
         print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{rows[0][0]}[/bold green]"))
         definition(rows[0][0])
 
-def get_random_word_from_favorite_set():
+def get_random_word_from_favorite_set()->None:
     """ 
     Gets a random word from the favorite list.
     
@@ -564,7 +564,7 @@ def get_random_word_from_favorite_set():
         print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}"))
         definition(rows[0][0])
     
-def get_random_word_from_tag(tagName:str):
+def get_random_word_from_tag(tagName:str)->None:
     """
     Gets a random word from the vocabulary builder list with a particular tag.
 
@@ -595,7 +595,7 @@ def show_list(
     last:Optional[int]=None,
     most: Optional[int]=None,
     tagnames:Optional[bool]=False
-    ):
+    )->None:
     # sourcery skip: low-code-quality
     """
     Gets all the words in the vocabulary builder list.
@@ -797,7 +797,7 @@ def show_list(
         print(Columns(rows, equal=True))
 
  
-def delete_all():
+def delete_all()->None:
     """ Deletes all the words from the database.
      
     Raises:
@@ -821,7 +821,7 @@ def delete_all():
         )
 
 
-def delete_mastered():
+def delete_mastered()->None:
     """ Deletes all the mastered words from the database. 
     
     Raises:
@@ -845,7 +845,7 @@ def delete_mastered():
         )
 
 
-def delete_learning():
+def delete_learning()->None:
     """Deletes all the learning words from the database.
     
     Raises:
@@ -869,7 +869,7 @@ def delete_learning():
         )
 
 
-def delete_favorite():
+def delete_favorite()->None:
     """Deletes all the favorite words from the database.
     
     Raises:
@@ -893,7 +893,7 @@ def delete_favorite():
         )
 
 
-def delete_words_from_tag(tag: str):
+def delete_words_from_tag(tag: str)->None:
     """
     Deletes all the words from a particular tag from the database.
 
@@ -921,7 +921,7 @@ def delete_words_from_tag(tag: str):
         )
 
 
-def delete_word(query:List[str]):
+def delete_word(query:List[str])->None:
     """
     Deletes a word from the database.
 
@@ -945,7 +945,7 @@ def delete_word(query:List[str]):
         )
 
 
-def clear_learning():
+def clear_learning()->None:
     """Clears all the words marked as learning.
     
     Raises:
@@ -967,7 +967,7 @@ def clear_learning():
         )
     
 
-def clear_mastered():
+def clear_mastered()->None:
     """Clears all the words marked as mastered.
     
     Raises:
@@ -989,7 +989,7 @@ def clear_mastered():
         )
 
 
-def clear_favorite():
+def clear_favorite()->None:
     """Clears all the words marked as favorite.
     
     Raises:
@@ -1011,7 +1011,7 @@ def clear_favorite():
         )
 
 
-def clear_all_words_from_tag(tagName:str):
+def clear_all_words_from_tag(tagName:str)->None:
     """
     Clears all the words with specific tag.
 
@@ -1037,7 +1037,7 @@ def clear_all_words_from_tag(tagName:str):
         )
 
 
-def get_lookup_rate(today=False, week=False, month=False, year=False):
+def get_lookup_rate(today:bool=False, week:bool=False, month:bool=False, year:bool=False)->None:
     """
     Returns the learning rate of the user.
 
@@ -1133,7 +1133,7 @@ def get_lookup_rate(today=False, week=False, month=False, year=False):
         )
 
 # get conseuctive dates from list of dates
-def get_consecutive_dates(dates):
+def get_consecutive_dates(dates:list)->tuple:
     """Returns list of consecutive dates from list of dates"""
     consecutive_dates=[]
     start_date=dates[0]
@@ -1151,7 +1151,7 @@ def get_consecutive_dates(dates):
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis
-def show_streak():
+def show_streak()->None:
     """Shows streak of days user has looked up words"""
     
     conn=createConnection()
@@ -1178,7 +1178,7 @@ def show_streak():
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis
-def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
+def predict_milestone(milestone: int)->None:
     """
     Predicts when user will reach a milestone
     
