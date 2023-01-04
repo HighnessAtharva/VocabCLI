@@ -35,23 +35,18 @@ def export_util(c, type:str):
     if not (rows := c.fetchall()):
             print(f"No words found for selected criteria: {type}")
 
-    for row in rows:
-        word=row[0]
-        datetime=row[1]
-        tag=row[2]
-        mastered=row[3]
-        learning=row[4]
-        favorite=row[5]
-        
+    # Create a new image with a white background
+    width, height = 1080, 1080
 
-        # # Create a new image with a white background
-        width, height = 1080, 1080
+    for row in rows:
+        tag = row[1] if type =="tag" else None
+        word=row[0]
         image = Image.new('RGB', (width, height), 'white')
 
-        # # Get a drawing context
+        # Get a drawing context
         draw = ImageDraw.Draw(image)
 
-        # # Draw a gradient from red to blue
+        # Draw a gradient from red to blue
         for i in range(height):
             # Calculate the current intensity of red and blue
             red = int(i / height * 255)
@@ -61,24 +56,22 @@ def export_util(c, type:str):
             draw.line((0, i, width, i), fill=(red, 0, blue))
 
 
-        # # Use ImageFont to specify the font and size of the text
+        # Use ImageFont to specify the font and size of the text
         font = ImageFont.truetype('arial.ttf', 32)
         wordfont = ImageFont.truetype('arial.ttf', 64)
 
 
-        # # Draw the word and its definition on the image
+        # Draw the word and its definition on the image
         draw.text((50, 50), word, fill='white', font=wordfont)
         # if word is favorite
-        if favorite:
+        if type == "favorite":
             draw.text((250, 50), "💙", fill='white', font=font)
-        # if word is mastered 
-        if mastered:
-            draw.text((250, 50), "✅", fill='white', font=font)
-        # if word is learning
-        if learning:
+        elif type == "learning":
             draw.text((250, 50), "⏳", fill='white', font=font)
 
-        # # check if the word has any tag
+        elif type == "mastered":
+            draw.text((250, 50), "✅", fill='white', font=font)
+        # check if the word has any tag
         if tag:
             draw.text((50, 100), tag, fill='white', font=font)
 
@@ -93,7 +86,7 @@ def export_util(c, type:str):
         # Make a folder of the type of words
         if not os.path.exists(f"{type}"):
             os.makedirs(f"{type}")
-        
+
         # Save the image to a file
         image.save(f"{type}/{word}.png")
             
@@ -102,7 +95,7 @@ def export_util(c, type:str):
 def export_all():
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words")
+    c.execute("SELECT DISTINCT(word) FROM words")
     export_util(c, type="all words")
 
 
@@ -110,21 +103,21 @@ def export_all():
 def export_mastered():
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words WHERE mastered=1")
+    c.execute("SELECT DISTINCT(word) FROM words WHERE mastered=1")
     export_util(c, type="mastered")
 
 
 def export_learning():
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT DISTINCT(word), datetime, tag, mastered, learning, favorite FROM words WHERE learning=1")
+    c.execute("SELECT DISTINCT(word) FROM words WHERE learning=1")
     export_util(c, type="learning")
 
 
 def export_favorite():
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words WHERE favorite=1")
+    c.execute("SELECT DISTINCT(word) FROM words WHERE favorite=1")
     export_util(c, type="favorite")
 
         
@@ -132,15 +125,15 @@ def export_favorite():
 def export_tag(query:str):
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words WHERE tag=?", (query,))
+    c.execute("SELECT DISTINCT(word), tag FROM words WHERE tag=?", (query,))
     export_util(c, type="tag")
 
 
 def export_word(query:str):
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT * FROM words WHERE word=?", (query,))
+    c.execute("SELECT DISTINCT(word) FROM words WHERE word=?", (query,))
     export_util(c, type="word")
 
 
-export_learning()
+export_mastered()
