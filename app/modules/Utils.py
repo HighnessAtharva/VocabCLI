@@ -1179,7 +1179,12 @@ def show_streak():
 
 # todo @anay - formatting can be improved, add color, styles and emojis
 def predict_milestone(milestone):  # sourcery skip: extract-duplicate-method
-    """Predicts when user will reach a milestone"""
+    """
+    Predicts when user will reach a milestone
+    
+    Parameters:
+        milestone (int): milestone to predict
+    """
     
     conn=createConnection()
     c=conn.cursor()

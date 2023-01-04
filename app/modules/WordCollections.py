@@ -101,8 +101,8 @@ def show_words_from_collection(collectionName: str):
     Args:
         collectionName (str): Name of the collection
 
-        Raises:
-            NoSuchCollectionException: If the collection does not exist
+    Raises:
+        NoSuchCollectionException: If the collection does not exist
     """
 
     conn = createConnection()
