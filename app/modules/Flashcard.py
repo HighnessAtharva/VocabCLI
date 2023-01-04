@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 from Database import createConnection
 from Dictionary import *
 import json
+import textwrap
 
 
 
@@ -59,18 +60,18 @@ def export_util(c, type:str):
         # Use ImageFont to specify the font and size of the text
         font = ImageFont.truetype('arial.ttf', 32)
         wordfont = ImageFont.truetype('arial.ttf', 64)
-
+        emojifont = ImageFont.truetype('NotoColorEmoji.ttf',109)
 
         # Draw the word and its definition on the image
         draw.text((50, 50), word, fill='white', font=wordfont)
         # if word is favorite
         if type == "favorite":
-            draw.text((250, 50), "💙", fill='white', font=font)
+            draw.text((250, 50), "💙",  embedded_color=True, font=emojifont)
         elif type == "learning":
-            draw.text((250, 50), "⏳", fill='white', font=font)
-
+            draw.text((250, 50), "⏳",  embedded_color=True, font=emojifont)
         elif type == "mastered":
-            draw.text((250, 50), "✅", fill='white', font=font)
+            draw.text((250, 50), "✅" , embedded_color=True, font=emojifont)
+        
         # check if the word has any tag
         if tag:
             draw.text((50, 100), tag, fill='white', font=font)
@@ -78,12 +79,19 @@ def export_util(c, type:str):
         # get the dictionary of definitions:examples
         def_and_example= flashcard_definition(word)
         for count, (definition, example) in enumerate(def_and_example.items(), start=1):
+            definition = textwrap.fill(definition, width=65)
+            linecount=0
             if example:
-                draw.text((50, 250+count*150), f"{count}. {definition} - {example}", fill='white', font=font)
+                example = textwrap.fill(example, width=65)
+                linecount+=len(definition.splitlines())
+                linecount+=len(example.splitlines())
+                draw.text((50, 250+(count*linecount*50)), f"{count}. {definition}\n - {example}", fill='white', font=font)
             else:
                 draw.text((50, 250), f"{count}. {definition}", fill='white', font=font)
-
+                
+                
         # Make a folder of the type of words
+        # todo @atharva make a subfolder for each tag in tag folder, and all the folders in a folder called "flashcards"
         if not os.path.exists(f"{type}"):
             os.makedirs(f"{type}")
 
