@@ -121,6 +121,6 @@ class NoQuotesException(Exception):
                 title="[b reverse red]  Error!  [/b reverse red]",
                 title_align="center",
                 padding=(1, 1),
-                renderable="There are no quotes in your list. Add some quotes in your list using 'quote' command first. 🔖",
+                renderable="There are no quotes in your list. Add some quotes in your list using 'quote' command first. 📪",
             )
         )

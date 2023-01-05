@@ -132,8 +132,8 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
             title="[b reverse green]  Quote Added  [/b reverse green]",
             title_align="center",
             padding=(1, 1),
-            renderable=f"[bold green]Quote:[/bold green] {quote} ✔")
-    )
+            renderable=f"[bold green]Quote:[/bold green] [reverse white]{quote}[/reverse white] by [italic u]{author if author is not None else '-'}[/italic u] added to your list. 📚",
+    ))
 
 
 def search_quote(quoteText: str)->None:
@@ -188,7 +188,7 @@ def search_quote(quoteText: str)->None:
     print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b]")
+                renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b] 🔍")
         )
 
     table = Table(
@@ -233,7 +233,7 @@ def delete_quote()->None:
         print(
             Panel(
                 title="[b reverse green]  Delete Quote  [/b reverse green]",
-                renderable="Select a quote to delete",
+                renderable="Select a quote to delete 📍",
                 title_align="center",
                 padding=(1, 1),
             )
@@ -250,7 +250,7 @@ def delete_quote()->None:
                 f'{quote_num}. [bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
             )
         # prompt the user to select a quote index to delete
-        quoteToDelete = input("Enter the index of the quote you want to delete: ")
+        quoteToDelete = input("📍 Enter the index of the quote you want to delete: ")
 
         # check if the quoteToDelete is a number
         if not quoteToDelete.isdigit():
@@ -324,7 +324,7 @@ def get_quote_of_the_day()->None:
     print(
         Panel(
             title=f"[b reverse green]  Quote of the Day - {quote_date} [/b reverse green]",
-            renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}",
+            renderable=f"🌟 [bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}",
             title_align="center",
             padding=(1, 1),
         )
@@ -361,7 +361,7 @@ def delete_all_quotes()->None:
             print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="All quotes deleted successfully ✅")
+                renderable="All quotes [bold red]deleted[/bold red] successfully ✅")
         )
             conn.commit()
         else:

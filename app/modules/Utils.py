@@ -1193,7 +1193,7 @@ def predict_milestone(milestone: int)->None:
     
     # if user has already reached milestone
     if milestone-learning_count<=0:
-        print(Panel(f"🤔 You have already reached [bold green]{milestone}[/bold green] words.", title="[reverse]Milestone Prediction[/reverse]", title_align="center",padding=(1, 1)))
+        print(Panel(f"👏🏻 You have already reached [bold green]{milestone}[/bold green] words.", title="[reverse]Milestone Prediction[/reverse]", title_align="center",padding=(1, 1)))
     else:
         # get the date of the most recent word looked up
         c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")

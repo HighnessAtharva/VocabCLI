@@ -77,7 +77,7 @@ def connect_to_api(query:str="hello")->json:
         print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")
+                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. ❌")
         )
 
     except exceptions.Timeout as error:
@@ -120,7 +120,7 @@ def phonetic(query: str)-> str:
             if "text" in phonetics and len(phonetics["text"])>0:
                 phonetic= phonetics["text"]
             else:
-                phonetic= "[bold red]Phonetic Unavailable[/bold red]"
+                phonetic= "[bold red]Phonetic Unavailable[/bold red] ❌"
     return(phonetic)
 
 
@@ -153,7 +153,7 @@ def insert_word_to_db(query: str)->None:
         print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔")
+                renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. ❌")
         )
         return
 
@@ -324,6 +324,6 @@ def get_word_of_the_day() -> None:
     WORDNIK_API_KEY = os.getenv("WORDNIK_API_KEY")
     response = requests.get(f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={WORDNIK_API_KEY}").json()    
     word = response["word"]
-    print(Panel("[bold green]WORD OF THE DAY[/bold green]"))
+    print(Panel("[bold green]WORD OF THE DAY[/bold green] 📅"))
     
     definition(query=word, short=True)

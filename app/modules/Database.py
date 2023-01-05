@@ -144,5 +144,5 @@ def refresh_cache()->None:
     print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                      title_align="center",
                      padding=(1, 1),
-                     renderable="Cache refreshed successfully.")
+                     renderable="Cache refreshed successfully. ✅")
         ) 

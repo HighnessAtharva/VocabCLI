@@ -99,7 +99,7 @@ def censor_bad_words_strict(text: str) -> None:
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="URL detected")
+                    renderable="URL detected 🌐")
               )
         text = parse_text_from_web(text)
 
@@ -108,7 +108,7 @@ def censor_bad_words_strict(text: str) -> None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="This is not a valid URL. Processing it as text...")
+                    renderable="This is not a valid URL. Processing it as text... 📃")
               )
         text = cleanup_text(text)
         text = ' '.join(text)
@@ -137,7 +137,7 @@ def censor_bad_words_not_strict(text: str) -> None:
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="URL detected")
+                    renderable="URL detected 🌐")
               )
         text = parse_text_from_web(text)
 
@@ -146,7 +146,7 @@ def censor_bad_words_not_strict(text: str) -> None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="This is not a valid URL. Processing it as text...")
+                    renderable="This is not a valid URL. Processing it as text... 📃")
               )
         text = cleanup_text(text)
         text = ' '.join(text)
@@ -221,7 +221,7 @@ def extract_difficult_words(text: str) -> None:
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="URL detected")
+                    renderable="URL detected 🌐")
               )
         text = parse_text_from_web(text)
 
@@ -230,7 +230,7 @@ def extract_difficult_words(text: str) -> None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="This is not a valid URL. Processing it as text...")
+                    renderable="This is not a valid URL. Processing it as text... 📃")
               )
         text = cleanup_text(text)
         text = ' '.join(text)
@@ -285,7 +285,7 @@ def sentiment_analysis(content: str)->None:
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="URL detected")
+                    renderable="URL detected 🌐")
               )
         text = parse_text_from_web(content)
 
@@ -294,7 +294,7 @@ def sentiment_analysis(content: str)->None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="This is not a valid URL. Processing it as text...")
+                    renderable="This is not a valid URL. Processing it as text... 📃")
               )
         text = cleanup_text(content)
         text = ' '.join(text)
@@ -394,7 +394,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="URL detected")
+                    renderable="URL detected 🌐")
               )
 
         # this is just get the headings
@@ -410,7 +410,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="This is not a valid URL. Processing it as text...")
+                    renderable="This is not a valid URL. Processing it as text... 📃")
               )
         text = cleanup_text(content)
         text = ' '.join(text)

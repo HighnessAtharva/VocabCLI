@@ -103,7 +103,7 @@ def get_all_feeds()->None:
             print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="No feeds added yet. Use [bold red]rss[/bold red] command to add a feed. ➕")
+                renderable="[bold red]No feeds added yet[/bold red]. Use [bold blue]rss[/bold blue] command to add a feed. ➕")
         )
             return
 
@@ -116,10 +116,10 @@ def get_all_feeds()->None:
             title_justify="center",
             box=box.ROUNDED
         )
-        table.add_column("Title", width=30)
-        table.add_column("Link",  width=30, style="blue")
-        table.add_column("Summary", width=60, style="bright_green italic")
-        table.add_column("Date added", width=18, style="magenta")
+        table.add_column("🌐 Title", width=30)
+        table.add_column("🔗 Link",  width=30, style="blue")
+        table.add_column("📃 Summary", width=60, style="bright_green italic")
+        table.add_column("📅 Date added", width=18, style="magenta")
 
         for row in rows:
             # do not display the RSS feed URL, display the website URL instead
@@ -163,7 +163,7 @@ def remove_feed()->None:
         print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="index should be a number 🔢")
+                renderable="Index should be a number 🔢")
         )
         return
     if index > len(rows):
@@ -178,7 +178,7 @@ def remove_feed()->None:
     # remove feed from database
     c.execute("DELETE FROM rss WHERE title=?", (feed_name,))
     conn.commit()
-    print(f"Feed {feed_name} removed successfully")
+    print(f"Feed {feed_name} removed successfully ✅")
 
 
 def remove_html_tags(html: str)->str:
@@ -210,7 +210,7 @@ def check_feed_for_new_content(title:str)->None:
             print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="This feed is not added to your list. Use 'rss' command to add a feed. ➕")
+                renderable="This feed is [bold red]not added to your list[/bold red]. Use [bold blue]'rss' command[/bold blue] to add a feed. ➕")
         )
             return
 
@@ -227,10 +227,10 @@ def check_feed_for_new_content(title:str)->None:
                 title_justify="center",
                 box=box.ROUNDED
             )
-            table.add_column("Title", width=40, justify="center",
+            table.add_column("🌐 Title", width=40, justify="center",
                              style="bright_green")
-            table.add_column("Published On",  width=20, style="blue")
-            table.add_column("Article Summary", width=85,
+            table.add_column("📅 Published On",  width=20, style="blue")
+            table.add_column("📄 Article Summary", width=85,
                              style="white italic")
 
             # sorting by reverse chronological order
@@ -248,7 +248,7 @@ def check_feed_for_new_content(title:str)->None:
 
                 # if summary is empty, add a default message
                 if summary == "":
-                    summary = "No summary available"
+                    summary = "No summary available 📪"
 
                 table.add_row(
                     f"[link={str(entry.link)}]{remove_html_tags(entry.title)}[/link]",
