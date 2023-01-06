@@ -20,7 +20,7 @@ from rich.panel import Panel
 ################################
 # VISUALIZATION FUNCTIONS
 ################################
-def viz_top_words_bar(N:int=10, popup:bool=False):
+def viz_top_words_bar(N:int=10, popup:bool=False)->None:
     """Visualize the top N words looked up by the user
     
     Args:
@@ -76,7 +76,7 @@ def viz_top_words_bar(N:int=10, popup:bool=False):
         plt.show()
 
 
-def viz_top_tags_bar(N:int=10, popup:bool=False):
+def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
 
@@ -134,7 +134,7 @@ def viz_top_tags_bar(N:int=10, popup:bool=False):
         plt.show()
 
 
-def viz_top_words_pie(N:int=10, popup:bool=False):
+def viz_top_words_pie(N:int=10, popup:bool=False)->None:
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT word, COUNT(*) FROM words GROUP BY word ORDER BY COUNT(*) DESC LIMIT ?", (N,))
@@ -174,7 +174,7 @@ def viz_top_words_pie(N:int=10, popup:bool=False):
             padding=(1, 1)))
         plt.show()
     
-def viz_top_tags_pie(N:int=10, popup:bool=False):
+def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
 
@@ -226,7 +226,7 @@ def viz_top_tags_pie(N:int=10, popup:bool=False):
 
 
 # BUG days of the week is buggy, week range is not properly set
-def words_distribution_week_util():
+def words_distribution_week_util()->tuple[list, list]:
     """
     Returns the distribution of words by day of the week.
 
@@ -255,7 +255,7 @@ def words_distribution_week_util():
     return days_of_week, word_count
 
 # BUG 🐞 Graph does not show the entire week
-def viz_word_distribution_week(popup:bool=False):
+def viz_word_distribution_week(popup:bool=False)->None:
     """
     Visualizes the distribution of words by day of the week.
 
@@ -289,7 +289,7 @@ def viz_word_distribution_week(popup:bool=False):
 
 
 
-def word_distribution_month_util():
+def word_distribution_month_util()->tuple[list, list]:
     """
     Returns the distribution of word by dates of month.
 
@@ -333,7 +333,7 @@ def word_distribution_month_util():
     return dates, word_count
 
 
-def viz_word_distribution_month(popup:bool=False):
+def viz_word_distribution_month(popup:bool=False)->None:
     """ 
     Visualizes the distribution of words by dates of month. 
     
@@ -377,7 +377,7 @@ def viz_word_distribution_year(popup:bool=False):
     
     pass
 
-def viz_learning_vs_mastered(popup:bool=False):
+def viz_learning_vs_mastered(popup:bool=False)->None:
     """ 
     Visualizes the distribution of words by learning and mastered. 
     
@@ -426,7 +426,7 @@ def viz_learning_vs_mastered(popup:bool=False):
         plt.show()
     
 
-def viz_word_distribution_category(popup:bool=False):
+def viz_word_distribution_category(popup:bool=False)->None:
     conn=createConnection()
     c=conn.cursor()
     

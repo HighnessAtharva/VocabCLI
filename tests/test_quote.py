@@ -1,6 +1,6 @@
 from unittest import mock
 import pytest
-from VocabularyCLI import app
+from vocabCLI import app
 # TODO: @anay complete all the tests below this point 🔻
 
 

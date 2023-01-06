@@ -1,5 +1,5 @@
 import pytest
-from VocabularyCLI import app
+from vocabCLI import app
 from unittest import mock
 
 
@@ -18,8 +18,10 @@ def test_about(runner):
 def test_streak(runner):
     pass
 
+
 def test_milestone(runner):
     pass
+
 
 def test_qotd(runner):
     pass

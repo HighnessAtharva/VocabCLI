@@ -45,6 +45,15 @@ def refresh():
     """
     refresh_cache()
 
+@app.command(rich_help_panel="Miscellaneous", help="💻 [bold blue]About[/bold blue] the software")
+def about():
+    """
+    Print information about the software.
+    """
+
+    console = Console(record=False, color_system="truecolor")
+    print_banner(console)
+    print_about_app()
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📚 [bold blue]Lookup[/bold blue] a word in the dictionary")
 def define(
@@ -306,17 +315,6 @@ def untag(
 
     for word in words:
         remove_tag(word)
-
-
-@app.command(rich_help_panel="Miscellaneous", help="💻 [bold blue]About[/bold blue] the software")
-def about():
-    """
-    Print information about the software.
-    """
-
-    console = Console(record=False, color_system="truecolor")
-    print_banner(console)
-    print_about_app()
 
 
 @app.command(rich_help_panel="Vocabulary Builder", help="📊 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")

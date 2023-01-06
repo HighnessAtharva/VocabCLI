@@ -1,13 +1,9 @@
-my_env/
 .env
-src/VocabularyBuilder/tempCodeRunnerFile.py
-src/VocabularyBuilder/emojis.txt
-src/VocabularyBuilder/response.json
+.vscode/
 *.pyc
 src/VocabularyBuilder/delete.py
-app/modules/tempCodeRunnerFile.py
+vocabCLI/modules/tempCodeRunnerFile.py
+vocabCLI/tempCodeRunnerFile.py
+vocabCLI/__pycache__/
 tests/tempCodeRunnerFile.py
-app/tempCodeRunnerFile.py
-Project Summary \[Atharva + Anay\].md
-Project Summary \[Atharva + Anay\].pdf
-.vscode/
+tests/__pycache__/

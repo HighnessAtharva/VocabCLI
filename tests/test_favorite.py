@@ -1,6 +1,6 @@
 from unittest import mock
 import pytest
-from VocabularyCLI import app
+from vocabCLI import app
 
 
 class TestFavorite:
