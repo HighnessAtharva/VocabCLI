@@ -1,1 +1,331 @@
-<mxfile host="Electron" modified="2023-01-07T10:30:03.521Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.7.4 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36" etag="o-dw92VvJFLA2UOiewyP" version="20.7.4" type="device"><diagram id="IimcMbe1XG4ubdRFTGQp" name="Page-1">zZhdc6IwFIZ/jZfd4VP0shWt3W132rWt7mUKUTIDhA1BwV+/SUnkI3R0Z7qFmzbnJZ/PeXNQR+Ysym8JSIIH7MNwZGh+PjLdkWHo0/GU/eNKIRTN0kplR5AvtEpYoSOUHYWaIR+mjY4U45CipCl6OI6hRxsaIAQfmt22OGyumoAdVISVB0JVXSOfBqU6MZxKX0K0C+TKujxxBGRncZI0AD4+1CRzPjJnBGNatqJ8BkNOT3Ipxy0+eHraGIExvWSA9ePFt/Nrf5svN24QHfHbtLgSs+xBmIkDu8ijCMeAFGLbtJAs2HwMOwtuDgGicJUAjz85sNQzLaBRyCKdNUGalLnYohyy5W/UvcqFIaEwr0li77cQR5DyPWjiqWVa5RDhJEsTXA9VWqZCCmoZkRoQRtidZq5YsYbA9Q/oTAXdK/bA2+z+TgFHcBb7HISrnYf3CawMyUay0m2FlW50wBr/L1iWAkt1V+xf8wvLIi8EaYq8JpcmRJgjuhFPePs317/ZInLzWje3kEHMjrKpB7VRPKyGvUdy3IcZSXFGPHjeI9BvFRkKyA7Sc/dSzW8tf3ZH+qRGYAgo2jfX7MqpWOERI3ay6qpNmvaxzZYtynOLUfWS057IbPnQaU1UclAmYj4ARa1bwjukiglPYC7y5Tp8zR/wEXzfB2nyp3hebpfbK0Px5V2UYMJ2s5jnZeOTi6ByizucdXERtPWvK4Kd/NQi+Gu1GhYzc9o04bhvZmotXLB6F3iA+AMjpzfJOV/4yu0kZyvkft4/DouZ3nKb07fbxgqz5wCmICNZOixy7dpmTHom56i1DQ7vldAub7rTM7ZJB7Y9Ynj4B84xiDiT8i9TnjJ0HBjPVtHr24VTBeca8xeFNsNhCN+/qw3sIrdL4LhngjKhNYRPGaZwYNicr/IdC6tfHcoP0tWPN+b8Lw==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-01-07T13:47:41.666Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" etag="-lbmWF5L7lBzeFavj-GG" version="20.8.3" type="github">
+  <diagram id="IimcMbe1XG4ubdRFTGQp" name="Page-1">
+    <mxGraphModel dx="4234" dy="1106" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4KUd5xAdfxHXDhmzob9y-1" value="Dictionary" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="190" y="576.25" width="175" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="4KUd5xAdfxHXDhmzob9y-3" target="Js5eSTslBhXQOxkfxcye-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="931" y="315" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-45" value="Write Export Data to CSV" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-43">
+          <mxGeometry x="-0.0178" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4KUd5xAdfxHXDhmzob9y-3" value="VocabCLI" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="324" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4KUd5xAdfxHXDhmzob9y-4" value="&#xa;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;Invoke Commands Associated to a module&amp;nbsp;&lt;/span&gt;&#xa;&#xa;" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="4KUd5xAdfxHXDhmzob9y-1" edge="1">
+          <mxGeometry x="-0.2467" y="-12" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="530" as="sourcePoint" />
+            <mxPoint x="430" y="470" as="targetPoint" />
+            <Array as="points" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-2" value="Import/Export" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="-40" y="580" width="171.25" height="171.25" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-3" value="RSS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="-270" y="580" width="172.5" height="172.5" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-4" value="Flashcard comamnds" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="-540" y="590" width="170" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-5" value="NLP commands" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="-860" y="600" width="167.5" height="167.5" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-6" value="Thesaurus" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="1130" y="557.5" width="182.5" height="182.5" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-7" value="Report" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="690" y="582.5" width="157.5" height="157.5" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-8" value="Revise &amp;amp; Quiz" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="450" y="568.75" width="175" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-9" value="Word Collections" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="910" y="568.75" width="171.25" height="171.25" as="geometry" />
+        </mxCell>
+        <mxCell id="WlVxMozaJvhspqyTHfHf-10" value="Quotes" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="1410" y="568.75" width="171.25" height="171.25" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-1" value="Database" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-710" y="70" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-2" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-46" value="Fetch Definitions, Examples, Phonetic and Pronunciation from API" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-40">
+          <mxGeometry x="-0.0021" y="-3" relative="1" as="geometry">
+            <mxPoint x="23" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-2" value="API (Wordnik and DictionaryAPI.dev)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="739" y="70" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-3" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-44" value="Read Word Collections, Frequently Used Words, Curse words from a CSV/TXT file" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-41">
+          <mxGeometry x="-0.3828" y="-3" relative="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-3" value="CSV/TXT word store" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-4" value="User" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="315" y="1060" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="385" y="869.9999999999998" as="sourcePoint" />
+            <mxPoint x="385" y="680" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-53" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-9">
+          <mxGeometry x="0.4877" y="-3" relative="1" as="geometry">
+            <mxPoint x="1" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="860" as="sourcePoint" />
+            <mxPoint x="595.0000000000005" y="682.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-54" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-10">
+          <mxGeometry x="0.175" relative="1" as="geometry">
+            <mxPoint x="94" y="-92" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-11" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="869.9999999999998" as="sourcePoint" />
+            <mxPoint x="794" y="682.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-57" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-11">
+          <mxGeometry x="0.4341" y="-1" relative="1" as="geometry">
+            <mxPoint x="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-12" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.406;exitY=0.026;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="860" as="sourcePoint" />
+            <mxPoint x="950" y="682.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-56" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-12">
+          <mxGeometry x="0.1221" y="-4" relative="1" as="geometry">
+            <mxPoint x="214" y="-85" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-13" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="860" as="sourcePoint" />
+            <mxPoint x="1110" y="687.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-55" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-13">
+          <mxGeometry x="-0.2466" y="2" relative="1" as="geometry">
+            <mxPoint x="434" y="-117" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="385" y="1070" as="sourcePoint" />
+            <mxPoint x="385" y="680" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-52" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-14">
+          <mxGeometry x="0.2056" y="7" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-15" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="355" y="1070" as="sourcePoint" />
+            <mxPoint x="183.1466243677205" y="681.1788783729041" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-51" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-15">
+          <mxGeometry x="0.2497" y="-8" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-16" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.154;exitY=0.02;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="165" y="1072.5" as="sourcePoint" />
+            <mxPoint x="-215" y="677.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-50" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-16">
+          <mxGeometry x="0.2998" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.952;entryY=0.717;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-4" target="WlVxMozaJvhspqyTHfHf-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="200.00000000000003" y="1054.3199999999997" as="sourcePoint" />
+            <mxPoint x="-378.96000000000004" y="675" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-49" value="Invoke Commands Associated to a module&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-17">
+          <mxGeometry x="0.4223" y="4" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-20" value="&#xa;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;Invoke associated function to the command (with optional flags)&lt;/span&gt;&#xa;&#xa;" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="4KUd5xAdfxHXDhmzob9y-1" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="586" y="560" as="sourcePoint" />
+            <mxPoint x="580" y="160" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-4" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="587.5" as="sourcePoint" />
+            <mxPoint x="205" y="377.5" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-59" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-21">
+          <mxGeometry x="-0.0454" y="-4" relative="1" as="geometry">
+            <mxPoint x="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-22" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.339;exitY=0.05;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-8" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="389" y="590" as="sourcePoint" />
+            <mxPoint x="404" y="380" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-62" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-22">
+          <mxGeometry x="-0.2043" y="-4" relative="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-23" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-7" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="399" y="600" as="sourcePoint" />
+            <mxPoint x="414" y="390" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-63" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-23">
+          <mxGeometry x="-0.2737" y="-2" relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-24" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-9" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="409" y="610" as="sourcePoint" />
+            <mxPoint x="424" y="400" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-64" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-24">
+          <mxGeometry x="-0.4427" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-25" value="Invoke associated function to the command (with optional flags)" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-6" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="419" y="620" as="sourcePoint" />
+            <mxPoint x="434" y="410" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-26" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-10" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1262.5" y="600" as="sourcePoint" />
+            <mxPoint x="1277.5" y="390" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-65" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-26">
+          <mxGeometry x="-0.317" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-27" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.653;exitY=-0.003;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitPerimeter=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-3" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="175" y="590" as="sourcePoint" />
+            <mxPoint x="367.72000000000025" y="370" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-60" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-27">
+          <mxGeometry x="-0.3221" y="-5" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-28" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-2" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="185" y="600" as="sourcePoint" />
+            <mxPoint x="377.72000000000025" y="380" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-61" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-28">
+          <mxGeometry x="-0.6093" y="-2" relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-30" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="WlVxMozaJvhspqyTHfHf-5" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-370" y="600" as="sourcePoint" />
+            <mxPoint x="-177.27999999999975" y="380" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-58" value="Invoke associated function to the command (with optional flags)" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-30">
+          <mxGeometry x="-0.1656" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-36" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="4KUd5xAdfxHXDhmzob9y-3" target="Js5eSTslBhXQOxkfxcye-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-570" y="375" as="sourcePoint" />
+            <mxPoint x="530.25" y="90" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-47" value="Write All User Data, CSV data and API response into 6 tables in the database. &lt;br&gt;1. words -&amp;gt; for word management as needed by user&lt;br&gt;2. cached_words -&amp;gt; for API response caching to serve an offline dictionary interface&lt;br&gt;3. collections -&amp;gt; ready-made word categories for domain related knowledge&lt;br&gt;4. quiz_history -&amp;gt; Track Records of Quiz Attempts and associated data&lt;br&gt;5. Quotes -&amp;gt; Manage User Quotes&lt;br&gt;6. RSS -&amp;gt; Manage User RSS Subscriptions" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];rotation=10;" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-36">
+          <mxGeometry x="0.6222" y="-4" relative="1" as="geometry">
+            <mxPoint x="175" y="-28" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-37" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="Js5eSTslBhXQOxkfxcye-1" target="4KUd5xAdfxHXDhmzob9y-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="394" y="260" as="sourcePoint" />
+            <mxPoint x="-80" y="140" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Js5eSTslBhXQOxkfxcye-48" value="Return appropriate data from the database based on invoked commands" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];rotation=10;" vertex="1" connectable="0" parent="Js5eSTslBhXQOxkfxcye-37">
+          <mxGeometry x="-0.4118" y="1" relative="1" as="geometry">
+            <mxPoint x="35" y="27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
