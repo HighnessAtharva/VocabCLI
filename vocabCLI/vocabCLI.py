@@ -764,99 +764,49 @@ def graph(
         show_slider()
 
 
-
-# TODO: - some testing required
 @app.command(rich_help_panel="Text Processing & NLP", help="Filter out explicit words in a text or a webpage. Make it SFW!")
 def clean(
+    content: str = typer.Argument(..., help="Text or URL to clean"),
     strict: bool = typer.Option(False, "--strict", "-s", help="Completely replace all bad words with asterisks."),
 ):
-    check_clipboard=pyperclip.paste()
-    if check_clipboard:
-        if confirm := typer.confirm(
-            "📋 Clipboard text detected. Do you want to paste the content?"
-        ):
-            text=check_clipboard
-        else:
-            text=typer.prompt("Enter Text or URL to clean")
-
-    if not check_clipboard:
-        text=typer.prompt("Enter Text or URL to clean")
-
+    
     if strict:
-        censor_bad_words_strict(text)
+        censor_bad_words_strict(content)
     else:
-        censor_bad_words_not_strict(text)
+        censor_bad_words_not_strict(content)
         
 
-# TODO: - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Generate a summary of a text or a webpage.")
 def summary(
+    content: str = typer.Argument(..., help="Text or URL to summarize"),
     file: bool = typer.Option(False, "--file", "-f", help="Save the summary to a text file."),
 ):
-    check_clipboard=pyperclip.paste()
-    if check_clipboard:
-        if confirm := typer.confirm(
-            "📋 Clipboard text detected. Do you want to paste the content?"
-        ):
-            text=check_clipboard
-
-        else:
-            text=typer.prompt("Enter Text or URL to summarize")
-
-    if not check_clipboard:
-        text=typer.prompt("Enter Text or URL to summarize")
+    
     if file:
-        summarize_text(text, file=True)
+        summarize_text(content, file=True)
     else:
-        summarize_text(text)
+        summarize_text(content)
         
-# TODO: - not tested at all, manual testing necessary
+
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Extract Difficult Words from a text or a webpage.")
-def hardwords():
-    if check_clipboard := pyperclip.paste():
-        if confirm := typer.confirm(
-            "📋 Clipboard text detected. Do you want to paste the content?"
-        ):
-            text=check_clipboard
+def hardwords(
+    content: str = typer.Argument(..., help="Text or URL to extract difficult words from"),
+):
+    extract_difficult_words(content)
+    
 
-        else:
-            text=typer.prompt("Enter Text or URL to extract difficult words")
-        
-    if not check_clipboard:
-        text=typer.prompt("Enter Text or URL to extract difficult words")
-    extract_difficult_words(text)
-    
-    
-# TODO: - not tested at all, manual testing necessary
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Get the Sentiment Analysis of a text or a webpage.")
-def sentiment():
-    check_clipboard=pyperclip.paste()
-    if check_clipboard:
-        if confirm := typer.confirm(
-            "📋 Clipboard text detected. Do you want to paste the content?"
-        ):
-            text=check_clipboard
-
-        else:
-            text=typer.prompt("Enter Text or URL to get the sentiment analysis")
-
-    if not check_clipboard:
-        text=typer.prompt("Enter Text or URL to get the sentiment analysis")
-
-    sentiment_analysis(text)
+def sentiment(
+    content: str = typer.Argument(..., help="Text or URL to get sentiment analysis from"),
+):
+    sentiment_analysis(content)
+    
     
 @app.command(rich_help_panel="Text Processing & NLP", help="📝 Get readability score of a text or a webpage.")
-def readability():
-    if check_clipboard := pyperclip.paste():
-        if confirm := typer.confirm(
-            "📋 Clipboard text detected. Do you want to paste the content?"
-        ):
-            text=check_clipboard
-
-        else:
-            text=typer.prompt("Enter Text or URL to summarize")
-
-    readability_index(text)
+def readability(
+    content: str = typer.Argument(..., help="Text or URL to get readability score from"),
+):
+    readability_index(content)
 
 
 @app.command(rich_help_panel="Miscellaneous", help="📝 Add, View or Delete RSS feeds")

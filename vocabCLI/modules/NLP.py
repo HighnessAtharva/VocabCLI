@@ -61,7 +61,7 @@ def parse_text_from_web(webURL: str) -> str:
     """
 
     downloaded = trafilatura.fetch_url(webURL)
-    return trafilatura.extract(downloaded)
+    return trafilatura.extract(downloaded, include_comments=False, include_tables=False, with_metadata=False, include_formatting=True, target_language='en', include_images= False)
 
 
 def cleanup_text(text: str) -> str:
@@ -79,12 +79,17 @@ def cleanup_text(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)  # remove whitespaces
     # remove special characters except full stop and apostrophe
     text = re.sub(r'[^a-zA-Z0-9\s.]', '', text)
-    text = text.lower()  # convert text to lowercase
+    # text = text.lower()  # convert text to lowercase
     text = text.strip()  # remove leading and trailing whitespaces
     text = text.encode('ascii', 'ignore').decode(
         'ascii')  # remove non-ascii characters
-    text = text.split()
+    
+    # split text into words without messing up the punctuation
+    text = re.findall(r"[\w']+|[.,!?;]", text)
+    
     return text
+    
+    
 
 
 # TODO: - show total count of censor words in the text for both strict and not strict
@@ -110,19 +115,24 @@ def censor_bad_words_strict(text: str) -> None:
                     padding=(1, 1),
                     renderable="This is not a valid URL. Processing it as text... 📃")
               )
-        text = cleanup_text(text)
-        text = ' '.join(text)
+        
+    text = cleanup_text(text)
+    new_text = ''   
+    offensive_words=0 
 
-    # TODO: handle plurals as substring
     with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
         bad_words = f.read().splitlines()
-    text = cleanup_text(text)
-    new_text = ''
+        bad_words_plural = [bad_words[i]+'s' for i in range(len(bad_words))]
+        bad_words = bad_words + bad_words_plural
+    
     for word in text:
-        if word in bad_words:
+        if word.lower() in bad_words:
+            offensive_words+=1
             word = word.replace(word, '*' * len(word))
         new_text += f'{word} '
-    print(Panel(renderable=new_text, title="Censored Text"))
+    new_text = new_text.replace(' .', '.')
+    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))
+    print(Panel(f"Offensive words censored: {offensive_words}"))
 
 
 # TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
@@ -140,6 +150,7 @@ def censor_bad_words_not_strict(text: str) -> None:
                     renderable="URL detected 🌐")
               )
         text = parse_text_from_web(text)
+        
 
     # if text and not URL, then directly use the model
     if not isWebURL:
@@ -148,19 +159,22 @@ def censor_bad_words_not_strict(text: str) -> None:
                     padding=(1, 1),
                     renderable="This is not a valid URL. Processing it as text... 📃")
               )
-        text = cleanup_text(text)
-        text = ' '.join(text)
+ 
 
     with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
         bad_words = f.read().splitlines()
         bad_words_plural = [bad_words[i]+'s' for i in range(len(bad_words))]
         bad_words = bad_words + bad_words_plural
+    
+    
     text = cleanup_text(text)
     new_text = ''
-
+    offensive_words = 0
+    
     for word in text:
         word = str(word)
-        if word in bad_words:
+        if word.lower() in bad_words:
+            offensive_words += 1
             if len(word) <= 3:
                 word = word.replace(word, '*' * len(word))
             elif len(word) <= 5:
@@ -171,17 +185,36 @@ def censor_bad_words_not_strict(text: str) -> None:
             else:
                 word = word.replace(word[2:5], '***')
         new_text += f'{word} '
-    print(Panel(renderable=new_text, title="Censored Text"))
+    new_text = new_text.replace(' .', '.')
+    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))
+    print(Panel(f"Offensive words censored: {offensive_words}"))
 
 
-# TODO: @atharva, debug webpage parsing
 def readability_index(text: str) -> None:
     """Prints the readability index of the text and the summary of the index 
 
     Args:
         text (str): text to be analyzed
     """
+    # check if the content is a URL, if yes, then parse the text from it and then use the model
+    if isWebURL := check_url_or_text(text):
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐")
+              )
+        text = parse_text_from_web(text)
+        
 
+    # if text and not URL, then directly use the model
+    if not isWebURL:
+        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="This is not a valid URL. Processing it as text... 📃")
+              )
+ 
+ 
     print(f"Lexicon Count {textstat.lexicon_count(text, removepunct=True)}")
     print(f"Character Count {textstat.char_count(text)}")
     print(f"Sentences Count {textstat.sentence_count(text)}")
@@ -208,7 +241,7 @@ def readability_index(text: str) -> None:
         f"Readability Index {textstat.flesch_reading_ease(text)}\nSummary: The text is {index_desc} to read")
 
 
-# TODO: - allow to pass an internet article url here and show percentage of difficult words in the article
+
 def extract_difficult_words(text: str) -> None:
     """Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
 
@@ -242,7 +275,7 @@ def extract_difficult_words(text: str) -> None:
 
     # remove full stop from the words
     text = [word for word in text if '.' not in word]
-    difficult_words = [word for word in text if word not in simple_words]
+    difficult_words = [word for word in text if word.lower() not in simple_words]
     filter_words = ['didnt', 'couldnt', 'wouldnt', 'shouldnt', 'isnt',
                     'wasnt', 'arent', 'werent', 'dont', 'doesnt', 'didnt', 'hasnt', 'hadnt']
     difficult_words = [
@@ -260,6 +293,10 @@ def extract_difficult_words(text: str) -> None:
         if word[-1] == 's' and word[:-1] in simple_words:
             difficult_words.remove(word)
 
+    # TODO: Function has scope for imporvement (low value but high effort):
+    # 1. Elminiate proper nouns -> Remove words that start with a capital letter but are not in the simple words list and not preceeded by a full stop. Because first word of a sentence is always capitalized.
+    # 2. Remove gerunds (ing), past participles (ed) of the words that are in the simple words list. Those are not difficult words. (eg. "I am reading" -> "factories" is not detected as a difficult word but "factory" is.)
+
     difficult_words.sort()
     print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
@@ -269,7 +306,7 @@ def extract_difficult_words(text: str) -> None:
 
     # TODO: @anay: convert to column layout
     for word in difficult_words:
-        print(word)
+        print(word, end=', ')
 
 
 def sentiment_analysis(content: str)->None:
@@ -415,36 +452,30 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
         text = cleanup_text(content)
         text = ' '.join(text)
 
-    # print(text)
     text_summary = summarize_text_util(text, 0.2)
 
     if not file:
         print(f"Length of the article: {len(text)} characters", end="\n\n")
         print(
             f"Length of the summary:{len(text_summary)} characters", end="\n\n")
-
         if isWebURL:
             print(f"Headline:\n{headline}", end="\n\n")
-
         print(f"Summary:\n{text_summary}", end="\n\n")
 
-    if file:
+    if file:  
+        # writing to a .txt file
         with open("summary.txt", "w", encoding="utf-8") as f:
             f.write(f"Length of the article: {len(text)} characters\n\n")
-
-            f.write(
-                f"Length of the summary:{len(text_summary)} characters\n\n")
-
+            f.write(f"Length of the summary:{len(text_summary)} characters\n\n")
             if isWebURL:
                 f.write(str(f"Headline:\n{headline}\n\n"))
-
-            f.write(
-                "------------------------------------------------------------\n\n")
-
+            f.write("------------------------------------------------------------\n\n")
             f.write(f"Summary:\n{text_summary}\n\n")
 
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
-                    renderable="[[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
+                    renderable="[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
               )
+        #TODO: writing to a .md file
+       
