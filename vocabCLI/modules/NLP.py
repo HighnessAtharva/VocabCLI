@@ -131,7 +131,7 @@ def censor_bad_words_strict(text: str) -> None:
             word = word.replace(word, '*' * len(word))
         new_text += f'{word} '
     new_text = new_text.replace(' .', '.')
-    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))
+    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))  #@anay add padding, heading, styling, emojis
     print(Panel(f"Offensive words censored: {offensive_words}"))
 
 
@@ -186,7 +186,7 @@ def censor_bad_words_not_strict(text: str) -> None:
                 word = word.replace(word[2:5], '***')
         new_text += f'{word} '
     new_text = new_text.replace(' .', '.')
-    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))
+    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))  #@anay add padding, heading, styling, emojis
     print(Panel(f"Offensive words censored: {offensive_words}"))
 
 
@@ -214,7 +214,7 @@ def readability_index(text: str) -> None:
                     renderable="This is not a valid URL. Processing it as text... 📃")
               )
  
- 
+    #@anay add panel, heading, styling, emojis
     print(f"Lexicon Count {textstat.lexicon_count(text, removepunct=True)}")
     print(f"Character Count {textstat.char_count(text)}")
     print(f"Sentences Count {textstat.sentence_count(text)}")
@@ -304,7 +304,7 @@ def extract_difficult_words(text: str) -> None:
                 renderable=f"Content Length: {article_word_count} words\nExtracted {len(difficult_words)} difficult words")
           )
 
-    # TODO: @anay: convert to column layout
+    # TODO: @anay: convert to column layout add double border box styling
     for word in difficult_words:
         print(word, end=', ')
 
@@ -371,7 +371,7 @@ def sentiment_analysis(content: str)->None:
     print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}")
+                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}") #@anay add padding, styling, emojis
           )
 
 
@@ -454,7 +454,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
     text_summary = summarize_text_util(text, 0.2)
 
-    if not file:
+    if not file: #@anay add padding, heading, styling, emojis
         print(f"Length of the article: {len(text)} characters", end="\n\n")
         print(
             f"Length of the summary:{len(text_summary)} characters", end="\n\n")
