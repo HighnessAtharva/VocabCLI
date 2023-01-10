@@ -1,26 +1,10 @@
-from modules.About import *
-from modules.Banner import print_banner
-from modules.Database import *
-from modules.Dictionary import definition, say_aloud
-from modules.ImportExport import *
-from modules.Study import *
-from modules.Thesaurus import *
-from modules.Utils import *
-from modules.Graph import *
-from modules.Flashcard import *
-from modules.WordCollections import *
-from modules.Carousel import *
-from modules.NLP import *
-from modules.RSS import *
-from modules.Quotes import *
 import sys
-import pyperclip
 import typer
+import os
 from typing import *
 from rich import print
 from rich.console import Console
-from datetime import datetime
-from spellchecker import SpellChecker
+from rich.panel import Panel
 
 
 # app configuration
@@ -43,6 +27,8 @@ def refresh():
     """
     Refreshes the cached content from the API.
     """
+    from modules.Database import refresh_cache
+    
     refresh_cache()
 
 @app.command(rich_help_panel="Miscellaneous", help="💻 [bold blue]About[/bold blue] the software")
@@ -50,7 +36,9 @@ def about():
     """
     Print information about the software.
     """
-
+    from modules.Banner import print_banner
+    from modules.About import print_about_app
+    
     console = Console(record=False, color_system="truecolor")
     print_banner(console)
     print_about_app()
@@ -69,7 +57,9 @@ def define(
         short (bool, optional): If True, prints the short definition of the word. Defaults to False.
         pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.
     """
-
+    from spellchecker import SpellChecker
+    from modules.Dictionary import definition, say_aloud
+    
     spell=SpellChecker()    
     for word in words:
         
@@ -141,7 +131,9 @@ def ListCMD(
         collection (Optional[str], optional): If True, prints the list of words from a collection. Defaults to None.
         collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.
     """
-
+    from modules.Utils import show_list
+    from modules.WordCollections import show_words_from_collection, show_all_collections
+    
     if favorite:
         show_list(favorite=True)
     if learning:
@@ -179,6 +171,7 @@ def favorite(
     Args:
         words (List[str]): Word which is to be added to the favorite list.
     """
+    from modules.Utils import set_favorite
 
     for word in words:
         set_favorite(word)
@@ -194,7 +187,7 @@ def unfavorite(
     Args:
         words (List[str]): Word which is to be removed from the favorite list.
     """
-
+    from modules.Utils import set_unfavorite
     for word in words:
         set_unfavorite(word)
 
@@ -209,7 +202,8 @@ def learn(
     Args:
         words (List[str]): Word which is to be added to the learning list.
     """
-
+    from modules.Utils import set_learning
+    
     for word in words:
         set_learning(word)
 
@@ -224,7 +218,8 @@ def unlearn(
     Args:
         words (List[str]): Word which is to be removed from the learning list.
     """
-
+    from modules.Utils import set_unlearning
+    
     for word in words:
         set_unlearning(word)
 
@@ -239,7 +234,8 @@ def master(
     Args:
         words (List[str]): Word which is to be added to the mastered list.
     """
-
+    from modules.Utils import set_mastered
+    
     for word in words:
         set_mastered(word)
 
@@ -254,7 +250,8 @@ def unmaster(
     Args:
         words (List[str]): Word which is to be removed from the mastered list.
     """
-
+    from modules.Utils import set_unmastered
+    
     for word in words:
         set_unmastered(word)
 
@@ -269,7 +266,8 @@ def export(
     Args:
         pdf (bool, optional): If True, exports a list of your looked up words in PDF format. Defaults to False.
     """
-
+    from modules.ImportExport import export_to_csv, export_to_pdf
+    
     if pdf:
         export_to_pdf()
     else:
@@ -281,6 +279,8 @@ def Import():
     """
     Imports a list of words in the application.
     """
+    
+    from modules.ImportExport import import_from_csv
 
     import_from_csv()
 
@@ -298,6 +298,8 @@ def tag(
         tag (str): Tag to add to the words.
     """
 
+    from modules.Utils import add_tag
+    
     for word in words:
         add_tag(word, tag)
 
@@ -312,6 +314,7 @@ def untag(
     Args:
         words (List[str]): Word to remove tag from.
     """
+    from modules.Utils import remove_tag
 
     for word in words:
         remove_tag(word)
@@ -333,6 +336,8 @@ def rate(
         month (bool, optional): If True, get learning rate this month. Defaults to False.
         year (bool, optional): If True, get learning rate this year. Defaults to False.
     """
+    
+    from modules.Utils import get_lookup_rate
 
     if today:
         get_lookup_rate(today=True)
@@ -358,7 +363,8 @@ def synonym(
     Args:
         words (List[str]): Word to search synonyms for.
     """
-
+    from modules.Thesaurus import find_synonym
+    
     for word in words:
         find_synonym(word)
 
@@ -373,7 +379,8 @@ def antonym(
     Args:
         words (List[str]): Word to search antonyms for.
     """
-
+    from modules.Thesaurus import find_antonym
+    
     for word in words:
         find_antonym(word)
 
@@ -388,7 +395,8 @@ def history(
     Args:
         words (List[str]): Word to get lookup history for.
     """
-
+    from modules.Utils import fetch_word_history
+    
     for word in words:
         fetch_word_history(word)
 
@@ -411,7 +419,7 @@ def delete(
         tag (str, optional): Tag of words to be deleted. Defaults to None.
         words (List[str], optional): Word to be deleted. Defaults to None.
     """
-
+    from modules.Utils import delete_word, delete_mastered, delete_learning, delete_favorite, delete_words_from_tag, delete_all
 
     if mastered:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
@@ -499,6 +507,8 @@ def clear(
         tag (str, optional): If True, clears all the words with a particular tag. Defaults to None.
     """
 
+    from modules.Utils import clear_learning, clear_mastered, clear_favorite, clear_all_words_from_tag
+
     if learning:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
@@ -566,6 +576,10 @@ def random(
         tag (Optional[str], optional): Get a random word from a particular tag. Defaults to None.
         collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.
     """
+    
+    from modules.Utils import get_random_word_from_learning_set, get_random_word_from_mastered_set, get_random_word_from_favorite_set, get_random_word_from_tag, get_random_word_definition_from_api
+    
+    from modules.WordCollections import get_random_word_from_collection
 
     if learning:
         get_random_word_from_learning_set()
@@ -601,6 +615,8 @@ def revise(
         favorite (Optional[bool], optional): Revise words in your favorite list. Defaults to False.
         collection (Optional[str], optional): Revise words in a particular collection. Defaults to None.
     """
+
+    from modules.Study import revise_all, revise_tag, revise_learning, revise_mastered, revise_favorite, revise_collection
 
     if not any([learning, mastered, favorite, collection, tag]) and not number:
         revise_all()
@@ -662,6 +678,8 @@ def quiz(
         favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
         collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.
     """
+    from modules.Study import quiz_all, quiz_tag, quiz_learning, quiz_mastered, quiz_favorite, quiz_collection, show_quiz_history
+    
     if not any([learning, mastered, favorite, collection, tag, history]) and not number:
         quiz_all()
         
@@ -734,7 +752,10 @@ def graph(
         learnVSmaster (Optional[bool], optional): Visualizes the number of words in your learning list vs. your mastered list. Defaults to False.
         slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.
     """
-        
+    from modules.Graph import viz_top_words_bar, viz_top_tags_bar, viz_top_words_pie, viz_top_tags_pie, viz_word_distribution_week, viz_word_distribution_month, viz_word_distribution_year, viz_learning_vs_mastered, viz_word_distribution_category
+    
+    from modules.Carousel import show_slider
+    
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar, popup=True)
     elif topTagsBar:
@@ -769,7 +790,7 @@ def clean(
     content: str = typer.Argument(..., help="Text or URL to clean"),
     strict: bool = typer.Option(False, "--strict", "-s", help="Completely replace all bad words with asterisks."),
 ):
-    
+    from modules.NLP import censor_bad_words_strict, censor_bad_words_not_strict
     if strict:
         censor_bad_words_strict(content)
     else:
@@ -781,7 +802,7 @@ def summary(
     content: str = typer.Argument(..., help="Text or URL to summarize"),
     file: bool = typer.Option(False, "--file", "-f", help="Save the summary to a text file."),
 ):
-    
+    from modules.NLP import summarize_text
     if file:
         summarize_text(content, file=True)
     else:
@@ -792,6 +813,7 @@ def summary(
 def hardwords(
     content: str = typer.Argument(..., help="Text or URL to extract difficult words from"),
 ):
+    from modules.NLP import extract_difficult_words
     extract_difficult_words(content)
     
 
@@ -799,6 +821,7 @@ def hardwords(
 def sentiment(
     content: str = typer.Argument(..., help="Text or URL to get sentiment analysis from"),
 ):
+    from modules.NLP import sentiment_analysis
     sentiment_analysis(content)
     
     
@@ -806,6 +829,7 @@ def sentiment(
 def readability(
     content: str = typer.Argument(..., help="Text or URL to get readability score from"),
 ):
+    from modules.NLP import readability_index
     readability_index(content)
 
 
@@ -816,6 +840,8 @@ def rss(
     delete: bool = typer.Option(False, "--delete", "-d", help="Delete an RSS feed."),
     read: str = typer.Option(None, "--read", "-r", help="Read an RSS feed."),
 ):
+    from modules.RSS import add_feed, get_all_feeds, remove_feed, check_feed_for_new_content
+    
     if add:
         add_feed(url=add)
     elif list:
@@ -837,6 +863,9 @@ def quote(
     search: str = typer.Option(None, "--search", "-S", help="Search for a quote."),
     delete_all: bool = typer.Option(False, "--delete-all", "-D", help="Delete all quotes."),
 ):
+    
+    from modules.Quotes import get_random_quote, get_quotes, search_quote, delete_quote, delete_all_quotes, add_quote
+    
     if random:
         get_random_quote()
     elif list:
@@ -862,6 +891,8 @@ def quote(
         
 @app.command(rich_help_panel="Stats", help="📝Get the streak of days you have looked up words.")
 def streak():
+    
+    from modules.Utils import show_streak
     show_streak()
     
     
@@ -869,23 +900,51 @@ def streak():
 def milestone(
     milestone_number: int = typer.Argument(...,help="Number of words that marks a milestone."),
 ):
+    from modules.Utils import predict_milestone
     predict_milestone(milestone_number)
+    
     
 @app.command(rich_help_panel="Miscellaneous", help="📝 Get quote of the day.")
 def daily_quote():
+    from modules.Quotes import get_quote_of_the_day
     get_quote_of_the_day()
+    
     
 @app.command(rich_help_panel="Miscellaneous", help="📝 Get word of the day.")
 def daily_word():
+    from modules.Dictionary import get_word_of_the_day
     get_word_of_the_day()    
 
+
+
 # TODO: - need to write the function
-@app.command(rich_help_panel="Vocabulary Builder", help="📇 Create flashcards for words in your learning list")
-def flashcard():
+@app.command(rich_help_panel="Vocabulary Builder", help="📇 Generate flashcards for words in your learning list")
+def flashcard(
+    all: bool = typer.Option(False, "--all", "-a", help="Generate flashcards for all words."),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Generate flashcards for words in learning list."),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Generate flashcards for words in mastered list."), 
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Generate flashcards for words in favorite list."),
+    tag: str = typer.Option(None, "--tag", "-t", help="Generate flashcards for words with a specific tag."),
+):
     """
     Create flashcards for words in your learning list.
     """
-    pass
+    
+    from modules.Flashcard import generate_all_flashcards, generate_learning_flashcards, generate_mastered_flashcards, generate_favorite_flashcards, generate_tag_flashcards
+    
+    if all:
+        generate_all_flashcards()
+    elif learning:
+        generate_learning_flashcards()
+    elif mastered:
+        generate_mastered_flashcards()
+    elif favorite:
+        generate_favorite_flashcards()
+    elif tag:
+        generate_tag_flashcards(tag)
+    else:
+        print("Cannot combine options. Please select only one option.")
+        
 
 
 if __name__ == "__main__":
@@ -895,7 +954,7 @@ if __name__ == "__main__":
         # initialize the database with the tables if not already existing
         initializeDB()
         # uncomment this to easily delete all words from collections table during testing
-        delete_collection_from_DB()
+        # delete_collection_from_DB()
         clean_collection_csv_data()
         # add all the collection words to the database if not already existing
         insert_collection_to_DB()
