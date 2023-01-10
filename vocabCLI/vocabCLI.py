@@ -880,12 +880,30 @@ def daily_word():
     get_word_of_the_day()    
 
 # TODO: - need to write the function
-@app.command(rich_help_panel="Vocabulary Builder", help="📇 Create flashcards for words in your learning list")
-def flashcard():
+@app.command(rich_help_panel="Vocabulary Builder", help="📇 Generate flashcards for words in your learning list")
+def flashcard(
+    all: bool = typer.Option(False, "--all", "-a", help="Generate flashcards for all words."),
+    learning: bool = typer.Option(False, "--learning", "-l", help="Generate flashcards for words in learning list."),
+    mastered: bool = typer.Option(False, "--mastered", "-m", help="Generate flashcards for words in mastered list."), 
+    favorite: bool = typer.Option(False, "--favorite", "-f", help="Generate flashcards for words in favorite list."),
+    tag: str = typer.Option(None, "--tag", "-t", help="Generate flashcards for words with a specific tag."),
+):
     """
     Create flashcards for words in your learning list.
     """
-    pass
+    if all:
+        generate_all_flashcards()
+    elif learning:
+        generate_learning_flashcards()
+    elif mastered:
+        generate_mastered_flashcards()
+    elif favorite:
+        generate_favorite_flashcards()
+    elif tag:
+        generate_tag_flashcards(tag)
+    else:
+        print("Cannot combine options. Please select only one option.")
+        
 
 
 if __name__ == "__main__":
