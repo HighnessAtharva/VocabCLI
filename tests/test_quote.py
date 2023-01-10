@@ -12,7 +12,7 @@ class TestQuotes:
             result = runner.invoke(
                 app, ["quote", "--add"], input="Lorem ipsum\njohn doe")
             assert result.exit_code == 0
-            assert "Quote: Lorem ipsum ✔" in result.stdout
+            assert "Quote: Lorem ipsum by john doe added to your list" in result.stdout
 
         @mock.patch("typer.confirm")
         def test_add_quote_no_author(self, mock_typer, runner):
@@ -20,7 +20,7 @@ class TestQuotes:
             result = runner.invoke(
                 app, ["quote", "--add"], input="Lorem ipsum x2")
             assert result.exit_code == 0
-            assert "Quote: Lorem ipsum x2 ✔" in result.stdout
+            assert "Quote: Lorem ipsum x2 by - added to your list" in result.stdout
 
         @mock.patch("typer.confirm")
         def test_add_empty_quote(self, mock_typer, runner):
@@ -42,7 +42,7 @@ class TestQuotes:
             mock_typer.return_value = True
             result = runner.invoke(app, ["quote", "--add"], input="\"hi there\"\n\"John Doe\"")
             assert result.exit_code == 0
-            assert "Quote: hi there ✔" in result.stdout
+            assert " Quote: hi there by John Doe added to your list" in result.stdout
  
 
     class Test_List_Quotes:
