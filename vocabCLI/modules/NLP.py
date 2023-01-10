@@ -25,8 +25,6 @@ from typing import *
 # TODO: @atharva - add proper response headers and browser details to prevent false IP blocks.
 # TODO: - revise docstrings and add wherever missing. @anay
 # TODO: - add type hints wherever missing and return types as well @anay
-# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement.
-# TODO: @anay - Beautify Panels
 
 
 def check_url_or_text(value: str) -> bool:
@@ -131,8 +129,8 @@ def censor_bad_words_strict(text: str) -> None:
             word = word.replace(word, '*' * len(word))
         new_text += f'{word} '
     new_text = new_text.replace(' .', '.')
-    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))  #@anay add padding, heading, styling, emojis
-    print(Panel(f"Offensive words censored: {offensive_words}"))
+    print(Panel(renderable=new_text,padding=(1, 1), title="[reverse]Censored Text[/reverse]"))  #@atharva check this
+    print(Panel(renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red]",padding=(1, 1), title="[reverse]Censored Words[/reverse]"))
 
 
 # TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
@@ -186,8 +184,8 @@ def censor_bad_words_not_strict(text: str) -> None:
                 word = word.replace(word[2:5], '***')
         new_text += f'{word} '
     new_text = new_text.replace(' .', '.')
-    print(Panel(renderable=new_text, title="[reverse]Censored Text[/reverse]"))  #@anay add padding, heading, styling, emojis
-    print(Panel(f"Offensive words censored: {offensive_words}"))
+    print(Panel(renderable=new_text,padding=(1, 1), title="[reverse]Censored Text[/reverse]"))  #@tharva check this
+    print(Panel(renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red] ",padding=(1, 1), title="[reverse]Censored Words[/reverse]"))
 
 
 def readability_index(text: str) -> None:
@@ -214,11 +212,7 @@ def readability_index(text: str) -> None:
                     renderable="This is not a valid URL. Processing it as text... 📃")
               )
  
-    #@anay add panel, heading, styling, emojis
-    print(f"Lexicon Count {textstat.lexicon_count(text, removepunct=True)}")
-    print(f"Character Count {textstat.char_count(text)}")
-    print(f"Sentences Count {textstat.sentence_count(text)}")
-    print(f"Words Per Sentence {textstat.avg_sentence_length(text)}")
+    #@atharva check this
 
     readability_index = textstat.flesch_reading_ease(text)
 
@@ -237,9 +231,7 @@ def readability_index(text: str) -> None:
     else:
         index_desc = "Very Confusing"
 
-    print(
-        f"Readability Index {textstat.flesch_reading_ease(text)}\nSummary: The text is {index_desc} to read")
-
+    print(Panel(title="[b reverse]Readability Index[/b reverse]", title_align="center", padding=(1, 1), renderable=f"Lexicon Count {textstat.lexicon_count(text, removepunct=True)}\n\n Character Count {textstat.char_count(text)}\n\n Sentence Count {textstat.sentence_count(text)}\n\n Words Per Sentence {textstat.avg_sentence_length(text)}\n\n [bold]Readability Index {textstat.flesch_reading_ease(text)}[/bold]"))
 
 
 def extract_difficult_words(text: str) -> None:
@@ -301,12 +293,12 @@ def extract_difficult_words(text: str) -> None:
     print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Content Length: {article_word_count} words\nExtracted {len(difficult_words)} difficult words")
+                renderable=f"Content Length: [bold blue]{article_word_count}[/bold blue] words\nExtracted [bold blue]{len(difficult_words)}[/bold blue] difficult words")
           )
 
-    # TODO: @anay: convert to column layout add double border box styling
+    # TODO: @atharva: forgot how to add double border to this, just added columns
     for word in difficult_words:
-        print(word, end=', ')
+        print(Columns(word))
 
 
 def sentiment_analysis(content: str)->None:
@@ -368,11 +360,24 @@ def sentiment_analysis(content: str)->None:
     result.logits
     sentiment_score = int(torch.argmax(result.logits))+1
     outcome = sentiment_score_to_summary(sentiment_score)
-    print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+    if outcome == "Extremely Negative" or outcome == "Somewhat Negative":
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} 😞") 
+              )
+    elif outcome == "Generally Neutral":
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)}") #@anay add padding, styling, emojis
+                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} 😐") #@atharva check this
           )
+    elif outcome == "Somewhat Positive" or outcome == "Extremely Positive":
+        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} 😃")
+              )
 
 
 def summarize_text_util(text:str, per:int)->str:
@@ -454,13 +459,19 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
 
     text_summary = summarize_text_util(text, 0.2)
 
-    if not file: #@anay add padding, heading, styling, emojis
-        print(f"Length of the article: {len(text)} characters", end="\n\n")
-        print(
-            f"Length of the summary:{len(text_summary)} characters", end="\n\n")
+    if not file: #@atharva check this
         if isWebURL:
-            print(f"Headline:\n{headline}", end="\n\n")
-        print(f"Summary:\n{text_summary}", end="\n\n")
+            print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\nHeadline:\n{headline} \n\n Summary:\n{text_summary}"
+              ))
+        else:
+            print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\n Summary:\n{text_summary}"
+              ))
 
     if file:  
         # writing to a .txt file

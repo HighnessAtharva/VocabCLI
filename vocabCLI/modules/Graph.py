@@ -14,7 +14,6 @@ from rich.panel import Panel
 
 # TODO: - revise docstrings and add wherever missing. 
 # TODO: - add type hints wherever missing and return types as well
-# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
 
 
 ################################
@@ -49,7 +48,7 @@ def viz_top_words_bar(N:int=10, popup:bool=False)->None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="⚠ Not enough words found. Showing graph for available words only. 📊")
+                renderable="🔺 Not enough words found. Showing graph for available words only. 📊")
         )
 
     # create a dataframe
@@ -106,7 +105,7 @@ def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="⚠ Not enough tags found. Showing graph for available tags only. 📊")
+                renderable="🔺 Not enough tags found. Showing graph for available tags only. 📊")
         )
 
     # create a dataframe
@@ -155,7 +154,7 @@ def viz_top_words_pie(N:int=10, popup:bool=False)->None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="⚠ Not enough words found. Showing pie chart for available words only. 📊")
+                renderable="🔺 Not enough words found. Showing pie chart for available words only. 📊")
         )
 
     # create a dataframe
@@ -203,7 +202,7 @@ def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
         print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable="⚠ Not enough tags found. Showing Pie Chart for available tags only. 📊")
+                renderable="🔺 Not enough tags found. Showing Pie Chart for available tags only. 📊")
         )
 
     # create a dataframe

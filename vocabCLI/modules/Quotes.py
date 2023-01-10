@@ -233,7 +233,7 @@ def delete_quote()->None:
         print(
             Panel(
                 title="[b reverse green]  Delete Quote  [/b reverse green]",
-                renderable="Select a quote to delete 📍",
+                renderable="Select a quote to delete 🔢",
                 title_align="center",
                 padding=(1, 1),
             )

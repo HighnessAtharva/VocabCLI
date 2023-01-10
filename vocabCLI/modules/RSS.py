@@ -18,10 +18,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 # TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement.
-# TODO: @anay - Remove Panel() and replace it with Panel() where message text varies. For errors let it be Panel().
 
-
-# todo @anay - formatting can be improved, add color, styles and emojis.
 def add_feed(url:str)->None:
     """Add the feed to the database"""
     # ----------------- Spinner -----------------#
