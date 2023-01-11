@@ -13,7 +13,6 @@ from Utils import *
 from Database import createConnection, createTables
 from rich import print
 from rich.panel import Panel
-from rich.columns import Columns
 from rich.console import Console
 from rich.console import Console
 from rich.table import Table

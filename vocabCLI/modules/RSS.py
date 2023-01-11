@@ -208,8 +208,7 @@ def check_feed_for_new_content(title:str)->None:
 
         for row in rows:
             feed = feedparser.parse(row[1])
-            print(Panel("Seeing updates for feed: ", row[0]))
-
+            
             table = Table(
                 show_header=True,
                 header_style="bold gold3",

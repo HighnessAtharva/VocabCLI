@@ -8,7 +8,6 @@ from sqlite3 import *
 import requests
 from typing import *
 from rich import print
-from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -248,7 +247,7 @@ def delete_quote()->None:
                 f'{quote_num}. [bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
             )
         # prompt the user to select a quote index to delete
-        quoteToDelete = input(Panel("🔢 Enter the index of the quote you want to delete: "))
+        quoteToDelete = input("🔢 Enter the index of the quote you want to delete: ")
 
         # check if the quoteToDelete is a number
         if not quoteToDelete.isdigit():
