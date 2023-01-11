@@ -1150,7 +1150,7 @@ def get_consecutive_dates(dates:list)->tuple:
     return max(consecutive_dates, key=lambda x: x[1]-x[0])
 
 
-# todo @anay - formatting can be improved, add color, styles and emojis
+# @atharva I guess this is already formatted
 def show_streak()->None:
     """Shows streak of days user has looked up words"""
     
@@ -1177,7 +1177,7 @@ def show_streak()->None:
          
 
 
-# todo @anay - formatting can be improved, add color, styles and emojis
+# @atharva I guess this is already formatted
 def predict_milestone(milestone: int)->None:
     """
     Predicts when user will reach a milestone
