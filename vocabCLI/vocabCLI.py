@@ -948,8 +948,11 @@ def flashcard(
 
 
 if __name__ == "__main__":
+    
     # check if Vocabulary.db exists, if not create it
     if not os.path.exists("VocabularyBuilder.db"):
+        from modules.Database import initializeDB
+        from modules.WordCollections import delete_collection_from_DB, clean_collection_csv_data, insert_collection_to_DB
         
         # initialize the database with the tables if not already existing
         initializeDB()

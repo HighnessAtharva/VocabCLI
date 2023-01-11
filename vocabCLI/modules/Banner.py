@@ -3,7 +3,7 @@ from platform import system, platform
 from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
-from . import __app_name__, __version__
+from . import __version__
 
 
 # no tests for this function as it is not called anywhere in the command directly

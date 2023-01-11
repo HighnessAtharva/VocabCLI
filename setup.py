@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
+import vocabCLI
 
-with open ("README.md", "r", encoding='utf-8') as fh:
-     LONG_DESCRIPTION = fh.read()
      
 setup(
     name="vocabCLI",
-    version='0.0.15',
+    version='0.0.16',
     author="Atharva Shah, Anay Deshpande",
     author_email="<HighnessAtharva@gmail.com>, <anaydesh1234@gmail.com>",
     description='A stylish and modern CLI to help you build your vocabulary and manage your words.',
-    long_description=LONG_DESCRIPTION,
+    long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type = "text/markdown",
  
     packages=find_packages("modules", exclude="tests"),
@@ -19,14 +18,25 @@ setup(
 
     keywords=['python', 'vocabulary', 'cli', 'dictionary', 'flashcards', 'quotes',
               'knowledgebase', 'rich', 'richmarkup', 'graph', 'reporting', 'flashcard'],
+    
     classifiers=[
         "Intended Audience :: Education",
         "Programming Language :: Python :: 3",
         "Operating System :: Microsoft :: Windows",
+         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Topic :: Terminals",
+        "Topic :: Utilities",
     ],
     entry_points={
         "console_scripts": [
-            "vocab = vocabCLI.__main__:app"
+            "vocab = vocabCLI.vocabCLI:app",
+            "vocabCLI = vocabCLI.vocabCLI:app"
         ]
     },
 )

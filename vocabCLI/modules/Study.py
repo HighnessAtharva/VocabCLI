@@ -6,8 +6,8 @@ import typer
 import questionary
 import random
 import time
-from Dictionary import *
-from Exceptions import *
+from .Dictionary import *
+from .Exceptions import *
 from typing import *
 from Utils import *
 from Database import createConnection, createTables

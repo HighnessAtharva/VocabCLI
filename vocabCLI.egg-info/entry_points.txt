@@ -1,0 +1,4 @@
+[console_scripts]
+vocab = vocabCLI.vocabCLI:app
+vocabCLI = vocabCLI.vocabCLI:app
+

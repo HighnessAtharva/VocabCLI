@@ -1,6 +1,6 @@
 import nltk
 from nltk.corpus import wordnet
-from Dictionary import *
+from .Dictionary import *
 from rich import print
 from rich.console import Console
 from rich.columns import Columns

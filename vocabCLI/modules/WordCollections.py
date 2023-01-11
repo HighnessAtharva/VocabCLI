@@ -1,11 +1,12 @@
 import contextlib
-from Database import *
+from .Database import *
+from .Exceptions import *
 import pandas as pd
 import csv
 import os
 from rich.table import Table
 from rich.columns import Columns
-from Exceptions import *
+
 
 
 def delete_collection_from_DB():

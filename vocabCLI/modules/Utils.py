@@ -4,9 +4,9 @@ import os
 import random
 import typer
 import requests
-from Database import createConnection, createTables
-from Dictionary import *
-from Exceptions import *
+from .Database import createConnection, createTables
+from .Dictionary import *
+from .Exceptions import *
 from datetime import datetime
 from datetime import timedelta 
 from pathlib import Path

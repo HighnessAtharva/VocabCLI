@@ -1,5 +1,5 @@
-from Database import createConnection
-from Exceptions import NoDataFoundException
+from .Database import createConnection
+from .Exceptions import NoDataFoundException
 import csv
 from fpdf import FPDF
 from datetime import datetime
