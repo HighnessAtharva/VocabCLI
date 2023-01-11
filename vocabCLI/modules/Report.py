@@ -1,5 +1,5 @@
-from .Database import createConnection
-from .ImportExport import PDF
+from Database import createConnection
+from ImportExport import PDF
 from fpdf import FPDF
 from datetime import datetime
 

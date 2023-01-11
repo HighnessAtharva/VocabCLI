@@ -1,7 +1,7 @@
 import glob
 from tkinter import *
 from PIL import ImageTk, Image
-from .Graph import *
+from Graph import *
 import typer
 import os
 

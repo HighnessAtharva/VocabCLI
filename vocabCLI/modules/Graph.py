@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from .Database import *
+from Database import *
 from PIL import Image, ImageTk
 from rich.panel import Panel
 

@@ -4,9 +4,9 @@ import os
 import random
 import typer
 import requests
-from .Database import createConnection, createTables
-from .Dictionary import *
-from .Exceptions import *
+from Database import createConnection, createTables
+from Dictionary import *
+from Exceptions import *
 from datetime import datetime
 from datetime import timedelta 
 from pathlib import Path
@@ -794,7 +794,7 @@ def show_list(
     else:
         print(Panel(f"{success_message} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
-        print(Columns(rows, equal=True))
+        print(Columns(rows, equal=True, expand=True))
 
  
 def delete_all()->None:
