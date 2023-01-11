@@ -13,9 +13,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich import box
-
-# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement. 
-# TODO: @anay - Remove Panel() and replace it with Panel() where message text varies. For errors let it be Panel().   ✅
+ 
 
 def get_quotes() -> None:
     """
@@ -250,7 +248,7 @@ def delete_quote()->None:
                 f'{quote_num}. [bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
             )
         # prompt the user to select a quote index to delete
-        quoteToDelete = input("📍 Enter the index of the quote you want to delete: ")
+        quoteToDelete = input(Panel("🔢 Enter the index of the quote you want to delete: "))
 
         # check if the quoteToDelete is a number
         if not quoteToDelete.isdigit():
@@ -302,9 +300,7 @@ def get_random_quote()->None:
         quote_author = random_quote[1] if random_quote[1] is not None else "-"
         quote_date = random_quote[2]
 
-        print(
-            f"[bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}"
-            )
+        print(Panel(title="[b reverse green]  Random Quote  [/b reverse green]", title_align="center", padding=(1, 1), renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}\n\n[bold green]Date:[/bold green] {quote_date}"))
         
 def get_quote_of_the_day()->None:
     """

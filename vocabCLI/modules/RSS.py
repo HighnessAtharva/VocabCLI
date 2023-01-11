@@ -17,7 +17,6 @@ from bs4 import BeautifulSoup
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
-# TODO: @anay - add rich themes, styling, formatting, emojis for almost every print statement.
 
 def add_feed(url:str)->None:
     """Add the feed to the database"""
@@ -69,11 +68,7 @@ def add_feed(url:str)->None:
                   (feed.feed.title, url, feed.feed.description, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         conn.commit()
 
-        # TODO: @anay - convert this to a table/panel.
-        print("Feed added successfully")
-        print("Title: ", feed.feed.title)
-        print("Link: ", feed.feed.link)
-        print("Summary:", feed.feed.description)
+        print(Panel(title="[b reverse]  Feed added successfully ✅  [/b reverse]",renderable=f"Title:  {feed.feed.title}\n\nLink:  {feed.feed.link}\n\nSummary: {feed.feed.description}"))
 
 
 def get_all_feeds()->None:
@@ -153,7 +148,7 @@ def remove_feed()->None:
             row[3], "%Y-%m-%d %H:%M:%S").strftime("%d %b \'%y | %H:%M"))
         print()
 
-    print("Enter the index of the feed you want to remove!")
+    print(Panel("Enter the index of the feed you want to remove!"))
     try:
         index = int(input("Index: "))
     except ValueError:
@@ -175,7 +170,7 @@ def remove_feed()->None:
     # remove feed from database
     c.execute("DELETE FROM rss WHERE title=?", (feed_name,))
     conn.commit()
-    print(f"Feed {feed_name} removed successfully ✅")
+    print(Panel(title="[b reverse green]  Success!  [/b reverse green]",renderable=f"Feed {feed_name} removed successfully ✅"))
 
 
 def remove_html_tags(html: str)->str:
@@ -213,7 +208,7 @@ def check_feed_for_new_content(title:str)->None:
 
         for row in rows:
             feed = feedparser.parse(row[1])
-            print("Seeing updates for feed: ", row[0])
+            print(Panel("Seeing updates for feed: ", row[0]))
 
             table = Table(
                 show_header=True,
