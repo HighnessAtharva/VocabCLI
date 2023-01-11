@@ -5,6 +5,7 @@ from fpdf import FPDF
 from datetime import datetime
 from rich import print
 from rich.panel import Panel
+import os
 
 def export_to_csv()->None:
     """Export words to csv file."""
@@ -16,6 +17,11 @@ def export_to_csv()->None:
         words = c.fetchall()
         if len(words) <= 0:
             raise NoDataFoundException
+        
+        #check if the directory exists, if not create it
+        if not os.path.exists('exports'):
+            os.makedirs('exports')
+        
         with open('exports/VocabularyBuilder.csv', 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
@@ -146,6 +152,11 @@ def export_to_pdf()->None:    # sourcery skip: extract-method
             favorite= "X" if row[4] == 1 else ""
             pdf.cell(30,8, txt=favorite,border=True, align='C')  # Favorite
             pdf.ln()
+            
+        #check if the directory exists, if not create it
+        if not os.path.exists('exports'):
+            os.makedirs('exports')
+        
         pdf.output(f"exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",

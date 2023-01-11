@@ -2,7 +2,7 @@ import calendar
 import glob
 from datetime import datetime
 from tkinter import *
-
+import os
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -67,6 +67,11 @@ def viz_top_words_bar(N:int=10, popup:bool=False)->None:
 
     # show the plot
     plt.grid()
+    
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+    
     plt.savefig('exports/GRAPH-top_words_bar.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
@@ -125,6 +130,11 @@ def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
 
     # show the plot
     plt.grid()
+    
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+        
     plt.savefig('exports/GRAPH-top_tags_bar.png')
     if popup:    
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
@@ -167,6 +177,10 @@ def viz_top_words_pie(N:int=10, popup:bool=False)->None:
     # saving the plot
     plt.savefig('exports/GRAPH-top_words_pie.png')
     
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+        
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
             renderable=f"Displaying [bold u]Pie Chart[/bold u] of [gold1]top {len(top_words)} words[/gold1]",
@@ -217,6 +231,11 @@ def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
         
     # saving the plot
     plt.savefig('exports/GRAPH-top_tags_pie.png')
+    
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')    
+        
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
                     renderable=f"Displaying [bold u]Pie Chart[/bold u] of [gold1]top {len(top_tags)} tags[/gold1] 📊",
@@ -279,7 +298,12 @@ def viz_word_distribution_week(popup:bool=False)->None:
     
     plt.grid()
     
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+    
     plt.savefig('exports/GRAPH-words_distribution_week.png')
+    
     if popup:    
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
                     renderable="Displaying [bold u]Bar Graph[bold u] of [gold1]weekly word lookup[/gold1] distribution. 📊",
@@ -307,6 +331,8 @@ def word_distribution_month_util()->tuple[list, list]:
     if month_next==13:
         month_next=1
         increment_year=True
+    else:
+        increment_year=False
 
     # determine total number of days in current month [INT]
     total_days=calendar.monthrange(year, month)[1]
@@ -360,6 +386,10 @@ def viz_word_distribution_month(popup:bool=False)->None:
     plt.tight_layout()
     plt.grid()
     
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+        
     plt.savefig('exports/GRAPH-word_distribution_month.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
@@ -416,6 +446,10 @@ def viz_learning_vs_mastered(popup:bool=False)->None:
     plt.xlabel('Date', fontsize=15, fontweight='bold', labelpad=0, color='black', fontname='MS Gothic')
     #plt.ylabel('Count', fontsize=15, fontweight='bold', labelpad=20, color='black', fontname='MS Gothic')
     
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+        
     # show the graph
     plt.savefig('exports/GRAPH-learning_vs_mastered.png')
     if popup:
@@ -456,6 +490,10 @@ def viz_word_distribution_category(popup:bool=False)->None:
     plt.tight_layout()
     plt.grid()
     
+    #check if the directory exists, if not create it
+    if not os.path.exists('exports'):
+        os.makedirs('exports')
+        
     plt.savefig('exports/GRAPH-word_distribution_category.png')
     if popup:
         print(Panel(title="[b reverse green]  Graph  [/b reverse green]",
