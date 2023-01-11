@@ -1,3 +1,0 @@
-include README.md LICENSE.md 
-include assets/*.png assets/*.svg assets/*.ico assets/*.icns
-include vocabCLI/*.txt vocabCLI/*.csv

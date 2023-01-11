@@ -80,3 +80,6 @@ vocab = "vocabCLI.__main__:app"
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+vocabCLI = ["**/*.txt", "**/*.csv", "**/*.jpeg", "**/*.png", "**/*.ico", "**/*.TTF"]
