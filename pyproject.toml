@@ -64,8 +64,14 @@ dependencies = [
     "torch",
     "torchaudio",
     "torchvision",
-    "typer",
-    "typer[all]"
+    "typer[all]",
+    "setuptools>=42",
+    "wheel",
+    "homophones",
+    "huggingface-hub",
+    "Random-Word",
+    "spacy-alignments",
+    "spacy-legacy",
 ]
 
 [project.scripts]
