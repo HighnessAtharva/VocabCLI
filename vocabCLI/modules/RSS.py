@@ -1,8 +1,8 @@
 import feedparser
 import typer
 import contextlib
-from .Exceptions import *
-from .Database import createConnection, createTables
+from Exceptions import *
+from Database import createConnection, createTables
 from datetime import datetime, timedelta
 from pathlib import Path
 from sqlite3 import *
