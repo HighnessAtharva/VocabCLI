@@ -23,5 +23,8 @@ def test_milestone(runner):
     pass
 
 
-def test_qotd(runner):
+def test_quote_of_the_day(runner):
+    pass
+
+def test_word_of_the_day(runner):
     pass

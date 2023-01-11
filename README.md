@@ -108,7 +108,7 @@ pip freeze > requirements.txt
 
 ```powershell
 # Move to source folder
-cd app
+cd vocabCLI
 
 # Run the main project file
 python -m VocabularyCLI --help
@@ -118,7 +118,7 @@ python -m VocabularyCLI --help
 
 ```powershell
 # Move to source folder
-cd app
+cd vocabCLI
 
 # Run all tests
 python -m pytest ../tests
@@ -148,7 +148,7 @@ make html
 
 ```powershell
 # Move to source folder
-cd app
+cd vocabCLI
 
 # Run the coverage command
 coverage run -m pytest ..\tests
@@ -168,7 +168,7 @@ coverage html
 pip3 install typer-cli
 
 # Move to source folder
-cd app
+cd vocabCLI
 
 # Generate the user manual in command line 
 typer VocabularyCLI.py utils docs
@@ -183,7 +183,7 @@ typer VocabularyCLI.py utils docs --name "VocabularyCLI" --output "../docs/user_
 
 ```powershell
 # Move to source folder
-cd app
+cd vocabCLI
  
 # install pygount
 pip3 install pygount
