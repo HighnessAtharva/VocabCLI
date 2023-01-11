@@ -17,14 +17,11 @@ tokenized = nltk.regexp_tokenize(string, r"\w+|\$[\d\.]+|\S+")
 
 # find those words that may be misspelled
 misspelled = spell.unknown(tokenized)
-sentence=""
-
-# print the original sentence with the misspelled words highlighted (red)
-for word in tokenized:
-    # check if the word is misspelled and not a punctuation, number or symbol
-    if word in misspelled and word.isalpha():
-        sentence += f"[red s]{word}[/red s] "
-    else:
-        sentence += {word}
-
+sentence = "".join(
+    f"[red s]{word}[/red s] "
+    if word in misspelled and word.isalpha()
+    else f"{word} "
+    for word in tokenized
+)
+sentence=sentence.replace(" .",".")
 print(Panel(title="[b reverse red]Mispelled words[/b reverse red]",title_align="center",  border_style="red", renderable=sentence))
