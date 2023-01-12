@@ -6,6 +6,8 @@ from rich import print
 from rich.console import Console
 from rich.panel import Panel
 
+from vocabCLI.modules.Database import initializeDB
+from vocabCLI.modules.WordCollections import clean_collection_csv_data, insert_collection_to_DB
 
 # app configuration
 app = typer.Typer(
