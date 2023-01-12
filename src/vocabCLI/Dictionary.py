@@ -3,8 +3,8 @@ import json
 import requests
 import time
 import csv
-from Database import createConnection
-from Exceptions import *
+from .Database import createConnection
+from .Exceptions import *
 from playsound import playsound
 from pathlib import Path
 from requests import exceptions

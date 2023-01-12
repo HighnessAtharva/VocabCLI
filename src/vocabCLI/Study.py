@@ -10,7 +10,7 @@ from Dictionary import *
 from Exceptions import *
 from typing import *
 from Utils import *
-from Database import createConnection, createTables
+from .Database import createConnection, createTables
 from rich import print
 from rich.panel import Panel
 from rich.console import Console

@@ -12,8 +12,8 @@ import sqlite3
 import shutil
 import pytest
 from pathlib import Path
-from modules.Database import *
-from modules.WordCollections import *
+from vocabCLI.Database import *
+from vocabCLI.WordCollections import *
 from typer.testing import CliRunner
 
 

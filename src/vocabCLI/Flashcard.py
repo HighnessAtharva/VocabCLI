@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
-from Database import createConnection
-from Dictionary import *
+from .Database import createConnection
+from .Dictionary import *
 import json
 import textwrap
 import random

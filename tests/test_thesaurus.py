@@ -1,6 +1,6 @@
 from unittest import mock
 import pytest
-from vocabCLI import app
+from vocabCLI.__main__ import app
 
 
 class TestThesaurus:
