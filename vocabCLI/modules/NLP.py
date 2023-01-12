@@ -37,6 +37,11 @@ def check_url_or_text(value: str) -> bool:
 
     Returns:
         bool: True if the value is a URL, False if the value is a text
+
+    Raises:
+        requests.exceptions.MissingSchema: If the URL is missing the schema
+        requests.exceptions.InvalidSchema: If the URL has an invalid schema
+        requests.exceptions.InvalidURL: If the URL is invalid
     """
 
     try:
@@ -58,6 +63,9 @@ def parse_text_from_web(webURL: str) -> str:
 
     Returns:
         str: clean text from the web page
+
+    Raises:
+        trafilatura.errors.FetchingError: If the URL is invalid or the server is down
     """
 
     downloaded = trafilatura.fetch_url(webURL)
@@ -94,7 +102,8 @@ def cleanup_text(text: str) -> str:
 
 # TODO: - show total count of censor words in the text for both strict and not strict
 def censor_bad_words_strict(text: str) -> None:
-    """Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
+    """
+    Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
 
     Args:
         text (str): text that needs to be censored
@@ -157,7 +166,8 @@ def censor_bad_words_strict(text: str) -> None:
 
 # TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
 def censor_bad_words_not_strict(text: str) -> None:
-    """Removes the bad words from the text and replaces them with asterisks partially and prints the censor text
+    """
+    Removes the bad words from the text and replaces them with asterisks partially and prints the censor text
 
     Args:
         text (str): text that needs to be censored
@@ -225,7 +235,8 @@ def censor_bad_words_not_strict(text: str) -> None:
 
 
 def readability_index(text: str) -> None:
-    """Prints the readability index of the text and the summary of the index 
+    """
+    Prints the readability index of the text and the summary of the index 
 
     Args:
         text (str): text to be analyzed
@@ -287,7 +298,8 @@ def readability_index(text: str) -> None:
 
 
 def extract_difficult_words(text: str) -> None:
-    """Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
+    """
+    Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
 
     Args:
         text (str): text/url to be analyzed
@@ -499,7 +511,8 @@ def summarize_text_util(text:str, per:int)->str:
 
 
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
-    """Print the summarized text or internet article. 
+    """
+    Print the summarized text or internet article. 
 
     Args:
         text (str): Text that is to be summarized
