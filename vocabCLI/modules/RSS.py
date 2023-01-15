@@ -19,7 +19,13 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 def add_feed(url:str)->None:
-    """Add the feed to the database"""
+    """
+    Add the feed to the database
+    
+    Args:
+        url (str): The URL of the feed
+    """
+
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="clock", style="bold violet"),
@@ -73,6 +79,7 @@ def add_feed(url:str)->None:
 
 def get_all_feeds()->None:
     """Get the feed details from the database"""
+
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="clock", style="bold violet"),
@@ -125,6 +132,7 @@ def get_all_feeds()->None:
 
 def remove_feed()->None:
     """Remove the feed from the database"""
+
     conn = createConnection()
     c = conn.cursor()
 
@@ -174,6 +182,13 @@ def remove_feed()->None:
 
 
 def remove_html_tags(html: str)->str:
+    """
+    Remove html tags from a string
+    
+    Args:
+        html (str): HTML string
+    """
+    
     soup = BeautifulSoup(html, "html.parser")
     for data in soup(['style', 'script']):
         # Remove tags
@@ -182,7 +197,13 @@ def remove_html_tags(html: str)->str:
 
 
 def check_feed_for_new_content(title:str)->None:
-    """Parse the feed and check for new content"""
+    """
+    Parse the feed and check for new content
+    
+    Args:
+        title (str): Title of the feed
+    """
+    
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="clock", style="bold violet"),

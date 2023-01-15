@@ -10,8 +10,12 @@ from rich.progress import track
 def flashcard_definition(query: str) -> str:
     # sourcery skip: use-contextlib-suppress
     """
-    Docstring 
+    Returns the definition of the word from the cache
+
+    Args:
+        query (str): The word to be searched
     """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT api_response FROM cache_words WHERE word=?", (query,))
@@ -33,13 +37,28 @@ def flashcard_definition(query: str) -> str:
 
 
 def interpolate(black, random_color, interval):
+    """
+    Interpolate between two colors.
+    
+    Args:
+        black (tuple): The first color
+        random_color (tuple): The second color
+        interval (int): The number of steps to take between the two colors"""
+
     derandom_color =[(t - f) / interval for f , t in zip(black, random_color)]
     for i in range(interval):
         yield [round(t + det * i) for t, det in zip(black, derandom_color)]
         
         
 def export_util(c, type: str):  # sourcery skip: low-code-quality
-
+    """
+    Exports the words from the database to a flashcard image
+    
+    Args:
+        c (sqlite3.Cursor): The cursor object
+        type (str): The type of words to be exported
+    """
+    
     if not (rows := c.fetchall()):
         print(f"No words found for selected criteria: {type}")
 
@@ -210,6 +229,8 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             
 
 def generate_all_flashcards():
+    """ Generate flashcards for all words in the database """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word) FROM words")
@@ -217,6 +238,8 @@ def generate_all_flashcards():
 
 
 def generate_mastered_flashcards():
+    """ Generate flashcards for all mastered words in the database """
+    
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word) FROM words WHERE mastered=1")
@@ -224,6 +247,8 @@ def generate_mastered_flashcards():
 
 
 def generate_learning_flashcards():
+    """ Generate flashcards for all learning words in the database """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word) FROM words WHERE learning=1")
@@ -231,6 +256,8 @@ def generate_learning_flashcards():
 
 
 def generate_favorite_flashcards():
+    """ Generate flashcards for all favorite words in the database """
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word) FROM words WHERE favorite=1")
@@ -238,6 +265,13 @@ def generate_favorite_flashcards():
 
 
 def generate_tag_flashcards(query: str):
+    """ 
+    Generate flashcards for all words with a specific tag in the database 
+    
+    Args:
+        query (str): the tag to search for
+    """
+    
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word), tag FROM words WHERE tag=?", (query,))
