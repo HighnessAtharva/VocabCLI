@@ -511,7 +511,7 @@ def get_random_word_from_learning_set()->None:
     Gets a random word from the learning list.
     
     Raises:
-        NoWordsInLearningList: If there are no words in the learning list.
+        NoWordsInLearningListException: If there are no words in the learning list.
     """
 
     conn=createConnection()
@@ -519,9 +519,9 @@ def get_random_word_from_learning_set()->None:
     c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     
-    with contextlib.suppress(NoWordsInLearningList):
+    with contextlib.suppress(NoWordsInLearningListException):
         if len(rows) <= 0:
-            raise NoWordsInLearningList()
+            raise NoWordsInLearningListException()
         print(Panel(f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{rows[0][0]}[/bold blue]"))
         definition(rows[0][0])
 
@@ -531,7 +531,7 @@ def get_random_word_from_mastered_set()->None:
     Gets a random word with definition from the mastered words list.
 
     Raises:
-        NoWordsInMasteredList: If there are no words in the mastered list.
+        NoWordsInMasteredListException: If there are no words in the mastered list.
     """
 
     conn=createConnection()
@@ -539,9 +539,9 @@ def get_random_word_from_mastered_set()->None:
     c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
     
-    with contextlib.suppress(NoWordsInMasteredList):
+    with contextlib.suppress(NoWordsInMasteredListException):
         if len(rows) <= 0:
-            raise NoWordsInMasteredList()
+            raise NoWordsInMasteredListException()
         
         print(Panel(f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{rows[0][0]}[/bold green]"))
         definition(rows[0][0])
@@ -551,16 +551,16 @@ def get_random_word_from_favorite_set()->None:
     Gets a random word from the favorite list.
     
     Raises:
-        NoWordsInFavoriteList: If there are no words in the favorite list.
+        NoWordsInFavoriteListException: If there are no words in the favorite list.
     """
     
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 ORDER BY RANDOM() LIMIT 1")
     rows=c.fetchall()
-    with contextlib.suppress(NoWordsInFavoriteList):
+    with contextlib.suppress(NoWordsInFavoriteListException):
         if len(rows) <= 0:
-            raise NoWordsInFavoriteList()   
+            raise NoWordsInFavoriteListException()   
         print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}"))
         definition(rows[0][0])
     
@@ -801,16 +801,16 @@ def delete_all()->None:
     """ Deletes all the words from the database.
      
     Raises:
-        NoWordsInDB: If there are no words in the database.
+        NoWordsInDBException: If there are no words in the database.
     """
 
     conn=createConnection()
     c=conn.cursor()
     rowcount=count_all_words()
     
-    with contextlib.suppress(NoWordsInDB):
+    with contextlib.suppress(NoWordsInDBException):
         if rowcount==0:
-            raise NoWordsInDB()
+            raise NoWordsInDBException()
         
         c.execute("DELETE FROM words")
         conn.commit()
@@ -825,16 +825,16 @@ def delete_mastered()->None:
     """ Deletes all the mastered words from the database. 
     
     Raises:
-        NoWordsInMasteredList: If there are no mastered words in the database.
+        NoWordsInMasteredListException: If there are no mastered words in the database.
     """
 
     conn=createConnection()
     c=conn.cursor()
 
     rowcount=count_mastered()
-    with contextlib.suppress(NoWordsInMasteredList):
+    with contextlib.suppress(NoWordsInMasteredListException):
         if rowcount==0:
-            raise NoWordsInMasteredList()
+            raise NoWordsInMasteredListException()
         
         c.execute("DELETE FROM words WHERE mastered=1")
         conn.commit()
@@ -849,16 +849,16 @@ def delete_learning()->None:
     """Deletes all the learning words from the database.
     
     Raises:
-        NoWordsInLearningList: If there are no learning words in the database.
+        NoWordsInLearningListException: If there are no learning words in the database.
     """
 
     conn=createConnection()
     c=conn.cursor()
 
     rowcount=count_learning()
-    with contextlib.suppress(NoWordsInLearningList):
+    with contextlib.suppress(NoWordsInLearningListException):
         if rowcount==0:
-            raise NoWordsInLearningList()
+            raise NoWordsInLearningListException()
         
         c.execute("DELETE FROM words WHERE learning=1")
         conn.commit()
@@ -873,16 +873,16 @@ def delete_favorite()->None:
     """Deletes all the favorite words from the database.
     
     Raises:
-        NoWordsInFavoriteList: If there are no favorite words in the database.    
+        NoWordsInFavoriteListException: If there are no favorite words in the database.    
     """
 
     conn=createConnection()
     c=conn.cursor()
 
     rowcount=count_favorite()
-    with contextlib.suppress(NoWordsInFavoriteList):
+    with contextlib.suppress(NoWordsInFavoriteListException):
         if rowcount==0:
-            raise NoWordsInFavoriteList()
+            raise NoWordsInFavoriteListException()
         
         c.execute("DELETE FROM words WHERE favorite=1")
         conn.commit()
@@ -949,16 +949,16 @@ def clear_learning()->None:
     """Clears all the words marked as learning.
     
     Raises:
-        NoWordsInLearningList: If there are no words in the learning list.
+        NoWordsInLearningListException: If there are no words in the learning list.
     """
 
     conn=createConnection()
     c=conn.cursor()
     c.execute("UPDATE words SET learning=0 WHERE learning=1")
     
-    with contextlib.suppress(NoWordsInLearningList):
+    with contextlib.suppress(NoWordsInLearningListException):
         if c.rowcount <= 0:
-            raise NoWordsInLearningList()
+            raise NoWordsInLearningListException()
         conn.commit() 
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
@@ -971,16 +971,16 @@ def clear_mastered()->None:
     """Clears all the words marked as mastered.
     
     Raises:
-        NoWordsInMasteredList: If there are no words in the mastered list.
+        NoWordsInMasteredListException: If there are no words in the mastered list.
     """
 
     conn=createConnection()
     c=conn.cursor()
     c.execute("UPDATE words SET mastered=0 WHERE mastered=1")
     
-    with contextlib.suppress(NoWordsInMasteredList):
+    with contextlib.suppress(NoWordsInMasteredListException):
         if c.rowcount <= 0:
-            raise NoWordsInMasteredList()
+            raise NoWordsInMasteredListException()
         conn.commit()
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",
@@ -993,16 +993,16 @@ def clear_favorite()->None:
     """Clears all the words marked as favorite.
     
     Raises:
-        NoWordsInFavoriteList: If there are no words in the favorite list.
+        NoWordsInFavoriteListException: If there are no words in the favorite list.
     """
 
     conn=createConnection()
     c=conn.cursor()
     c.execute("UPDATE words SET favorite=0 WHERE favorite=1")
     
-    with contextlib.suppress(NoWordsInFavoriteList):
+    with contextlib.suppress(NoWordsInFavoriteListException):
         if c.rowcount <= 0:
-            raise NoWordsInFavoriteList()
+            raise NoWordsInFavoriteListException()
         conn.commit()
         print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
                 title_align="center",

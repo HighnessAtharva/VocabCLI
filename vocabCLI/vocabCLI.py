@@ -957,7 +957,7 @@ if __name__ == "__main__":
         # initialize the database with the tables if not already existing
         initializeDB()
         # uncomment this to easily delete all words from collections table during testing
-        # delete_collection_from_DB()
+        delete_collection_from_DB()
         clean_collection_csv_data()
         # add all the collection words to the database if not already existing
         insert_collection_to_DB()

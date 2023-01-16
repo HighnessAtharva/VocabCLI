@@ -71,7 +71,7 @@ def add_feed(url:str)->None:
         # add feed to database if it does not exist
         # NOTE: feed.feed.link is not the same as url, you want to store the RSS feed URL, not the website URL
         c.execute("INSERT INTO rss (title, link, description, datetime) VALUES (?, ?, ?, ?)",
-                  (feed.feed.title, url, feed.feed.description, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                  (feed.feed.title, url, feed.feed.description, datetime.datetime.now().strftime("%Y-%m-%d %H:%M")))
         conn.commit()
 
         print(Panel(title="[b reverse]  Feed added successfully ✅  [/b reverse]",renderable=f"Title:  {feed.feed.title}\n\nLink:  {feed.feed.link}\n\nSummary: {feed.feed.description}"))
@@ -93,42 +93,41 @@ def get_all_feeds()->None:
         conn = createConnection()
         c = conn.cursor()
 
-        # get all feeds
-        c.execute("SELECT * from rss")
-        rows = c.fetchall()
+        try:
+            # get all feeds
+            c.execute("SELECT * from rss")
+            rows = c.fetchall()
 
-        # if no feeds exist, print error message
-        if not rows:
-            print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="[bold red]No feeds added yet[/bold red]. Use [bold blue]rss[/bold blue] command to add a feed. ➕")
-        )
-            return
+            # if no feeds exist, print error message
+            if not rows:
+                raise NoRSSFeedsException()
 
-        table = Table(
-            show_header=True,
-            header_style="bold gold3",
-            border_style="white",
-            title="📰 YOUR FEEDS ",
-            title_style="bold magenta",
-            title_justify="center",
-            box=box.ROUNDED
-        )
-        table.add_column("🌐 Title", width=30)
-        table.add_column("🔗 Link",  width=30, style="blue")
-        table.add_column("📃 Summary", width=60, style="bright_green italic")
-        table.add_column("📅 Date added", width=18, style="magenta")
+            table = Table(
+                show_header=True,
+                header_style="bold gold3",
+                border_style="white",
+                title="📰 YOUR FEEDS ",
+                title_style="bold magenta",
+                title_justify="center",
+                box=box.ROUNDED
+            )
+            table.add_column("🌐 Title", width=30)
+            table.add_column("🔗 Link",  width=30, style="blue")
+            table.add_column("📃 Summary", width=60, style="bright_green italic")
+            table.add_column("📅 Date added", width=18, style="magenta")
 
-        for row in rows:
-            # do not display the RSS feed URL, display the website URL instead
-            link = feedparser.parse(row[1]).feed.link
-            table.add_row(f"[b u cyan]{row[0]}[/b u cyan]", link, row[2], datetime.datetime.strptime(
-                row[3], "%Y-%m-%d %H:%M:%S").strftime("%d %b \'%y | %H:%M"))
-            table.add_row("\n", "\n", "\n", "\n")
-            table.add_section()
-        print(table)
-
+            for row in rows:
+                # do not display the RSS feed URL, display the website URL instead
+                link = feedparser.parse(row[1]).feed.link
+                table.add_row(f"[b u cyan]{row[0]}[/b u cyan]", link, row[2], datetime.datetime.strptime(
+                    row[3], "%Y-%m-%d %H:%M").strftime("%d %b \'%y | %H:%M"))
+                table.add_row("\n", "\n", "\n", "\n")
+                table.add_section()
+            print(table)
+            
+        except NoRSSFeedsException as e:
+            print(e)
+            
 
 def remove_feed()->None:
     """Remove the feed from the database"""

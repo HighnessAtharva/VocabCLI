@@ -34,7 +34,7 @@ class NoDataFoundException(Exception):
                 renderable="[bold red]No words to export ❌. Add some words in your list using 'define' command ➕. [/bold red]")
         ) 
 
-class NoWordsInDB(Exception):
+class NoWordsInDBException(Exception):
     """raised when the user attempts to perform some operation on a word which is not present in the database."""
 
     def __init__(self):
@@ -46,7 +46,7 @@ class NoWordsInDB(Exception):
             )
         )
         
-class NoWordsInLearningList(Exception):
+class NoWordsInLearningListException(Exception):
     """raised when the user attempts to start a learning session but there are no words in the list."""
 
     def __init__(self):
@@ -56,7 +56,7 @@ class NoWordsInLearningList(Exception):
                 renderable="[bold red]No words in your learning list. Add some words in your list using 'learn [word]' command first. 🔎[/bold red]")
         )
 
-class NoWordsInMasteredList(Exception):
+class NoWordsInMasteredListException(Exception):
     """raised when the user attempts to start a learning session but there are no words in the list."""
 
     def __init__(self):
@@ -66,7 +66,7 @@ class NoWordsInMasteredList(Exception):
                 renderable="[bold red]No words in your mastered list. Add some words in your list using 'master [word]' command first. 🔎[/bold red]")
         )
         
-class NoWordsInFavoriteList(Exception):
+class NoWordsInFavoriteListException(Exception):
         """raised when the user attempts to start a learning session but there are no words in the list."""
 
         def __init__(self):
@@ -122,5 +122,18 @@ class NoQuotesException(Exception):
                 title_align="center",
                 padding=(1, 1),
                 renderable="There are no quotes in your list. Add some quotes in your list using 'quote' command first. 📪",
+            )
+        )
+        
+class NoRSSFeedsException(Exception):
+    """raised when the user attempts to perform some operation on a RSS feed which is not present in the list."""
+    
+    def __init__(self):
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]No feeds added yet[/bold red]. Use [bold blue]rss[/bold blue] command to add a feed. ➕",
             )
         )

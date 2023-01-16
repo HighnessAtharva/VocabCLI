@@ -82,9 +82,9 @@ def revise_all(number: Optional[int] = None)->None:  # sourcery skip: remove-red
     c=conn.cursor()
 
     # checks if there are any words in the database and breaks out if there are none
-    with contextlib.suppress(NoWordsInDB):
+    with contextlib.suppress(NoWordsInDBException):
         if count_all_words()==0:
-            raise NoWordsInDB()
+            raise NoWordsInDBException()
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
         start_revision(c)
@@ -136,9 +136,9 @@ def revise_learning(
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    with contextlib.suppress(NoWordsInLearningList):
+    with contextlib.suppress(NoWordsInLearningListException):
         if count_learning() ==0:
-            raise NoWordsInLearningList()
+            raise NoWordsInLearningListException()
         
     if not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
@@ -165,9 +165,9 @@ def revise_mastered(
 
     # will stop the execution if no words learning
   
-    with contextlib.suppress(NoWordsInMasteredList):
+    with contextlib.suppress(NoWordsInMasteredListException):
         if count_mastered() ==0:
-            raise NoWordsInMasteredList()
+            raise NoWordsInMasteredListException()
             
     if not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
@@ -192,9 +192,9 @@ def revise_favorite(
     c=conn.cursor()
 
 
-    with contextlib.suppress(NoWordsInFavoriteList):
+    with contextlib.suppress(NoWordsInFavoriteListException):
         if count_favorite() ==0:
-            raise NoWordsInFavoriteList()
+            raise NoWordsInFavoriteListException()
             
     if not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")
@@ -349,9 +349,9 @@ def quiz_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redun
     c=conn.cursor()
     
     # checks if there are any words in the database and breaks out if there are none
-    with contextlib.suppress(NoWordsInDB):
+    with contextlib.suppress(NoWordsInDBException):
         if count_all_words()==0:
-            raise NoWordsInDB()
+            raise NoWordsInDBException()
     
     if not number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM()")
@@ -411,9 +411,9 @@ def quiz_learning(
 
     # will stop the execution if no words learning
     
-    with contextlib.suppress(NoWordsInLearningList):
+    with contextlib.suppress(NoWordsInLearningListException):
         if count_learning() ==0:
-            raise NoWordsInLearningList()
+            raise NoWordsInLearningListException()
             
     if not number:
         c.execute("SELECT DISTINCT word FROM words where learning=1 ORDER BY RANDOM()")
@@ -441,9 +441,9 @@ def quiz_mastered(
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    with contextlib.suppress(NoWordsInMasteredList):
+    with contextlib.suppress(NoWordsInMasteredListException):
         if count_mastered() ==0:
-            raise NoWordsInMasteredList()
+            raise NoWordsInMasteredListException()
         
     if not number:
         c.execute("SELECT DISTINCT word FROM words where mastered=1 ORDER BY RANDOM()")
@@ -468,9 +468,9 @@ def quiz_favorite(number: Optional[int] = None)->None:
     c=conn.cursor()
     
     # will stop the execution if no words learning
-    with contextlib.suppress(NoWordsInFavoriteList):
+    with contextlib.suppress(NoWordsInFavoriteListException):
         if count_favorite() ==0:
-            raise NoWordsInFavoriteList()
+            raise NoWordsInFavoriteListException()
         
     if not number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM()")

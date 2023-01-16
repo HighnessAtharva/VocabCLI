@@ -60,7 +60,7 @@ def createTables(conn: sqlite3.Connection)->None:
     
     quiz_history="""CREATE TABLE IF NOT EXISTS "quiz_history" (
             "type" TEXT NOT NULL,
-            "datetime" timestamp NOT NULL,
+            "datetime" timestamp NOT NULL UNIQUE,
             "question_count" INTEGER NOT NULL,
             "points" INTEGER NOT NULL,
             "duration" INTEGER NOT NULL
@@ -68,7 +68,7 @@ def createTables(conn: sqlite3.Connection)->None:
         """
         
     quotes=""" CREATE TABLE IF NOT EXISTS "quotes" (
-            "quote" TEXT NOT NULL,
+            "quote" TEXT NOT NULL UNIQUE,
             "author" TEXT,
             "datetime" timestamp NOT NULL
             );
