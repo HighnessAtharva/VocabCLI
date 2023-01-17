@@ -19,6 +19,16 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
 def display_theme(query: str)->None:
+    """
+    Display the theme of the word if it exists in the collections table
+    1. Create a connection to the database
+    2. Create a cursor to execute SQL queries on the database
+    3. Execute an SQL query that returns the collection name for a given word
+    4. If the query returns a result, print it 
+
+    Args:
+        query (str): Word to check if it has a theme
+    """
     conn=createConnection()
     c=conn.cursor()
     # join collection and words table to get the collection name for the word
@@ -28,7 +38,16 @@ def display_theme(query: str)->None:
   
 
 def show_commonly_confused(word:str)->None:
-    """Check if the word is commonly confused with other words, if yes, show them"""
+    """
+    Check if the word is commonly confused with other words, if yes, show them
+    1. Open the commonly_confused.csv file
+    2. Read the file
+    3. If the word is in the row, then print the words in the row as commonly confused words
+    4. If the word is not in the row, then do nothing
+
+    Args:
+        word (str): Word to check if it is commonly confused with other words
+    """
     
     with open("modules/commonly_confused.csv", "r") as file:
         reader=csv.reader(file)
@@ -42,12 +61,21 @@ def show_commonly_confused(word:str)->None:
 def connect_to_api(query:str="hello")->json:
     """
     Connects to the API and returns the response in JSON format.
-
+    1. Connect to the internet to check if the word is a valid word.
+    2. If the word is a valid word, then check if the word is already in the cache_word table. If the word is in the cache_word table, then return the response from the cache_word table. 
+    3. If the word is not in the cache_word table, then connect to the API, get the response and then insert the word and its response into the cache_word table.
+    4. If the word is not a valid word, then print an error message.
+    
     Args:
         query (str, optional): Word to lookup to test the API. Defaults to "hello".
 
     Returns:
         dict: Response in JSON format.
+    
+    Raises:
+        ConnectionError: If the user is not connected to the internet.
+        HTTPError: If the word is not a valid word.
+        Timeout: If the request times out.
     """
     
     try:
@@ -103,6 +131,12 @@ def connect_to_api(query:str="hello")->json:
 def phonetic(query: str)-> str:
     """
     Prints the phonetic of the word.
+    1. It takes the query as an argument.
+    2. It connects to the API and retrieves the response.
+    3. If the word is not found in the dictionary, it prints the message.
+    4. If the word is found, it loops through the phonetics.
+    5. If the phonetic is available, it returns it.
+    6. If the phonetic is not available, it prints 'Phonetic Unavailable'. 
 
     Args:
         query (str): Word for which phonetic is to be printed.
@@ -111,12 +145,16 @@ def phonetic(query: str)-> str:
         string: Phonetic of the word.
     """
 
+    # Connect to the API and retrieve the response
     if not (response := connect_to_api(query)):
         return
+    # If the word is not found in the dictionary
     if len(response["phonetics"])==0:
         phonetic="[bold red]Phonetic Unavailable[/bold red]"
     else:
+        # Loop through the phonetics
         for phonetics in response["phonetics"]:
+            # If the phonetic is available
             if "text" in phonetics and len(phonetics["text"])>0:
                 phonetic= phonetics["text"]
             else:

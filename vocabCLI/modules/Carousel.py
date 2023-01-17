@@ -7,8 +7,13 @@ import os
 
 
 def show_slider() -> None:
-    """Show the slider"""
-
+    """ 
+    1. Sets up the GUI window
+    2. Dumps the images to the folder
+    3. Deletes the images if already existing
+    4. Sets up the images
+    5. Creates a global counter variable 
+    """
     # set up the tkinter window
     root = Tk()
     root.title("VocabCLI Graphs")
@@ -57,7 +62,10 @@ def show_slider() -> None:
     counter = 0
 
     def ChangeImage():
-
+        """ 
+        1. Changes the image
+        2. Changes the info label
+        """
         global counter
         if counter < len(image_list) - 1:
             counter += 1

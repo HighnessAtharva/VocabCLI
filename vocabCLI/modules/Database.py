@@ -30,7 +30,11 @@ def createConnection():
 #no tests for this function as it is not called anywhere in the command directly
 def createTables(conn: sqlite3.Connection)->None:
     """
-    Creates tables in the database
+    1. Creates the tables in the database if they do not exist
+    2. Tables created are words, cache_words, collections, quiz_history, quotes, rss
+    3. The tables are created using the SQL statements in the docstring with respective column names and data types
+    4. The tables are created using the execute method of the connection object
+    5. The connection object is passed as an argument to the function
 
     Args:
         conn (sqlite3.Connection): Connection object
@@ -102,6 +106,14 @@ def initializeDB()->None:
 def refresh_cache()->None:
     """
     Refreshes the cache of the words in the database.
+    1. Connect to the database
+    2. Check if the cache is empty, if yes, then do nothing.
+    3. If the cache is not empty, then we need to refresh it.
+    4. Get all the words from the cache.
+    5. For each word, get the response from the API and update the cache.
+    6. If there's an error, then show a error message and exit.
+    7. If there's no error, then update the cache.
+    8. If the cache is updated, then show a success message.
     """
     
     # check if cache is empty, if yes then do nothing

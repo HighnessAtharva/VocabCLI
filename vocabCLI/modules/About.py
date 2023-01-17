@@ -11,8 +11,16 @@ from rich.syntax import Syntax
 
 
 def print_about_app()->None:
-    """Prints the details of the app"""
-
+    """
+    Prints the about app page
+    1. Create a layout object
+    2. Create a header content object with the help of the Panel class
+    3. Create a footer content object with the help of the Panel class
+    4. Create a main content object with the help of the Panel class
+    5. Divide the "screen" into three parts
+    6. Update the header, main and footer with their respective content objects
+    7. Print the layout which contains details about the app 
+    """
     layout = Layout()  
     
     header_content =  Panel(
