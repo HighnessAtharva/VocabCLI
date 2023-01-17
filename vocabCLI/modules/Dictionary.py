@@ -165,7 +165,12 @@ def phonetic(query: str)-> str:
 #no tests for this function as it is not called anywhere in the command directly
 def insert_word_to_db(query: str)->None:
     """
-    Tags the word in the vocabulary builder list.
+    Add the word in the vocabulary builder list.
+    The code above does the following, explained in English:
+    1. Check if the word exists in the cache_word table
+    2. If the word exists, then insert the word to the database
+    3. If the word does not exist, then query the API to check if the word exists
+    4. If the word exists, then insert the word to the database and also insert the word and its response to the cache_word table
 
     Args:
         query (str): Word which is to be tagged.
@@ -204,6 +209,11 @@ def insert_word_to_db(query: str)->None:
 def insert_to_db_util(conn, query: str)->None:
     """
     Inserts the word into the database.
+    1. If the word exists in the database, with a tag, then insert it with that tag.
+    2. If the word exists in the database, without a tag, then insert it without a tag.
+    3. If the word exists in the database, with favorite 1, then insert it with favorite 1.
+    4. If the word exists in the database, with learning 1, then insert it with learning 1.
+    5. If the word exists in the database, with mastered 1, then insert it with mastered 1.
 
     Args:
         conn (sqlite3.Connection): Connection to the database.
@@ -248,6 +258,13 @@ def insert_to_db_util(conn, query: str)->None:
 def definition(query:str, short:Optional[bool]=False) -> None:
     """
     Prints the definition of the word.
+    1. The function definition first calls the function connect_to_api which takes query (str) as argument and returns the response (dict) if successful or None if unsuccessful.
+    2. The function definition then calls the function phonetic which takes query (str) as argument and returns the phonetic (str) of the word.
+    3. The function definition then calls the function insert_word_to_db which takes query (str) as argument and inserts the word into the database.
+    4. If the short is set to True, the function definition then iterates over the meanings (dict) and prints the first definition (str) of the word.
+    5. If the short is set to False, the function definition then calls the function display_theme which takes query (str) as argument and displays the theme (str) associated with the word.
+    6. The function definition then calls the function show_commonly_confused which takes query (str) as argument and displays the commonly confused words (str) of the word.
+    7. The function definition then iterates over the meanings (dict) and prints the definition (str) and example (str) of the word.
 
     Args:
         query (str): Word which is meant to be defined.
