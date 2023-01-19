@@ -321,7 +321,6 @@ def definition(query:str, short:Optional[bool]=False) -> None:
             print("\n")
 
 
-#no tests for this function as it is not called anywhere in the command directly
 def one_line_definition(query:str) -> str:
     """
     Prints the one line definition of the word.
@@ -339,7 +338,7 @@ def one_line_definition(query:str) -> str:
 
 
 
-#no tests for this function as it is not called anywhere in the command directly
+# TODO @anay : update docstring with new format
 def say_aloud(query: str) -> None:
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
@@ -372,7 +371,7 @@ def say_aloud(query: str) -> None:
         print(e)
 
 
-# TODO: add a main command and link it to this function
+
 def get_word_of_the_day() -> None:
     """Get a word of the day from a public API and print its definition."""
 

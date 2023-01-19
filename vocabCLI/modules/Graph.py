@@ -12,13 +12,12 @@ from Database import *
 from PIL import Image, ImageTk
 from rich.panel import Panel
 
-# TODO: - revise docstrings and add wherever missing. 
-# TODO: - add type hints wherever missing and return types as well
-
 
 ################################
 # VISUALIZATION FUNCTIONS
 ################################
+
+# TODO @anay : update docstring with new format
 def viz_top_words_bar(N:int=10, popup:bool=False)->None:
     """Visualize the top N words looked up by the user
     
@@ -79,7 +78,7 @@ def viz_top_words_bar(N:int=10, popup:bool=False)->None:
                         padding=(1, 1)))
         plt.show()
 
-
+# TODO @anay : update docstring with new format
 def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
@@ -143,6 +142,7 @@ def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
         plt.show()
 
 
+# TODO @anay : update docstring with new format
 def viz_top_words_pie(N:int=10, popup:bool=False)->None:
     conn=createConnection()
     c=conn.cursor()
@@ -187,6 +187,7 @@ def viz_top_words_pie(N:int=10, popup:bool=False)->None:
             padding=(1, 1)))
         plt.show()
     
+# TODO @anay : update docstring with new format
 def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
@@ -242,7 +243,7 @@ def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
                     padding=(1, 1)))
         plt.show()
 
-
+# TODO @anay : update docstring with new format
 # BUG days of the week is buggy, week range is not properly set
 def words_distribution_week_util()->tuple[list, list]:
     """
@@ -272,6 +273,8 @@ def words_distribution_week_util()->tuple[list, list]:
 
     return days_of_week, word_count
 
+
+# TODO @anay : update docstring with new format
 # BUG 🐞 Graph does not show the entire week
 def viz_word_distribution_week(popup:bool=False)->None:
     """
@@ -311,7 +314,7 @@ def viz_word_distribution_week(popup:bool=False)->None:
         plt.show()
 
 
-
+# TODO @anay : update docstring with new format
 def word_distribution_month_util()->tuple[list, list]:
     """
     Returns the distribution of word by dates of month.
@@ -357,7 +360,7 @@ def word_distribution_month_util()->tuple[list, list]:
 
     return dates, word_count
 
-
+# TODO @anay : update docstring with new format
 def viz_word_distribution_month(popup:bool=False)->None:
     """ 
     Visualizes the distribution of words by dates of month. 
@@ -398,14 +401,20 @@ def viz_word_distribution_month(popup:bool=False)->None:
         plt.show()
 
 
-def word_distribution_year_util():
 
+
+
+def word_distribution_year_util():
     pass
+
+
 
 def viz_word_distribution_year(popup:bool=False):
-    
     pass
 
+
+
+# TODO @anay : # TODO @anay : update docstring with new format
 def viz_learning_vs_mastered(popup:bool=False)->None:
     """ 
     Visualizes the distribution of words by learning and mastered. 
@@ -458,7 +467,7 @@ def viz_learning_vs_mastered(popup:bool=False)->None:
             padding=(1, 1)))
         plt.show()
     
-
+# TODO @anay : docstrings missing
 def viz_word_distribution_category(popup:bool=False)->None:
     conn=createConnection()
     c=conn.cursor()

@@ -557,7 +557,6 @@ def clear(
         raise typer.BadParameter(message="Please specify a list to clear. Use --help for more info.")
 
 
-# TODO: - add more flags/options
 @app.command(rich_help_panel="Vocabulary Builder", help="🔀 Gets a random word")
 def random(
     learning: bool = typer.Option(False, "--learning", "-l", help="Get a random learning word"),
@@ -916,8 +915,6 @@ def daily_word():
     get_word_of_the_day()    
 
 
-
-# TODO: - need to write the function
 @app.command(rich_help_panel="Vocabulary Builder", help="📇 Generate flashcards for words in your learning list")
 def flashcard(
     all: bool = typer.Option(False, "--all", "-a", help="Generate flashcards for all words."),
@@ -946,6 +943,14 @@ def flashcard(
         print("Cannot combine options. Please select only one option.")
         
 
+@app.command(rich_help_panel="Vocabulary Builder", help="📇 Spell check your input sentences and find the misspelled words.")
+def spellcheck(text: str = typer.Argument(..., help="Text to spell check.")):
+    """
+    Spell check a word.
+    """
+    
+    from modules.Spelling import spell_checker
+    spell_checker(text)
 
 if __name__ == "__main__":
     from modules.Database import initializeDB

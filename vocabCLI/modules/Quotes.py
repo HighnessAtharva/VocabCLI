@@ -13,7 +13,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import box
  
-
+# TODO @anay : update docstring with new format
 def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
@@ -55,7 +55,7 @@ def get_quotes() -> None:
             table.add_section()
         print(table)
 
-
+# TODO @anay : update docstring with new format
 def add_quote(quote: str, author: Optional[str] = None)->None:
     # sourcery skip: remove-redundant-fstring
     """
@@ -132,7 +132,7 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
             renderable=f"[bold green]Quote:[/bold green] [reverse white]{quote}[/reverse white] by [italic u]{author if author is not None else '-'}[/italic u] added to your list. 📚",
     ))
 
-
+# TODO @anay : update docstring with new format
 def search_quote(quoteText: str)->None:
     """
     Searches for a quote in the database.
@@ -211,7 +211,7 @@ def search_quote(quoteText: str)->None:
         table.add_section()
     print(table)
 
-
+# TODO @anay : update docstring with new format
 def delete_quote()->None:
     """
     Deletes a quote from the database.
@@ -277,7 +277,8 @@ def delete_quote()->None:
         c.execute("DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete)-1][0],))
         print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
         conn.commit()
-        
+  
+# TODO @anay : update docstring with new format      
 def get_random_quote()->None:
     """
     Gets a random quote from the database.
@@ -300,7 +301,9 @@ def get_random_quote()->None:
         quote_date = random_quote[2]
 
         print(Panel(title="[b reverse green]  Random Quote  [/b reverse green]", title_align="center", padding=(1, 1), renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}\n\n[bold green]Date:[/bold green] {quote_date}"))
-        
+  
+  
+# TODO @anay : update docstring with new format      
 def get_quote_of_the_day()->None:
     """
     Get a random quote from a public API
@@ -326,6 +329,7 @@ def get_quote_of_the_day()->None:
     )
 
 
+# TODO @anay : update docstring with new format
 def delete_all_quotes()->None:
     """
     Deletes all quotes from the database.

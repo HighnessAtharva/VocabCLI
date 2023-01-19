@@ -26,9 +26,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
  
 
 # TODO: @atharva - add proper response headers and browser details to prevent false IP blocks.
-# TODO: - revise docstrings and add wherever missing. @anay
 
-
+# TODO @anay : update docstring with new format
 def check_url_or_text(value: str) -> bool:
     """Checks if the value is a URL or a text
 
@@ -55,6 +54,7 @@ def check_url_or_text(value: str) -> bool:
     return True
 
 
+# TODO @anay : update docstring with new format
 def parse_text_from_web(webURL: str) -> str:
     """Extracts the text from the main content of the web page. Removes the ads, comments, navigation bar, footer, html tags, etc
 
@@ -72,6 +72,8 @@ def parse_text_from_web(webURL: str) -> str:
     return trafilatura.extract(downloaded, include_comments=False, include_tables=False, with_metadata=False, include_formatting=True, target_language='en', include_images= False)
 
 
+
+# TODO @anay : update docstring with new format
 def cleanup_text(text: str) -> str:
     """Clean up the text by removing special characters, numbers, whitespaces, etc for further processing and to improve the accuracy of the model.
 
@@ -98,9 +100,7 @@ def cleanup_text(text: str) -> str:
     return text
     
     
-
-
-# TODO: - show total count of censor words in the text for both strict and not strict
+# TODO @anay : update docstring with new format
 def censor_bad_words_strict(text: str) -> None:
     """
     Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
@@ -163,8 +163,7 @@ def censor_bad_words_strict(text: str) -> None:
             
         ))
 
-
-# TODO: - allow to pass an internet article url here and show percentage of offensive words in the article
+# TODO @anay : update docstring with new format
 def censor_bad_words_not_strict(text: str) -> None:
     """
     Removes the bad words from the text and replaces them with asterisks partially and prints the censor text
@@ -233,7 +232,7 @@ def censor_bad_words_not_strict(text: str) -> None:
                     ))  
         print(Panel(renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red] ",padding=(1, 1), title="[reverse]Censored Words[/reverse]"))
 
-
+# TODO @anay : update docstring with new format
 def readability_index(text: str) -> None:
     """
     Prints the readability index of the text and the summary of the index 
@@ -296,7 +295,7 @@ def readability_index(text: str) -> None:
             renderable=f"[b r blue]Lexicon Count[/b r blue]: {textstat.lexicon_count(text, removepunct=True)}\n\n[b r green]Character Count[/b r green]: {textstat.char_count(text)}\n\n[b r yellow2]Sentence Count[/b r yellow2]: {textstat.sentence_count(text)}\n\n[b r gold1]Words Per Sentence[/b r gold1]: {textstat.avg_sentence_length(text)}\n\n[b r white]Readability Index[/b r white]: {textstat.flesch_reading_ease(text)}")
             )
 
-
+# TODO @anay : update docstring with new format
 def extract_difficult_words(text: str) -> None:
     """
     Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
@@ -376,7 +375,7 @@ def extract_difficult_words(text: str) -> None:
         ]
         print(Columns(difficult_words, equal=True, expand=True))
 
-
+# TODO @anay : update docstring with new format
 def sentiment_score_to_summary(sentiment_score: int) -> str:
         """
         Converts the sentiment score to a summary
@@ -400,7 +399,7 @@ def sentiment_score_to_summary(sentiment_score: int) -> str:
             return "Extremely Positive"
             
             
-            
+# TODO @anay : update docstring with new format           
 def sentiment_analysis(content: str) -> None:
     """
     Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
@@ -464,7 +463,7 @@ def sentiment_analysis(content: str) -> None:
                 )
        
 
-
+# TODO @anay : update docstring with new format
 def summarize_text_util(text:str, per:int)->str:
     """
     Summarizes the text using the spacy library
@@ -509,7 +508,7 @@ def summarize_text_util(text:str, per:int)->str:
     summary = ''.join(final_summary)
     return summary
 
-
+# TODO @anay : update docstring with new format
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
     """
     Print the summarized text or internet article. 

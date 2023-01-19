@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
-
+# TODO @anay : update docstring with new format
 def add_feed(url:str)->None:
     """
     Add the feed to the database
@@ -76,7 +76,7 @@ def add_feed(url:str)->None:
 
         print(Panel(title="[b reverse]  Feed added successfully ✅  [/b reverse]",renderable=f"Title:  {feed.feed.title}\n\nLink:  {feed.feed.link}\n\nSummary: {feed.feed.description}"))
 
-
+# TODO @anay : update docstring with new format
 def get_all_feeds()->None:
     """Get the feed details from the database"""
 
@@ -128,7 +128,7 @@ def get_all_feeds()->None:
         except NoRSSFeedsException as e:
             print(e)
             
-
+# TODO @anay : update docstring with new format
 def remove_feed()->None:
     """Remove the feed from the database"""
 
@@ -195,6 +195,8 @@ def remove_html_tags(html: str)->str:
     return ' '.join(soup.stripped_strings)
 
 
+
+# TODO @anay : update docstring with new format
 def check_feed_for_new_content(title:str)->None:
     """
     Parse the feed and check for new content

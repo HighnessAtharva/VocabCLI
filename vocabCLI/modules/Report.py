@@ -7,10 +7,6 @@ from datetime import datetime
 # todo @anay - complete the functions below
 
 
-def learning_rate():
-    pass
-
-
 def generate_text_report():
     """ Generates a text report """
 

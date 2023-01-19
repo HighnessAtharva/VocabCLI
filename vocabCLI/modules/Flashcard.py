@@ -6,7 +6,7 @@ import textwrap
 import random
 from rich.progress import track
 
-
+# TODO @anay : update docstring with new format
 def flashcard_definition(query: str) -> str:
     # sourcery skip: use-contextlib-suppress
     """
@@ -35,7 +35,7 @@ def flashcard_definition(query: str) -> str:
     return {k: defs_and_examples[k] for k in list(defs_and_examples)[:3]}
 
 
-
+# TODO @anay : update docstring with new format
 def interpolate(black, random_color, interval):
     """
     Interpolate between two colors.

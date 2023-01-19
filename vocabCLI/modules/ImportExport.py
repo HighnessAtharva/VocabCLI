@@ -7,6 +7,8 @@ from rich import print
 from rich.panel import Panel
 import os
 
+
+# TODO @anay : update docstring with new format
 def export_to_csv()->None:
     """Export words to csv file."""
     conn= createConnection()
@@ -117,7 +119,7 @@ def export_to_csv()->None:
         print("No quiz history found in the database. ❌")
 
 
-
+# TODO @anay : update docstring with new format
 def import_from_csv()->None:
     """Import words from csv file."""
 
@@ -220,7 +222,7 @@ def import_from_csv()->None:
             )
         
         
-    # todo - handle imports from seperate file quote.csv
+
     # ==================================#
     # IMPORT QUOTES FROM CSV FILE       #
     # ==================================#
@@ -334,6 +336,7 @@ class PDF(FPDF):
         self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
 
 
+# TODO @anay : update docstring with new format
 def export_to_pdf()->None:    # sourcery skip: extract-method
     """Export words to pdf file."""
     try:

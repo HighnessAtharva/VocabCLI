@@ -21,7 +21,7 @@ from rich.panel import Panel
 from rich.table import Table
                 
 
-#no tests for this function as it is not called anywhere in the command directly
+
 def check_word_exists(query: str)->bool:
     """
     Checks if the word exists in the database
@@ -45,7 +45,7 @@ def check_word_exists(query: str)->bool:
             raise WordNeverSearchedException(query)
         return True
 
-
+# TODO @anay : update docstring with new format
 def fetch_word_history(word: str)-> None: 
     """
     Fetches all instances of timestamp for a word from the database
@@ -76,7 +76,7 @@ def fetch_word_history(word: str)-> None:
             table.add_section()
         print(table)
 
-
+# TODO @anay : update docstring with new format
 def add_tag(query: str, tagName:str)->None:
     """
     Tags the word in the vocabulary builder list.
@@ -118,6 +118,7 @@ def add_tag(query: str, tagName:str)->None:
         )
         return
 
+# TODO @anay : update docstring with new format
 def remove_tag(query: str)->None:
     """Removes the tag from the word in the database
 
@@ -154,8 +155,7 @@ def remove_tag(query: str)->None:
 
 
 
-
-# word doesn't exist
+# TODO @anay : update docstring with new format
 def set_mastered(query: str)->None:
     """
     Sets the word as mastered.
@@ -195,7 +195,7 @@ def set_mastered(query: str)->None:
                 renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work! ✅")
         )
 
-
+# TODO @anay : update docstring with new format
 def check_mastered(query:str)->bool:
     """
     Checks if the word is mastered and returns a boolean value.
@@ -212,7 +212,7 @@ def check_mastered(query:str)->bool:
     c.execute("SELECT mastered FROM words WHERE word=? and mastered=1", (query,))
     return bool(row := c.fetchall())
          
-    
+ # TODO @anay : update docstring with new format   
 def check_learning(query:str)->bool:
     """
     Checks if the word is learning and returns a boolean value.
@@ -228,7 +228,8 @@ def check_learning(query:str)->bool:
 
     c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
     return bool(row := c.fetchall())
-    
+ 
+# TODO @anay : update docstring with new format   
 def set_unmastered(query: str)->None:
     """
     Sets the word as unmastered.
@@ -263,7 +264,7 @@ def set_unmastered(query: str)->None:
         )
 
 
-
+# TODO @anay : update docstring with new format
 def set_learning(query: str)->None:
     """
     Sets the word as learning.
@@ -308,7 +309,7 @@ def set_learning(query: str)->None:
                 renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising! 🧠")
         )
 
-
+# TODO @anay : update docstring with new format
 def set_unlearning(query: str)->None:
     """
     Sets the word as unlearning.
@@ -348,7 +349,7 @@ def set_unlearning(query: str)->None:
 
 
 
-
+# TODO @anay : update docstring with new format
 def set_favorite(query: str)->None:
     """
     Sets the word as favorite.
@@ -379,7 +380,7 @@ def set_favorite(query: str)->None:
         )
 
 
-
+# TODO @anay : update docstring with new format
 def set_unfavorite(query:str)->None:
     """
     Remove the word from favorite list.
@@ -564,6 +565,7 @@ def get_random_word_from_favorite_set()->None:
         print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}"))
         definition(rows[0][0])
     
+# TODO @anay : update docstring with new format
 def get_random_word_from_tag(tagName:str)->None:
     """
     Gets a random word from the vocabulary builder list with a particular tag.
@@ -585,6 +587,7 @@ def get_random_word_from_tag(tagName:str)->None:
         print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"))
         definition(rows[0][0])
 
+# TODO @anay : update docstring with new format
 def show_list(
     favorite:Optional[bool]=False,
     learning:Optional[bool]=False,
@@ -1037,6 +1040,7 @@ def clear_all_words_from_tag(tagName:str)->None:
         )
 
 
+# TODO @anay : update docstring with new format
 def get_lookup_rate(today:bool=False, week:bool=False, month:bool=False, year:bool=False)->None:
     """
     Returns the learning rate of the user.
@@ -1132,7 +1136,7 @@ def get_lookup_rate(today:bool=False, week:bool=False, month:bool=False, year:bo
             )
         )
 
-# get conseuctive dates from list of dates
+# TODO @anay : update docstring with new format
 def get_consecutive_dates(dates:list)->tuple:
     """Returns list of consecutive dates from list of dates"""
     consecutive_dates=[]
@@ -1150,34 +1154,43 @@ def get_consecutive_dates(dates:list)->tuple:
     return max(consecutive_dates, key=lambda x: x[1]-x[0])
 
 
-# @atharva I guess this is already formatted
+# TODO @anay : update docstring with new format
 def show_streak()->None:
     """Shows streak of days user has looked up words"""
     
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT DISTINCT(date(datetime)) FROM words")
-    dates=c.fetchall()
+   
     
-    # convert dates to datetime objects
-    for i in range(len(dates)):
-        dates[i]=datetime.datetime.strptime(dates[i][0], "%Y-%m-%d")    
+    try:
+        c.execute("SELECT DISTINCT(date(datetime)) FROM words")
+        if not c.fetchone():
+            raise NoWordsInDBException()
     
-    # sort dates
-    dates.sort()
+        c.execute("SELECT DISTINCT(date(datetime)) FROM words")
+        dates=c.fetchall()
+        
+        # convert dates to datetime objects
+        for i in range(len(dates)):
+            dates[i]=datetime.datetime.strptime(dates[i][0], "%Y-%m-%d")    
+        
+        # sort dates
+        dates.sort()
+        
+        max_streak=get_consecutive_dates(dates)
+        streak_days=max_streak[1]-max_streak[0]
+        
+        # convert streak_days to days
+        streak_days=int(streak_days.days)+1
+        
+
+        print(Panel(f"🔥 Your longest word lookup streak is [bold green]{streak_days}[/bold green] day(s).\n[violet]Start Date[/violet]: {max_streak[0].strftime('%d %B %Y')}\n[violet]End Date[/violet]: {max_streak[1].strftime('%d %B %Y')}", title="[reverse]Streak[/reverse]", title_align="center",padding=(1, 1)))
     
-    max_streak=get_consecutive_dates(dates)
-    streak_days=max_streak[1]-max_streak[0]
-    
-    # convert streak_days to days
-    streak_days=int(streak_days.days)+1
-     
-    
-    print(Panel(f"🔥 Your longest word lookup streak is [bold green]{streak_days}[/bold green] days.\n[violet]Start Date[/violet]: {max_streak[0].strftime('%d %B %Y')}\n[violet]End Date[/violet]: {max_streak[1].strftime('%d %B %Y')}", title="[reverse]Streak[/reverse]", title_align="center",padding=(1, 1)))
-         
+    except NoWordsInDBException as e:
+        print(e)
 
 
-# @atharva I guess this is already formatted
+# TODO @anay : update docstring with new format
 def predict_milestone(milestone: int)->None:
     """
     Predicts when user will reach a milestone

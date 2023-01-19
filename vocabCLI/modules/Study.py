@@ -22,7 +22,7 @@ from questionary import Style
 #####################
 # REVISE FUNCTIONS #         
 #####################
-
+# TODO @anay : update docstring with new format
 def start_revision(c: Cursor, is_collection: bool = False)->None:
     """ 
     Starts the revision process. 
@@ -69,7 +69,7 @@ def start_revision(c: Cursor, is_collection: bool = False)->None:
     #             renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
     #     )
         
-
+# TODO @anay : update docstring with new format
 def revise_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redundant-if
     """ 
     Revise all words in the database.
@@ -92,7 +92,9 @@ def revise_all(number: Optional[int] = None)->None:  # sourcery skip: remove-red
     elif number:
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
-        
+       
+       
+ 
 def revise_tag(
     number: Optional[int] = None,
     tag: Optional[str] = None
@@ -203,6 +205,8 @@ def revise_favorite(
     if number:
         c.execute("SELECT DISTINCT word FROM words where favorite=1 ORDER BY RANDOM() LIMIT ?", (number,))
         start_revision(c)
+ 
+ 
         
 def revise_collection(
     number: Optional[int] = None,
@@ -236,6 +240,7 @@ def revise_collection(
 #####################
 # QUIZ FUNCTIONS #      
 #####################
+# TODO @anay : update docstring with new format
 def start_quiz(c:Cursor, collection=None, quizType:str=None)->None:    # sourcery skip: remove-redundant-if
     """
     Starts the quiz.
@@ -336,6 +341,8 @@ def start_quiz(c:Cursor, collection=None, quizType:str=None)->None:    # sourcer
         # inserting quiz history into the database
         c.execute("INSERT INTO quiz_history (type, datetime, question_count,points,duration) values (?, ?, ?, ?, ?)", (quizType, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), len(rows), score, diff.seconds))
         c.close()         
+      
+      
         
 def quiz_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redundant-if
     """
@@ -517,7 +524,9 @@ def quiz_collection(
             return
         start_quiz(c, collection=collectionName, quizType=f"collection: {collectionName}")
         conn.commit()
-        
+  
+  
+# TODO @anay : docstrings missing        
 def show_quiz_history()->None:
     conn=createConnection()
     c=conn.cursor()

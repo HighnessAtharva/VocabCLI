@@ -103,6 +103,8 @@ def initializeDB()->None:
 
 
 # NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
+
+# TODO: ADD ASYNCIO MULTITHREADING TO THIS FUNCTION
 def refresh_cache()->None:
     """
     Refreshes the cache of the words in the database.

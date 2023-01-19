@@ -73,15 +73,18 @@ def show_slider() -> None:
             counter = 0
         imageLabel.config(image=image_list[counter])
         infoLabel.config(text=f"Image {str(counter + 1)} of {len(image_list)}")
+    
     # set up the components
     imageLabel = Label(root, image=image1)
     infoLabel = Label(
         root, text=f"Image 1 of {len(image_list)}", font="Helvetica, 20")
     button = Button(root, text="Change", width=20, height=2,
                     bg="purple", fg="white", command=ChangeImage)
+    
     # display the components
     imageLabel.pack()
     infoLabel.pack()
     button.pack(side="bottom", pady=3)
+    
     # run the main loop
     root.mainloop()
