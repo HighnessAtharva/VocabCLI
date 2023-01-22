@@ -535,8 +535,9 @@ def show_quiz_history()->None:
     if not rows:
         print("No quiz attempts yet. Take a quiz to see your quiz history.")
         return
-    # for row in rows:
-    #     print(row)
+    
+    #----------------- Table -----------------#
+
     table=Table(show_header=True, header_style="bold green")
     table.add_column("Quiz Type", style="cyan")
     table.add_column("Date & Time of Attempt")
@@ -550,3 +551,5 @@ def show_quiz_history()->None:
         table.add_row(row[0], history, score, duration)
         table.add_section()
     print(table)
+
+    #----------------- Table -----------------#

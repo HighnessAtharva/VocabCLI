@@ -84,6 +84,9 @@ def show_all_collections():
     c.execute(
         "SELECT count(word), collection FROM collections GROUP BY collection ORDER BY count(word) DESC")
     rows = c.fetchall()
+
+    #----------------- Table -----------------#
+
     table = Table(title="Collections")
     table.add_column("Words in Collection", justify="center",
                      style="cyan", no_wrap=True)
@@ -92,6 +95,8 @@ def show_all_collections():
     for row in rows:
         table.add_row(str(row[0]), row[1])
     print(table)
+
+    #----------------- Table -----------------#
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis
@@ -118,7 +123,12 @@ def show_words_from_collection(collectionName: str):
             f"Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [
             Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+        
+        #----------------- Columns -----------------#
+        
         print(Columns(rows, equal=True))
+
+        #----------------- Columns -----------------#
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis

@@ -12,14 +12,8 @@ app = typer.Typer(
     name="Vocabulary Builder",
     add_completion=False,
     rich_markup_mode="rich",
-    help=":book: [bold green]This is a dictionary and a vocabulary builder CLI.[/bold green]"
+    help="📕[bold green] This is a dictionary and a vocabulary builder CLI.[/bold green] VocabularyCLI is a lightweight Command Line Interface that allows users to look up word definitions, examples, synonyms and antonyms directly via the command line. Powered with several utility based commands our CLI offers rapid and robust Knowledge Base capabilities like Flashcards, Tagging, Word Management, Graph Reporting, Bulk import and export of word lists and is a definitive software for linguaphiles. This application boasts a simple and intuitive interface that is easy to use and is a must have for anyone who wants to expand their vocabulary and improve their language skills. The app also offers advanced Text Classification and Processing via the use of Natural Language Processing. The CLI will be offered with eye-catching Panels, Tables, Animated Symbols, Emojis, Interactive Menus, Spinners, Colored fonts and other rich features that will make the user experience more enjoyable and interactive." 
 )
-
-
-@app.command(rich_help_panel="Miscellaneous", help="👋🏼 [bold red]Exits[/bold red] the CLI")
-def bye():
-    print(Panel(":wave: [bold green]Bye bye![/bold green]"))
-    sys.exit(0)
 
 
 @app.command(rich_help_panel="Miscellaneous", help="🔄 Update the JSON response in the cache")
@@ -30,6 +24,13 @@ def refresh():
     from modules.Database import refresh_cache
     
     refresh_cache()
+
+
+@app.command(rich_help_panel="Miscellaneous", help="👋🏼 [bold red]Exits[/bold red] the CLI")
+def bye():
+    print(Panel("👋🏼 [bold green]Bye bye![/bold green]"))
+    sys.exit(0)
+
 
 @app.command(rich_help_panel="Miscellaneous", help="💻 [bold blue]About[/bold blue] the software")
 def about():
@@ -192,7 +193,7 @@ def unfavorite(
         set_unfavorite(word)
 
 
-@app.command(rich_help_panel="Word Management", help="✍🏼 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
+@app.command(rich_help_panel="Word Management", help="🎓 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]")
 def learn(
     words: List[str] = typer.Argument(..., help="Word to add to learning."),
 ):
@@ -304,7 +305,7 @@ def tag(
         add_tag(word, tag)
 
 
-@app.command(rich_help_panel="Word Management", help="✂ [bold red] Removes[/bold red] tag of a word in the dictionary")
+@app.command(rich_help_panel="Word Management", help="🔪[bold red] Removes[/bold red] tag of a word in the dictionary")
 def untag(
     words: List[str] = typer.Argument(..., help="Word to remove tag from"),
 ):
@@ -320,7 +321,7 @@ def untag(
         remove_tag(word)
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="📊 [bold blue]Learning Rate[/bold blue] gives the number of words you have learned in a particular time period with a comparison of a previous time period")
+@app.command(rich_help_panel="Vocabulary Builder", help="📈 Periodic comparison of words learned")
 def rate(
     today: bool = typer.Option(False, "--today", "-t", help="Get learning rate today"),
     week: bool = typer.Option(False, "--week", "-w", help="Get learning rate this week"),
@@ -720,7 +721,7 @@ def quiz(
                 renderable="Cannot combine these arguments")
         ) 
 
-@app.command(rich_help_panel="Stats", help="📚 Generate Graphical Charts based on your vocabulary")
+@app.command(rich_help_panel="Stats", help="📊 Generate Graphical Charts based on your vocabulary")
 def graph(
     topWordsBar: int = typer.Option(None, "--topwordsbar", "-twb", help="Bar Graph of Top N Most Looked Up Words", max=25, min=1),
     topTagsBar: int = typer.Option(None, "--toptagsbar", "-ttb", help="Bar Graph of Top N Tags with the most words.", max=25, min=1),
@@ -784,7 +785,7 @@ def graph(
         show_slider()
 
 
-@app.command(rich_help_panel="Text Processing & NLP", help="Filter out explicit words in a text or a webpage. Make it SFW!")
+@app.command(rich_help_panel="Text Processing & NLP", help="🧹 Filter out explicit words in a text or a webpage. Make it SFW!")
 def clean(
     content: str = typer.Argument(..., help="Text or URL to clean"),
     strict: bool = typer.Option(False, "--strict", "-s", help="Completely replace all bad words with asterisks."),
@@ -808,7 +809,7 @@ def summary(
         summarize_text(content)
         
 
-@app.command(rich_help_panel="Text Processing & NLP", help="📝 Extract Difficult Words from a text or a webpage.")
+@app.command(rich_help_panel="Text Processing & NLP", help="😯 Extract Difficult Words from a text or a webpage.")
 def hardwords(
     content: str = typer.Argument(..., help="Text or URL to extract difficult words from"),
 ):
@@ -816,7 +817,7 @@ def hardwords(
     extract_difficult_words(content)
     
 
-@app.command(rich_help_panel="Text Processing & NLP", help="📝 Get the Sentiment Analysis of a text or a webpage.")
+@app.command(rich_help_panel="Text Processing & NLP", help="😀😐😞 Get the Sentiment Analysis of a text or a webpage.")
 def sentiment(
     content: str = typer.Argument(..., help="Text or URL to get sentiment analysis from"),
 ):
@@ -824,7 +825,7 @@ def sentiment(
     sentiment_analysis(content)
     
     
-@app.command(rich_help_panel="Text Processing & NLP", help="📝 Get readability score of a text or a webpage.")
+@app.command(rich_help_panel="Text Processing & NLP", help="💯 Get readability score of a text or a webpage.")
 def readability(
     content: str = typer.Argument(..., help="Text or URL to get readability score from"),
 ):
@@ -832,7 +833,7 @@ def readability(
     readability_index(content)
 
 
-@app.command(rich_help_panel="Miscellaneous", help="📝 Add, View or Delete RSS feeds")
+@app.command(rich_help_panel="Miscellaneous", help="📰 Add, View or Delete RSS feeds")
 def rss(
     add: str = typer.Option(None, "--add", "-a", help="Add a new RSS feed."),
     list: bool = typer.Option(False, "--list", "-l", help="View all RSS feeds."),
@@ -853,7 +854,7 @@ def rss(
         typer.echo("🤷‍♀️ No option selected. Please select an option to continue.")
 
 
-@app.command(rich_help_panel="Miscellaneous", help="📝 Add, View, Search or Delete Delete Quotes")
+@app.command(rich_help_panel="Miscellaneous", help="✍🏼 Add, View, Search or Delete Delete Quotes")
 def quote(
     random: bool = typer.Option(False, "--random", "-r", help="Show a random quote from the saved list."),
     list: bool = typer.Option(False, "--list", "-l", help="Display all saved quotes."),
@@ -888,14 +889,14 @@ def quote(
             add_quote(quote=my_quote)
         
         
-@app.command(rich_help_panel="Stats", help="📝Get the streak of days you have looked up words.")
+@app.command(rich_help_panel="Stats", help="🔥 Get the streak of days you have looked up words.")
 def streak():
     
     from modules.Utils import show_streak
     show_streak()
     
     
-@app.command(rich_help_panel="Stats", help="📝Predict the milestone of words looked up via the app.")
+@app.command(rich_help_panel="Stats", help="🎯 Predict the milestone of words looked up via the app.")
 def milestone(
     milestone_number: int = typer.Argument(...,help="Number of words that marks a milestone."),
 ):
@@ -903,19 +904,19 @@ def milestone(
     predict_milestone(milestone_number)
     
     
-@app.command(rich_help_panel="Miscellaneous", help="📝 Get quote of the day.")
+@app.command(rich_help_panel="Miscellaneous", help="🔆 Get quote of the day.")
 def daily_quote():
     from modules.Quotes import get_quote_of_the_day
     get_quote_of_the_day()
     
     
-@app.command(rich_help_panel="Miscellaneous", help="📝 Get word of the day.")
+@app.command(rich_help_panel="Miscellaneous", help="😍 Get word of the day.")
 def daily_word():
     from modules.Dictionary import get_word_of_the_day
     get_word_of_the_day()    
 
 
-@app.command(rich_help_panel="Vocabulary Builder", help="📇 Generate flashcards for words in your learning list")
+@app.command(rich_help_panel="Vocabulary Builder", help="🎫 Generate flashcards for words in your learning list")
 def flashcard(
     all: bool = typer.Option(False, "--all", "-a", help="Generate flashcards for all words."),
     learning: bool = typer.Option(False, "--learning", "-l", help="Generate flashcards for words in learning list."),
@@ -943,7 +944,7 @@ def flashcard(
         print("Cannot combine options. Please select only one option.")
         
 
-@app.command(rich_help_panel="Vocabulary Builder", help="📇 Spell check your input sentences and find the misspelled words.")
+@app.command(rich_help_panel="Vocabulary Builder", help="🔠 Spell check your input sentences and find the misspelled words.")
 def spellcheck(text: str = typer.Argument(..., help="Text to spell check.")):
     """
     Spell check a word.

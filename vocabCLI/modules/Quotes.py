@@ -33,6 +33,9 @@ def get_quotes() -> None:
             Panel(
                 title="[b reverse green]  Your Quotes  [/b reverse green]", renderable=f"You have [bold green]{len(quotes)}[/bold green] quotes saved. 📚", title_align="center", padding=(1, 1)
             ))
+
+        #----------------- Table -----------------#
+        
         table = Table(
         show_header=True,
         header_style="bold gold3",
@@ -54,6 +57,9 @@ def get_quotes() -> None:
             table.add_row(quote_text, quote_author, quote_date)
             table.add_section()
         print(table)
+
+        #----------------- Table -----------------#
+
 
 # TODO @anay : update docstring with new format
 def add_quote(quote: str, author: Optional[str] = None)->None:
@@ -182,11 +188,13 @@ def search_quote(quoteText: str)->None:
         )
         return
             
-    print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+    print(Panel(title="[b reverse green]  Search Results  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b] 🔍")
         )
+
+    #----------------- Table -----------------#
 
     table = Table(
         show_header=True,
@@ -210,6 +218,9 @@ def search_quote(quoteText: str)->None:
         table.add_row(quote_text, quote_author, quote_date)
         table.add_section()
     print(table)
+
+    #----------------- Table -----------------#
+
 
 # TODO @anay : update docstring with new format
 def delete_quote()->None:
@@ -275,7 +286,7 @@ def delete_quote()->None:
 
         # delete the quote from the database
         c.execute("DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete)-1][0],))
-        print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} deleted successfully", title_align="center", padding=(1, 1)))
+        print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} [bold red]deleted[/bold red] successfully", title_align="center", padding=(1, 1)))
         conn.commit()
   
 # TODO @anay : update docstring with new format      
@@ -357,7 +368,7 @@ def delete_all_quotes()->None:
         
         if typer.confirm(""):
             c.execute("DELETE FROM quotes")
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+            print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="All quotes [bold red]deleted[/bold red] successfully ✅")

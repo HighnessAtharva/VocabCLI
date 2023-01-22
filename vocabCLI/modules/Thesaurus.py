@@ -58,7 +58,12 @@ def find_synonym(query: str) -> None:
                 f" [reverse bold green]Synonyms[/reverse bold green] of [bold blue underline]{query}[/bold blue underline] are 👇"))
             synonyms = [
                 Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True) for synonym in synonyms]
+
+            #----------------- Columns -----------------#
+
             print(Columns(synonyms))
+
+            #----------------- Columns -----------------#
 
         else:
             print(Panel(title="[b reverse red]  Error!  [/b reverse red]",
@@ -117,7 +122,12 @@ def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
                 f" [reverse bold red]Antonyms[/reverse bold red] of [bold blue underline]{query}[/bold blue underline] are 👇"))
             antonyms = [Panel(f"[red]{antonym}[red]", expand=True)
                         for antonym in antonyms]
+            
+            #----------------- Columns -----------------#
+            
             print(Columns(antonyms))
+
+            #----------------- Columns -----------------#
 
         else:
             print(Panel(title="[b reverse red]  Error!  [/b reverse red]",

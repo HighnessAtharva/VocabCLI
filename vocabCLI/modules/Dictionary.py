@@ -285,6 +285,8 @@ def definition(query:str, short:Optional[bool]=False) -> None:
 
         # print(response)
         print(Panel(f"[bold gold1]{query.upper()}[/bold gold1]\n{phonetic(query)}"))
+        
+        #----------------- Table -----------------#
 
         table=Table(show_header=True, header_style="bold bright_cyan")
         table.add_column("Part of Speech", style="cyan", width=15)
@@ -318,6 +320,9 @@ def definition(query:str, short:Optional[bool]=False) -> None:
                         table.add_row(f"\n{meaningNumber['partOfSpeech']}", f"\n{count}. {meaning['definition']}\n")
                 table.add_section()
             print(table)
+        
+        #----------------- Table -----------------#
+
             print("\n")
 
 
@@ -373,7 +378,13 @@ def say_aloud(query: str) -> None:
 
 
 def get_word_of_the_day() -> None:
-    """Get a word of the day from a public API and print its definition."""
+    """
+    Get a word of the day from a public API and print its definition.
+    1. Get the API key from the environment variables
+    2. Send a GET request to the Wordnik API to get the word of the day
+    3. Get the word from the response
+    4. Print the word & definition of the word of the day
+"""
 
     WORDNIK_API_KEY = os.getenv("WORDNIK_API_KEY")
     response = requests.get(f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={WORDNIK_API_KEY}").json()    

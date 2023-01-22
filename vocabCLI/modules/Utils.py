@@ -63,6 +63,9 @@ def fetch_word_history(word: str)-> None:
     with contextlib.suppress(WordNeverSearchedException):
         c.execute("SELECT datetime FROM words WHERE word=? ORDER by datetime DESC", (word,))
         rows=c.fetchall()
+
+        #----------------- Table -----------------#
+
         table=Table(show_header=True, header_style="bold green")
         table.add_column("History", style="cyan")
         if len(rows) <= 0:
@@ -75,6 +78,9 @@ def fetch_word_history(word: str)-> None:
             table.add_row(history)
             table.add_section()
         print(table)
+
+        #----------------- Table -----------------#
+
 
 # TODO @anay : update docstring with new format
 def add_tag(query: str, tagName:str)->None:
@@ -138,10 +144,10 @@ def remove_tag(query: str)->None:
             # word exists with tag
             c.execute("UPDATE words SET tag=NULL WHERE word=?", (query,))
             conn.commit()
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+            print(Panel(title="[b reverse green]  Tag Deleted!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Tags deleted for the word [bold blue]{query}[/bold blue]. ✅")
+                renderable=f"Tags [bold red]deleted[/bold red] for the word [bold blue]{query}[/bold blue]. ✅")
         )
         else:
             print(Panel(title="[b reverse red]  Error!  [/b reverse red]", 
@@ -341,7 +347,7 @@ def set_unlearning(query: str)->None:
 
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold blue]{query}[/bold blue] has been removed from [bold red]learning[/bold red]. ✅")
@@ -410,7 +416,7 @@ def set_unfavorite(query:str)->None:
 
     if c.rowcount > 0:
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold blue]{query}[/bold blue] has been removed from [bold red]favorite[/bold red]. ✅")
@@ -736,6 +742,9 @@ def show_list(
                 renderable=error_message)
         )
         else:
+
+            #----------------- Table -----------------#
+
             table=Table(show_header=True, header_style="bold bright_cyan")
             table.add_column("Word", style="cyan", width=15)
             table.add_column("Last searched on", style="light_green")
@@ -744,6 +753,9 @@ def show_list(
                 table.add_row(row[0], row[1])
                 table.add_section()
             print(table)
+
+            #----------------- Table -----------------#
+
         return
 
     elif most:
@@ -767,6 +779,9 @@ def show_list(
                 renderable=error_message)
         )
         else:
+            
+            #----------------- Table -----------------#
+
             table=Table(show_header=True, header_style="bold bright_cyan")
             table.add_column("Word", style="cyan", width=15)
             table.add_column("Times searched", style="light_green")
@@ -775,6 +790,9 @@ def show_list(
                 table.add_row(row[0], str(row[1]))
                 table.add_section()
             print(table)
+
+            #----------------- Table -----------------#
+
         return
 
     elif tagnames:
@@ -797,7 +815,12 @@ def show_list(
     else:
         print(Panel(f"{success_message} [bold blue][{len(rows)} word(s)][/bold blue]"))
         rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+        
+        #----------------- Columns -----------------#
+        
         print(Columns(rows, equal=True, expand=True))
+
+        #----------------- Columns -----------------#
 
  
 def delete_all()->None:
@@ -841,7 +864,7 @@ def delete_mastered()->None:
         
         c.execute("DELETE FROM words WHERE mastered=1")
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"All [bold green]mastered[/bold green] words [{rowcount}] [bold red]deleted[/bold red] from your lists. ✅")
@@ -889,7 +912,7 @@ def delete_favorite()->None:
         
         c.execute("DELETE FROM words WHERE favorite=1")
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"All [bold gold1]favorite[/bold gold1] words [{rowcount}][bold red] deleted[/bold red] from your lists. ✅")
@@ -941,7 +964,7 @@ def delete_word(query:List[str])->None:
     c.execute(sql, (query,))
     if c.rowcount>0:
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"Word [bold u]{query}[/bold u][bold red] deleted[/bold red] from your lists. ✅")
@@ -985,7 +1008,7 @@ def clear_mastered()->None:
         if c.rowcount <= 0:
             raise NoWordsInMasteredListException()
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable="[bold green]All words[/bold green] have been removed from [bold red]mastered[/bold red]. ✅")
@@ -1033,7 +1056,7 @@ def clear_all_words_from_tag(tagName:str)->None:
         if c.rowcount <= 0:
             raise NoSuchTagException(tag=tagName)
         conn.commit()
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Delete Successful! [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]All words[/bold green] have been removed from the tag {tagName}. ✅")

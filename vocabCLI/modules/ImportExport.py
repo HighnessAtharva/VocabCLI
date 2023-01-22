@@ -10,7 +10,12 @@ import os
 
 # TODO @anay : update docstring with new format
 def export_to_csv()->None:
-    """Export words to csv file."""
+    """
+    Export words to csv file.
+    
+    Raises:
+        NoDataFoundException: If no words are found in the database.
+    """
     conn= createConnection()
     c=conn.cursor()
     
@@ -32,7 +37,7 @@ def export_to_csv()->None:
             writer = csv.writer(file)
             writer.writerow([ "word", "datetime", "tag", "mastered", "learning", "favorite"])
             writer.writerows(words)
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Export Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(words)}[/bold blue] words to [bold blue]WORDS.csv[/bold blue] file 📁")
@@ -58,7 +63,7 @@ def export_to_csv()->None:
             writer = csv.writer(file)
             writer.writerow([ "quote", "author", "datetime"])
             writer.writerows(quotes)
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+        print(Panel(title="[b reverse green]  Export Successful!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(quotes)}[/bold blue] quotes to [bold blue]QUOTES.csv[/bold blue] file 📁")
@@ -83,7 +88,7 @@ def export_to_csv()->None:
             writer = csv.writer(file)
             writer.writerow([ "title", "link", "description", "datetime"])
             writer.writerows(rss)
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+        print(Panel(title="[b reverse green]  Export Successful!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(rss)}[/bold blue] rss feeds to [bold blue]RSS.csv[/bold blue] file 📁")
@@ -110,7 +115,7 @@ def export_to_csv()->None:
             writer = csv.writer(file)
             writer.writerow([ "type", "datetime", "question_count", "points", "duration"])
             writer.writerows(quiz_history)
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+        print(Panel(title="[b reverse green]  Export Successful!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(quiz_history)}[/bold blue] quiz history to [bold blue]QUIZ_HISTORY.csv[/bold blue] file 📁")
@@ -119,9 +124,21 @@ def export_to_csv()->None:
         print("No quiz history found in the database. ❌")
 
 
-# TODO @anay : update docstring with new format
+
 def import_from_csv()->None:
-    """Import words from csv file."""
+    """Import words from csv file.
+    1. Open the csv file
+    2. Get the csv reader
+    3. Skip the header
+    4. For each row in the csv file
+    5. Try to add the word to the database
+    6. If the word already exists in the database with the same timestamp, increment the word_already_exists counter
+    7. If the word does not exist in the database, increment the added_words counter
+    8. If the csv file is not found, print an error message
+
+    Raises:
+        NoDataFoundException: If no words are found in the csv file.
+    """
 
     conn= createConnection()
     c=conn.cursor()
@@ -170,7 +187,7 @@ def import_from_csv()->None:
         )
 
         if added_words>0:
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+            print(Panel(title="[b reverse green]  Import Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_words}[/bold blue] WORD(S) ✅")
@@ -179,7 +196,20 @@ def import_from_csv()->None:
     # ==================================#
     # IMPORT RSS FEEDS FROM CSV FILE    #
     # ==================================#
-    
+    """ 
+    Import rss feeds from csv file.
+    1. Open the csv file
+    2. Get the csv reader
+    3. Skip the header
+    4. For each row in the csv file
+    5. Try to add the rss feed to the database
+    6. If the rss feed already exists in the database with the same timestamp, increment the rss_already_exists counter
+    7. If the rss feed does not exist in the database, increment the added_rss counter
+    8. If the csv file is not found, print an error message
+
+    Raises:
+        NoDataFoundException: If no rss feeds are found in the csv file.
+    """
     added_rss=0
     rss_already_exists=0
             
@@ -215,7 +245,7 @@ def import_from_csv()->None:
         )
             
         if added_rss>0:
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+            print(Panel(title="[b reverse green]  Import Successful!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
                     renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_rss}[/bold blue] rss feeds from [bold blue]RSS.csv[/bold blue] file 📁")
@@ -226,7 +256,20 @@ def import_from_csv()->None:
     # ==================================#
     # IMPORT QUOTES FROM CSV FILE       #
     # ==================================#
-    
+    """ 
+    Import quotes from csv file.
+    1. Open the csv file
+    2. Get the csv reader
+    3. Skip the header
+    4. For each row in the csv file
+    5. Try to add the quote to the database
+    6. If the quote already exists in the database with the same timestamp, increment the quote_already_exists counter
+    7. If the quote does not exist in the database, increment the added_quotes counter
+    8. If the csv file is not found, print an error message
+
+    Raises:
+        NoDataFoundException: If no quotes are found in the csv file.
+    """
     added_quotes=0
     quote_already_exists=0
      
@@ -265,7 +308,7 @@ def import_from_csv()->None:
         )
             
         if added_quotes>0:
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+            print(Panel(title="[b reverse green]  Import Successful!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
                     renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_quotes}[/bold blue] quotes from [bold blue]QUOTES.csv[/bold blue] file 📁")
@@ -275,7 +318,20 @@ def import_from_csv()->None:
     # ==================================#
     # IMPORT QUIZ HISTORY FROM CSV FILE #
     # ==================================#
+    """ 
+    Import quiz history from csv file.
+    1. Open the csv file
+    2. Get the csv reader
+    3. Skip the header
+    4. For each row in the csv file
+    5. Try to add the quiz history to the database
+    6. If the quiz history already exists in the database with the same timestamp, increment the quiz_history_already_exists counter
+    7. If the quiz history does not exist in the database, increment the added_quiz_history counter
+    8. If the csv file is not found, print an error message
     
+    Raises:
+        NoDataFoundException: If no quiz history is found in the csv file.
+    """
     added_quiz_history=0
     quiz_history_already_exists=0
      
@@ -309,7 +365,7 @@ def import_from_csv()->None:
         )
             
         if added_quiz_history>0:
-            print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+            print(Panel(title="[b reverse green]  Import Successful!  [/b reverse green]",
                     title_align="center",
                     padding=(1, 1),
                     renderable=f"[bold green]IMPORTED[/bold green] [bold blue]{added_quiz_history}[/bold blue] quiz history from [bold blue]QUIZ_HISTORY.csv[/bold blue] file 📁")
@@ -336,9 +392,18 @@ class PDF(FPDF):
         self.cell(0, 10, f'Page {str(self.page_no())}', 0, 0, 'C')
 
 
-# TODO @anay : update docstring with new format
+
 def export_to_pdf()->None:    # sourcery skip: extract-method
-    """Export words to pdf file."""
+    """Export words to pdf file.
+    1. Create a pdf file
+    2. Sets all the attributes (colour, font, size, etc.)
+    3. Execute a query to select all words from the database
+    4. If there are no rows, raise NoDataFoundException
+    5. Create a cell for respective column and fill it with the data
+
+    Raises:
+        NoDataFoundException: If no words are found in the database.
+    """
     try:
         pdf=PDF('P', 'mm', 'A4')
         pdf.set_fill_color(r=152, g=251, b=152)
@@ -385,7 +450,7 @@ def export_to_pdf()->None:    # sourcery skip: extract-method
             os.makedirs('exports')
         
         pdf.output(f"exports/VocabularyWords[{datetime.now().strftime('%d_%b_%Y')}].pdf")
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]", 
+        print(Panel(title="[b reverse green]  Export Successful!  [/b reverse green]", 
                 title_align="center",
                 padding=(1, 1),
                 renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(rows)}[/bold blue] WORDS TO PDF ✅")

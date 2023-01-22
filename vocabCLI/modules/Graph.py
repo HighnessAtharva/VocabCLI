@@ -414,7 +414,7 @@ def viz_word_distribution_year(popup:bool=False):
 
 
 
-# TODO @anay : # TODO @anay : update docstring with new format
+# TODO @anay : update docstring with new format
 def viz_learning_vs_mastered(popup:bool=False)->None:
     """ 
     Visualizes the distribution of words by learning and mastered. 

@@ -102,6 +102,8 @@ def get_all_feeds()->None:
             if not rows:
                 raise NoRSSFeedsException()
 
+            #----------------- Table -----------------#
+
             table = Table(
                 show_header=True,
                 header_style="bold gold3",
@@ -124,7 +126,9 @@ def get_all_feeds()->None:
                 table.add_row("\n", "\n", "\n", "\n")
                 table.add_section()
             print(table)
-            
+
+            #----------------- Table -----------------#
+
         except NoRSSFeedsException as e:
             print(e)
             
@@ -177,7 +181,7 @@ def remove_feed()->None:
     # remove feed from database
     c.execute("DELETE FROM rss WHERE title=?", (feed_name,))
     conn.commit()
-    print(Panel(title="[b reverse green]  Success!  [/b reverse green]",renderable=f"Feed {feed_name} removed successfully ✅"))
+    print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]",renderable=f"Feed {feed_name} [bold red]deleted[/bold red] successfully ✅"))
 
 
 def remove_html_tags(html: str)->str:
@@ -230,7 +234,9 @@ def check_feed_for_new_content(title:str)->None:
 
         for row in rows:
             feed = feedparser.parse(row[1])
-            
+
+            #----------------- Table -----------------#
+
             table = Table(
                 show_header=True,
                 header_style="bold gold3",
@@ -271,6 +277,8 @@ def check_feed_for_new_content(title:str)->None:
                 table.add_section()
 
             print(table)
+
+            #----------------- Table -----------------#
 
 # add_feed(url="https://www.reddit.com/r/Python/.rss")
 # add_feed(url="https://pitchfork.com/rss/reviews/best/albums/")
