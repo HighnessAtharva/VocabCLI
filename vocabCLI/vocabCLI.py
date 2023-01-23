@@ -453,7 +453,7 @@ def history(
         fetch_word_history(word)
 
 
-@app.command(rich_help_panel="Word Management", help="🚮 Deletes the word from the database")
+@app.command(rich_help_panel="Word Management", help="🚮 [bold red]Deletes[/bold red] the word from the database")
 def delete(
     words: List[str] = typer.Argument(None, 
     help="🚮 Word to be [bold red]deleted[/bold red]"),

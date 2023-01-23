@@ -343,13 +343,21 @@ def one_line_definition(query:str) -> str:
 
 
 
-# TODO @anay : update docstring with new format
 def say_aloud(query: str) -> None:
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
+    1. The function say_aloud first calls the function connect_to_api which takes query (str) as argument and returns the response (dict) if successful or None if unsuccessful.
+    2. The function say_aloud then checks if the audio is available or not.
+    3. If the audio is available, the function say_aloud then downloads the audio file and plays it.
+    4. If the audio is not available, the function say_aloud then raises the AudioUnavailableException.
+    5. The function say_aloud then deletes the audio file.
+    6. The function say_aloud then prints the phonetic (str) of the word.
 
     Args:
         query (str): Word to be pronounced.
+
+    Raises:
+        AudioUnavailableException: Raised when the audio is not available.
 
     """
     

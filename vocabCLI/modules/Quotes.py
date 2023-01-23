@@ -340,10 +340,13 @@ def get_quote_of_the_day()->None:
     )
 
 
-# TODO @anay : update docstring with new format
+
 def delete_all_quotes()->None:
     """
     Deletes all quotes from the database.
+    1. Display a warning message & prompt the user to confirm the deletion
+    2. Delete all quotes from the database
+    3. Display a success message
     """
 
     conn = createConnection()

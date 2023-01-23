@@ -17,10 +17,14 @@ from bs4 import BeautifulSoup
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
-# TODO @anay : update docstring with new format
 def add_feed(url:str)->None:
     """
     Add the feed to the database
+    1. Feed parser is used to parse the feed
+    2. If the feed is not found, print error message
+    3. Check if the feed exists in the database
+    4. If it does not exist, add it to the database
+    5. If it does exist, print error message
     
     Args:
         url (str): The URL of the feed
@@ -76,9 +80,15 @@ def add_feed(url:str)->None:
 
         print(Panel(title="[b reverse]  Feed added successfully ✅  [/b reverse]",renderable=f"Title:  {feed.feed.title}\n\nLink:  {feed.feed.link}\n\nSummary: {feed.feed.description}"))
 
-# TODO @anay : update docstring with new format
+
+
 def get_all_feeds()->None:
-    """Get the feed details from the database"""
+    """
+    Get the feed details from the database
+    1. Get all feeds from the database
+    2. If no feeds exist, print error message
+    3. Print the feeds in a table
+    """
 
     # ----------------- Spinner -----------------#
     with Progress(
@@ -132,9 +142,17 @@ def get_all_feeds()->None:
         except NoRSSFeedsException as e:
             print(e)
             
-# TODO @anay : update docstring with new format
+
+
 def remove_feed()->None:
-    """Remove the feed from the database"""
+    """
+    Remove the feed from the database
+    1. Get all feeds from the database
+    2. If no feeds exist, print error message
+    3. Print the feeds in a table
+    4. Ask the user to select the feed to remove
+    5. Remove the feed from the database
+    """
 
     conn = createConnection()
     c = conn.cursor()
@@ -200,10 +218,15 @@ def remove_html_tags(html: str)->str:
 
 
 
-# TODO @anay : update docstring with new format
+
 def check_feed_for_new_content(title:str)->None:
     """
     Parse the feed and check for new content
+    1. Check if the feed exists in the database
+    2. If the feed does not exist, print error message
+    3. If the feed exists, parse the feed and check for new content
+    4. If new content is found, print the new content
+    5. If no new content is found, print error message
     
     Args:
         title (str): Title of the feed

@@ -69,13 +69,20 @@ def start_revision(c: Cursor, is_collection: bool = False)->None:
     #             renderable="No words to revise in the selected category. Look up some more words first by using 'define' command.")
     #     )
         
-# TODO @anay : update docstring with new format
+
+
 def revise_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redundant-if
     """ 
     Revise all words in the database.
+    1. If number is not specified, then all words are revised.
+    2. If number is specified, then only that many words are revised.
+    3. If there are no words in the database, then an exception is raised.
 
     Args:
         number: number of words to revise, default is None.
+
+    Raises:
+        NoWordsInDBException: if there are no words in the database.
     """
 
     conn=createConnection()
@@ -526,8 +533,15 @@ def quiz_collection(
         conn.commit()
   
   
-# TODO @anay : docstrings missing        
+        
 def show_quiz_history()->None:
+    """
+    Show quiz history.
+    1. Execute SQL SELECT statement to get all the rows from the quiz_history table.
+    2. If there are no rows, print a message and return.
+    3. Else print the quiz history in a table. 
+    """
+
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT * FROM quiz_history ORDER BY datetime DESC")

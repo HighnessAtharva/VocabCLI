@@ -8,14 +8,25 @@ from rich.panel import Panel
 import os
 
 
-# TODO @anay : update docstring with new format
 def export_to_csv()->None:
     """
     Export words to csv file.
+    1. Create a connection to the database.
+    2. Create a cursor object.
+    3. Execute a SELECT query to fetch all the words from the database.
+    4. Write the words to a csv file.
+    5. Execute a SELECT query to fetch all the quotes from the database.
+    6. Write the quotes to a csv file.
+    7. Execute a SELECT query to fetch all the rss feeds from the database.
+    8. Write the rss feeds to a csv file.
+    9. Execute a SELECT query to fetch all the quiz history from the database.
+    10. Write the quiz history to a csv file.
+    11. Close the connection.
     
     Raises:
         NoDataFoundException: If no words are found in the database.
     """
+
     conn= createConnection()
     c=conn.cursor()
     
