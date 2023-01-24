@@ -174,7 +174,7 @@ def remove_feed()->None:
         print("Link: ", row[1])
         print("Summary:", row[2])
         print("Date added:", datetime.datetime.strptime(
-            row[3], "%Y-%m-%d %H:%M:%S").strftime("%d %b \'%y | %H:%M"))
+            row[3], "%Y-%m-%d %H:%M").strftime("%d %b \'%y | %H:%M"))
         print()
 
     print(Panel("Enter the index of the feed you want to remove!"))

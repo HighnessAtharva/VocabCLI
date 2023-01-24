@@ -6,7 +6,7 @@ from unittest import mock
 def test_bye(runner):
     result = runner.invoke(app, ["bye"])
     assert result.exit_code == 0
-    assert "👋 Bye bye!" in result.stdout
+    assert "Bye bye!" in result.stdout
 
 # TODO: Add tests for the about command
 
@@ -41,15 +41,38 @@ def test_streak_multiple_days(runner):
     pass
 
 
+@mock.patch("typer.confirm")
+def test_milestone_no_words( mock_typer, runner):
+    mock_typer.return_value = True
+    runner.invoke(app, ["delete"])
+    result=runner.invoke(app, ["milestone", "10"])
+    assert result.exit_code == 0
+    assert "Cannot predict milestone as you have not looked up any words yet." in result.stdout
+    
+def test_milestone_day_one(runner):
+    runner.invoke(app, ["define", "math", "school"])
+    result=runner.invoke(app, ["milestone", "10"])
+    assert result.exit_code == 0
+    assert "Keep learning words to get a prediction." in result.stdout
 
-def test_milestone(runner):
-    pass
 
-def test_milestone_no_words(runner):
+def test_milestone_day_two(runner):
+    # TODO: HOW TO MOCK THE DATE?    
     pass
+    # runner.invoke(app, ["define", "math", "school"])
+    # result=runner.invoke(app, ["milestone", "10"])
+    # assert result.exit_code == 0
+    # assert "You have been learning" in result.stdout
+    # assert "You have learnt" in result.stdout
+    # assert "Based on your current word lookup rate, you will reach 10" in result.stdout
+
+
 
 def test_milestone_already_reached(runner):
-    pass
+    # TODO:  Causes zero division error due to average_words_per_day=learning_count/(datetime.datetime.now()-first_date).days
+    result=runner.invoke(app, ["milestone", "2"])
+    assert result.exit_code == 0
+    assert "You have already reached 2 words" in result.stdout
 
 
 
@@ -76,4 +99,8 @@ def test_spell_checker_no_mispelling(runner):
     pass
 
 def test_spell_checker_with_proper_nouns(runner):
+    pass
+
+
+def test_refresh_cache(runner):
     pass

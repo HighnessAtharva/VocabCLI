@@ -1224,37 +1224,51 @@ def predict_milestone(milestone: int)->None:
     
     conn=createConnection()
     c=conn.cursor()
-    c.execute("SELECT COUNT(DISTINCT word) FROM words")
-    learning_count=c.fetchone()[0]
     
-    # if user has already reached milestone
-    if milestone-learning_count<=0:
-        print(Panel(f"👏🏻 You have already reached [bold green]{milestone}[/bold green] words.", title="[reverse]Milestone Prediction[/reverse]", title_align="center",padding=(1, 1)))
-    else:
-        # get the date of the most recent word looked up
-        c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")
-        last_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+    c.execute("SELECT DISTINCT word FROM words")
+    
+    with contextlib.suppress(NoWordsInDBException):
+        if not c.fetchone():
+            print(Panel("Cannot predict milestone as you have not looked up any words yet."))
+            raise NoWordsInDBException()
         
-        # get the date of the first word looked up
-        c.execute("SELECT date(datetime) FROM words ORDER BY datetime ASC LIMIT 1")
-        first_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+        c.execute("SELECT COUNT(DISTINCT word) FROM words")
         
+        learning_count=c.fetchone()[0]
         
-        # average words per day
-        average_words_per_day=learning_count/(datetime.datetime.now()-first_date).days
-        average_words_per_day=round(average_words_per_day, 2)
-        
-        # calculate date to reach milestone based on average words per day
-        milestone_date=datetime.datetime.now()+datetime.timedelta(days=(milestone-learning_count)/average_words_per_day)
-        
-        # print average words per day
-        print(
-            Panel(
-                f"You have been learning [bold green]{average_words_per_day}[/bold green] words on average per day. 🤔\n\nYou have learnt: {learning_count} words. Just {milestone-learning_count} more to go! 🚵🏻\n\nBased on your current word lookup rate, you will reach [bold green]{milestone}[/bold green] words on [bold green]{milestone_date.strftime('%d %B %Y')}[/bold green].", title="[reverse]Milestone Prediction[/reverse]", 
-                title_align="center",
-                padding=(1, 1)
-                )
-            )
+        # if user has already reached milestone
+        if milestone-learning_count<=0:
+            print(Panel(f"👏🏻 You have already reached [bold green]{milestone}[/bold green] words.", title="[reverse]Milestone Prediction[/reverse]", title_align="center",padding=(1, 1)))
+        else:
+            # get the date of the most recent word looked up
+            c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")
+            last_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+            
+            # get the date of the first word looked up
+            c.execute("SELECT date(datetime) FROM words ORDER BY datetime ASC LIMIT 1")
+            first_date=datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+            
+            
+            # average words per day
+            try:
+                average_words_per_day=learning_count/(datetime.datetime.now()-first_date).days
+                average_words_per_day=round(average_words_per_day, 2)
+           
+                
+            
+                # calculate date to reach milestone based on average words per day
+                milestone_date=datetime.datetime.now()+datetime.timedelta(days=(milestone-learning_count)/average_words_per_day)
+                
+                # print average words per day
+                print(
+                    Panel(
+                        f"You have been learning [bold green]{average_words_per_day}[/bold green] words on average per day. 🤔\n\nYou have learnt: {learning_count} words. Just {milestone-learning_count} more to go! 🚵🏻\n\nBased on your current word lookup rate, you will reach [bold green]{milestone}[/bold green] words on [bold green]{milestone_date.strftime('%d %B %Y')}[/bold green].", title="[reverse]Milestone Prediction[/reverse]", 
+                        title_align="center",
+                        padding=(1, 1)
+                        )
+                    )
+            except ZeroDivisionError:
+                print(Panel("Keep learning words to get a prediction."))
         
 
     
