@@ -22,10 +22,18 @@ from questionary import Style
 #####################
 # REVISE FUNCTIONS #         
 #####################
-# TODO @anay : update docstring with new format
+
 def start_revision(c: Cursor, is_collection: bool = False)->None:
     """ 
     Starts the revision process. 
+    1. Fetches all the words in the collection from the database
+    2. For each word in the collection, it prints out the word and its definition
+    3. It asks the user if they want to set the word as learning
+    4. If the user says yes, then the word is set as learning
+    5. If the user says no, then the user is asked if they want to set the word as mastered
+    6. If the user says yes, then the word is set as mastered
+    7. If the user says no, then the user is asked if they want to stop revising
+    8. If the user says yes, then the program stops revising, else it continues revising
     
     Args:
         c: cursor object
@@ -247,10 +255,21 @@ def revise_collection(
 #####################
 # QUIZ FUNCTIONS #      
 #####################
-# TODO @anay : update docstring with new format
+
 def start_quiz(c:Cursor, collection=None, quizType:str=None)->None:    # sourcery skip: remove-redundant-if
     """
     Starts the quiz.
+    1. Fetches all the words in the collection or in the database, depending on the quiz type.
+    2. Breaks out if the collection has less than 4 words, as the minimum number of words in a quiz is 4.
+    3. Sets the style of the quiz.
+    4. Initializes the score and timer.
+    5. Iterates over the words in the collection/database.
+    6. Sets up the question.
+    7. Fetches the correct answer for the question.
+    8. Sets up the list of choices. If the quiz type is collection, the list of choices is made up of the correct answer and three fake answers from the collection. Otherwise, the list of choices is made up of the correct answer and three fake answers from the database.
+    9. Asks the question to the user and checks if the answer is correct.
+    10. If the answer is correct, increases the score and prints the success message. Otherwise, prints the failure message.
+    11. Prints the quiz summary and inserts the quiz history into the database.
 
     Args:
         c: cursor object.
@@ -377,6 +396,7 @@ def quiz_all(number: Optional[int] = None)->None:  # sourcery skip: remove-redun
         c.execute("SELECT DISTINCT word FROM words ORDER BY RANDOM() LIMIT ?", (number,))
         start_quiz(c, quizType="all words")
         conn.commit()
+
 
 def quiz_tag(
     number: Optional[int] = None,

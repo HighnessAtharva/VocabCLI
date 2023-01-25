@@ -6,14 +6,24 @@ import textwrap
 import random
 from rich.progress import track
 
-# TODO @anay : update docstring with new format
+
 def flashcard_definition(query: str) -> str:
     # sourcery skip: use-contextlib-suppress
     """
-    Returns the definition of the word from the cache
+    Returns the definition of the word from the cache.
+    1. Execute a query that selects the api_response column from the cache_words table where the word column is equal to the query
+    2. Load the api_response column as a JSON object
+    3. Create an empty dictionary
+    4. Loop through each meaning in the meanings array
+    5. For each meaning, loop through the first 3 definitions
+    6. For each definition, add it to the dictionary with the key being the definition and the value being the example if it exists
+    7. Return the first 3 definitions and examples
 
     Args:
         query (str): The word to be searched
+
+    Returns:
+        str: The definition of the word
     """
 
     conn = createConnection()
@@ -35,10 +45,15 @@ def flashcard_definition(query: str) -> str:
     return {k: defs_and_examples[k] for k in list(defs_and_examples)[:3]}
 
 
-# TODO @anay : update docstring with new format
+
 def interpolate(black, random_color, interval):
     """
     Interpolate between two colors.
+    1. It calculates the difference between the two colors
+    2. It divides the difference by the number of steps
+    3. It adds the difference to the black color each time it moves one step
+    4. It returns the new color, rounded to the nearest integer
+    5. It does this for each step
     
     Args:
         black (tuple): The first color

@@ -17,9 +17,18 @@ from rich.panel import Panel
 # VISUALIZATION FUNCTIONS
 ################################
 
-# TODO @anay : update docstring with new format
+
 def viz_top_words_bar(N:int=10, popup:bool=False)->None:
-    """Visualize the top N words looked up by the user
+    """
+    Visualize the top N words looked up by the user
+    1. Get the top N words and their word count from the database and store them in a list
+    2. If no words are found, print an error message and return
+    3. If there are less words than the number we want to display, print a warning message
+    4. Create a dataframe from the list
+    5. Set the style of the graph
+    6. Plot the graph
+    7. Export the graph to a png file
+    8. If popup is True, show the graph in a popup window
     
     Args:
         N (int, optional): Number of words to visualize. Defaults to 10.
@@ -78,10 +87,20 @@ def viz_top_words_bar(N:int=10, popup:bool=False)->None:
                         padding=(1, 1)))
         plt.show()
 
-# TODO @anay : update docstring with new format
+
+
 def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
+    1. Get the top N tags and their word count from the database and store them in a list
+    2. If no words are found, print an error message and return
+    3. If there are less words than the number we want to display, print a warning message
+    4. Create a dataframe from the list
+    5. Set the style of the graph
+    6. Plot the graph
+    7. Export the graph to a png file
+    8. If popup is True, show the graph in a popup window
+
 
     Args:
         N (int, optional): Number of top tags to visualize . Defaults to 10.
@@ -142,8 +161,22 @@ def viz_top_tags_bar(N:int=10, popup:bool=False)->None:
         plt.show()
 
 
-# TODO @anay : update docstring with new format
+
 def viz_top_words_pie(N:int=10, popup:bool=False)->None:
+    """
+    Visualizes the top N words with the most lookups.
+    1. Create a cursor and execute a query to fetch the word and the count of the word from the database
+    2. If no words are found, print an error message and return
+    3. If there are less words than the number we want to display, print a warning message
+    4. Create a dataframe using the top words and their counts
+    5. Create a pie chart using matplotlib and seaborn and save it to a file
+    6. If the popup parameter is True, display the pie chart using matplotlib 
+
+    Args:
+        N (int, optional): Number of top words to visualize . Defaults to 10.
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.
+    """
+
     conn=createConnection()
     c=conn.cursor()
     c.execute("SELECT word, COUNT(*) FROM words GROUP BY word ORDER BY COUNT(*) DESC LIMIT ?", (N,))
@@ -187,10 +220,20 @@ def viz_top_words_pie(N:int=10, popup:bool=False)->None:
             padding=(1, 1)))
         plt.show()
     
-# TODO @anay : update docstring with new format
+
+
 def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
     """
     Visualizes the top N tags with the most words.
+    1. Execute a SQL query to get the count of each tag. The query returns a list of tuples, where the first element is the tag and the second is the count.
+    2. If no words are found, print an error message and return
+    3. If there are less words than the number we want to display, print a warning message
+    4. Create a dataframe from the list of tags and the list of counts.
+    5. Set the theme of the plot.
+    6. Create a pie chart using the dataframe.
+    7. Save the plot in a file.
+    8. Check if the directory exists, if not create it.
+    9. Show the plot on screen if the popup argument is true. 
 
     Args:
         N (int, optional): Number of top tags to visualize . Defaults to 10.
@@ -243,11 +286,18 @@ def viz_top_tags_pie(N:int=10, popup:bool=False)->None:
                     padding=(1, 1)))
         plt.show()
 
-# TODO @anay : update docstring with new format
+
+
 # BUG days of the week is buggy, week range is not properly set
 def words_distribution_week_util()->tuple[list, list]:
     """
     Returns the distribution of words by day of the week.
+    1. Create a dictionary with numbers as keys and weekdays as values.
+    2. Create two lists, one for weekdays and one for word count.
+    3. Query the database for word count for each day in the current week.
+    4. Loop through the results and assign the weekday to the list.
+    5. Assign the word count to the list.
+    6. Return the two lists.
 
     Returns:
         list: list of days of the week.
@@ -274,11 +324,17 @@ def words_distribution_week_util()->tuple[list, list]:
     return days_of_week, word_count
 
 
-# TODO @anay : update docstring with new format
+
 # BUG 🐞 Graph does not show the entire week
 def viz_word_distribution_week(popup:bool=False)->None:
     """
     Visualizes the distribution of words by day of the week.
+    1. Create a dataframe from a list of tuples (day, count).
+    2. Set the style of the graph.
+    3. Plot the graph with the dataframe.
+    4. Set the title, x and y labels, x and y ticks.
+    5. Save the graph.
+    5. Show the graph in a popup window if popup is True. 
 
     Args:
         popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.
@@ -314,10 +370,14 @@ def viz_word_distribution_week(popup:bool=False)->None:
         plt.show()
 
 
-# TODO @anay : update docstring with new format
+
 def word_distribution_month_util()->tuple[list, list]:
     """
     Returns the distribution of word by dates of month.
+    1. Determine current year, current month and next month.
+    2. Determine total number of days in current month.
+    3. Get unformatted datestrings for each day in current month.
+    4. Get word count for each day in current month.
 
     Returns:
         list: List of dates of month.
@@ -360,10 +420,20 @@ def word_distribution_month_util()->tuple[list, list]:
 
     return dates, word_count
 
-# TODO @anay : update docstring with new format
+
+
 def viz_word_distribution_month(popup:bool=False)->None:
     """ 
-    Visualizes the distribution of words by dates of month. 
+    Visualizes the distribution of words by dates of month.
+    1. Get the data from the function word_distribution_month_util() which is a list of:
+        a. Dates
+        b. Word count
+    2. Create a dataframe from the list
+    3. Set the style of the graph
+    4. Plot the graph
+    5. Set the graph title, x and y axis labels, and x axis tick labels
+    6. Save the graph to the folder 'exports'
+    7. If popup is True, show the graph in a popup window    
     
     Args:
         popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.    
@@ -414,10 +484,14 @@ def viz_word_distribution_year(popup:bool=False):
 
 
 
-# TODO @anay : update docstring with new format
 def viz_learning_vs_mastered(popup:bool=False)->None:
     """ 
-    Visualizes the distribution of words by learning and mastered. 
+    Visualizes the distribution of words by learning and mastered.
+    1. Count number of words in learning and mastered.
+    2. Set the style of the graph.
+    3. Plot a pie chart.
+    4. Export the graph as png.
+    5. Show the graph in a popup window if popup=True. 
     
     Args:
         popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.    
@@ -467,8 +541,22 @@ def viz_learning_vs_mastered(popup:bool=False)->None:
             padding=(1, 1)))
         plt.show()
     
-# TODO @anay : docstrings missing
+
+
 def viz_word_distribution_category(popup:bool=False)->None:
+    """
+    Visualizes the distribution of words by category.
+    1. Selects the collection column and the word count from the words and collections table.
+    2. Creates a dataframe from the data obtained.
+    3. Sets the style of the graph.
+    4. Creates a bar graph based on the dataframe.
+    5. Saves the graph to the exports folder.
+    6. Displays graph if popup is True.
+
+    Args:
+        popup (bool, optional): Whether to show the graph in a popup window. Defaults to False.    
+    """
+
     conn=createConnection()
     c=conn.cursor()
     

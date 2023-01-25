@@ -45,10 +45,13 @@ def check_word_exists(query: str)->bool:
             raise WordNeverSearchedException(query)
         return True
 
-# TODO @anay : update docstring with new format
+
 def fetch_word_history(word: str)-> None: 
     """
     Fetches all instances of timestamp for a word from the database
+    1. Execute a query that selects the datetime column from the words table where the word column is equal to the word
+    2. If the word is not found in the database, raise an exception
+    3. If the word is found in the database, print the history of the word
 
     Args:
         word (str): word for which history is to be fetched
@@ -82,10 +85,16 @@ def fetch_word_history(word: str)-> None:
         #----------------- Table -----------------#
 
 
-# TODO @anay : update docstring with new format
+
 def add_tag(query: str, tagName:str)->None:
     """
     Tags the word in the vocabulary builder list.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database with no tags, then add the tag to add words
+    4. If the word exists in the database with the same tag, then do nothing
+    5. If the word exists in the database with a different tag, then overwrite the tag
+    6. Print the success message
 
     Args:
         query (str): Word which is to be tagged.
@@ -124,9 +133,15 @@ def add_tag(query: str, tagName:str)->None:
         )
         return
 
-# TODO @anay : update docstring with new format
+
+
 def remove_tag(query: str)->None:
     """Removes the tag from the word in the database
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database with no tags, then do nothing
+    4. If the word exists in the database with tags, then remove the tag
+    5. Print the success message
 
     Args:
         query (str): Word for which the tag is to be removed
@@ -161,10 +176,15 @@ def remove_tag(query: str)->None:
 
 
 
-# TODO @anay : update docstring with new format
 def set_mastered(query: str)->None:
     """
     Sets the word as mastered.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and mastered is set to 1, then do nothing
+    4. If the word exists in the database and learning is set to 1, then set mastered to 1 and learning to 0
+    5. If the word exists in the database and mastered is set to 0, then set it to 1
+    6. Print the success message
 
     Args:
         query (str): Word which is to be set as mastered.
@@ -201,10 +221,15 @@ def set_mastered(query: str)->None:
                 renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]mastered[/bold green]. Good work! ✅")
         )
 
-# TODO @anay : update docstring with new format
+
+
 def check_mastered(query:str)->bool:
     """
     Checks if the word is mastered and returns a boolean value.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and mastered is set to 1, then return True
+    4. If the word exists in the database and mastered is set to 0, then return False
 
     Args:
         query (str): word which is to be checked for mastered status
@@ -218,10 +243,15 @@ def check_mastered(query:str)->bool:
     c.execute("SELECT mastered FROM words WHERE word=? and mastered=1", (query,))
     return bool(row := c.fetchall())
          
- # TODO @anay : update docstring with new format   
+
+
 def check_learning(query:str)->bool:
     """
     Checks if the word is learning and returns a boolean value.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and learning is set to 1, then return True
+    4. If the word exists in the database and learning is set to 0, then return False
 
     Args:
         query (str): word which is to be checked for learning status
@@ -235,10 +265,16 @@ def check_learning(query:str)->bool:
     c.execute("SELECT learning FROM words WHERE word=? and learning=1", (query,))
     return bool(row := c.fetchall())
  
-# TODO @anay : update docstring with new format   
+
+  
 def set_unmastered(query: str)->None:
     """
     Sets the word as unmastered.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and mastered is set to 0, then do nothing
+    4. If the word exists in the database and mastered is set to 1, then set it as 0
+    5. Print the success message
 
     Args:
         query (str): Word which is to be set as unmastered.
@@ -270,10 +306,16 @@ def set_unmastered(query: str)->None:
         )
 
 
-# TODO @anay : update docstring with new format
+
 def set_learning(query: str)->None:
     """
     Sets the word as learning.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and is already learning, then do nothing
+    4. If the word exists in the database and is mastered is set to 1, then set learning to 1 and mastered to 0
+    5. If the word exists in the database and is mastered is set to 0, then set learning to 1
+    6. Print the success message
 
     Args:
         query (str): Word which is to be set as learning.
@@ -315,10 +357,16 @@ def set_learning(query: str)->None:
                 renderable=f"[bold blue]{query}[/bold blue] has been set as [bold green]learning[/bold green]. Keep revising! 🧠")
         )
 
-# TODO @anay : update docstring with new format
+
+
 def set_unlearning(query: str)->None:
     """
     Sets the word as unlearning.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and learning is set to 0, then do nothing
+    4. If the word exists in the database and learning is set to 1, then set it 0
+    5. Print the success message
 
     Args:
         query (str): Word which is to be set as unlearning.
@@ -355,10 +403,14 @@ def set_unlearning(query: str)->None:
 
 
 
-# TODO @anay : update docstring with new format
 def set_favorite(query: str)->None:
     """
     Sets the word as favorite.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and favorite is set to 1, then do nothing
+    4. If the word exists in the database and favorite is set to 0, then set it to 1
+    5. Print the success message
 
     Args:
         query (str): Word which is to be set as favorite.
@@ -386,10 +438,15 @@ def set_favorite(query: str)->None:
         )
 
 
-# TODO @anay : update docstring with new format
+
 def set_unfavorite(query:str)->None:
     """
     Remove the word from favorite list.
+    1. Check if the word exists in the database
+    2. If the word does not exist in the database, raise an exception
+    3. If the word exists in the database and favorite is set to 0, then do nothing
+    4. If the word exists in the database and favorite is set to 1, then set it to 0
+    5. Print the success message
 
     Args:
         query (str): Word which is to be removed from favorite.
@@ -571,10 +628,12 @@ def get_random_word_from_favorite_set()->None:
         print(Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}"))
         definition(rows[0][0])
     
-# TODO @anay : update docstring with new format
+
+
 def get_random_word_from_tag(tagName:str)->None:
     """
     Gets a random word from the vocabulary builder list with a particular tag.
+    1. 
 
     Args:
         tag (Optional[str], optional): Tag from which the random word should be. Defaults to None.
@@ -593,7 +652,8 @@ def get_random_word_from_tag(tagName:str)->None:
         print(Panel(f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"))
         definition(rows[0][0])
 
-# TODO @anay : update docstring with new format
+
+
 def show_list(
     favorite:Optional[bool]=False,
     learning:Optional[bool]=False,
@@ -608,6 +668,12 @@ def show_list(
     # sourcery skip: low-code-quality
     """
     Gets all the words in the vocabulary builder list.
+    1. The code give a list of mastered, learning, favorite, words with a particular tag, most recent words, words added in a particular date or words added in the last n number of days or most recent words based on the arguments passed
+    2. Based on the arguments passed, the code executes the respective SQL command
+    1. If no arguments are passed, it gets all the words in the vocabulary builder list
+    4. If the SQL command returns no words, an error message is printed to the user
+    5. If the SQL command returns words, the words are printed to the user in a table format
+
     Args:
         favorite (bool, optional): If True, gets list of favorite words. Defaults to False.
         learning (bool, optional): If True, gets list of learning words. Defaults to False.
@@ -824,7 +890,8 @@ def show_list(
 
  
 def delete_all()->None:
-    """ Deletes all the words from the database.
+    """ 
+    Deletes all the words from the database.
      
     Raises:
         NoWordsInDBException: If there are no words in the database.
@@ -848,7 +915,8 @@ def delete_all()->None:
 
 
 def delete_mastered()->None:
-    """ Deletes all the mastered words from the database. 
+    """ 
+    Deletes all the mastered words from the database. 
     
     Raises:
         NoWordsInMasteredListException: If there are no mastered words in the database.
@@ -872,7 +940,8 @@ def delete_mastered()->None:
 
 
 def delete_learning()->None:
-    """Deletes all the learning words from the database.
+    """
+    Deletes all the learning words from the database.
     
     Raises:
         NoWordsInLearningListException: If there are no learning words in the database.
@@ -896,7 +965,8 @@ def delete_learning()->None:
 
 
 def delete_favorite()->None:
-    """Deletes all the favorite words from the database.
+    """
+    Deletes all the favorite words from the database.
     
     Raises:
         NoWordsInFavoriteListException: If there are no favorite words in the database.    
@@ -972,7 +1042,8 @@ def delete_word(query:List[str])->None:
 
 
 def clear_learning()->None:
-    """Clears all the words marked as learning.
+    """
+    Clears all the words marked as learning.
     
     Raises:
         NoWordsInLearningListException: If there are no words in the learning list.
@@ -994,7 +1065,8 @@ def clear_learning()->None:
     
 
 def clear_mastered()->None:
-    """Clears all the words marked as mastered.
+    """
+    Clears all the words marked as mastered.
     
     Raises:
         NoWordsInMasteredListException: If there are no words in the mastered list.
@@ -1016,7 +1088,8 @@ def clear_mastered()->None:
 
 
 def clear_favorite()->None:
-    """Clears all the words marked as favorite.
+    """
+    Clears all the words marked as favorite.
     
     Raises:
         NoWordsInFavoriteListException: If there are no words in the favorite list.
@@ -1063,10 +1136,15 @@ def clear_all_words_from_tag(tagName:str)->None:
         )
 
 
-# TODO @anay : update docstring with new format
+
 def get_lookup_rate(today:bool=False, week:bool=False, month:bool=False, year:bool=False)->None:
     """
     Returns the learning rate of the user.
+    1. If today, then get the number of words learned today, yesterday and the difference between them
+    2. If week, then get the number of words learned this week, last week and the difference between them
+    3. If month, then get the number of words learned this month, last month and the difference between them
+    4. If year, then get the number of words learned this year, last year and the difference between them
+    5. If no option is given, then print an error message 
 
     Args:
         today (bool, optional): If True, returns the lookup rate for today. Defaults to False.
@@ -1159,9 +1237,25 @@ def get_lookup_rate(today:bool=False, week:bool=False, month:bool=False, year:bo
             )
         )
 
-# TODO @anay : update docstring with new format
+
+
 def get_consecutive_dates(dates:list)->tuple:
-    """Returns list of consecutive dates from list of dates"""
+    """
+    Returns list of consecutive dates from list of dates
+    1. Sort the list of dates
+    2. Iterate through the list of dates
+    3. If the difference between the current date and the next date is 1 day, continue
+    4. If the difference between the current date and the next date is not 1 day, append the start date and the current date to the list of consecutive dates
+    5. Set the start date to the next date
+    6. Return the item with the longest time difference
+    
+    Args:
+        dates (list): list of dates
+        
+    Returns:
+        tuple: tuple of consecutive dates
+    """
+
     consecutive_dates=[]
     start_date=dates[0]
 
@@ -1177,9 +1271,18 @@ def get_consecutive_dates(dates:list)->tuple:
     return max(consecutive_dates, key=lambda x: x[1]-x[0])
 
 
-# TODO @anay : update docstring with new format
+
 def show_streak()->None:
-    """Shows streak of days user has looked up words"""
+    """
+    Shows streak of days user has looked up words
+    1. Check if there are any words in the database.
+    2. If there are words, get all the dates from the database.
+    3. Convert dates to datetime objects
+    4. Sort dates
+    5. Get consecutive dates
+    6. Get difference between consecutive dates
+    7. Print streak
+    """
     
     conn=createConnection()
     c=conn.cursor()
@@ -1213,10 +1316,17 @@ def show_streak()->None:
         print(e)
 
 
-# TODO @anay : update docstring with new format
+
 def predict_milestone(milestone: int)->None:
     """
     Predicts when user will reach a milestone
+    1. It runs a query to get the number of words in the database.
+    2. If there are no words in the database, it throws an exception and prints a message.
+    3. If there are words in the database, it runs a query to get the date of the most recent word looked up (last_date).
+    4. It then runs a query to get the date of the first word looked up (first_date).
+    5. It calculates the average words per day.
+    6. It calculates the date of reaching the milestone (milestone_date).
+    7. It prints the average words per day, the number of words learnt, and the date of reaching the milestone
     
     Parameters:
         milestone (int): milestone to predict

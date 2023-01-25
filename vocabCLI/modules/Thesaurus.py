@@ -12,10 +12,15 @@ from rich.panel import Panel
 
 # todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.
 # sourcery skip: for-append-to-extend, remove-redundant-if
-# TODO @anay : update docstring with new format
 def find_synonym(query: str) -> None:
     """
     Finds the synonyms of the query word
+    1. Connects to the API
+    2. Checks if the API returned a response
+    3. If it did, it loops through the response and adds the synonyms to a list
+    4. If the list is empty, it uses the NLTK library to find synonyms
+    5. If it still can't find any synonyms, it prints an error message
+    6. If it did find synonyms, it prints them in columns 
 
     Args:
         query (str): Word to find synonyms for.
@@ -74,10 +79,15 @@ def find_synonym(query: str) -> None:
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis. Need to change column style.
-# TODO @anay : update docstring with new format
 def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word
+    1. Connects to the API
+    2. Checks if the API returned a response
+    3. If it did, it loops through the response and adds the antonyms to a list
+    4. If the list is empty, it uses the NLTK library to find antonyms
+    5. If it still can't find any antonyms, it prints an error message
+    6. If it did find antonyms, it prints them in columns 
 
     Args:
         query (str): Word to find antonyms for.

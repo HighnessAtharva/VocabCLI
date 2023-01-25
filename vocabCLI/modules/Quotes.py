@@ -13,10 +13,16 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import box
  
-# TODO @anay : update docstring with new format
+
 def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
+    1. Check if there are any quotes in the database
+    2. If there are quotes, it prints a table with the quotes, authors and dates added
+    3. If there are no quotes, it raises an exception 
+
+    Raises:
+        NoQuotesError: If there are no quotes in the database.
     """
 
     conn = createConnection()
@@ -61,11 +67,16 @@ def get_quotes() -> None:
         #----------------- Table -----------------#
 
 
-# TODO @anay : update docstring with new format
+
 def add_quote(quote: str, author: Optional[str] = None)->None:
     # sourcery skip: remove-redundant-fstring
     """
     Adds a quote to the database.
+    1. The quote and author are stripped of any leading or trailing whitespace.
+    2. The quote and author are checked to see if they are only whitespaces. If they are, an error message is printed and the function is returned.
+    3. The quote and author are checked to see if they already exist in the database. If they do, an error message is printed and the function is returned.
+    4. The quote and author are added to the database.
+    5. A success message is printed. 
 
     Args:
         quote (str): The quote to be added.
@@ -138,11 +149,17 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
             renderable=f"[bold green]Quote:[/bold green] [reverse white]{quote}[/reverse white] by [italic u]{author if author is not None else '-'}[/italic u] added to your list. 📚",
     ))
 
-# TODO @anay : update docstring with new format
+
 def search_quote(quoteText: str)->None:
     """
     Searches for a quote in the database.
-
+    1. It then strips the quote of any leading or trailing whitespace & removes the quotes from the quote if they exist
+    2. It then converts the quote to lowercase so as to match the case of the quotes in the database
+    3. It then checks if the quote does not only have whitespace
+    4. If the quote does not only have whitespace, it then searches for the quote in the database while LOWERING all the quotes in the database
+    5. If the quote does not exist, it prints an error message
+    6. If the quote does exist, it prints a table with the search results
+    
     Args:
         quoteText (str): The quote to be searched.
     """
@@ -222,10 +239,18 @@ def search_quote(quoteText: str)->None:
     #----------------- Table -----------------#
 
 
-# TODO @anay : update docstring with new format
+
 def delete_quote()->None:
     """
     Deletes a quote from the database.
+    1. Displays all the quotes in the database with their index using SELECT query
+    2. If there are no quotes in the database, it raises a NoQuotesError
+    3. Asks the user to select a quote to delete (by index)
+    4. If the user enters a valid index, it deletes the quote from the database and prints a success message
+    5. If the user enters an invalid index, it prints an error message
+    
+    Raises:
+        NoQuotesError: If there are no quotes in the database
     """
     
     conn = createConnection()
@@ -289,10 +314,16 @@ def delete_quote()->None:
         print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} [bold red]deleted[/bold red] successfully", title_align="center", padding=(1, 1)))
         conn.commit()
   
-# TODO @anay : update docstring with new format      
+ 
 def get_random_quote()->None:
     """
     Gets a random quote from the database.
+    1. Displays a random quote from the database using SELECT query
+    2. If there are no quotes in the database, it raises a NoQuotesError
+    3. Prints the quote
+
+    Raises:
+        NoQuotesError: If there are no quotes in the database
     """
 
     conn = createConnection()
@@ -314,10 +345,12 @@ def get_random_quote()->None:
         print(Panel(title="[b reverse green]  Random Quote  [/b reverse green]", title_align="center", padding=(1, 1), renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}\n\n[bold green]Date:[/bold green] {quote_date}"))
   
   
-# TODO @anay : update docstring with new format      
+
 def get_quote_of_the_day()->None:
     """
     Get a random quote from a public API
+    1. Gets a random quote from the API
+    2. Prints the quote
     """
 
     # get the quote of the day from the API
