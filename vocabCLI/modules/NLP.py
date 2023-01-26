@@ -1,6 +1,8 @@
 from collections import Counter
 from heapq import nlargest
 from string import punctuation
+from typing import *
+
 import nltk
 import pandas as pd
 import regex as re
@@ -11,25 +13,22 @@ import textstat
 import torch
 import trafilatura
 from bs4 import BeautifulSoup
+from rich import box, print
+from rich.columns import Columns
 from rich.console import Console
+from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from spacy.lang.en.stop_words import STOP_WORDS
 from spacytextblob.spacytextblob import SpacyTextBlob
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-from rich.panel import Panel
-from rich.table import Table
-from rich import print, box
-from rich.columns import Columns
-from typing import *
-from rich.progress import Progress, SpinnerColumn, TextColumn
- 
-URL_INVALID_PANEL=Panel(title="[b reverse red]  Error!  [/b reverse red]",
-                    title_align="center",
-                    padding=(1, 1),
-                    renderable="The URL is [bold red]not valid[/bold red] or the website is [bold red]not accessible.[/bold red] Please try again later. 😕"
-            )
 
-
+URL_INVALID_PANEL = Panel(
+    title="[b reverse red]  Error!  [/b reverse red]",
+    title_align="center",
+    padding=(1, 1),
+    renderable="The URL is [bold red]not valid[/bold red] or the website is [bold red]not accessible.[/bold red] Please try again later. 😕",
+)
 
 
 # TODO: @atharva - add proper response headers and browser details to prevent false IP blocks.
@@ -66,7 +65,6 @@ def check_url_or_text(value: str) -> bool:
         return True
 
 
-
 def parse_text_from_web(webURL: str) -> str:
     """
     Extracts the text from the main content of the web page. Removes the ads, comments, navigation bar, footer, html tags, etc
@@ -88,17 +86,15 @@ def parse_text_from_web(webURL: str) -> str:
     if response.status_code != 200:
         return -1
     downloaded = trafilatura.fetch_url(webURL)
-    return trafilatura.extract(downloaded, 
-                               include_comments=False, 
-                               include_tables=False, 
-                               with_metadata=False, 
-                               include_formatting=True, 
-                               target_language='en', 
-                               include_images= False
-                               )
-
-    
-    
+    return trafilatura.extract(
+        downloaded,
+        include_comments=False,
+        include_tables=False,
+        with_metadata=False,
+        include_formatting=True,
+        target_language="en",
+        include_images=False,
+    )
 
 
 def cleanup_text(text: str) -> str:
@@ -111,7 +107,7 @@ def cleanup_text(text: str) -> str:
     5. Convert the text to lowercase
     6. Remove the leading and trailing whitespaces
     7. Split the text into words without messing up the punctuation
-    
+
     Args:
         text (str): text to be cleaned up
 
@@ -120,21 +116,19 @@ def cleanup_text(text: str) -> str:
     """
 
     text = re.sub("\xc2\xa0", "", text)  # Deal with some weird tokens
-    text = re.sub(r'\d+', '', text)  # remove numbers
-    text = re.sub(r'\s+', ' ', text)  # remove whitespaces
+    text = re.sub(r"\d+", "", text)  # remove numbers
+    text = re.sub(r"\s+", " ", text)  # remove whitespaces
     # remove special characters except full stop and apostrophe
-    text = re.sub(r'[^a-zA-Z0-9\s.]', '', text)
+    text = re.sub(r"[^a-zA-Z0-9\s.]", "", text)
     # text = text.lower()  # convert text to lowercase
     text = text.strip()  # remove leading and trailing whitespaces
-    text = text.encode('ascii', 'ignore').decode(
-        'ascii')  # remove non-ascii characters
-    
+    text = text.encode("ascii", "ignore").decode("ascii")  # remove non-ascii characters
+
     # split text into words without messing up the punctuation
     text = re.findall(r"[\w']+|[.,!?;]", text)
-    
+
     return text
-    
-    
+
 
 def censor_bad_words_strict(text: str) -> None:
     """
@@ -145,69 +139,82 @@ def censor_bad_words_strict(text: str) -> None:
     4. Read the bad words from the file and store them in a list
     5. Split the text into words and for each word, we check if it is a bad word, if yes, then we replace it with asterisks
     6. Print the censored text and the number of bad words censored
-    
+
     Args:
         text (str): text that needs to be censored
     """
-    #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="monkey", style="bold violet"),
-        TextColumn("[progress.description]{task.description}", justify="left", style="bold cyan"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold cyan",
+        ),
         transient=True,
     ) as progress:
         progress.add_task(description="Censoring...", total=None)
-    #----------------- Spinner -----------------#
-    
-    
+        # ----------------- Spinner -----------------#
+
         # check if the content is a URL, if yes, then parse the text from it and then use the model
         if isWebURL := check_url_or_text(text):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
             text = parse_text_from_web(text)
 
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
-            
+            )
+
         # HANDLE INVALID URLS
         if text == -1:
             print(URL_INVALID_PANEL)
             return
-             
-        text = cleanup_text(text)
-        new_text = ''   
-        offensive_words=0 
 
-        with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
+        text = cleanup_text(text)
+        new_text = ""
+        offensive_words = 0
+
+        with open("modules/_bad_words.txt", mode="r", encoding="utf-8") as f:
             bad_words = f.read().splitlines()
-            bad_words_plural = [bad_words[i]+'s' for i in range(len(bad_words))]
+            bad_words_plural = [bad_words[i] + "s" for i in range(len(bad_words))]
             bad_words = bad_words + bad_words_plural
-        
+
         for word in text:
             if word.lower() in bad_words:
-                offensive_words+=1
-                word = word.replace(word, '*' * len(word))
-            new_text += f'{word} '
-        new_text = new_text.replace(' .', '.')
-        print(Panel(renderable=new_text,
-                    padding=(2, 2), 
-                    title="[reverse]Censored Text[/reverse]", 
-                    border_style="bold violet",
-                    box= box.DOUBLE_EDGE
-            ))
-          
-        print(Panel(
-            renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red]",
-            title="[reverse]Censored Words[/reverse]",
-            
-        ))
+                offensive_words += 1
+                word = word.replace(word, "*" * len(word))
+            new_text += f"{word} "
+        new_text = new_text.replace(" .", ".")
+        print(
+            Panel(
+                renderable=new_text,
+                padding=(2, 2),
+                title="[reverse]Censored Text[/reverse]",
+                border_style="bold violet",
+                box=box.DOUBLE_EDGE,
+            )
+        )
+
+        print(
+            Panel(
+                renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red]",
+                title="[reverse]Censored Words[/reverse]",
+            )
+        )
 
 
 def censor_bad_words_not_strict(text: str) -> None:
@@ -223,70 +230,87 @@ def censor_bad_words_not_strict(text: str) -> None:
     Args:
         text (str): text that needs to be censored
     """
-      #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="monkey", style="bold violet"),
-        TextColumn("[progress.description]{task.description}", justify="left", style="bold cyan"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold cyan",
+        ),
         transient=True,
     ) as progress:
         progress.add_task(description="Censoring...", total=None)
-    #----------------- Spinner -----------------#
-    
+        # ----------------- Spinner -----------------#
+
         # check if the content is a URL, if yes, then parse the text from it and then use the model
         if isWebURL := check_url_or_text(text):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
             text = parse_text_from_web(text)
-            
 
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
-    
+            )
+
         # HANDLE INVALID URLS
         if text == -1:
             print(URL_INVALID_PANEL)
             return
-        
-        with open('modules/_bad_words.txt', mode='r', encoding='utf-8') as f:
+
+        with open("modules/_bad_words.txt", mode="r", encoding="utf-8") as f:
             bad_words = f.read().splitlines()
-            bad_words_plural = [bad_words[i]+'s' for i in range(len(bad_words))]
+            bad_words_plural = [bad_words[i] + "s" for i in range(len(bad_words))]
             bad_words = bad_words + bad_words_plural
-        
-        
+
         text = cleanup_text(text)
-        new_text = ''
+        new_text = ""
         offensive_words = 0
-        
+
         for word in text:
             word = str(word)
             if word.lower() in bad_words:
                 offensive_words += 1
                 if len(word) <= 3:
-                    word = word.replace(word, '*' * len(word))
+                    word = word.replace(word, "*" * len(word))
                 elif len(word) <= 5:
                     # replace the middle character with asterisk
-                    word = word.replace(word[1], '*')
-                    word = word.replace(word[2], '*')
-                    word = word.replace(word[3], '*')
+                    word = word.replace(word[1], "*")
+                    word = word.replace(word[2], "*")
+                    word = word.replace(word[3], "*")
                 else:
-                    word = word.replace(word[2:5], '***')
-            new_text += f'{word} '
-        new_text = new_text.replace(' .', '.')
-        print(Panel(renderable=new_text,
-                    padding=(2, 2), 
-                    title="[reverse]Censored Text[/reverse]",
-                    border_style="bold violet",
-                    box= box.DOUBLE_EDGE
-                    ))  
-        print(Panel(renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red] ",padding=(1, 1), title="[reverse]Censored Words[/reverse]"))
+                    word = word.replace(word[2:5], "***")
+            new_text += f"{word} "
+        new_text = new_text.replace(" .", ".")
+        print(
+            Panel(
+                renderable=new_text,
+                padding=(2, 2),
+                title="[reverse]Censored Text[/reverse]",
+                border_style="bold violet",
+                box=box.DOUBLE_EDGE,
+            )
+        )
+        print(
+            Panel(
+                renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red] ",
+                padding=(1, 1),
+                title="[reverse]Censored Words[/reverse]",
+            )
+        )
 
 
 def readability_index(text: str) -> None:
@@ -303,42 +327,50 @@ def readability_index(text: str) -> None:
     Args:
         text (str): text to be analyzed
     """
-       #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
-                SpinnerColumn(spinner_name="aesthetic", style="bold green"),
-                TextColumn("[progress.description]{task.description}", justify="left", style="bold cyan"),
-                transient=True,
-            ) as progress:
+        SpinnerColumn(spinner_name="aesthetic", style="bold green"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold cyan",
+        ),
+        transient=True,
+    ) as progress:
         progress.add_task(description="Processing Text...", total=None)
-    #----------------- Spinner -----------------#
-
+        # ----------------- Spinner -----------------#
 
         # check if the content is a URL, if yes, then parse the text from it and then use the model
         if isWebURL := check_url_or_text(text):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
 
             text = parse_text_from_web(text)
 
-
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
+            )
 
         # HANDLE INVALID URLS
         if text == -1:
             print(URL_INVALID_PANEL)
             return
-        
+
         text = cleanup_text(text)
-        text = ' '.join(text)
+        text = " ".join(text)
 
         readability_index = textstat.flesch_reading_ease(text)
 
@@ -357,16 +389,16 @@ def readability_index(text: str) -> None:
         else:
             index_desc = "Very Confusing"
 
-        print(Panel(
-            title="[b reverse]Readability Index[/b reverse]", 
-            title_align="center", 
-            padding=(2, 2), 
-            border_style="bold magenta1",
-            box= box.DOUBLE,
-            renderable=f"[b r blue]Lexicon Count[/b r blue]: {textstat.lexicon_count(text, removepunct=True)}\n\n[b r green]Character Count (without spaces)[/b r green]: {textstat.char_count(text)}\n\n[b r yellow2]Sentence Count[/b r yellow2]: {textstat.sentence_count(text)}\n\n[b r gold1]Words Per Sentence[/b r gold1]: {textstat.avg_sentence_length(text)}\n\n[b r white]Readability Index[/b r white]: {textstat.flesch_reading_ease(text)}")
+        print(
+            Panel(
+                title="[b reverse]Readability Index[/b reverse]",
+                title_align="center",
+                padding=(2, 2),
+                border_style="bold magenta1",
+                box=box.DOUBLE,
+                renderable=f"[b r blue]Lexicon Count[/b r blue]: {textstat.lexicon_count(text, removepunct=True)}\n\n[b r green]Character Count (without spaces)[/b r green]: {textstat.char_count(text)}\n\n[b r yellow2]Sentence Count[/b r yellow2]: {textstat.sentence_count(text)}\n\n[b r gold1]Words Per Sentence[/b r gold1]: {textstat.avg_sentence_length(text)}\n\n[b r white]Readability Index[/b r white]: {textstat.flesch_reading_ease(text)}",
             )
-        
-            
+        )
 
 
 def extract_difficult_words(text: str) -> None:
@@ -389,153 +421,194 @@ def extract_difficult_words(text: str) -> None:
     Args:
         text (str): text/url to be analyzed
     """
-    
 
-      #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="aesthetic", style="bold gold1"),
-        TextColumn("[progress.description]{task.description}", justify="left", style="bold white"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold white",
+        ),
         transient=True,
     ) as progress:
         progress.add_task(description="Checking URL...", total=None)
-    #----------------- Spinner -----------------#
-    
+        # ----------------- Spinner -----------------#
+
         # check if the content is a URL, if yes, then parse the text from it and then use the model
         if isWebURL := check_url_or_text(text):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
             text = parse_text_from_web(text)
 
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
+            )
             text = cleanup_text(text)
-            text = ' '.join(text)
+            text = " ".join(text)
 
         # HANDLE INVALID URLS
         if text == -1:
             print(URL_INVALID_PANEL)
             return
-        
-       
-        
-    #----------------- Spinner -----------------#
+
+    # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="aesthetic", style="bold gold1"),
-        TextColumn("[progress.description]{task.description}", justify="left", style="bold white"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold white",
+        ),
         transient=True,
     ) as progress:
         progress.add_task(description="Removing Common Words...", total=None)
-    #----------------- Spinner -----------------#
+        # ----------------- Spinner -----------------#
 
-    
-        with open(file='modules/_most_common_words.txt', mode='r', encoding='utf-8') as f:
+        with open(
+            file="modules/_most_common_words.txt", mode="r", encoding="utf-8"
+        ) as f:
             simple_words = f.read().splitlines()
         text = cleanup_text(text)
         article_word_count = len(text)
 
         # remove full stop from the words
-        text = [word for word in text if '.' not in word]
+        text = [word for word in text if "." not in word]
         difficult_words = [word for word in text if word.lower() not in simple_words]
-        filter_words = ['didnt', 'couldnt', 'wouldnt', 'shouldnt', 'isnt',
-                        'wasnt', 'arent', 'werent', 'dont', 'doesnt', 'didnt', 'hasnt', 'hadnt']
+        filter_words = [
+            "didnt",
+            "couldnt",
+            "wouldnt",
+            "shouldnt",
+            "isnt",
+            "wasnt",
+            "arent",
+            "werent",
+            "dont",
+            "doesnt",
+            "didnt",
+            "hasnt",
+            "hadnt",
+        ]
         difficult_words = [
-            word for word in difficult_words if word.lower() not in filter_words]
+            word for word in difficult_words if word.lower() not in filter_words
+        ]
         # filter out duplicate words
         difficult_words = list(set(difficult_words))
 
         # remove plurals of the same word
         for word in difficult_words:
-            if word[-1] == 's' and word[:-1] in difficult_words:
+            if word[-1] == "s" and word[:-1] in difficult_words:
                 difficult_words.remove(word)
 
         # remove plurals of which singular is in the simple words list
         for word in difficult_words:
-            if word[-1] == 's' and word[:-1] in simple_words:
+            if word[-1] == "s" and word[:-1] in simple_words:
                 difficult_words.remove(word)
-                
-    #----------------- Spinner -----------------#
+
+    # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="aesthetic", style="bold gold1"),
-        TextColumn("[progress.description]{task.description}", justify="left", style="bold white"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold white",
+        ),
         transient=True,
     ) as progress:
         progress.add_task(description="Removing Named Entities...", total=None)
-    #----------------- Spinner -----------------#
-        
+        # ----------------- Spinner -----------------#
+
         # remove all named entities
-        difficult_words=" ".join(difficult_words)
-        
+        difficult_words = " ".join(difficult_words)
+
         # Loading the NLP model
         nlp = spacy.load("en_core_web_sm")
-        
+
         nlp_text = nlp(difficult_words)
         entities = [entity.text for entity in nlp_text.ents]
-    
-    
-        difficult_words = [word for word in difficult_words.split() if word not in entities]      
+
+        difficult_words = [
+            word for word in difficult_words.split() if word not in entities
+        ]
 
         # remove all uppercase words
         difficult_words = [word for word in difficult_words if word.islower()]
-        
-        
+
         # remove mispelled words
         import spellchecker
+
         spell = spellchecker.SpellChecker()
-        difficult_words = [word for word in difficult_words if word not in spell.unknown(difficult_words)]
-        
+        difficult_words = [
+            word
+            for word in difficult_words
+            if word not in spell.unknown(difficult_words)
+        ]
 
         difficult_words.sort()
-        print(Panel(title="[b reverse navajo_white1]  Success!  [/b reverse navajo_white1]",
-                    title_align="center",
-                    padding=(1, 1),
-                    border_style="navajo_white1",
-                    box= box.DOUBLE,
-                    renderable=f"Content Length: [bold blue]{article_word_count}[/bold blue] words\nExtracted [bold blue]{len(difficult_words)}[/bold blue] difficult words"),       
-            )
+        print(
+            Panel(
+                title="[b reverse navajo_white1]  Success!  [/b reverse navajo_white1]",
+                title_align="center",
+                padding=(1, 1),
+                border_style="navajo_white1",
+                box=box.DOUBLE,
+                renderable=f"Content Length: [bold blue]{article_word_count}[/bold blue] words\nExtracted [bold blue]{len(difficult_words)}[/bold blue] difficult words",
+            ),
+        )
 
         difficult_words = [
-            Panel(f"[thistle1]{word}[thistle1]", expand=True, box=box.ROUNDED, border_style="pale_violet_red1")
+            Panel(
+                f"[thistle1]{word}[thistle1]",
+                expand=True,
+                box=box.ROUNDED,
+                border_style="pale_violet_red1",
+            )
             for word in difficult_words
         ]
-         #----------------- Columns -----------------#
+        # ----------------- Columns -----------------#
 
         print(Columns(difficult_words, equal=True, expand=True))
 
-         #----------------- Columns -----------------#
+        # ----------------- Columns -----------------#
 
 
 def sentiment_score_to_summary(sentiment_score: int) -> str:
-        """
-        Converts the sentiment score to a summary of the score
+    """
+    Converts the sentiment score to a summary of the score
 
-        Args:
-            sentiment_score (int): sentiment score
+    Args:
+        sentiment_score (int): sentiment score
 
-        Returns:
-            str: summary of the sentiment score
-        """
+    Returns:
+        str: summary of the sentiment score
+    """
 
-        if sentiment_score == 1:
-            return "Extremely Negative"
-        elif sentiment_score == 2:
-            return "Somewhat Negative"
-        elif sentiment_score == 3:
-            return "Generally Neutral"
-        elif sentiment_score == 4:
-            return "Somewhat Positive"
-        elif sentiment_score == 5:
-            return "Extremely Positive"
-            
+    if sentiment_score == 1:
+        return "Extremely Negative"
+    elif sentiment_score == 2:
+        return "Somewhat Negative"
+    elif sentiment_score == 3:
+        return "Generally Neutral"
+    elif sentiment_score == 4:
+        return "Somewhat Positive"
+    elif sentiment_score == 5:
+        return "Extremely Positive"
 
-          
+
 def sentiment_analysis(content: str) -> None:
     """
     Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
@@ -551,33 +624,43 @@ def sentiment_analysis(content: str) -> None:
     Args:
         content (str): text/url to be analyzed
     """
-          #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
-            SpinnerColumn(spinner_name="smiley", style="bold green"),
-            TextColumn("[progress.description]{task.description}", justify="left", style="bold white"),
-            transient=True,
-        ) as progress:
+        SpinnerColumn(spinner_name="smiley", style="bold green"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold white",
+        ),
+        transient=True,
+    ) as progress:
         progress.add_task(description="Getting Sentiment...", total=None)
-    #----------------- Spinner -----------------#
+        # ----------------- Spinner -----------------#
 
         # check if the content is a URL, if yes, then parse the text from it and then use the model
         if isWebURL := check_url_or_text(content):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
             text = parse_text_from_web(content)
 
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
+            )
             text = cleanup_text(content)
-            text = ' '.join(text)
+            text = " ".join(text)
 
         # HANDLE INVALID URLS
         if text == -1:
@@ -585,33 +668,39 @@ def sentiment_analysis(content: str) -> None:
             return
 
         tokenizer = AutoTokenizer.from_pretrained(
-            "nlptown/bert-base-multilingual-uncased-sentiment")
+            "nlptown/bert-base-multilingual-uncased-sentiment"
+        )
         model = AutoModelForSequenceClassification.from_pretrained(
-            "nlptown/bert-base-multilingual-uncased-sentiment")
+            "nlptown/bert-base-multilingual-uncased-sentiment"
+        )
         tokens = tokenizer.encode(
-            text, return_tensors='pt', truncation=True, padding=True)
+            text, return_tensors="pt", truncation=True, padding=True
+        )
         result = model(tokens)
         result.logits
-        sentiment_score = int(torch.argmax(result.logits))+1
+        sentiment_score = int(torch.argmax(result.logits)) + 1
         outcome = sentiment_score_to_summary(sentiment_score)
         if outcome in ["Extremely Negative", "Somewhat Negative"]:
             emoji = "😞"
-        
+
         elif outcome == "Generally Neutral":
             emoji = "😐"
-            
+
         elif outcome in ["Somewhat Positive", "Extremely Positive"]:
             emoji = "😀"
-        
-        print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} {emoji}") 
-                )
-       
+
+        print(
+            Panel(
+                title="[b reverse green]  Success!  [/b reverse green]",
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} {emoji}",
+            )
+        )
+
 
 # TODO @atharva check this
-def summarize_text_util(text:str, per:int) -> str:
+def summarize_text_util(text: str, per: int) -> str:
     """
     Summarizes the text using the spacy library
     1. Load the document in Spacy
@@ -625,7 +714,7 @@ def summarize_text_util(text:str, per:int) -> str:
     9. Get the number of sentences to include in the summary (here 20% of the sentences in the document)
     10. Get the top sentences with the highest score
     11. Combine the words in the top sentences into a string
-    
+
     Args:
         text (str): text to be summarized
         per (int): percentage of the text to be summarized
@@ -633,12 +722,10 @@ def summarize_text_util(text:str, per:int) -> str:
     Returns:
         str: summarized text
     """
-   
-  
-   
+
     # Loading the NLP model
-    nlp=spacy.load("en_core_web_sm")
-    
+    nlp = spacy.load("en_core_web_sm")
+
     doc = nlp(text)
     tokens = [token.text for token in doc]
     word_frequencies = {}
@@ -654,7 +741,7 @@ def summarize_text_util(text:str, per:int) -> str:
 
     max_frequency = max(word_frequencies.values())
     for word in word_frequencies:
-        word_frequencies[word] = word_frequencies[word]/max_frequency
+        word_frequencies[word] = word_frequencies[word] / max_frequency
     sentence_tokens = list(doc.sents)
     sentence_scores = {}
     for sent in sentence_tokens:
@@ -664,99 +751,117 @@ def summarize_text_util(text:str, per:int) -> str:
                     sentence_scores[sent] += word_frequencies[word.text.lower()]
                 else:
                     sentence_scores[sent] = word_frequencies[word.text.lower()]
-    select_length = int(len(sentence_tokens)*per)
+    select_length = int(len(sentence_tokens) * per)
     summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
     final_summary = [word.text for word in summary]
-    summary = ''.join(final_summary)
+    summary = "".join(final_summary)
     return summary
 
 
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
     """
-    Print the summarized text or internet article. 
+    Print the summarized text or internet article.
     1. Check if the content is a URL or text
     2. If URL, then parse the text from it and then use the model
     3. If text, then directly use the model
     4. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
     5. It summarizes the text using the summarize_text_util function.
     6. If the input is a URL, it prints the headline of the article as well.
-    7. If the output is a file, it saves the summary to a file called summary.txt. 
+    7. If the output is a file, it saves the summary to a file called summary.txt.
 
     Args:
         text (str): Text that is to be summarized
     """
 
-     #----------------- Spinner -----------------#
+    # ----------------- Spinner -----------------#
     with Progress(
-            SpinnerColumn(spinner_name="dots12", style="bold blue"),
-            TextColumn("[progress.description]{task.description}", justify="left", style="bold white"),
-            transient=True,
-        ) as progress:
+        SpinnerColumn(spinner_name="dots12", style="bold blue"),
+        TextColumn(
+            "[progress.description]{task.description}",
+            justify="left",
+            style="bold white",
+        ),
+        transient=True,
+    ) as progress:
         progress.add_task(description="Summarizing...", total=None)
-    #----------------- Spinner -----------------#
-    
+        # ----------------- Spinner -----------------#
+
         if isWebURL := check_url_or_text(content):
-            print(Panel(title="[b reverse green]  Processing...  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="URL detected 🌐")
+            print(
+                Panel(
+                    title="[b reverse green]  Processing...  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="URL detected 🌐",
                 )
+            )
 
             # this is just get the headings
             r = requests.get(content)
             soup = BeautifulSoup(r.content, "html.parser")
-            headline = soup.find('h1').get_text()
+            headline = soup.find("h1").get_text()
 
             # this gets the body of the article.
             text = parse_text_from_web(content)
 
         # if text and not URL, then directly use the model
         if not isWebURL:
-            print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="Processing text... 📃")
+            print(
+                Panel(
+                    title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="Processing text... 📃",
                 )
+            )
             text = cleanup_text(content)
-            text = ' '.join(text)
-            
+            text = " ".join(text)
 
         # HANDLE INVALID URLS
         if text == -1:
             print(URL_INVALID_PANEL)
             return
-        
-        
+
         text_summary = summarize_text_util(text, 0.2)
 
-        if not file: #@atharva check this
+        if not file:
             if isWebURL:
-                print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                print(
+                    Panel(
+                        title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\nHeadline:\n{headline} \n\n Summary:\n{text_summary}"
-                ))
+                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\nHeadline:\n{headline} \n\n Summary:\n{text_summary}",
+                    )
+                )
             else:
-                print(Panel(title="[b reverse green]  Success!  [/b reverse green]",
+                print(
+                    Panel(
+                        title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\n Summary:\n{text_summary}"
-                ))
+                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\n Summary:\n{text_summary}",
+                    )
+                )
 
-        if file:  
+        if file:
             # writing to a .txt file
             with open("summary.txt", "w", encoding="utf-8") as f:
                 f.write(f"Length of the article: {len(text)} characters\n\n")
                 f.write(f"Length of the summary:{len(text_summary)} characters\n\n")
                 if isWebURL:
                     f.write(str(f"Headline:\n{headline}\n\n"))
-                f.write("------------------------------------------------------------\n\n")
+                f.write(
+                    "------------------------------------------------------------\n\n"
+                )
                 f.write(f"Summary:\n{text_summary}\n\n")
 
-            print(Panel(title="[b reverse green]  Summary Exported!  [/b reverse green]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]")
-              )
-        #TODO: writing to a .md file
-       
+            print(
+                Panel(
+                    title="[b reverse green]  Summary Exported!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="[bold green]Summary saved[/bold green] to [bold]summary.txt[/bold]",
+                )
+            )
+        # TODO: writing to a .md file

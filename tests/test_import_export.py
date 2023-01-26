@@ -1,7 +1,9 @@
-from unittest import mock
-import pytest
-from vocabCLI import app
 import os
+from unittest import mock
+
+import pytest
+
+from vocabCLI import app
 
 
 class TestImportExport:

@@ -1,11 +1,12 @@
 import contextlib
-from Database import *
-import pandas as pd
 import csv
 import os
-from rich.table import Table
-from rich.columns import Columns
+
+import pandas as pd
+from Database import *
 from Exceptions import *
+from rich.columns import Columns
+from rich.table import Table
 
 
 def delete_collection_from_DB():
@@ -20,33 +21,33 @@ def delete_collection_from_DB():
 def clean_collection_csv_data():
     """Cleans the domains.csv file and writes the cleaned data to domains.csv"""
 
-    df = pd.read_csv('modules/domains.csv')  # Read the CSV Files
-    df['word'] = df['word'].str.lower()  # convert all words to lowercase
+    df = pd.read_csv("modules/domains.csv")  # Read the CSV Files
+    df["word"] = df["word"].str.lower()  # convert all words to lowercase
     # Remove the rows with spaces in the word column
-    df = df[df['word'].str.contains(' ') == False]
+    df = df[df["word"].str.contains(" ") == False]
     # Remove the rows with hyphen in the word column
-    df = df[df['word'].str.contains('-') == False]
+    df = df[df["word"].str.contains("-") == False]
     # Remove the rows with apostrophe in the word column
-    df = df[df['word'].str.contains('\'') == False]
+    df = df[df["word"].str.contains("'") == False]
     # Remove the rows with quotes in the word column
-    df = df[df['word'].str.contains('\"') == False]
+    df = df[df["word"].str.contains('"') == False]
     # drop rows where word column and topic column have same value
-    df = df.drop(df[(df['word'] == df['topic'])].index)
-    df = df.drop_duplicates(subset='word')  # Remove duplicate rows
+    df = df.drop(df[(df["word"] == df["topic"])].index)
+    df = df.drop_duplicates(subset="word")  # Remove duplicate rows
     # sort the dataframe by topic and word
-    df = df.sort_values(by=['topic', 'word'])
+    df = df.sort_values(by=["topic", "word"])
     df.reset_index(drop=True, inplace=True)  # reset index
 
     # delete words if length is less than 3
     for i in range(len(df)):
-        if len(df['word'][i]) <= 2:
+        if len(df["word"][i]) <= 2:
             df.drop(i, inplace=True)
 
     # delete the current domains.csv file
-    os.remove('modules/domains.csv')
+    os.remove("modules/domains.csv")
 
     # write to new csv
-    df.to_csv('modules/domains.csv', index=False)
+    df.to_csv("modules/domains.csv", index=False)
 
     # print(df.shape) # print row and column count
     # print(df.groupby('topic').count().sort_values(['word'],ascending=False)) # show word count grouped by topic and sorted by word count
@@ -64,14 +65,16 @@ def insert_collection_to_DB():
         return
 
     clean_collection_csv_data()
-    with open(file='modules/domains.csv', mode='r', encoding='utf-8') as f:
+    with open(file="modules/domains.csv", mode="r", encoding="utf-8") as f:
         reader = csv.reader(f)
         next(reader)
         for row in reader:
             word = row[0]
             collection_name = row[1]
             c.execute(
-                "INSERT INTO collections (word, collection) VALUES (?, ?)", (word, collection_name))
+                "INSERT INTO collections (word, collection) VALUES (?, ?)",
+                (word, collection_name),
+            )
     conn.commit()
 
 
@@ -82,21 +85,22 @@ def show_all_collections():
     conn = createConnection()
     c = conn.cursor()
     c.execute(
-        "SELECT count(word), collection FROM collections GROUP BY collection ORDER BY count(word) DESC")
+        "SELECT count(word), collection FROM collections GROUP BY collection ORDER BY count(word) DESC"
+    )
     rows = c.fetchall()
 
-    #----------------- Table -----------------#
+    # ----------------- Table -----------------#
 
     table = Table(title="Collections")
-    table.add_column("Words in Collection", justify="center",
-                     style="cyan", no_wrap=True)
-    table.add_column("Collection Name", justify="center",
-                     style="cyan", no_wrap=True)
+    table.add_column(
+        "Words in Collection", justify="center", style="cyan", no_wrap=True
+    )
+    table.add_column("Collection Name", justify="center", style="cyan", no_wrap=True)
     for row in rows:
         table.add_row(str(row[0]), row[1])
     print(table)
 
-    #----------------- Table -----------------#
+    # ----------------- Table -----------------#
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis
@@ -112,23 +116,24 @@ def show_words_from_collection(collectionName: str):
 
     conn = createConnection()
     c = conn.cursor()
-    c.execute("SELECT word FROM collections WHERE collection=?",
-              (collectionName,))
+    c.execute("SELECT word FROM collections WHERE collection=?", (collectionName,))
     rows = c.fetchall()
     with contextlib.suppress(NoSuchCollectionException):
         if len(rows) <= 0:
             raise NoSuchCollectionException(collection=collectionName)
 
-        print(Panel(
-            f"Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"))
-        rows = [
-            Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
-        
-        #----------------- Columns -----------------#
-        
+        print(
+            Panel(
+                f"Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"
+            )
+        )
+        rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+
+        # ----------------- Columns -----------------#
+
         print(Columns(rows, equal=True))
 
-        #----------------- Columns -----------------#
+        # ----------------- Columns -----------------#
 
 
 # todo @anay - formatting can be improved, add color, styles and emojis
@@ -138,20 +143,26 @@ def get_random_word_from_collection(collectionName: str):
     Args:
         collectionName (str): Name of the collection
 
-    Raises: 
+    Raises:
         NoSuchCollectionException: If the collection does not exist
     """
 
     conn = createConnection()
     c = conn.cursor()
     c.execute(
-        "SELECT word FROM collections WHERE collection=? ORDER BY RANDOM() LIMIT 1", (collectionName,))
+        "SELECT word FROM collections WHERE collection=? ORDER BY RANDOM() LIMIT 1",
+        (collectionName,),
+    )
     row = c.fetchone()
     with contextlib.suppress(NoSuchCollectionException):
         if row is None:
             raise NoSuchCollectionException(collection=collectionName)
         else:
-            print(Panel(title="[reverse blue]Random Word[/reverse blue]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable=f"A random word from the [u green]{collectionName}[/u green] collection: [bold blue]{row[0]}[/bold blue]"))
+            print(
+                Panel(
+                    title="[reverse blue]Random Word[/reverse blue]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"A random word from the [u green]{collectionName}[/u green] collection: [bold blue]{row[0]}[/bold blue]",
+                )
+            )

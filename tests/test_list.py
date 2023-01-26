@@ -1,7 +1,9 @@
-from unittest import mock
-import pytest
-from vocabCLI import app
 from datetime import datetime
+from unittest import mock
+
+import pytest
+
+from vocabCLI import app
 
 
 class TestList:
@@ -75,8 +77,7 @@ class TestList:
         month = datetime.now().month
         year = datetime.now().year
         # handling typer.prompt() input, need to pass in the input as a string
-        result = runner.invoke(
-            app, ["list", "--date"], input=f"{day}\n{month}\n{year}")
+        result = runner.invoke(app, ["list", "--date"], input=f"{day}\n{month}\n{year}")
         assert result.exit_code == 0
         assert "Words added to the vocabulary builder list on" in result.stdout
 
@@ -181,7 +182,11 @@ class TestList:
     def test_list_words_in_collection(self, runner):
         result = runner.invoke(app, ["list", "--collection", "music"])
         assert result.exit_code == 0
-        assert "Words from the collection music" and "accordian" and "blues" in result.stdout
+        assert (
+            "Words from the collection music"
+            and "accordian"
+            and "blues" in result.stdout
+        )
 
     def test_list_words_in_collection_nonexistent(self, runner):
         result = runner.invoke(app, ["list", "--collection", "fakeCollection"])

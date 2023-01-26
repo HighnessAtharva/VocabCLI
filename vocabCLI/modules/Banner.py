@@ -1,8 +1,10 @@
 import os
-from platform import system, platform
+from platform import platform, system
+
 from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
+
 from . import __app_name__, __version__
 
 
@@ -11,7 +13,7 @@ def get_terminal_width() -> int:
     """
     Gets the width of the terminal.
 
-    Returns: 
+    Returns:
         int: width of the terminal.
     """
     try:

@@ -1,21 +1,59 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="vocabCLI",
-    version='0.0.15',
+    version="0.0.15",
     author="Atharva Shah, Anay Deshpande",
     author_email="<HighnessAtharva@gmail.com>, <anaydesh1234@gmail.com>",
-    description='A stylish and modern CLI to help you build your vocabulary and manage your words.',
+    description="A stylish and modern CLI to help you build your vocabulary and manage your words.",
     long_description=open(file="README.md", mode="r", encoding="utf-8").read(),
-    long_description_content_type = "text/markdown",
- 
+    long_description_content_type="text/markdown",
     packages=find_packages("modules", exclude="tests"),
- 
     # add any additional packages that
-    install_requires=["bs4", "click", "configparser", "dateparser", "feedparser", "fpdf", "lxml", "matplotlib", "nltk", "numpy", "pandas", "Pillow", "playsound==1.2.2", "pyspellchecker", "requests", "rich", "seaborn", "spacy", "spacy-loggers", "spacytextblob", "textblob", "textstat", "tk", "torch", "torchaudio", "torchvision", "typer",  "typer[all]"],
-
-    keywords=['python', 'vocabulary', 'cli', 'dictionary', 'flashcards', 'quotes',
-              'knowledgebase', 'rich', 'richmarkup', 'graph', 'reporting', 'flashcard'],
+    install_requires=[
+        "bs4",
+        "click",
+        "configparser",
+        "dateparser",
+        "feedparser",
+        "fpdf",
+        "lxml",
+        "matplotlib",
+        "nltk",
+        "numpy",
+        "pandas",
+        "Pillow",
+        "playsound==1.2.2",
+        "pyspellchecker",
+        "requests",
+        "rich",
+        "seaborn",
+        "spacy",
+        "spacy-loggers",
+        "spacytextblob",
+        "textblob",
+        "textstat",
+        "tk",
+        "torch",
+        "torchaudio",
+        "torchvision",
+        "typer",
+        "typer[all]",
+    ],
+    keywords=[
+        "python",
+        "vocabulary",
+        "cli",
+        "dictionary",
+        "flashcards",
+        "quotes",
+        "knowledgebase",
+        "rich",
+        "richmarkup",
+        "graph",
+        "reporting",
+        "flashcard",
+    ],
     classifiers=[
         "Intended Audience :: Education",
         "Programming Language :: Python :: 3",
@@ -30,9 +68,5 @@ setup(
         "Topic :: Terminals",
         "Topic :: Utilities",
     ],
-    entry_points={
-        "console_scripts": [
-            "vocab = vocabCLI.__main__:app"
-        ]
-    },
+    entry_points={"console_scripts": ["vocab = vocabCLI.__main__:app"]},
 )

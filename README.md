@@ -196,6 +196,14 @@ pip3 install pygount
 # Run the following command to get the code stats
 pygount --suffix=py --format=summary
 ```
+---
+
+### Format Code and Sort Imports 📝
+
+```powershell
+isort .
+black .
+```
 
 ---
 

@@ -1,5 +1,7 @@
 from unittest import mock
+
 import pytest
+
 from vocabCLI import app
 
 
@@ -33,8 +35,9 @@ class TestRevise:
             mock_typer.return_value = True
             runner.invoke(app, ["delete"])
             runner.invoke(app, ["define", "math", "rock", "class", "gems"])
-            runner.invoke(app, ["tag", "math", "rock",
-                          "class", "gems", "--name", "diamonds"])
+            runner.invoke(
+                app, ["tag", "math", "rock", "class", "gems", "--name", "diamonds"]
+            )
             result = runner.invoke(app, ["revise", "--tag", "diamonds"])
             assert result.exit_code == 0
             assert "3 word(s) to go. Keep revising!" in result.stdout
@@ -46,8 +49,7 @@ class TestRevise:
 
         @mock.patch("typer.confirm")
         def test_revise_tag_with_word_limit(self, mock_typer, runner):
-            result = runner.invoke(
-                app, ["revise", "--tag", "diamonds", "-n", "3"])
+            result = runner.invoke(app, ["revise", "--tag", "diamonds", "-n", "3"])
             assert result.exit_code == 0
             assert "2 word(s) to go. Keep revising!" in result.stdout
 
@@ -145,12 +147,12 @@ class TestRevise:
 
         def test_revise_collection_with_word_limit(self, runner):
             result = runner.invoke(
-                app, ["revise", "--collection", "500 SAT words", "-n", "3"])
+                app, ["revise", "--collection", "500 SAT words", "-n", "3"]
+            )
             assert result.exit_code == 0
             assert "2 word(s) to go. Keep revising!" in result.stdout
 
         def test_revise_fake_collection(self, runner):
-            result = runner.invoke(
-                app, ["revise", "--collection", "fakeCollection"])
+            result = runner.invoke(app, ["revise", "--collection", "fakeCollection"])
             assert result.exit_code == 0
             assert "The collection fakeCollection is not available" in result.stdout

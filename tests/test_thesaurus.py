@@ -1,5 +1,7 @@
 from unittest import mock
+
 import pytest
+
 from vocabCLI import app
 
 
@@ -11,10 +13,9 @@ class TestThesaurus:
         assert "small" in result.stdout
         assert "minuscule" in result.stdout
         assert "tiny" in result.stdout
-        
+
         assert "Antonyms of wise are" in result.stdout
         assert "foolish" in result.stdout
-        
 
     def test_synonyms(self, runner):
         result = runner.invoke(app, ["synonym", "large", "drink"])
@@ -23,7 +24,7 @@ class TestThesaurus:
         assert "great" in result.stdout
         assert "huge" in result.stdout
         assert "giant" in result.stdout
-        
+
         assert "Synonyms of drink are" in result.stdout
         assert "imbibe" in result.stdout
         assert "sip" in result.stdout

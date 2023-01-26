@@ -1,9 +1,10 @@
-from PIL import Image, ImageDraw, ImageFont
+import json
+import random
+import textwrap
+
 from Database import createConnection
 from Dictionary import *
-import json
-import textwrap
-import random
+from PIL import Image, ImageDraw, ImageFont
 from rich.progress import track
 
 
@@ -38,12 +39,12 @@ def flashcard_definition(query: str) -> str:
     for meaningNumber in response["meanings"]:
         # get only the first 3 meanings
         for count, meaning in enumerate(meaningNumber["definitions"][:3], start=1):
-            defs_and_examples[meaning["definition"]
-                              ] = meaning["example"] if "example" in meaning else None
+            defs_and_examples[meaning["definition"]] = (
+                meaning["example"] if "example" in meaning else None
+            )
 
     # return the first 3 definitions and examples
     return {k: defs_and_examples[k] for k in list(defs_and_examples)[:3]}
-
 
 
 def interpolate(black, random_color, interval):
@@ -54,120 +55,108 @@ def interpolate(black, random_color, interval):
     3. It adds the difference to the black color each time it moves one step
     4. It returns the new color, rounded to the nearest integer
     5. It does this for each step
-    
+
     Args:
         black (tuple): The first color
         random_color (tuple): The second color
         interval (int): The number of steps to take between the two colors"""
 
-    derandom_color =[(t - f) / interval for f , t in zip(black, random_color)]
+    derandom_color = [(t - f) / interval for f, t in zip(black, random_color)]
     for i in range(interval):
         yield [round(t + det * i) for t, det in zip(black, derandom_color)]
-        
-        
+
+
 def export_util(c, type: str):  # sourcery skip: low-code-quality
     """
     Exports the words from the database to a flashcard image
-    
+
     Args:
         c (sqlite3.Cursor): The cursor object
         type (str): The type of words to be exported
     """
-    
+
     if not (rows := c.fetchall()):
         print(f"No words found for selected criteria: {type}")
 
     # Create a new image with a white background
     width, height = 1080, 1080
 
-
-    my_colors=[
-       
-       # shades of red
-        (255,99,71),
-        (255,127,80),
-        (205,92,92),
-        (240,128,128),
-        (233,150,122),
-        (250,128,114),
-        (255,160,122),
-
-
+    my_colors = [
+        # shades of red
+        (255, 99, 71),
+        (255, 127, 80),
+        (205, 92, 92),
+        (240, 128, 128),
+        (233, 150, 122),
+        (250, 128, 114),
+        (255, 160, 122),
         # shades of green
-        (50,205,50),
-        (144,238,144),
-        (152,251,152),
-        (143,188,143),
-        (0,250,154),
-        (0,255,127),
-
-
+        (50, 205, 50),
+        (144, 238, 144),
+        (152, 251, 152),
+        (143, 188, 143),
+        (0, 250, 154),
+        (0, 255, 127),
         # shades of blue
-        (0,255,255),
-        (224,255,255),
-        (0,206,209),
-        (64,224,208),
-        (72,209,204),
-        (175,238,238),
-        (127,255,212),
-        (176,224,230),
-        (95,158,160),
-        (70,130,180),
-        (100,149,237),
-        (0,191,255),
-        (30,144,255),
-
-
+        (0, 255, 255),
+        (224, 255, 255),
+        (0, 206, 209),
+        (64, 224, 208),
+        (72, 209, 204),
+        (175, 238, 238),
+        (127, 255, 212),
+        (176, 224, 230),
+        (95, 158, 160),
+        (70, 130, 180),
+        (100, 149, 237),
+        (0, 191, 255),
+        (30, 144, 255),
         # shades of purple
-        (106,90,205),
-        (123,104,238),
-        (147,112,219),
-        (153,50,204),
-        (186,85,211),
-        (128,0,128),
-        (216,191,216),
-        (221,160,221),
-        (238,130,238),
-        (255,0,255),
-
+        (106, 90, 205),
+        (123, 104, 238),
+        (147, 112, 219),
+        (153, 50, 204),
+        (186, 85, 211),
+        (128, 0, 128),
+        (216, 191, 216),
+        (221, 160, 221),
+        (238, 130, 238),
+        (255, 0, 255),
         # shades of pink
-        (199,21,133),
-        (219,112,147),
-        (255,20,147),
-        (255,105,180),
-        (255,182,193),
-        (255,192,203)   
+        (199, 21, 133),
+        (219, 112, 147),
+        (255, 20, 147),
+        (255, 105, 180),
+        (255, 182, 193),
+        (255, 192, 203),
     ]
-    
 
-    progressbar_total=0
-    
-    #----------------- Progress Bar -----------------#
-    
-    for row, _ in zip(rows, track(range(len(rows)-1), description=" 🔃 Exporting Flashcards ")):
-    
-    #----------------- Progress Bar -----------------#
-                
-    
+    progressbar_total = 0
+
+    # ----------------- Progress Bar -----------------#
+
+    for row, _ in zip(
+        rows, track(range(len(rows) - 1), description=" 🔃 Exporting Flashcards ")
+    ):
+
+        # ----------------- Progress Bar -----------------#
 
         tag = row[1] if type == "tag" else None
         word = row[0]
-        image = Image.new('RGB', (width, height), 'white')
+        image = Image.new("RGB", (width, height), "white")
 
         # Get a drawing context
         draw = ImageDraw.Draw(image)
-        
-        black = (0,0,0)
+
+        black = (0, 0, 0)
         random_color = random.choice(my_colors)
         # print(random_color)
         for i, color in enumerate(interpolate(random_color, black, image.width * 2)):
             draw.line([(i, 0), (0, i)], tuple(color), width=1)
-    
-    
-        # Use ImageFont to specify the font and size of the text
-        font = ImageFont.truetype('../assets/FTLTLT.ttf', 32)
-        headingfont = ImageFont.truetype('../assets/FTLTLT.ttf', 64)
 
+        # Use ImageFont to specify the font and size of the text
+        font = ImageFont.truetype("../assets/FTLTLT.ttf", 32)
+        headingfont = ImageFont.truetype("../assets/FTLTLT.ttf", 64)
 
         # draw the watermark in the top right corner
         watermark = Image.open("../assets/VocabCLI -  White.png")
@@ -175,7 +164,14 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
         image.paste(watermark, (880, -50), mask=watermark)
 
         # Draw the word and its definition on the image
-        draw.text((50, 50), word.upper(), fill='white', font=headingfont, stroke_width=2, stroke_fill="black")
+        draw.text(
+            (50, 50),
+            word.upper(),
+            fill="white",
+            font=headingfont,
+            stroke_width=2,
+            stroke_fill="black",
+        )
 
         if type == "favorite":
             # paste the heart on the image at position (250, 50) with transparency
@@ -198,27 +194,30 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             tagImg = Image.open("../assets/tag.png")
             tagImg = tagImg.resize((75, 75))
             image.paste(tagImg, (50, 125), mask=tagImg)
-            
-            draw.text((150, 150), tag, fill='white', font=font)
+
+            draw.text((150, 150), tag, fill="white", font=font)
 
         # get the dictionary of definitions:examples
         def_and_example = flashcard_definition(word)
-        
 
         for count, (definition, example) in enumerate(def_and_example.items(), start=1):
             definition = textwrap.fill(definition, width=65)
-            y_pos = 150+(count*200)
+            y_pos = 150 + (count * 200)
 
             # if the definition has an example, add it to the flashcard
             if example:
                 example = textwrap.fill(example, width=65)
-                draw.text((50, y_pos),
-                        f"{count}. {definition}\n eg. {example}", fill='black', font=font)
+                draw.text(
+                    (50, y_pos),
+                    f"{count}. {definition}\n eg. {example}",
+                    fill="black",
+                    font=font,
+                )
             else:
-                draw.text((50, y_pos), f"{count}. {definition}", fill='black', font=font)
-            
-                
-            
+                draw.text(
+                    (50, y_pos), f"{count}. {definition}", fill="black", font=font
+                )
+
         # save images to their respective folders based on passed type
         if tag:
             if not os.path.exists(f"flashcard/tag/{tag}"):
@@ -237,14 +236,12 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             if os._exists(name := f"flashcard/{type}/{word}.png"):
                 os.remove(name)
             image.save(f"flashcard/{type}/{word}.png")
-            
+
         progressbar_total += 1
-                
-        
-            
+
 
 def generate_all_flashcards():
-    """ Generate flashcards for all words in the database """
+    """Generate flashcards for all words in the database"""
 
     conn = createConnection()
     c = conn.cursor()
@@ -253,8 +250,8 @@ def generate_all_flashcards():
 
 
 def generate_mastered_flashcards():
-    """ Generate flashcards for all mastered words in the database """
-    
+    """Generate flashcards for all mastered words in the database"""
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word) FROM words WHERE mastered=1")
@@ -262,7 +259,7 @@ def generate_mastered_flashcards():
 
 
 def generate_learning_flashcards():
-    """ Generate flashcards for all learning words in the database """
+    """Generate flashcards for all learning words in the database"""
 
     conn = createConnection()
     c = conn.cursor()
@@ -271,7 +268,7 @@ def generate_learning_flashcards():
 
 
 def generate_favorite_flashcards():
-    """ Generate flashcards for all favorite words in the database """
+    """Generate flashcards for all favorite words in the database"""
 
     conn = createConnection()
     c = conn.cursor()
@@ -280,13 +277,13 @@ def generate_favorite_flashcards():
 
 
 def generate_tag_flashcards(query: str):
-    """ 
-    Generate flashcards for all words with a specific tag in the database 
-    
+    """
+    Generate flashcards for all words with a specific tag in the database
+
     Args:
         query (str): the tag to search for
     """
-    
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT DISTINCT(word), tag FROM words WHERE tag=?", (query,))

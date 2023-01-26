@@ -1,5 +1,7 @@
 from unittest import mock
+
 import pytest
+
 from vocabCLI import app
 
 

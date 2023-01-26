@@ -1,5 +1,7 @@
 from unittest import mock
+
 import pytest
+
 from vocabCLI import app
 
 
@@ -42,11 +44,17 @@ class TestDefine:
     def test_define_multiple_real_words(self, runner):
         result = runner.invoke(app, ["define", "indigo", "paint"])
         assert result.exit_code == 0
-        assert """Having a deep purplish-blue""" in result.stdout  # substr from def of first word
-        assert """To direct a radar beam toward""" in result.stdout  # substr from def of second word
+        assert (
+            """Having a deep purplish-blue""" in result.stdout
+        )  # substr from def of first word
+        assert (
+            """To direct a radar beam toward""" in result.stdout
+        )  # substr from def of second word
 
     def test_define_multiple_real_fake_words(self, runner):
         result = runner.invoke(app, ["define", "fakewordhaha", "paint"])
         assert result.exit_code == 0
         assert """is not a valid word""" in result.stdout  # error msg for fake word
-        assert """To direct a radar beam toward""" in result.stdout  # substr from def of second word
+        assert (
+            """To direct a radar beam toward""" in result.stdout
+        )  # substr from def of second word

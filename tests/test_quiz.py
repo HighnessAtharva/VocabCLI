@@ -1,5 +1,7 @@
 from unittest import mock
+
 import pytest
+
 from vocabCLI import app
 
 # TODO: add tests for collection Quizzing
@@ -201,7 +203,6 @@ class TestQuiz:
         #     mock_typer.return_value = True
 
         def test_quiz_fake_collection(self, runner):
-            result = runner.invoke(
-                app, ["quiz", "--collection", "fakeCollection"])
+            result = runner.invoke(app, ["quiz", "--collection", "fakeCollection"])
             assert result.exit_code == 0
             assert "The collection fakeCollection is not available" in result.stdout

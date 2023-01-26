@@ -1,25 +1,25 @@
-import typer
 import contextlib
-from Exceptions import *
-from Database import createConnection, createTables
 from datetime import datetime, timedelta
 from pathlib import Path
 from sqlite3 import *
-import requests
 from typing import *
-from rich import print
+
+import requests
+import typer
+from Database import createConnection, createTables
+from Exceptions import *
+from rich import box, print
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from rich import box
- 
+
 
 def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
     1. Check if there are any quotes in the database
     2. If there are quotes, it prints a table with the quotes, authors and dates added
-    3. If there are no quotes, it raises an exception 
+    3. If there are no quotes, it raises an exception
 
     Raises:
         NoQuotesError: If there are no quotes in the database.
@@ -37,38 +37,43 @@ def get_quotes() -> None:
 
         print(
             Panel(
-                title="[b reverse green]  Your Quotes  [/b reverse green]", renderable=f"You have [bold green]{len(quotes)}[/bold green] quotes saved. 📚", title_align="center", padding=(1, 1)
-            ))
+                title="[b reverse green]  Your Quotes  [/b reverse green]",
+                renderable=f"You have [bold green]{len(quotes)}[/bold green] quotes saved. 📚",
+                title_align="center",
+                padding=(1, 1),
+            )
+        )
 
-        #----------------- Table -----------------#
-        
+        # ----------------- Table -----------------#
+
         table = Table(
-        show_header=True,
-        header_style="bold gold3",
-        border_style="white",
-        title="✍🏼 Quotes ",
-        title_style="bold magenta",
-        title_justify="center",
-        box=box.ROUNDED
+            show_header=True,
+            header_style="bold gold3",
+            border_style="white",
+            title="✍🏼 Quotes ",
+            title_style="bold magenta",
+            title_justify="center",
+            box=box.ROUNDED,
         )
         table.add_column("Quote", width=30)
-        table.add_column("Author",  width=30, style="blue")
+        table.add_column("Author", width=30, style="blue")
         table.add_column("Date", width=18, style="magenta")
 
         for quote in quotes:
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
-            quote_date = datetime.datetime.strptime(quote[2], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
-        
+            quote_date = datetime.datetime.strptime(
+                quote[2], "%Y-%m-%d %H:%M:%S"
+            ).strftime("%d %b '%y | %H:%M")
+
             table.add_row(quote_text, quote_author, quote_date)
             table.add_section()
         print(table)
 
-        #----------------- Table -----------------#
+        # ----------------- Table -----------------#
 
 
-
-def add_quote(quote: str, author: Optional[str] = None)->None:
+def add_quote(quote: str, author: Optional[str] = None) -> None:
     # sourcery skip: remove-redundant-fstring
     """
     Adds a quote to the database.
@@ -76,7 +81,7 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
     2. The quote and author are checked to see if they are only whitespaces. If they are, an error message is printed and the function is returned.
     3. The quote and author are checked to see if they already exist in the database. If they do, an error message is printed and the function is returned.
     4. The quote and author are added to the database.
-    5. A success message is printed. 
+    5. A success message is printed.
 
     Args:
         quote (str): The quote to be added.
@@ -134,10 +139,11 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
         )
         return
 
-
     # insert the quote into the database
-    c.execute("INSERT INTO quotes VALUES (?,?,?)", (quote, author,
-              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    c.execute(
+        "INSERT INTO quotes VALUES (?,?,?)",
+        (quote, author, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+    )
     conn.commit()
 
     # print a success message
@@ -147,10 +153,11 @@ def add_quote(quote: str, author: Optional[str] = None)->None:
             title_align="center",
             padding=(1, 1),
             renderable=f"[bold green]Quote:[/bold green] [reverse white]{quote}[/reverse white] by [italic u]{author if author is not None else '-'}[/italic u] added to your list. 📚",
-    ))
+        )
+    )
 
 
-def search_quote(quoteText: str)->None:
+def search_quote(quoteText: str) -> None:
     """
     Searches for a quote in the database.
     1. It then strips the quote of any leading or trailing whitespace & removes the quotes from the quote if they exist
@@ -159,7 +166,7 @@ def search_quote(quoteText: str)->None:
     4. If the quote does not only have whitespace, it then searches for the quote in the database while LOWERING all the quotes in the database
     5. If the quote does not exist, it prints an error message
     6. If the quote does exist, it prints a table with the search results
-    
+
     Args:
         quoteText (str): The quote to be searched.
     """
@@ -168,8 +175,8 @@ def search_quote(quoteText: str)->None:
     c = conn.cursor()
 
     # strip the quote of any leading or trailing whitespace
-    quoteText= quoteText.strip()
-    
+    quoteText = quoteText.strip()
+
     # convert the quote to lowercase so as to match the case of the quotes in the database
     quoteText = quoteText.lower()
 
@@ -190,7 +197,10 @@ def search_quote(quoteText: str)->None:
         return
 
     # search for the quote in the database whiile LOWERING all the quotes in the database
-    c.execute("SELECT * FROM quotes WHERE LOWER(quote) LIKE ? OR LOWER(author) LIKE ?", (f'%{quoteText.lower()}%',f'%{quoteText.lower()}%'))
+    c.execute(
+        "SELECT * FROM quotes WHERE LOWER(quote) LIKE ? OR LOWER(author) LIKE ?",
+        (f"%{quoteText.lower()}%", f"%{quoteText.lower()}%"),
+    )
     quotes = c.fetchall()
 
     # if the quote does not exist
@@ -204,14 +214,17 @@ def search_quote(quoteText: str)->None:
             )
         )
         return
-            
-    print(Panel(title="[b reverse green]  Search Results  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b] 🔍")
-        )
 
-    #----------------- Table -----------------#
+    print(
+        Panel(
+            title="[b reverse green]  Search Results  [/b reverse green]",
+            title_align="center",
+            padding=(1, 1),
+            renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b] 🔍",
+        )
+    )
+
+    # ----------------- Table -----------------#
 
     table = Table(
         show_header=True,
@@ -220,27 +233,28 @@ def search_quote(quoteText: str)->None:
         title="✍🏼 Quotes ",
         title_style="bold magenta",
         title_justify="center",
-        box=box.ROUNDED
-        )
+        box=box.ROUNDED,
+    )
     table.add_column("Quote", width=30)
-    table.add_column("Author",  width=30, style="blue")
+    table.add_column("Author", width=30, style="blue")
     table.add_column("Date", width=18, style="magenta")
 
     for quote in quotes:
         # print the quote
         quote_text = quote[0]
         quote_author = quote[1] if quote[1] is not None else "-"
-        quote_date = datetime.datetime.strptime(quote[2], '%Y-%m-%d %H:%M:%S').strftime('%d %b \'%y | %H:%M')
+        quote_date = datetime.datetime.strptime(quote[2], "%Y-%m-%d %H:%M:%S").strftime(
+            "%d %b '%y | %H:%M"
+        )
 
         table.add_row(quote_text, quote_author, quote_date)
         table.add_section()
     print(table)
 
-    #----------------- Table -----------------#
+    # ----------------- Table -----------------#
 
 
-
-def delete_quote()->None:
+def delete_quote() -> None:
     """
     Deletes a quote from the database.
     1. Displays all the quotes in the database with their index using SELECT query
@@ -248,11 +262,11 @@ def delete_quote()->None:
     3. Asks the user to select a quote to delete (by index)
     4. If the user enters a valid index, it deletes the quote from the database and prints a success message
     5. If the user enters an invalid index, it prints an error message
-    
+
     Raises:
         NoQuotesError: If there are no quotes in the database
     """
-    
+
     conn = createConnection()
     c = conn.cursor()
     c.execute("SELECT * FROM quotes ORDER BY quote ASC")
@@ -274,13 +288,13 @@ def delete_quote()->None:
 
         # display added quotes
         for idx, quote in enumerate(quotes, start=1):
-            quote_num=idx
+            quote_num = idx
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
             quote_date = quote[2]
 
             print(
-                f'{quote_num}. [bold green]Quote:[/bold green] \"{quote_text}\" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
+                f'{quote_num}. [bold green]Quote:[/bold green] "{quote_text}" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
             )
         # prompt the user to select a quote index to delete
         quoteToDelete = input("🔢 Enter the index of the quote you want to delete: ")
@@ -298,7 +312,7 @@ def delete_quote()->None:
             return
 
         # check if the quoteToDelete is within the range of the quotes
-        if int(quoteToDelete) not in range(1, len(quotes)+1):
+        if int(quoteToDelete) not in range(1, len(quotes) + 1):
             print(
                 Panel(
                     title="[b reverse red]  Error!  [/b reverse red]",
@@ -310,12 +324,21 @@ def delete_quote()->None:
             return
 
         # delete the quote from the database
-        c.execute("DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete)-1][0],))
-        print(Panel(title="[b reverse green]  Quote Deleted  [/b reverse green]", renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} [bold red]deleted[/bold red] successfully", title_align="center", padding=(1, 1)))
+        c.execute(
+            "DELETE FROM quotes WHERE quote=?", (quotes[int(quoteToDelete) - 1][0],)
+        )
+        print(
+            Panel(
+                title="[b reverse green]  Quote Deleted  [/b reverse green]",
+                renderable=f" Quote [bold green]{quoteToDelete}[/bold green]: {quotes[int(quoteToDelete)-1][0]} [bold red]deleted[/bold red] successfully",
+                title_align="center",
+                padding=(1, 1),
+            )
+        )
         conn.commit()
-  
- 
-def get_random_quote()->None:
+
+
+def get_random_quote() -> None:
     """
     Gets a random quote from the database.
     1. Displays a random quote from the database using SELECT query
@@ -336,17 +359,22 @@ def get_random_quote()->None:
         if len(random_quote) == 0:
             raise NoQuotesException
 
-    
         # print the quote
         quote_text = random_quote[0]
         quote_author = random_quote[1] if random_quote[1] is not None else "-"
         quote_date = random_quote[2]
 
-        print(Panel(title="[b reverse green]  Random Quote  [/b reverse green]", title_align="center", padding=(1, 1), renderable=f"[bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}\n\n[bold green]Date:[/bold green] {quote_date}"))
-  
-  
+        print(
+            Panel(
+                title="[b reverse green]  Random Quote  [/b reverse green]",
+                title_align="center",
+                padding=(1, 1),
+                renderable=f'[bold green]Quote:[/bold green] "{quote_text}" \n\n[bold green]Author:[/bold green] {quote_author}\n\n[bold green]Date:[/bold green] {quote_date}',
+            )
+        )
 
-def get_quote_of_the_day()->None:
+
+def get_quote_of_the_day() -> None:
     """
     Get a random quote from a public API
     1. Gets a random quote from the API
@@ -354,27 +382,30 @@ def get_quote_of_the_day()->None:
     """
 
     # get the quote of the day from the API
-    quote = requests.get("https://quotes.rest/qod?language=en").json()["contents"]["quotes"][0]
+    quote = requests.get("https://quotes.rest/qod?language=en").json()["contents"][
+        "quotes"
+    ][0]
 
     # print the quote
     quote_text = quote["quote"]
     quote_author = quote["author"] if quote["author"] is not None else "-"
     quote_date = quote["date"]
-    quote_date=datetime.datetime.strptime(quote_date, '%Y-%m-%d').strftime('%d %b \'%y')
+    quote_date = datetime.datetime.strptime(quote_date, "%Y-%m-%d").strftime(
+        "%d %b '%y"
+    )
 
     # print using Panel
     print(
         Panel(
             title=f"[b reverse green]  Quote of the Day - {quote_date} [/b reverse green]",
-            renderable=f"🌟 [bold green]Quote:[/bold green] \"{quote_text}\" \n\n[bold green]Author:[/bold green] {quote_author}",
+            renderable=f'🌟 [bold green]Quote:[/bold green] "{quote_text}" \n\n[bold green]Author:[/bold green] {quote_author}',
             title_align="center",
             padding=(1, 1),
         )
     )
 
 
-
-def delete_all_quotes()->None:
+def delete_all_quotes() -> None:
     """
     Deletes all quotes from the database.
     1. Display a warning message & prompt the user to confirm the deletion
@@ -392,23 +423,28 @@ def delete_all_quotes()->None:
         if len(quotes) == 0:
             raise NoQuotesException
 
-        print(Panel(title="[b reverse yellow]  Warning!  [/b reverse yellow]", 
+        print(
+            Panel(
+                title="[b reverse yellow]  Warning!  [/b reverse yellow]",
                 title_align="center",
                 padding=(1, 1),
-                renderable="🛑 [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?")
+                renderable="🛑 [bold red]Warning:[/bold red] This action cannot be undone. Are you sure you want to delete all quotes?",
+            )
         )
 
         # prompt the user to select a quote index to delete
         print("")
-        
-        
+
         if typer.confirm(""):
             c.execute("DELETE FROM quotes")
-            print(Panel(title="[b reverse green]  Delete Successful!  [/b reverse green]", 
-                title_align="center",
-                padding=(1, 1),
-                renderable="All quotes [bold red]deleted[/bold red] successfully ✅")
-        )
+            print(
+                Panel(
+                    title="[b reverse green]  Delete Successful!  [/b reverse green]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable="All quotes [bold red]deleted[/bold red] successfully ✅",
+                )
+            )
             conn.commit()
         else:
             print(
