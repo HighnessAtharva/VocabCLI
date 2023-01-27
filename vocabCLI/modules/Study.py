@@ -84,7 +84,7 @@ def start_revision(c: Cursor, is_collection: bool = False) -> None:
                 )
                 print("\n\n")
         else:
-            print("Press Y to Stop Revision. Enter to continue 📖")
+            print(Panel("Press Y to Stop Revision. Enter to continue 📖"))
             if not (sure := typer.confirm("")):
                 continue
             print(Panel("OK, stopping revision. 🛑"))
@@ -633,7 +633,14 @@ def quiz_collection(
             (collectionName, number),
         )
         if c.fetchone() is None:
-            print(f"Collection '{collectionName}' is empty")
+            print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"Collection '{collectionName}' is empty",
+            )
+        )
             return
         start_quiz(
             c, collection=collectionName, quizType=f"collection: {collectionName}"
@@ -654,7 +661,14 @@ def show_quiz_history() -> None:
     c.execute("SELECT * FROM quiz_history ORDER BY datetime DESC")
     rows = c.fetchall()
     if not rows:
-        print("No quiz attempts yet. Take a quiz to see your quiz history.")
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="No quiz attempts yet. Take a quiz to see your quiz history.",
+            )
+        )
         return
 
     # ----------------- Table -----------------#

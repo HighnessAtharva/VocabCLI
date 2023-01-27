@@ -32,3 +32,5 @@ torch
 torchaudio
 torchvision
 typer
+trafilatura
+transformers

@@ -76,7 +76,14 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
     """
 
     if not (rows := c.fetchall()):
-        print(f"No words found for selected criteria: {type}")
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable=f"No words found for selected criteria: {type}",
+            )
+        )
 
     # Create a new image with a white background
     width, height = 1080, 1080

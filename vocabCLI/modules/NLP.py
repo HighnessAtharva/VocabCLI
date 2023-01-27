@@ -211,7 +211,7 @@ def censor_bad_words_strict(text: str) -> None:
 
         print(
             Panel(
-                renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red]",
+                renderable=f"[bold]Offensive words censored:[/bold][bold red] {offensive_words} 😤[/bold red]",
                 title="[reverse]Censored Words[/reverse]",
             )
         )
@@ -306,7 +306,7 @@ def censor_bad_words_not_strict(text: str) -> None:
         )
         print(
             Panel(
-                renderable=f"Offensive words censored:[bold red] {offensive_words} 😤[/bold red] ",
+                renderable=f"[bold]Offensive words censored:[/bold][bold red] {offensive_words} 😤[/bold red] ",
                 padding=(1, 1),
                 title="[reverse]Censored Words[/reverse]",
             )
@@ -566,7 +566,7 @@ def extract_difficult_words(text: str) -> None:
                 padding=(1, 1),
                 border_style="navajo_white1",
                 box=box.DOUBLE,
-                renderable=f"Content Length: [bold blue]{article_word_count}[/bold blue] words\nExtracted [bold blue]{len(difficult_words)}[/bold blue] difficult words",
+                renderable=f"[bold]Content Length:[/bold] [bold blue]{article_word_count}[/bold blue] words\nExtracted [bold blue]{len(difficult_words)}[/bold blue] difficult words",
             ),
         )
 
@@ -694,7 +694,7 @@ def sentiment_analysis(content: str) -> None:
                 title="[b reverse green]  Success!  [/b reverse green]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"Sentiment Analysis Verdict: {sentiment_score_to_summary(sentiment_score)} {emoji}",
+                renderable=f"[bold blue]Sentiment Analysis Verdict:[/bold blue] {sentiment_score_to_summary(sentiment_score)} {emoji}",
             )
         )
 
@@ -831,7 +831,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
                         title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\nHeadline:\n{headline} \n\n Summary:\n{text_summary}",
+                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters\n\n[bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)} [/bold]characters \n\n[bold blue]Headline:[/bold blue]\n[bold]{headline}[/bold] \n\n [bold blue]Summary:[/bold blue]\n{text_summary}",
                     )
                 )
             else:
@@ -840,7 +840,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
                         title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"Length of the article: {len(text)} characters  \n\n Length of the summary:{len(text_summary)} characters \n\n Summary:\n{text_summary}",
+                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters  \n\n [bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)}[/bold] characters \n\n[bold blue] Summary:[/bold blue]\n{text_summary}",
                     )
                 )
 

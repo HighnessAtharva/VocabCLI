@@ -1385,12 +1385,12 @@ def quote(
     elif delete_all:
         delete_all_quotes()
     elif add:
-        print("📝 Enter the quote to add.")
+        print(Panel("📝 Enter the quote to add."))
         my_quote = typer.prompt("")
-        print("Do you want to add the author of the quote? (y/n)")
+        print(Panel("Do you want to add the author of the quote? (y/n)"))
 
         if typer.confirm(""):
-            print("📝 Enter the author of the quote. (Optional)")
+            print(Panel("📝 Enter the author of the quote. (Optional)"))
             my_author = typer.prompt("")
             add_quote(quote=my_quote, author=my_author)
         else:
@@ -1476,7 +1476,7 @@ def flashcard(
     elif tag:
         generate_tag_flashcards(tag)
     else:
-        print("Cannot combine options. Please select only one option.")
+        print(Panel("Cannot combine options. Please select only one option."))
 
 
 @app.command(

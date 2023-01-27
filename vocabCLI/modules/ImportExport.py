@@ -92,7 +92,12 @@ def export_to_csv() -> None:
         )
     except NoQuotesException as e:
         print(
-            "[b red]SKIPPING QUOTES EXPORT[/b red] since no quotes were found in the database. ❌"
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="[b red]SKIPPING QUOTES EXPORT[/b red] since no quotes were found in the database. ❌",
+            )
         )
 
     # =========================#
@@ -160,7 +165,14 @@ def export_to_csv() -> None:
             )
         )
     except NoDataFoundException as e:
-        print("No quiz history found in the database. ❌")
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="No quiz history found in the database. ❌",
+            )
+        )
 
 
 def import_from_csv() -> None:
