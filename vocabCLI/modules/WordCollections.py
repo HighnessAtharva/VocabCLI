@@ -21,7 +21,7 @@ def delete_collection_from_DB():
 def clean_collection_csv_data():
     """Cleans the domains.csv file and writes the cleaned data to domains.csv"""
 
-    df = pd.read_csv("modules/domains.csv")  # Read the CSV Files
+    df = pd.read_csv("modules/domains.csv", encoding='latin-1')  # Read the CSV Files
     df["word"] = df["word"].str.lower()  # convert all words to lowercase
     # Remove the rows with spaces in the word column
     df = df[df["word"].str.contains(" ") == False]
