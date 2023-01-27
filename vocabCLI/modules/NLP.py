@@ -23,6 +23,12 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from spacytextblob.spacytextblob import SpacyTextBlob
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
+import os
+import openai
+
+# Load your API key from an environment variable or secret management service
+openai.api_key = os.getenv("OPENAI")
+
 URL_INVALID_PANEL = Panel(
     title="[b reverse red]  Error!  [/b reverse red]",
     title_align="center",
@@ -518,6 +524,11 @@ def extract_difficult_words(text: str) -> None:
         for word in difficult_words:
             if word[-1] == "s" and word[:-1] in simple_words:
                 difficult_words.remove(word)
+                
+        # remove words that end with 'ing'
+        for word in difficult_words:
+            if word[-3:] == "ing":
+                difficult_words.remove(word)
 
     # ----------------- Spinner -----------------#
     with Progress(
@@ -703,17 +714,9 @@ def sentiment_analysis(content: str) -> None:
 def summarize_text_util(text: str, per: int) -> str:
     """
     Summarizes the text using the spacy library
-    1. Load the document in Spacy
-    2. Create a list of tokens (i.e. each word in the document)
-    3. Create a dictionary of the words and their frequency
-    4. Get the maximum frequency of a word
-    5. Divide each frequency by the maximum frequency
-    6. Create a list of sentence tokens (i.e. each sentence in the document)
-    7. Create a dictionary of the sentences and their score
-    8. Multiply each sentence's score by the frequency of each word in that sentence
-    9. Get the number of sentences to include in the summary (here 20% of the sentences in the document)
-    10. Get the top sentences with the highest score
-    11. Combine the words in the top sentences into a string
+    1. Backend API call to OpenAI
+    2. 😎 100% abstraction, GPT 3 does all the work
+    3. Strip the text of any escape characters and newlines and return the summarized text
 
     Args:
         text (str): text to be summarized
@@ -722,40 +725,54 @@ def summarize_text_util(text: str, per: int) -> str:
     Returns:
         str: summarized text
     """
+    response = openai.Completion.create(model="text-davinci-003", prompt="summarize the following text:\n"+ text, temperature=0, max_tokens=2000)
+    
+    response = response['choices'][0]['text']
+    
+    # remove escape characters and newlines
+    response = re.sub(r"\\n", " ", response)
+    
+    # if the response contains "Summary:" then remove it
+    if "Summary:" in response:
+        response = response.split("Summary:")[1]
+         
+    return response
 
-    # Loading the NLP model
-    nlp = spacy.load("en_core_web_sm")
+    # OLD WAY
 
-    doc = nlp(text)
-    tokens = [token.text for token in doc]
-    word_frequencies = {}
-    for word in doc:
-        if (
-            word.text.lower() not in list(STOP_WORDS)
-            and word.text.lower() not in punctuation
-        ):
-            if word.text in word_frequencies:
-                word_frequencies[word.text] += 1
-            else:
-                word_frequencies[word.text] = 1
+    # # Loading the NLP model
+    # nlp = spacy.load("en_core_web_sm")
 
-    max_frequency = max(word_frequencies.values())
-    for word in word_frequencies:
-        word_frequencies[word] = word_frequencies[word] / max_frequency
-    sentence_tokens = list(doc.sents)
-    sentence_scores = {}
-    for sent in sentence_tokens:
-        for word in sent:
-            if word.text.lower() in word_frequencies:
-                if sent in sentence_scores:
-                    sentence_scores[sent] += word_frequencies[word.text.lower()]
-                else:
-                    sentence_scores[sent] = word_frequencies[word.text.lower()]
-    select_length = int(len(sentence_tokens) * per)
-    summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
-    final_summary = [word.text for word in summary]
-    summary = "".join(final_summary)
-    return summary
+    # doc = nlp(text)
+    # tokens = [token.text for token in doc]
+    # word_frequencies = {}
+    # for word in doc:
+    #     if (
+    #         word.text.lower() not in list(STOP_WORDS)
+    #         and word.text.lower() not in punctuation
+    #     ):
+    #         if word.text in word_frequencies:
+    #             word_frequencies[word.text] += 1
+    #         else:
+    #             word_frequencies[word.text] = 1
+
+    # max_frequency = max(word_frequencies.values())
+    # for word in word_frequencies:
+    #     word_frequencies[word] = word_frequencies[word] / max_frequency
+    # sentence_tokens = list(doc.sents)
+    # sentence_scores = {}
+    # for sent in sentence_tokens:
+    #     for word in sent:
+    #         if word.text.lower() in word_frequencies:
+    #             if sent in sentence_scores:
+    #                 sentence_scores[sent] += word_frequencies[word.text.lower()]
+    #             else:
+    #                 sentence_scores[sent] = word_frequencies[word.text.lower()]
+    # select_length = int(len(sentence_tokens) * per)
+    # summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
+    # final_summary = [word.text for word in summary]
+    # summary = "".join(final_summary)
+    # return summary
 
 
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
