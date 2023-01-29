@@ -4,5 +4,5 @@ VocabCLI
 .. toctree::
    :maxdepth: 4
 
-   app
-   
+   setup
+   vocabCLI

@@ -14,6 +14,7 @@ from rich.panel import Panel
 def find_synonym(query: str) -> None:
     """
     Finds the synonyms of the query word
+    
     1. Connects to the API
     2. Checks if the API returned a response
     3. If it did, it loops through the response and adds the synonyms to a list
@@ -92,6 +93,7 @@ def find_synonym(query: str) -> None:
 def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word
+    
     1. Connects to the API
     2. Checks if the API returned a response
     3. If it did, it loops through the response and adds the antonyms to a list

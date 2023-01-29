@@ -48,6 +48,7 @@ def check_word_exists(query: str) -> bool:
 def fetch_word_history(word: str) -> None:
     """
     Fetches all instances of timestamp for a word from the database
+    
     1. Execute a query that selects the datetime column from the words table where the word column is equal to the word
     2. If the word is not found in the database, raise an exception
     3. If the word is found in the database, print the history of the word
@@ -95,6 +96,7 @@ def fetch_word_history(word: str) -> None:
 def add_tag(query: str, tagName: str) -> None:
     """
     Tags the word in the vocabulary builder list.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database with no tags, then add the tag to add words
@@ -148,6 +150,7 @@ def add_tag(query: str, tagName: str) -> None:
 
 def remove_tag(query: str) -> None:
     """Removes the tag from the word in the database
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database with no tags, then do nothing
@@ -195,6 +198,7 @@ def remove_tag(query: str) -> None:
 def set_mastered(query: str) -> None:
     """
     Sets the word as mastered.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and mastered is set to 1, then do nothing
@@ -242,6 +246,7 @@ def set_mastered(query: str) -> None:
 def check_mastered(query: str) -> bool:
     """
     Checks if the word is mastered and returns a boolean value.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and mastered is set to 1, then return True
@@ -263,6 +268,7 @@ def check_mastered(query: str) -> bool:
 def check_learning(query: str) -> bool:
     """
     Checks if the word is learning and returns a boolean value.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and learning is set to 1, then return True
@@ -284,6 +290,7 @@ def check_learning(query: str) -> bool:
 def set_unmastered(query: str) -> None:
     """
     Sets the word as unmastered.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and mastered is set to 0, then do nothing
@@ -329,6 +336,7 @@ def set_unmastered(query: str) -> None:
 def set_learning(query: str) -> None:
     """
     Sets the word as learning.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and is already learning, then do nothing
@@ -386,6 +394,7 @@ def set_learning(query: str) -> None:
 def set_unlearning(query: str) -> None:
     """
     Sets the word as unlearning.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and learning is set to 0, then do nothing
@@ -435,6 +444,7 @@ def set_unlearning(query: str) -> None:
 def set_favorite(query: str) -> None:
     """
     Sets the word as favorite.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and favorite is set to 1, then do nothing
@@ -477,6 +487,7 @@ def set_favorite(query: str) -> None:
 def set_unfavorite(query: str) -> None:
     """
     Remove the word from favorite list.
+    
     1. Check if the word exists in the database
     2. If the word does not exist in the database, raise an exception
     3. If the word exists in the database and favorite is set to 0, then do nothing
@@ -730,6 +741,7 @@ def show_list(
     # sourcery skip: low-code-quality
     """
     Gets all the words in the vocabulary builder list.
+    
     1. The code give a list of mastered, learning, favorite, words with a particular tag, most recent words, words added in a particular date or words added in the last n number of days or most recent words based on the arguments passed
     2. Based on the arguments passed, the code executes the respective SQL command
     1. If no arguments are passed, it gets all the words in the vocabulary builder list
@@ -1279,6 +1291,7 @@ def get_lookup_rate(
 ) -> None:
     """
     Returns the learning rate of the user.
+    
     1. If today, then get the number of words learned today, yesterday and the difference between them
     2. If week, then get the number of words learned this week, last week and the difference between them
     3. If month, then get the number of words learned this month, last month and the difference between them
@@ -1468,6 +1481,7 @@ def get_lookup_rate(
 def get_consecutive_dates(dates: list) -> tuple:
     """
     Returns list of consecutive dates from list of dates
+    
     1. Sort the list of dates
     2. Iterate through the list of dates
     3. If the difference between the current date and the next date is 1 day, continue
@@ -1500,6 +1514,7 @@ def get_consecutive_dates(dates: list) -> tuple:
 def show_streak() -> None:
     """
     Shows streak of days user has looked up words
+    
     1. Check if there are any words in the database.
     2. If there are words, get all the dates from the database.
     3. Convert dates to datetime objects
@@ -1549,6 +1564,7 @@ def show_streak() -> None:
 def predict_milestone(milestone: int) -> None:
     """
     Predicts when user will reach a milestone
+    
     1. It runs a query to get the number of words in the database.
     2. If there are no words in the database, it throws an exception and prints a message.
     3. If there are words in the database, it runs a query to get the date of the most recent word looked up (last_date).

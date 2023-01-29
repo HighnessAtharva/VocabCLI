@@ -1,0 +1,1742 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>vocabCLI.vocabCLI - vocabCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">vocabCLI 0.0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">vocabCLI 0.0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for vocabCLI.vocabCLI</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">typer</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span> <span class="nn">rich.panel</span> <span class="kn">import</span> <span class="n">Panel</span>
+
+<span class="c1"># app configuration</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">add_completion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rich_markup_mode</span><span class="o">=</span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📕[bold green] This is a dictionary and a vocabulary builder CLI.[/bold green] VocabularyCLI is a lightweight Command Line Interface that allows users to look up word definitions, examples, synonyms and antonyms directly via the command line. Powered with several utility based commands our CLI offers rapid and robust Knowledge Base capabilities like Flashcards, Tagging, Word Management, Graph Reporting, Bulk import and export of word lists and is a definitive software for linguaphiles. This application boasts a simple and intuitive interface that is easy to use and is a must have for anyone who wants to expand their vocabulary and improve their language skills. The app also offers advanced Text Classification and Processing via the use of Natural Language Processing. The CLI will be offered with eye-catching Panels, Tables, Animated Symbols, Emojis, Interactive Menus, Spinners, Colored fonts and other rich features that will make the user experience more enjoyable and interactive.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="refresh"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.refresh">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔄 Update the JSON response in the cache&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">refresh</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refreshes the cached content from the API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Database</span> <span class="kn">import</span> <span class="n">refresh_cache</span>
+
+    <span class="n">refresh_cache</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="bye"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.bye">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;👋🏼 [bold red]Exits[/bold red] the CLI&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">bye</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;👋🏼 [bold green]Bye bye![/bold green]&quot;</span><span class="p">))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="about"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.about">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💻 [bold blue]About[/bold blue] the software&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">about</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print information about the software.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.About</span> <span class="kn">import</span> <span class="n">print_about_app</span>
+    <span class="kn">from</span> <span class="nn">modules.Banner</span> <span class="kn">import</span> <span class="n">print_banner</span>
+
+    <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">color_system</span><span class="o">=</span><span class="s2">&quot;truecolor&quot;</span><span class="p">)</span>
+    <span class="n">print_banner</span><span class="p">(</span><span class="n">console</span><span class="p">)</span>
+    <span class="n">print_about_app</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="define"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.define">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📚 [bold blue]Lookup[/bold blue] a word in the dictionary&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">define</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📚 [bold blue]Word[/bold blue] which is to be defined.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">short</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--short&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📚 [bold blue]Short definition[/bold blue] of the word.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">pronounce</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--pronounce&quot;</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📚 [bold blue]Pronounce[/bold blue] the word.&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="c1"># sourcery skip: use-named-expression</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Looks up a word in the dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be defined.</span>
+<span class="sd">        short (bool, optional): If True, prints the short definition of the word. Defaults to False.</span>
+<span class="sd">        pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Dictionary</span> <span class="kn">import</span> <span class="n">definition</span><span class="p">,</span> <span class="n">say_aloud</span>
+    <span class="kn">from</span> <span class="nn">spellchecker</span> <span class="kn">import</span> <span class="n">SpellChecker</span>
+
+    <span class="n">spell</span> <span class="o">=</span> <span class="n">SpellChecker</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+
+        <span class="c1"># check if the word is mispelled</span>
+        <span class="n">mispelled</span> <span class="o">=</span> <span class="n">spell</span><span class="o">.</span><span class="n">unknown</span><span class="p">([</span><span class="n">word</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">mispelled</span><span class="p">:</span>
+            <span class="c1"># store other possible correct words</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mispelled</span><span class="p">:</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="n">spell</span><span class="o">.</span><span class="n">candidates</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="c1"># if there are other possible correct words then ask the user if they meant any of them</span>
+                <span class="k">if</span> <span class="n">candidates</span><span class="p">:</span>
+                    <span class="n">candidates</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="n">Panel</span><span class="p">(</span>
+                            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                            <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The word </span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2"> was not found. Did you mean [u blue]</span><span class="si">{</span><span class="n">candidates</span><span class="si">}</span><span class="s2">[/u blue]? 🤔&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">break</span>
+
+                <span class="c1"># otherwise, print the word unavailable message</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="n">Panel</span><span class="p">(</span>
+                            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                            <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                            <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The word [bold red]</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">[/bold red] is not a valid word. Please check the spelling. 🤔&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">short</span><span class="p">:</span>
+                <span class="n">definition</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">short</span><span class="p">:</span>
+                <span class="n">definition</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">short</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">pronounce</span><span class="p">:</span>
+                <span class="n">say_aloud</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ListCMD"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.ListCMD">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 [bold blue]Lists [/bold blue] of all your looked up words&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">ListCMD</span><span class="p">(</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words set as [r bold gold1]favorite[/r bold gold1].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words set as [r bold green]learning[/r bold green].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words set as [r bold blue]mastered[/r bold blue].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words with a particular [bold purple4 r]tag[/bold purple4 r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--days&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-d&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words looked up in the [bold aquamarine3]last N days.[/bold aquamarine3]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">date</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--date&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-D&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only words looked up on a [bold aquamarine3]particular date.[/bold aquamarine3]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">last</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--last&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-L&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only the [bold orange3]last N[/bold orange3] words looked up.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">most</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--most&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-M&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only the [bold orange3]most[/bold orange3] looked up words.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--tagnames&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-T&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only the [bold purple4 r]tags[/bold purple4 r] used by the user.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--collection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only the words in a particular [bold cyan r]collection[/bold cyan r]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">collections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--collections&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-C&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Lists only the [bold cyan1]collections[/bold cyan1] available.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lists all the words looked up by the user.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        favorite (bool, optional): If True, prints the list of favorite words. Defaults to False.</span>
+<span class="sd">        learning (bool, optional): If True, prints the list of words in learning list. Defaults to False.</span>
+<span class="sd">        mastered (bool, optional): If True, prints the list of words in mastered list. Defaults to False.</span>
+<span class="sd">        tag (str, optional): If True, prints the list of words with a particular tag. Defaults to None.</span>
+<span class="sd">        days (str, optional): If True, prints the list of words from last n number of days. Defaults to None.</span>
+<span class="sd">        date (str, optional):  If True, prints the list of words from a particular date. Defaults to None.</span>
+<span class="sd">        last (str, optional): If True, prints the list of last searched words. Defaults to None.</span>
+<span class="sd">        most (str, optional): If True, prints the list of most searched words. Defaults to None.</span>
+<span class="sd">        tagnames (bool, optional): If True, prints the list of all the tags. Defaults to False.</span>
+<span class="sd">        collection (Optional[str], optional): If True, prints the list of words from a collection. Defaults to None.</span>
+<span class="sd">        collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">show_list</span>
+    <span class="kn">from</span> <span class="nn">modules.WordCollections</span> <span class="kn">import</span> <span class="p">(</span><span class="n">show_all_collections</span><span class="p">,</span>
+                                         <span class="n">show_words_from_collection</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">favorite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">learning</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">learning</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mastered</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">mastered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">days</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">last</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="n">last</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">most</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">most</span><span class="o">=</span><span class="n">most</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
+        <span class="n">show_list</span><span class="p">(</span><span class="n">tagnames</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">collection</span><span class="p">:</span>
+        <span class="n">show_words_from_collection</span><span class="p">(</span><span class="n">collectionName</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">collections</span><span class="p">:</span>
+        <span class="n">show_all_collections</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">favorite</span><span class="p">,</span>
+            <span class="n">learning</span><span class="p">,</span>
+            <span class="n">mastered</span><span class="p">,</span>
+            <span class="n">tag</span><span class="p">,</span>
+            <span class="n">days</span><span class="p">,</span>
+            <span class="n">date</span><span class="p">,</span>
+            <span class="n">last</span><span class="p">,</span>
+            <span class="n">most</span><span class="p">,</span>
+            <span class="n">collection</span><span class="p">,</span>
+            <span class="n">collections</span><span class="p">,</span>
+            <span class="n">tags</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">show_list</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="favorite"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.favorite">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💙 [bold green]Sets[/bold green] a word as [bold gold1]favorite[/bold gold1]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">favorite</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💙 Word to add to [bold gold1]favorites[/bold gold1].&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a word to the favorite list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be added to the favorite list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_favorite</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_favorite</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unfavorite"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.unfavorite">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💔 [bold red]Removes[/bold red] the word from [bold gold1]favorites[/bold gold1]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">unfavorite</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💔 [bold blue]Word[/bold blue] to remove from [bold gold1]favorites[/bold gold1]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes a word from the favorite list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be removed from the favorite list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_unfavorite</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_unfavorite</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="learn"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.learn">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎓 [bold green]Sets[/bold green] a word as [bold blue]learning[/bold blue]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">learn</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Word to add to [bold green]learning[/bold green].&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a word to the learning list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be added to the learning list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_learning</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_learning</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unlearn"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.unlearn">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😪 [bold red]Removes[/bold red] the word from [bold blue]learning[/bold blue]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">unlearn</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😪 Word to remove from [bold green]learning[/bold green].&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes a word from the learning list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be removed from the learning list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_unlearning</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_unlearning</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="master"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.master">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧠 [bold green]Sets[/bold green] a word as [bold green]mastered[/bold green]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">master</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧠 Word to add to [bold blue]mastered[/bold blue].&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds a word to the mastered list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be added to the mastered list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_mastered</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_mastered</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unmaster"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.unmaster">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🤔 [bold red]Removes[/bold red] the word from [bold green]mastered[/bold green]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">unmaster</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🤔Word to remove from [bold blue]mastered[/bold blue]&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Removes a word from the mastered list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word which is to be removed from the mastered list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">set_unmastered</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">set_unmastered</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="export"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.export">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Import &amp; Export&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📂 [bold chartreuse1]Exports[/bold chartreuse1] a list of all your looked up words&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">export</span><span class="p">(</span>
+    <span class="n">pdf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--pdf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-P&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📂 [bold green]Export[/bold green] a list of your looked up words in [bold purple3 r] PDF format[/bold purple3 r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exports a list of all your looked up words.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pdf (bool, optional): If True, exports a list of your looked up words in PDF format. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.ImportExport</span> <span class="kn">import</span> <span class="n">export_to_csv</span><span class="p">,</span> <span class="n">export_to_pdf</span>
+
+    <span class="k">if</span> <span class="n">pdf</span><span class="p">:</span>
+        <span class="n">export_to_pdf</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">export_to_csv</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Import"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.Import">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="s2">&quot;import&quot;</span><span class="p">,</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Import &amp; Export&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔼 [bold blue]Imports[/bold blue] a list words in the application&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">Import</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Imports a list of words in the application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.ImportExport</span> <span class="kn">import</span> <span class="n">import_from_csv</span>
+
+    <span class="n">import_from_csv</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="tag"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.tag">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔖 [bold blue]Tags[/bold blue] a word&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">tag</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔖 Words to be tagged&quot;</span><span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="s2">&quot;--name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔖 [bold purple4 r]Tag[/bold purple4 r] to add to the words&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tags a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Words to tagged.</span>
+<span class="sd">        tag (str): Tag to add to the words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">add_tag</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">add_tag</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="untag"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.untag">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔪[bold red] Removes[/bold red] tag of a word in the dictionary&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">untag</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✂ Word to remove [bold purple4 r]tag[/bold purple4 r] from&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove tag of a word in the dictionary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word to remove tag from.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">remove_tag</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">remove_tag</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rate"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.rate">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📈 Periodic comparison of words learned&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">rate</span><span class="p">(</span>
+    <span class="n">today</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--today&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Get [bold orchid1]learning rate[/bold orchid1] [u]today[/u]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">week</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--week&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-w&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Get [bold orchid1]learning rate[/bold orchid1] this [u]week[/u]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">month</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--month&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Get [bold orchid1]learning rate[/bold orchid1] this [u]month[/u]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">year</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--year&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-y&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Get [bold orchid1]learning rate[/bold orchid1] this [u]year[/u]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gives the number of words you have learned in a particular time period with a comparison of a previous time period.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        today (bool, optional): If True, get learning rate today. Defaults to False.</span>
+<span class="sd">        week (bool, optional): If True, get learning rate this week. Defaults to False.</span>
+<span class="sd">        month (bool, optional): If True, get learning rate this month. Defaults to False.</span>
+<span class="sd">        year (bool, optional): If True, get learning rate this year. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">get_lookup_rate</span>
+
+    <span class="k">if</span> <span class="n">today</span><span class="p">:</span>
+        <span class="n">get_lookup_rate</span><span class="p">(</span><span class="n">today</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">week</span><span class="p">:</span>
+        <span class="n">get_lookup_rate</span><span class="p">(</span><span class="n">week</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">month</span><span class="p">:</span>
+        <span class="n">get_lookup_rate</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">year</span><span class="p">:</span>
+        <span class="n">get_lookup_rate</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">today</span><span class="p">,</span> <span class="n">week</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">]):</span>
+        <span class="c1"># default is today</span>
+        <span class="n">get_lookup_rate</span><span class="p">(</span><span class="n">today</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="synonym"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.synonym">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔎 Find [bold green]synonyms[/bold green] for a word&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">synonym</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔎 Word to search [bold green]synonyms[/bold green] for&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find synonyms for a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word to search synonyms for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Thesaurus</span> <span class="kn">import</span> <span class="n">find_synonym</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">find_synonym</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="antonym"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.antonym">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❌ Find [bold red]antonyms[/bold red] for a word&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">antonym</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❌ Word to search [bold red]antonyms[/bold red] for&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find antonyms for a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word to search antonyms for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Thesaurus</span> <span class="kn">import</span> <span class="n">find_antonym</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">find_antonym</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="history"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.history">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔁 Get a [bold bright_magenta]lookup history[/bold bright_magenta] of a word&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">history</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔁 Word to get [bold bright_magenta]lookup history[/bold bright_magenta] for&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a lookup history of a word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        words (List[str]): Word to get lookup history for.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">fetch_word_history</span>
+
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">fetch_word_history</span><span class="p">(</span><span class="n">word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.delete">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 [bold red]Deletes[/bold red] the word from the database&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span>
+    <span class="n">words</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 Word to be [bold red]deleted[/bold red]&quot;</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 [bold red]Delete[/bold red] all [bold blue r]mastered[/bold blue r] words.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 [bold red]Delete[/bold red] all [bold green r]learning[/bold green r] words.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 [bold red]Delete[/bold red] all [bold gold1 r]favorite[/bold gold1 r] words.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🚮 [bold red]Delete[/bold red] all words with a particular [bold purple4 r]tag[/bold purple4 r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deletes the word from the database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mastered (bool, optional): Deletes all mastered words. Defaults to False.</span>
+<span class="sd">        learning (bool, optional): Deletes all learning words. Defaults to False.</span>
+<span class="sd">        favorite (bool, optional): Deletes all favorite words. Defaults to False.</span>
+<span class="sd">        tag (str, optional): Tag of words to be deleted. Defaults to None.</span>
+<span class="sd">        words (List[str], optional): Word to be deleted. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">delete_all</span><span class="p">,</span> <span class="n">delete_favorite</span><span class="p">,</span> <span class="n">delete_learning</span><span class="p">,</span>
+                               <span class="n">delete_mastered</span><span class="p">,</span> <span class="n">delete_word</span><span class="p">,</span>
+                               <span class="n">delete_words_from_tag</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mastered</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your mastered list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">delete_mastered</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">learning</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your learning list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">delete_learning</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your favorite list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">delete_favorite</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">tag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from tag </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">delete_words_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">words</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete these [b]</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="si">}</span><span class="s2"> words from your list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                <span class="n">delete_word</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">mastered</span><span class="p">,</span> <span class="n">learning</span><span class="p">,</span> <span class="n">favorite</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">words</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to delete [b]all words from your list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">delete_all</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not deleting anything.&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="clear"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.clear">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Word Management&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 [bold red]Clears[/bold red] all lists.&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">clear</span><span class="p">(</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 [bold red]Clear[/bold red] all words in your [bold green r]learning[/bold green r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">master</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 [bold red]Clear[/bold red] all words in your [bold blue r]mastered[/bold blue r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 [bold red]Clear[/bold red] all words in your [bold gold1 r]favorite[/bold gold1 r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 [bold red]Clear[/bold red] all words with a particular [bold purple4 r]tag[/bold purple4 r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clears all the words from the lists.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        learning (bool, optional): If True, clears all the words from the learning list. Defaults to False.</span>
+<span class="sd">        master (bool, optional): If True, clears all the words from the mastered list. Defaults to False.</span>
+<span class="sd">        favorite (bool, optional): If True, clears all the words from the favorite list. Defaults to False.</span>
+<span class="sd">        tag (str, optional): If True, clears all the words with a particular tag. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">clear_all_words_from_tag</span><span class="p">,</span> <span class="n">clear_favorite</span><span class="p">,</span>
+                               <span class="n">clear_learning</span><span class="p">,</span> <span class="n">clear_mastered</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">learning</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your learning list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">clear_learning</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not clearing anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">master</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your mastered list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">clear_mastered</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not clearing anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your favorite list[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">clear_favorite</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;OK, not clearing anything.&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">tag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse yellow]  Warning!  [/b reverse yellow]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;🛑 [bold red]DANGER[/bold red] Are you sure you want to clear [b]all words from your tag </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">[/b]?&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">sure</span> <span class="o">:=</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="n">clear_all_words_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OK, not learning any words from the tag </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">BadParameter</span><span class="p">(</span>
+            <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Please specify a list to clear. Use --help for more info.&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="random"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.random">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Gets a random word&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">random</span><span class="p">(</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Get a [u]random[/u] [bold green r]learning[/bold green r] word.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Get a [u]random[/u] [bold blue r]mastered[/bold blue r] word.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Get a [u]random[/u] [bold gold1 r]favorite[/bold gold1 r] word.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Get a [u]random[/u] word from a particular [bold purple4 r]tag[/bold purple4 r]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--collection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔀 Get a [u]random[/u] word from a particular [bold cyan r]collection[/bold cyan r]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets a random word.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        learning (bool, optional): Get a random learning word. Defaults to False.</span>
+<span class="sd">        mastered (bool, optional): Get a random mastered word. Defaults to False.</span>
+<span class="sd">        favorite (Optional[bool], optional): Get a random favorite word. Defaults to False.</span>
+<span class="sd">        tag (Optional[str], optional): Get a random word from a particular tag. Defaults to None.</span>
+<span class="sd">        collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_random_word_definition_from_api</span><span class="p">,</span>
+                               <span class="n">get_random_word_from_favorite_set</span><span class="p">,</span>
+                               <span class="n">get_random_word_from_learning_set</span><span class="p">,</span>
+                               <span class="n">get_random_word_from_mastered_set</span><span class="p">,</span>
+                               <span class="n">get_random_word_from_tag</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">modules.WordCollections</span> <span class="kn">import</span> <span class="n">get_random_word_from_collection</span>
+
+    <span class="k">if</span> <span class="n">learning</span><span class="p">:</span>
+        <span class="n">get_random_word_from_learning_set</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">mastered</span><span class="p">:</span>
+        <span class="n">get_random_word_from_mastered_set</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="n">get_random_word_from_favorite_set</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">tag</span><span class="p">:</span>
+        <span class="n">get_random_word_from_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">collection</span><span class="p">:</span>
+        <span class="n">get_random_word_from_collection</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">learning</span><span class="p">,</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">favorite</span><span class="p">]):</span>
+        <span class="n">get_random_word_definition_from_api</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="revise"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.revise">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 Revise words from your learning list&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">revise</span><span class="p">(</span>
+    <span class="n">number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 Number of words to [u]revise[/u] in random order.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 [u]Revise[/u] words in a particular [bold purple4 r]tag[/bold purple4 r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 [u]Revise[/u] words in your [bold green r]learning[/bold green r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 [u]Revise[/u] words in your [bold blue r]mastered[/bold blue r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 [u]Revise[/u] words in your [bold gold1 r]favorite[/bold gold1 r] list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--collection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💡 [u]Revise[/u] words in a particular [bold cyan r]collection[/bold cyan r].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="c1"># sourcery skip: remove-redundant-if</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Revise words from your learning list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int, optional): Number of words to revise. Defaults to None.</span>
+<span class="sd">        tag (str, optional): Tag of words to revise. Defaults to None.</span>
+<span class="sd">        learning (Optional[bool], optional): Revise words in your learning list. Defaults to False.</span>
+<span class="sd">        mastered (Optional[bool], optional): Revise words in your mastered list. Defaults to False.</span>
+<span class="sd">        favorite (Optional[bool], optional): Revise words in your favorite list. Defaults to False.</span>
+<span class="sd">        collection (Optional[str], optional): Revise words in a particular collection. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Study</span> <span class="kn">import</span> <span class="p">(</span><span class="n">revise_all</span><span class="p">,</span> <span class="n">revise_collection</span><span class="p">,</span> <span class="n">revise_favorite</span><span class="p">,</span>
+                               <span class="n">revise_learning</span><span class="p">,</span> <span class="n">revise_mastered</span><span class="p">,</span> <span class="n">revise_tag</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">learning</span><span class="p">,</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">favorite</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">tag</span><span class="p">])</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_all</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">number</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">learning</span><span class="p">,</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">favorite</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">tag</span><span class="p">]):</span>
+        <span class="n">revise_all</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">tag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_tag</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_tag</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">learning</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_learning</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">learning</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_learning</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">mastered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_mastered</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">mastered</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_mastered</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">favorite</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_favorite</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">favorite</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_favorite</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">collection</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_collection</span><span class="p">(</span><span class="n">collectionName</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">collection</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">revise_collection</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">collectionName</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;Cannot combine these arguments&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<span class="c1"># TODO: - need to find a way to force break out of the quiz using Ctrl+C, currently it only aborts the current word</span>
+<div class="viewcode-block" id="quiz"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.quiz">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a quiz on word definitions&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">quiz</span><span class="p">(</span>
+    <span class="n">number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Limit the number of words to [i u]quiz[/i u] on.&quot;</span><span class="p">,</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--tag&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a [i u]quiz[/i u] on words in a particular [bold purple4 r]tag[/bold purple4 r]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learning&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-l&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a [i u]quiz[/i u] on words in your [bold green r]learning[/bold green r] list&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a [i u]quiz[/i u] on words in your [bold blue r]mastered[/bold blue r] list&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a [i u]quiz[/i u] on words in your [bold gold1 r]favorite[/bold gold1 r] list&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">collection</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--collection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Take a [i u]quiz[/i u] on words in a particular [bold cyan r]collection[/bold cyan r]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">history</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--history&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-h&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;❓ Show [i u]quiz[/i u] [bold orchid2]history[/bold orchid2] and [bold pink1]statistics[/bold pink1]&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="c1"># sourcery skip: remove-redundant-if</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a quiz on words in your learning list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        number (int, optional): Number of words to quiz on. Defaults to 10.</span>
+<span class="sd">        tag (str, optional): Tag of words to quiz on. Defaults to None.</span>
+<span class="sd">        learning (Optional[bool], optional): Take a quiz on words in your learning list. Defaults to False.</span>
+<span class="sd">        mastered (Optional[bool], optional): Take a quiz on words in your mastered list. Defaults to False.</span>
+<span class="sd">        favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.</span>
+<span class="sd">        collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Study</span> <span class="kn">import</span> <span class="p">(</span><span class="n">quiz_all</span><span class="p">,</span> <span class="n">quiz_collection</span><span class="p">,</span> <span class="n">quiz_favorite</span><span class="p">,</span>
+                               <span class="n">quiz_learning</span><span class="p">,</span> <span class="n">quiz_mastered</span><span class="p">,</span> <span class="n">quiz_tag</span><span class="p">,</span>
+                               <span class="n">show_quiz_history</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">learning</span><span class="p">,</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">favorite</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">history</span><span class="p">])</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_all</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">number</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">learning</span><span class="p">,</span> <span class="n">mastered</span><span class="p">,</span> <span class="n">favorite</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">history</span><span class="p">]):</span>
+        <span class="n">quiz_all</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">tag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_tag</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tag</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_tag</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">learning</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_learning</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">learning</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_learning</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">mastered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_mastered</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">mastered</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_mastered</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">favorite</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_favorite</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">favorite</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_favorite</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">collection</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_collection</span><span class="p">(</span><span class="n">collectionName</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">collection</span> <span class="ow">and</span> <span class="n">number</span><span class="p">:</span>
+        <span class="n">quiz_collection</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="n">number</span><span class="p">,</span> <span class="n">collectionName</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">history</span><span class="p">:</span>
+        <span class="n">show_quiz_history</span><span class="p">()</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="s2">&quot;Cannot combine these arguments&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="graph"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.graph">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Stats&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Generate Graphical Charts based on your vocabulary&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">graph</span><span class="p">(</span>
+    <span class="n">topWordsBar</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--topwordsbar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-twb&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Bar Graph[/i u] of Top N Most Looked Up Words&quot;</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">topTagsBar</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--toptagsbar&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-ttb&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Bar Graph[/i u] of Top N Tags with the most words.&quot;</span><span class="p">,</span>
+        <span class="nb">max</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+        <span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">topWordsPie</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--topwordspie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-twp&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Pie Chart[/i u] of Top 10 Most Looked Up Words&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">topTagsPie</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--toptagspie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-ttp&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Pie Chart[/i u] of Top 10 Tags with the most words.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">lookupWeek</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--lookupweek&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-lw&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Bar Graph[/i u] of the word count distribution for days in the past [b u]week[/b u].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">lookupMonth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--lookupmonth&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-lm&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Bar Graph[/i u] of the word count distribution for days in the past [b u]month[/b u].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">lookupYear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--lookupyear&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-ly&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 [i u]Bar Graph[/i u] of the word count distribution for days in the past [b u]year[/b u].&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">learnVSmaster</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--learnvsmaster&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-lvm&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Stacked Graph the number of words in your learning list vs. your mastered list.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">wordCountByCollection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--wordcategories&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-wc&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📊 Bar Graph of the number of words in a category domain.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="c1"># slider: bool = typer.Option(False, &quot;--slider&quot;, &quot;-s&quot;, help=&quot;Shows all graphs one by one in a slider.&quot;)</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate Graphical Charts based on your vocabulary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        topWordsBar (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.</span>
+<span class="sd">        topTagsBar (int, optional): Visualizes the top N tags with the most words. Defaults to None.</span>
+<span class="sd">        topWordsPie (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.</span>
+<span class="sd">        topTagsPie (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.</span>
+<span class="sd">        lookupWeek (Optional[bool], optional): Visualizes the word count distribution for days in the past week. Defaults to False.</span>
+<span class="sd">        lookupMonth (Optional[bool], optional): Visualizes the word count distribution for days in the past month. Defaults to False.</span>
+<span class="sd">        lookupYear (Optional[bool], optional): Visualizes the word count distribution for days in the past year. Defaults to False.</span>
+<span class="sd">        learnVSmaster (Optional[bool], optional): Visualizes the number of words in your learning list vs. your mastered list. Defaults to False.</span>
+<span class="sd">        slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">modules.Carousel</span> <span class="kn">import</span> <span class="n">show_slider</span>
+    <span class="kn">from</span> <span class="nn">modules.Graph</span> <span class="kn">import</span> <span class="p">(</span><span class="n">viz_learning_vs_mastered</span><span class="p">,</span> <span class="n">viz_top_tags_bar</span><span class="p">,</span>
+                               <span class="n">viz_top_tags_pie</span><span class="p">,</span> <span class="n">viz_top_words_bar</span><span class="p">,</span>
+                               <span class="n">viz_top_words_pie</span><span class="p">,</span>
+                               <span class="n">viz_word_distribution_category</span><span class="p">,</span>
+                               <span class="n">viz_word_distribution_month</span><span class="p">,</span>
+                               <span class="n">viz_word_distribution_week</span><span class="p">,</span>
+                               <span class="n">viz_word_distribution_year</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">topWordsBar</span><span class="p">:</span>
+        <span class="n">viz_top_words_bar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">topWordsBar</span><span class="p">,</span> <span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">topTagsBar</span><span class="p">:</span>
+        <span class="n">viz_top_tags_bar</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">topTagsBar</span><span class="p">,</span> <span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">topWordsPie</span><span class="p">:</span>
+        <span class="n">viz_top_words_pie</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">topTagsPie</span><span class="p">:</span>
+        <span class="n">viz_top_tags_pie</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">lookupWeek</span><span class="p">:</span>
+        <span class="n">viz_word_distribution_week</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">lookupMonth</span><span class="p">:</span>
+        <span class="n">viz_word_distribution_month</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">lookupYear</span><span class="p">:</span>
+        <span class="n">viz_word_distribution_year</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">learnVSmaster</span><span class="p">:</span>
+        <span class="n">viz_learning_vs_mastered</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">wordCountByCollection</span><span class="p">:</span>
+        <span class="n">viz_word_distribution_category</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># by default, show all graphs in a GUI slider window</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># BUG 🐞 - slider will work as expected, after closing the termial will freeze up and not respond to any input</span>
+        <span class="n">show_slider</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="clean"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.clean">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Text Processing &amp; NLP&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 Filter out [b red1]Explicit[/b red1] words in a text or a webpage. Make it SFW!&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">clean</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 Text or URL to [b red1]clean[/b red1]&quot;</span><span class="p">),</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--strict&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🧹 Completely [b red1]replace[/b red1] all bad words with asterisks.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="kn">from</span> <span class="nn">modules.NLP</span> <span class="kn">import</span> <span class="p">(</span><span class="n">censor_bad_words_not_strict</span><span class="p">,</span>
+                             <span class="n">censor_bad_words_strict</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+        <span class="n">censor_bad_words_strict</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">censor_bad_words_not_strict</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="summary"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.summary">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Text Processing &amp; NLP&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Generate a [b orange_red1]Summary[/b orange_red1] of a text or a webpage.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">summary</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 Text or URL to [b orange_red1]summarize[/b orange_red1]&quot;</span>
+    <span class="p">),</span>
+    <span class="n">file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;--file&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📝 [b green]Save[/b green] the summary to a text file.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="kn">from</span> <span class="nn">modules.NLP</span> <span class="kn">import</span> <span class="n">summarize_text</span>
+
+    <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">summarize_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">summarize_text</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="hardwords"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.hardwords">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Text Processing &amp; NLP&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😯 Extract [b deep_pink2]Difficult[/b deep_pink2] Words from a text or a webpage.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">hardwords</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😯 Text or URL to extract [b deep_pink2]difficult words[/b deep_pink2] from&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">modules.NLP</span> <span class="kn">import</span> <span class="n">extract_difficult_words</span>
+
+    <span class="n">extract_difficult_words</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="sentiment"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.sentiment">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Text Processing &amp; NLP&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😀😐😞 Get the [b dodger_blue3]Sentiment Analysis[/b dodger_blue3] of a text or a webpage.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">sentiment</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😀😐😞 Text or URL to get [b dodger_blue3]sentiment analysis[/b dodger_blue3] from&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">modules.NLP</span> <span class="kn">import</span> <span class="n">sentiment_analysis</span>
+
+    <span class="n">sentiment_analysis</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="readability"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.readability">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Text Processing &amp; NLP&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💯 Get [b plum3]Readability Score[/b plum3] of a text or a webpage.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">readability</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;💯 Text or URL to get [b plum3]readability score[/b plum3] from&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">modules.NLP</span> <span class="kn">import</span> <span class="n">readability_index</span>
+
+    <span class="n">readability_index</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rss"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.rss">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📰 Add, View or Delete [b green4]RSS[/b green4] feeds&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">rss</span><span class="p">(</span>
+    <span class="n">add</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;--add&quot;</span><span class="p">,</span> <span class="s2">&quot;-a&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📰 [b green]Add[/b green] a new RSS feed.&quot;</span>
+    <span class="p">),</span>
+    <span class="nb">list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--list&quot;</span><span class="p">,</span> <span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📰 [b blue]View[/b blue] all RSS feeds.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">delete</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--delete&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📰 [b red]Delete[/b red] an RSS feed.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">read</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;--read&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;📰 [b violet]Read[/b violet] an RSS feed.&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="kn">from</span> <span class="nn">modules.RSS</span> <span class="kn">import</span> <span class="p">(</span><span class="n">add_feed</span><span class="p">,</span> <span class="n">check_feed_for_new_content</span><span class="p">,</span>
+                             <span class="n">get_all_feeds</span><span class="p">,</span> <span class="n">remove_feed</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">add</span><span class="p">:</span>
+        <span class="n">add_feed</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">add</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">get_all_feeds</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">delete</span><span class="p">:</span>
+        <span class="n">remove_feed</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">read</span><span class="p">:</span>
+        <span class="n">check_feed_for_new_content</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">read</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;🤷‍♀️ No option selected. Please select an option to continue.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="quote"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.quote">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Add, View, Search or Delete Delete Quotes&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">quote</span><span class="p">(</span>
+    <span class="n">random</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--random&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Show a random quote from the saved list.&quot;</span>
+    <span class="p">),</span>
+    <span class="nb">list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--list&quot;</span><span class="p">,</span> <span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Display all saved quotes.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">delete</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--delete&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Delete a quote from the saved list.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">add</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--add&quot;</span><span class="p">,</span> <span class="s2">&quot;-a&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Add a new quote.&quot;</span><span class="p">),</span>
+    <span class="n">search</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;--search&quot;</span><span class="p">,</span> <span class="s2">&quot;-S&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Search for a quote.&quot;</span><span class="p">),</span>
+    <span class="n">delete_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--delete-all&quot;</span><span class="p">,</span> <span class="s2">&quot;-D&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;✍🏼 Delete all quotes.&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Quotes</span> <span class="kn">import</span> <span class="p">(</span><span class="n">add_quote</span><span class="p">,</span> <span class="n">delete_all_quotes</span><span class="p">,</span> <span class="n">delete_quote</span><span class="p">,</span>
+                                <span class="n">get_quotes</span><span class="p">,</span> <span class="n">get_random_quote</span><span class="p">,</span> <span class="n">search_quote</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">random</span><span class="p">:</span>
+        <span class="n">get_random_quote</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">get_quotes</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">search</span><span class="p">:</span>
+        <span class="n">search_quote</span><span class="p">(</span><span class="n">quoteText</span><span class="o">=</span><span class="n">search</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">delete</span><span class="p">:</span>
+        <span class="n">delete_quote</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">delete_all</span><span class="p">:</span>
+        <span class="n">delete_all_quotes</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">add</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;📝 Enter the quote to add.&quot;</span><span class="p">))</span>
+        <span class="n">my_quote</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Do you want to add the author of the quote? (y/n)&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">typer</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;📝 Enter the author of the quote. (Optional)&quot;</span><span class="p">))</span>
+            <span class="n">my_author</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">add_quote</span><span class="p">(</span><span class="n">quote</span><span class="o">=</span><span class="n">my_quote</span><span class="p">,</span> <span class="n">author</span><span class="o">=</span><span class="n">my_author</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">add_quote</span><span class="p">(</span><span class="n">quote</span><span class="o">=</span><span class="n">my_quote</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="streak"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.streak">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Stats&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔥 Get the streak of days you have looked up words.&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">streak</span><span class="p">():</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">show_streak</span>
+
+    <span class="n">show_streak</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="milestone"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.milestone">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Stats&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎯 Predict the milestone of words looked up via the app.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">milestone</span><span class="p">(</span>
+    <span class="n">milestone_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎯 Number of words that marks a milestone.&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">modules.Utils</span> <span class="kn">import</span> <span class="n">predict_milestone</span>
+
+    <span class="n">predict_milestone</span><span class="p">(</span><span class="n">milestone_number</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="daily_quote"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.daily_quote">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔆 Get quote of the day.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">daily_quote</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">modules.Quotes</span> <span class="kn">import</span> <span class="n">get_quote_of_the_day</span>
+
+    <span class="n">get_quote_of_the_day</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="daily_word"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.daily_word">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Miscellaneous&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;😍 Get word of the day.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">daily_word</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">modules.Dictionary</span> <span class="kn">import</span> <span class="n">get_word_of_the_day</span>
+
+    <span class="n">get_word_of_the_day</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="flashcard"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.flashcard">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate flashcards for words in your learning list&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">flashcard</span><span class="p">(</span>
+    <span class="nb">all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--all&quot;</span><span class="p">,</span> <span class="s2">&quot;-a&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate for all words.&quot;</span><span class="p">),</span>
+    <span class="n">learning</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--learning&quot;</span><span class="p">,</span> <span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate for words set as learning.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">mastered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--mastered&quot;</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate for words set as mastered.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">favorite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--favorite&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate for words set as favorite.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;--tag&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🎫 Generate for words with a specific tag.&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create flashcards for words in your learning list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Flashcard</span> <span class="kn">import</span> <span class="p">(</span><span class="n">generate_all_flashcards</span><span class="p">,</span>
+                                   <span class="n">generate_favorite_flashcards</span><span class="p">,</span>
+                                   <span class="n">generate_learning_flashcards</span><span class="p">,</span>
+                                   <span class="n">generate_mastered_flashcards</span><span class="p">,</span>
+                                   <span class="n">generate_tag_flashcards</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">:</span>
+        <span class="n">generate_all_flashcards</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">learning</span><span class="p">:</span>
+        <span class="n">generate_learning_flashcards</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">mastered</span><span class="p">:</span>
+        <span class="n">generate_mastered_flashcards</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">favorite</span><span class="p">:</span>
+        <span class="n">generate_favorite_flashcards</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">tag</span><span class="p">:</span>
+        <span class="n">generate_tag_flashcards</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">&quot;Cannot combine options. Please select only one option.&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="spellcheck"><a class="viewcode-back" href="../../vocabCLI.html#vocabCLI.vocabCLI.spellcheck">[docs]</a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">rich_help_panel</span><span class="o">=</span><span class="s2">&quot;Vocabulary Builder&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔠 Spell check your input sentences and find the misspelled words.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">spellcheck</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;🔠 Text to spell check.&quot;</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Spell check a word.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">modules.Spelling</span> <span class="kn">import</span> <span class="n">spell_checker</span>
+
+    <span class="n">spell_checker</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">modules.Database</span> <span class="kn">import</span> <span class="n">initializeDB</span>
+    <span class="kn">from</span> <span class="nn">modules.WordCollections</span> <span class="kn">import</span> <span class="p">(</span><span class="n">clean_collection_csv_data</span><span class="p">,</span>
+                                         <span class="n">delete_collection_from_DB</span><span class="p">,</span>
+                                         <span class="n">insert_collection_to_DB</span><span class="p">)</span>
+
+    <span class="c1"># check if Vocabulary.db exists, if not create it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;VocabularyBuilder.db&quot;</span><span class="p">):</span>
+
+        <span class="c1"># initialize the database with the tables if not already existing</span>
+        <span class="n">initializeDB</span><span class="p">()</span>
+        <span class="c1"># uncomment this to easily delete all words from collections table during testing</span>
+        <span class="n">delete_collection_from_DB</span><span class="p">()</span>
+        <span class="n">clean_collection_csv_data</span><span class="p">()</span>
+        <span class="c1"># add all the collection words to the database if not already existing</span>
+        <span class="n">insert_collection_to_DB</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, AtharvaShah, AnayDeshpande
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

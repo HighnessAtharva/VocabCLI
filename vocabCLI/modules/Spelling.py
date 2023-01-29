@@ -11,6 +11,7 @@ from spellchecker import SpellChecker
 def spell_checker(string: str) -> str:
     """
     This function takes a string as input and returns a string with misspelled words highlighted in red.
+    
     1. Split the string based on punctuation.
     2. Find those words that may be misspelled.
     3. Highlight the misspelled words in red.

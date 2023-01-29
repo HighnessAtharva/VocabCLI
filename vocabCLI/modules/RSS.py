@@ -20,6 +20,7 @@ from rich.table import Table
 def add_feed(url: str) -> None:
     """
     Add the feed to the database
+    
     1. Feed parser is used to parse the feed
     2. If the feed is not found, print error message
     3. Check if the feed exists in the database
@@ -108,6 +109,7 @@ def add_feed(url: str) -> None:
 def get_all_feeds() -> None:
     """
     Get the feed details from the database
+    
     1. Get all feeds from the database
     2. If no feeds exist, print error message
     3. Print the feeds in a table
@@ -178,6 +180,7 @@ def get_all_feeds() -> None:
 def remove_feed() -> None:
     """
     Remove the feed from the database
+    
     1. Get all feeds from the database
     2. If no feeds exist, print error message
     3. Print the feeds in a table
@@ -265,6 +268,7 @@ def remove_html_tags(html: str) -> str:
 def check_feed_for_new_content(title: str) -> None:
     """
     Parse the feed and check for new content
+    
     1. Check if the feed exists in the database
     2. If the feed does not exist, print error message
     3. If the feed exists, parse the feed and check for new content
@@ -352,13 +356,3 @@ def check_feed_for_new_content(title: str) -> None:
 
             # ----------------- Table -----------------#
 
-
-# add_feed(url="https://www.reddit.com/r/Python/.rss")
-# add_feed(url="https://pitchfork.com/rss/reviews/best/albums/")
-# add_feed(url="https://www.tor.com/series/reading-the-wheel-of-time/feed/")
-# add_feed(url="https://www.buzzfeed.com/in/index.xml")
-# add_feed(url="https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/world/rss.xml")
-# get_all_feeds()
-# remove_feed()
-
-# check_feed_for_new_content(title="wheel of time")

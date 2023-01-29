@@ -12,6 +12,7 @@ def flashcard_definition(query: str) -> str:
     # sourcery skip: use-contextlib-suppress
     """
     Returns the definition of the word from the cache.
+    
     1. Execute a query that selects the api_response column from the cache_words table where the word column is equal to the query
     2. Load the api_response column as a JSON object
     3. Create an empty dictionary
@@ -50,6 +51,7 @@ def flashcard_definition(query: str) -> str:
 def interpolate(black, random_color, interval):
     """
     Interpolate between two colors.
+    
     1. It calculates the difference between the two colors
     2. It divides the difference by the number of steps
     3. It adds the difference to the black color each time it moves one step

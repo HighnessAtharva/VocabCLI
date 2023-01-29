@@ -1,0 +1,535 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>vocabCLI.modules.Flashcard - vocabCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">vocabCLI 0.0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">vocabCLI 0.0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for vocabCLI.modules.Flashcard</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+
+<span class="kn">from</span> <span class="nn">Database</span> <span class="kn">import</span> <span class="n">createConnection</span>
+<span class="kn">from</span> <span class="nn">Dictionary</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+<span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">track</span>
+
+
+<div class="viewcode-block" id="flashcard_definition"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.flashcard_definition">[docs]</a><span class="k">def</span> <span class="nf">flashcard_definition</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># sourcery skip: use-contextlib-suppress</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the definition of the word from the cache.</span>
+<span class="sd">    </span>
+<span class="sd">    1. Execute a query that selects the api_response column from the cache_words table where the word column is equal to the query</span>
+<span class="sd">    2. Load the api_response column as a JSON object</span>
+<span class="sd">    3. Create an empty dictionary</span>
+<span class="sd">    4. Loop through each meaning in the meanings array</span>
+<span class="sd">    5. For each meaning, loop through the first 3 definitions</span>
+<span class="sd">    6. For each definition, add it to the dictionary with the key being the definition and the value being the example if it exists</span>
+<span class="sd">    7. Return the first 3 definitions and examples</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): The word to be searched</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The definition of the word</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT api_response FROM cache_words WHERE word=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="n">defs_and_examples</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">meaningNumber</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;meanings&quot;</span><span class="p">]:</span>
+        <span class="c1"># get only the first 3 meanings</span>
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">meaning</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meaningNumber</span><span class="p">[</span><span class="s2">&quot;definitions&quot;</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">defs_and_examples</span><span class="p">[</span><span class="n">meaning</span><span class="p">[</span><span class="s2">&quot;definition&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">meaning</span><span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;example&quot;</span> <span class="ow">in</span> <span class="n">meaning</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+
+    <span class="c1"># return the first 3 definitions and examples</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">defs_and_examples</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">defs_and_examples</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]}</span></div>
+
+
+<div class="viewcode-block" id="interpolate"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.interpolate">[docs]</a><span class="k">def</span> <span class="nf">interpolate</span><span class="p">(</span><span class="n">black</span><span class="p">,</span> <span class="n">random_color</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interpolate between two colors.</span>
+<span class="sd">    </span>
+<span class="sd">    1. It calculates the difference between the two colors</span>
+<span class="sd">    2. It divides the difference by the number of steps</span>
+<span class="sd">    3. It adds the difference to the black color each time it moves one step</span>
+<span class="sd">    4. It returns the new color, rounded to the nearest integer</span>
+<span class="sd">    5. It does this for each step</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        black (tuple): The first color</span>
+<span class="sd">        random_color (tuple): The second color</span>
+<span class="sd">        interval (int): The number of steps to take between the two colors&quot;&quot;&quot;</span>
+
+    <span class="n">derandom_color</span> <span class="o">=</span> <span class="p">[(</span><span class="n">t</span> <span class="o">-</span> <span class="n">f</span><span class="p">)</span> <span class="o">/</span> <span class="n">interval</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">black</span><span class="p">,</span> <span class="n">random_color</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">interval</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">det</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">det</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">black</span><span class="p">,</span> <span class="n">derandom_color</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="export_util"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.export_util">[docs]</a><span class="k">def</span> <span class="nf">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># sourcery skip: low-code-quality</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Exports the words from the database to a flashcard image</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        c (sqlite3.Cursor): The cursor object</span>
+<span class="sd">        type (str): The type of words to be exported</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">rows</span> <span class="o">:=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()):</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="n">Panel</span><span class="p">(</span>
+                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;[b reverse red]  Error!  [/b reverse red]&quot;</span><span class="p">,</span>
+                <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">renderable</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;No words found for selected criteria: </span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Create a new image with a white background</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">1080</span><span class="p">,</span> <span class="mi">1080</span>
+
+    <span class="n">my_colors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># shades of red</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">71</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">127</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">205</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">240</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">233</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">122</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">114</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">122</span><span class="p">),</span>
+        <span class="c1"># shades of green</span>
+        <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">144</span><span class="p">,</span> <span class="mi">238</span><span class="p">,</span> <span class="mi">144</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">152</span><span class="p">,</span> <span class="mi">251</span><span class="p">,</span> <span class="mi">152</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">143</span><span class="p">,</span> <span class="mi">188</span><span class="p">,</span> <span class="mi">143</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">154</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">127</span><span class="p">),</span>
+        <span class="c1"># shades of blue</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">206</span><span class="p">,</span> <span class="mi">209</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">208</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">204</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="mi">238</span><span class="p">,</span> <span class="mi">238</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">127</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">212</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">176</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">230</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">158</span><span class="p">,</span> <span class="mi">160</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">149</span><span class="p">,</span> <span class="mi">237</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="c1"># shades of purple</span>
+        <span class="p">(</span><span class="mi">106</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">205</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">238</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">147</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">219</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">153</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">204</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">186</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">211</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">216</span><span class="p">,</span> <span class="mi">191</span><span class="p">,</span> <span class="mi">216</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">221</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">221</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">238</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">238</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="c1"># shades of pink</span>
+        <span class="p">(</span><span class="mi">199</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">133</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">219</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">147</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">147</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">180</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">182</span><span class="p">,</span> <span class="mi">193</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">203</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">progressbar_total</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># ----------------- Progress Bar -----------------#</span>
+
+    <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">track</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot; 🔃 Exporting Flashcards &quot;</span><span class="p">)</span>
+    <span class="p">):</span>
+
+        <span class="c1"># ----------------- Progress Bar -----------------#</span>
+
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;tag&quot;</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get a drawing context</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="n">black</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">random_color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">my_colors</span><span class="p">)</span>
+        <span class="c1"># print(random_color)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">interpolate</span><span class="p">(</span><span class="n">random_color</span><span class="p">,</span> <span class="n">black</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)):</span>
+            <span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)],</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Use ImageFont to specify the font and size of the text</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s2">&quot;../assets/FTLTLT.ttf&quot;</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="n">headingfont</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="s2">&quot;../assets/FTLTLT.ttf&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="c1"># draw the watermark in the top right corner</span>
+        <span class="n">watermark</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;../assets/VocabCLI -  White.png&quot;</span><span class="p">)</span>
+        <span class="n">watermark</span> <span class="o">=</span> <span class="n">watermark</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">watermark</span><span class="p">,</span> <span class="p">(</span><span class="mi">880</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">watermark</span><span class="p">)</span>
+
+        <span class="c1"># Draw the word and its definition on the image</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+            <span class="n">word</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+            <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">headingfont</span><span class="p">,</span>
+            <span class="n">stroke_width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">stroke_fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;favorite&quot;</span><span class="p">:</span>
+            <span class="c1"># paste the heart on the image at position (250, 50) with transparency</span>
+            <span class="n">heart</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;../assets/heart.png&quot;</span><span class="p">)</span>
+            <span class="n">heart</span> <span class="o">=</span> <span class="n">heart</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">heart</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">heart</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;learning&quot;</span><span class="p">:</span>
+            <span class="n">clock</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;../assets/clock.png&quot;</span><span class="p">)</span>
+            <span class="n">clock</span> <span class="o">=</span> <span class="n">clock</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">clock</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;mastered&quot;</span><span class="p">:</span>
+            <span class="n">tick</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;../assets/tick.png&quot;</span><span class="p">)</span>
+            <span class="n">tick</span> <span class="o">=</span> <span class="n">tick</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">tick</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">tick</span><span class="p">)</span>
+
+        <span class="c1"># check if the word has any tag</span>
+        <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
+            <span class="n">tagImg</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;../assets/tag.png&quot;</span><span class="p">)</span>
+            <span class="n">tagImg</span> <span class="o">=</span> <span class="n">tagImg</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">))</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">tagImg</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">125</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">tagImg</span><span class="p">)</span>
+
+            <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span> <span class="n">tag</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">)</span>
+
+        <span class="c1"># get the dictionary of definitions:examples</span>
+        <span class="n">def_and_example</span> <span class="o">=</span> <span class="n">flashcard_definition</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">def_and_example</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">definition</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">65</span><span class="p">)</span>
+            <span class="n">y_pos</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="mi">200</span><span class="p">)</span>
+
+            <span class="c1"># if the definition has an example, add it to the flashcard</span>
+            <span class="k">if</span> <span class="n">example</span><span class="p">:</span>
+                <span class="n">example</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">65</span><span class="p">)</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">),</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="se">\n</span><span class="s2"> eg. </span><span class="si">{</span><span class="n">example</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">definition</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span>
+                <span class="p">)</span>
+
+        <span class="c1"># save images to their respective folders based on passed type</span>
+        <span class="k">if</span> <span class="n">tag</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/tag/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/tag/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Save the image to a file and overwrite it</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">_exists</span><span class="p">(</span><span class="n">name</span> <span class="o">:=</span> <span class="sa">f</span><span class="s2">&quot;flashcard/tag/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/tag/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Save the image to a file and overwrite it</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">_exists</span><span class="p">(</span><span class="n">name</span> <span class="o">:=</span> <span class="sa">f</span><span class="s2">&quot;flashcard/</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;flashcard/</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+
+        <span class="n">progressbar_total</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="generate_all_flashcards"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_all_flashcards">[docs]</a><span class="k">def</span> <span class="nf">generate_all_flashcards</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate flashcards for all words in the database&quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT DISTINCT(word) FROM words&quot;</span><span class="p">)</span>
+    <span class="n">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;all words&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_mastered_flashcards"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_mastered_flashcards">[docs]</a><span class="k">def</span> <span class="nf">generate_mastered_flashcards</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate flashcards for all mastered words in the database&quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT DISTINCT(word) FROM words WHERE mastered=1&quot;</span><span class="p">)</span>
+    <span class="n">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mastered&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_learning_flashcards"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_learning_flashcards">[docs]</a><span class="k">def</span> <span class="nf">generate_learning_flashcards</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate flashcards for all learning words in the database&quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT DISTINCT(word) FROM words WHERE learning=1&quot;</span><span class="p">)</span>
+    <span class="n">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;learning&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_favorite_flashcards"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_favorite_flashcards">[docs]</a><span class="k">def</span> <span class="nf">generate_favorite_flashcards</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Generate flashcards for all favorite words in the database&quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT DISTINCT(word) FROM words WHERE favorite=1&quot;</span><span class="p">)</span>
+    <span class="n">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;favorite&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_tag_flashcards"><a class="viewcode-back" href="../../../vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_tag_flashcards">[docs]</a><span class="k">def</span> <span class="nf">generate_tag_flashcards</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate flashcards for all words with a specific tag in the database</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): the tag to search for</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">createConnection</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT DISTINCT(word), tag FROM words WHERE tag=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">query</span><span class="p">,))</span>
+    <span class="n">export_util</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;tag&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># def export_word(query: str):</span>
+<span class="c1">#     conn = createConnection()</span>
+<span class="c1">#     c = conn.cursor()</span>
+<span class="c1">#     c.execute(&quot;SELECT DISTINCT(word) FROM words WHERE word=?&quot;, (query,))</span>
+<span class="c1">#     export_util(c, type=&quot;word&quot;)</span>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, AtharvaShah, AnayDeshpande
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

@@ -1,0 +1,868 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>vocabCLI package - vocabCLI 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">vocabCLI 0.0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">vocabCLI 0.0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="vocabcli-package">
+<h1>vocabCLI package<a class="headerlink" href="#vocabcli-package" title="Permalink to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vocabCLI.modules.html">vocabCLI.modules package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.About">vocabCLI.modules.About module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.About.print_about_app"><code class="docutils literal notranslate"><span class="pre">print_about_app()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Banner">vocabCLI.modules.Banner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Banner.get_terminal_width"><code class="docutils literal notranslate"><span class="pre">get_terminal_width()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Banner.print_banner"><code class="docutils literal notranslate"><span class="pre">print_banner()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Carousel">vocabCLI.modules.Carousel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Carousel.show_slider"><code class="docutils literal notranslate"><span class="pre">show_slider()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Database">vocabCLI.modules.Database module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Database.createConnection"><code class="docutils literal notranslate"><span class="pre">createConnection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Database.createTables"><code class="docutils literal notranslate"><span class="pre">createTables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Database.initializeDB"><code class="docutils literal notranslate"><span class="pre">initializeDB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Database.refresh_cache"><code class="docutils literal notranslate"><span class="pre">refresh_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Dictionary">vocabCLI.modules.Dictionary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.connect_to_api"><code class="docutils literal notranslate"><span class="pre">connect_to_api()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.definition"><code class="docutils literal notranslate"><span class="pre">definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.display_theme"><code class="docutils literal notranslate"><span class="pre">display_theme()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.get_word_of_the_day"><code class="docutils literal notranslate"><span class="pre">get_word_of_the_day()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.insert_to_db_util"><code class="docutils literal notranslate"><span class="pre">insert_to_db_util()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.insert_word_to_db"><code class="docutils literal notranslate"><span class="pre">insert_word_to_db()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.one_line_definition"><code class="docutils literal notranslate"><span class="pre">one_line_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.phonetic"><code class="docutils literal notranslate"><span class="pre">phonetic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.say_aloud"><code class="docutils literal notranslate"><span class="pre">say_aloud()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Dictionary.show_commonly_confused"><code class="docutils literal notranslate"><span class="pre">show_commonly_confused()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Exceptions">vocabCLI.modules.Exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.AudioUnavailableException"><code class="docutils literal notranslate"><span class="pre">AudioUnavailableException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoDataFoundException"><code class="docutils literal notranslate"><span class="pre">NoDataFoundException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoQuotesException"><code class="docutils literal notranslate"><span class="pre">NoQuotesException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoRSSFeedsException"><code class="docutils literal notranslate"><span class="pre">NoRSSFeedsException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoSuchCollectionException"><code class="docutils literal notranslate"><span class="pre">NoSuchCollectionException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoSuchCollectionException.collection"><code class="docutils literal notranslate"><span class="pre">NoSuchCollectionException.collection</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoSuchTagException"><code class="docutils literal notranslate"><span class="pre">NoSuchTagException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoSuchTagException.tag"><code class="docutils literal notranslate"><span class="pre">NoSuchTagException.tag</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoWordsInDBException"><code class="docutils literal notranslate"><span class="pre">NoWordsInDBException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoWordsInFavoriteListException"><code class="docutils literal notranslate"><span class="pre">NoWordsInFavoriteListException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoWordsInLearningListException"><code class="docutils literal notranslate"><span class="pre">NoWordsInLearningListException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NoWordsInMasteredListException"><code class="docutils literal notranslate"><span class="pre">NoWordsInMasteredListException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.NotEnoughWordsForQuizException"><code class="docutils literal notranslate"><span class="pre">NotEnoughWordsForQuizException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.WordNeverSearchedException"><code class="docutils literal notranslate"><span class="pre">WordNeverSearchedException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Exceptions.WordNeverSearchedException.word"><code class="docutils literal notranslate"><span class="pre">WordNeverSearchedException.word</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Flashcard">vocabCLI.modules.Flashcard module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.export_util"><code class="docutils literal notranslate"><span class="pre">export_util()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.flashcard_definition"><code class="docutils literal notranslate"><span class="pre">flashcard_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_all_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_all_flashcards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_favorite_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_favorite_flashcards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_learning_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_learning_flashcards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_mastered_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_mastered_flashcards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.generate_tag_flashcards"><code class="docutils literal notranslate"><span class="pre">generate_tag_flashcards()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Flashcard.interpolate"><code class="docutils literal notranslate"><span class="pre">interpolate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Graph">vocabCLI.modules.Graph module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_learning_vs_mastered"><code class="docutils literal notranslate"><span class="pre">viz_learning_vs_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_top_tags_bar"><code class="docutils literal notranslate"><span class="pre">viz_top_tags_bar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_top_tags_pie"><code class="docutils literal notranslate"><span class="pre">viz_top_tags_pie()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_top_words_bar"><code class="docutils literal notranslate"><span class="pre">viz_top_words_bar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_top_words_pie"><code class="docutils literal notranslate"><span class="pre">viz_top_words_pie()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_word_distribution_category"><code class="docutils literal notranslate"><span class="pre">viz_word_distribution_category()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_word_distribution_month"><code class="docutils literal notranslate"><span class="pre">viz_word_distribution_month()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_word_distribution_week"><code class="docutils literal notranslate"><span class="pre">viz_word_distribution_week()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.viz_word_distribution_year"><code class="docutils literal notranslate"><span class="pre">viz_word_distribution_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.word_distribution_month_util"><code class="docutils literal notranslate"><span class="pre">word_distribution_month_util()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.word_distribution_year_util"><code class="docutils literal notranslate"><span class="pre">word_distribution_year_util()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Graph.words_distribution_week_util"><code class="docutils literal notranslate"><span class="pre">words_distribution_week_util()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.ImportExport">vocabCLI.modules.ImportExport module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.PDF"><code class="docutils literal notranslate"><span class="pre">PDF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.PDF.footer"><code class="docutils literal notranslate"><span class="pre">PDF.footer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.PDF.header"><code class="docutils literal notranslate"><span class="pre">PDF.header()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.export_to_csv"><code class="docutils literal notranslate"><span class="pre">export_to_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.export_to_pdf"><code class="docutils literal notranslate"><span class="pre">export_to_pdf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.ImportExport.import_from_csv"><code class="docutils literal notranslate"><span class="pre">import_from_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.NLP">vocabCLI.modules.NLP module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.censor_bad_words_not_strict"><code class="docutils literal notranslate"><span class="pre">censor_bad_words_not_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.censor_bad_words_strict"><code class="docutils literal notranslate"><span class="pre">censor_bad_words_strict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.check_url_or_text"><code class="docutils literal notranslate"><span class="pre">check_url_or_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.cleanup_text"><code class="docutils literal notranslate"><span class="pre">cleanup_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.extract_difficult_words"><code class="docutils literal notranslate"><span class="pre">extract_difficult_words()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.parse_text_from_web"><code class="docutils literal notranslate"><span class="pre">parse_text_from_web()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.readability_index"><code class="docutils literal notranslate"><span class="pre">readability_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.sentiment_analysis"><code class="docutils literal notranslate"><span class="pre">sentiment_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.sentiment_score_to_summary"><code class="docutils literal notranslate"><span class="pre">sentiment_score_to_summary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.summarize_text"><code class="docutils literal notranslate"><span class="pre">summarize_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.NLP.summarize_text_util"><code class="docutils literal notranslate"><span class="pre">summarize_text_util()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Quotes">vocabCLI.modules.Quotes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.add_quote"><code class="docutils literal notranslate"><span class="pre">add_quote()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.delete_all_quotes"><code class="docutils literal notranslate"><span class="pre">delete_all_quotes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.delete_quote"><code class="docutils literal notranslate"><span class="pre">delete_quote()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.get_quote_of_the_day"><code class="docutils literal notranslate"><span class="pre">get_quote_of_the_day()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.get_quotes"><code class="docutils literal notranslate"><span class="pre">get_quotes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.get_random_quote"><code class="docutils literal notranslate"><span class="pre">get_random_quote()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Quotes.search_quote"><code class="docutils literal notranslate"><span class="pre">search_quote()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.RSS">vocabCLI.modules.RSS module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.RSS.add_feed"><code class="docutils literal notranslate"><span class="pre">add_feed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.RSS.check_feed_for_new_content"><code class="docutils literal notranslate"><span class="pre">check_feed_for_new_content()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.RSS.get_all_feeds"><code class="docutils literal notranslate"><span class="pre">get_all_feeds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.RSS.remove_feed"><code class="docutils literal notranslate"><span class="pre">remove_feed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.RSS.remove_html_tags"><code class="docutils literal notranslate"><span class="pre">remove_html_tags()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Report">vocabCLI.modules.Report module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Report.generate_graph_report"><code class="docutils literal notranslate"><span class="pre">generate_graph_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Report.generate_text_report"><code class="docutils literal notranslate"><span class="pre">generate_text_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Spelling">vocabCLI.modules.Spelling module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Spelling.spell_checker"><code class="docutils literal notranslate"><span class="pre">spell_checker()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Study">vocabCLI.modules.Study module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_all"><code class="docutils literal notranslate"><span class="pre">quiz_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_collection"><code class="docutils literal notranslate"><span class="pre">quiz_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_favorite"><code class="docutils literal notranslate"><span class="pre">quiz_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_learning"><code class="docutils literal notranslate"><span class="pre">quiz_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_mastered"><code class="docutils literal notranslate"><span class="pre">quiz_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.quiz_tag"><code class="docutils literal notranslate"><span class="pre">quiz_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_all"><code class="docutils literal notranslate"><span class="pre">revise_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_collection"><code class="docutils literal notranslate"><span class="pre">revise_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_favorite"><code class="docutils literal notranslate"><span class="pre">revise_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_learning"><code class="docutils literal notranslate"><span class="pre">revise_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_mastered"><code class="docutils literal notranslate"><span class="pre">revise_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.revise_tag"><code class="docutils literal notranslate"><span class="pre">revise_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.show_quiz_history"><code class="docutils literal notranslate"><span class="pre">show_quiz_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.start_quiz"><code class="docutils literal notranslate"><span class="pre">start_quiz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Study.start_revision"><code class="docutils literal notranslate"><span class="pre">start_revision()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Thesaurus">vocabCLI.modules.Thesaurus module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Thesaurus.find_antonym"><code class="docutils literal notranslate"><span class="pre">find_antonym()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Thesaurus.find_synonym"><code class="docutils literal notranslate"><span class="pre">find_synonym()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.Utils">vocabCLI.modules.Utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.add_tag"><code class="docutils literal notranslate"><span class="pre">add_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.check_learning"><code class="docutils literal notranslate"><span class="pre">check_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.check_mastered"><code class="docutils literal notranslate"><span class="pre">check_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.check_word_exists"><code class="docutils literal notranslate"><span class="pre">check_word_exists()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.clear_all_words_from_tag"><code class="docutils literal notranslate"><span class="pre">clear_all_words_from_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.clear_favorite"><code class="docutils literal notranslate"><span class="pre">clear_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.clear_learning"><code class="docutils literal notranslate"><span class="pre">clear_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.clear_mastered"><code class="docutils literal notranslate"><span class="pre">clear_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.count_all_words"><code class="docutils literal notranslate"><span class="pre">count_all_words()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.count_favorite"><code class="docutils literal notranslate"><span class="pre">count_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.count_learning"><code class="docutils literal notranslate"><span class="pre">count_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.count_mastered"><code class="docutils literal notranslate"><span class="pre">count_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.count_tag"><code class="docutils literal notranslate"><span class="pre">count_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_all"><code class="docutils literal notranslate"><span class="pre">delete_all()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_favorite"><code class="docutils literal notranslate"><span class="pre">delete_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_learning"><code class="docutils literal notranslate"><span class="pre">delete_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_mastered"><code class="docutils literal notranslate"><span class="pre">delete_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_word"><code class="docutils literal notranslate"><span class="pre">delete_word()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.delete_words_from_tag"><code class="docutils literal notranslate"><span class="pre">delete_words_from_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.fetch_word_history"><code class="docutils literal notranslate"><span class="pre">fetch_word_history()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_consecutive_dates"><code class="docutils literal notranslate"><span class="pre">get_consecutive_dates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_lookup_rate"><code class="docutils literal notranslate"><span class="pre">get_lookup_rate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_random_word_definition_from_api"><code class="docutils literal notranslate"><span class="pre">get_random_word_definition_from_api()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_random_word_from_favorite_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_favorite_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_random_word_from_learning_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_learning_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_random_word_from_mastered_set"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_mastered_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.get_random_word_from_tag"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.predict_milestone"><code class="docutils literal notranslate"><span class="pre">predict_milestone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.remove_tag"><code class="docutils literal notranslate"><span class="pre">remove_tag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_favorite"><code class="docutils literal notranslate"><span class="pre">set_favorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_learning"><code class="docutils literal notranslate"><span class="pre">set_learning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_mastered"><code class="docutils literal notranslate"><span class="pre">set_mastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_unfavorite"><code class="docutils literal notranslate"><span class="pre">set_unfavorite()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_unlearning"><code class="docutils literal notranslate"><span class="pre">set_unlearning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.set_unmastered"><code class="docutils literal notranslate"><span class="pre">set_unmastered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.show_list"><code class="docutils literal notranslate"><span class="pre">show_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.Utils.show_streak"><code class="docutils literal notranslate"><span class="pre">show_streak()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules.WordCollections">vocabCLI.modules.WordCollections module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.clean_collection_csv_data"><code class="docutils literal notranslate"><span class="pre">clean_collection_csv_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.delete_collection_from_DB"><code class="docutils literal notranslate"><span class="pre">delete_collection_from_DB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.get_random_word_from_collection"><code class="docutils literal notranslate"><span class="pre">get_random_word_from_collection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.insert_collection_to_DB"><code class="docutils literal notranslate"><span class="pre">insert_collection_to_DB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.show_all_collections"><code class="docutils literal notranslate"><span class="pre">show_all_collections()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vocabCLI.modules.html#vocabCLI.modules.WordCollections.show_words_from_collection"><code class="docutils literal notranslate"><span class="pre">show_words_from_collection()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vocabCLI.modules.html#module-vocabCLI.modules">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="module-vocabCLI.vocabCLI">
+<span id="vocabcli-vocabcli-module"></span><h2>vocabCLI.vocabCLI module<a class="headerlink" href="#module-vocabCLI.vocabCLI" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.Import">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">Import</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#Import"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.Import" title="Permalink to this definition">#</a></dt>
+<dd><p>Imports a list of words in the application.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.ListCMD">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">ListCMD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#ListCMD"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.ListCMD" title="Permalink to this definition">#</a></dt>
+<dd><p>Lists all the words looked up by the user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>favorite (bool, optional): If True, prints the list of favorite words. Defaults to False.
+learning (bool, optional): If True, prints the list of words in learning list. Defaults to False.
+mastered (bool, optional): If True, prints the list of words in mastered list. Defaults to False.
+tag (str, optional): If True, prints the list of words with a particular tag. Defaults to None.
+days (str, optional): If True, prints the list of words from last n number of days. Defaults to None.
+date (str, optional):  If True, prints the list of words from a particular date. Defaults to None.
+last (str, optional): If True, prints the list of last searched words. Defaults to None.
+most (str, optional): If True, prints the list of most searched words. Defaults to None.
+tagnames (bool, optional): If True, prints the list of all the tags. Defaults to False.
+collection (Optional[str], optional): If True, prints the list of words from a collection. Defaults to None.
+collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.about">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">about</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#about"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.about" title="Permalink to this definition">#</a></dt>
+<dd><p>Print information about the software.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.antonym">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">antonym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#antonym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.antonym" title="Permalink to this definition">#</a></dt>
+<dd><p>Find antonyms for a word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word to search antonyms for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.bye">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">bye</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#bye"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.bye" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.clean">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.clean" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.clear">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">master:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.clear" title="Permalink to this definition">#</a></dt>
+<dd><p>Clears all the words from the lists.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning (bool, optional): If True, clears all the words from the learning list. Defaults to False.
+master (bool, optional): If True, clears all the words from the mastered list. Defaults to False.
+favorite (bool, optional): If True, clears all the words from the favorite list. Defaults to False.
+tag (str, optional): If True, clears all the words with a particular tag. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.daily_quote">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">daily_quote</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#daily_quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.daily_quote" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.daily_word">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">daily_word</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#daily_word"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.daily_word" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.define">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">define</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">short:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pronounce:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#define"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.define" title="Permalink to this definition">#</a></dt>
+<dd><p>Looks up a word in the dictionary.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be defined.
+short (bool, optional): If True, prints the short definition of the word. Defaults to False.
+pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.delete">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.delete" title="Permalink to this definition">#</a></dt>
+<dd><p>Deletes the word from the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mastered (bool, optional): Deletes all mastered words. Defaults to False.
+learning (bool, optional): Deletes all learning words. Defaults to False.
+favorite (bool, optional): Deletes all favorite words. Defaults to False.
+tag (str, optional): Tag of words to be deleted. Defaults to None.
+words (List[str], optional): Word to be deleted. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.export">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.export" title="Permalink to this definition">#</a></dt>
+<dd><p>Exports a list of all your looked up words.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pdf (bool, optional): If True, exports a list of your looked up words in PDF format. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.favorite">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">favorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#favorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.favorite" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds a word to the favorite list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be added to the favorite list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.flashcard">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">flashcard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#flashcard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.flashcard" title="Permalink to this definition">#</a></dt>
+<dd><p>Create flashcards for words in your learning list.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.graph">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topWordsBar:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topTagsBar:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topWordsPie:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topTagsPie:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookupWeek:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookupMonth:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lookupYear:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learnVSmaster:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wordCountByCollection:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.graph" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate Graphical Charts based on your vocabulary.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>topWordsBar (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
+topTagsBar (int, optional): Visualizes the top N tags with the most words. Defaults to None.
+topWordsPie (Optional[int], optional): Visualizes the top N most looked up words. Defaults to None.
+topTagsPie (Optional[int], optional): Visualizes the top N tags with the most words. Defaults to None.
+lookupWeek (Optional[bool], optional): Visualizes the word count distribution for days in the past week. Defaults to False.
+lookupMonth (Optional[bool], optional): Visualizes the word count distribution for days in the past month. Defaults to False.
+lookupYear (Optional[bool], optional): Visualizes the word count distribution for days in the past year. Defaults to False.
+learnVSmaster (Optional[bool], optional): Visualizes the number of words in your learning list vs. your mastered list. Defaults to False.
+slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.hardwords">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">hardwords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#hardwords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.hardwords" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.history">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.history" title="Permalink to this definition">#</a></dt>
+<dd><p>Get a lookup history of a word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word to get lookup history for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.learn">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.learn" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds a word to the learning list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be added to the learning list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.master">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">master</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#master"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.master" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds a word to the mastered list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be added to the mastered list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.milestone">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">milestone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">milestone_number:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#milestone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.milestone" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.quiz">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">quiz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#quiz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.quiz" title="Permalink to this definition">#</a></dt>
+<dd><p>Take a quiz on words in your learning list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>number (int, optional): Number of words to quiz on. Defaults to 10.
+tag (str, optional): Tag of words to quiz on. Defaults to None.
+learning (Optional[bool], optional): Take a quiz on words in your learning list. Defaults to False.
+mastered (Optional[bool], optional): Take a quiz on words in your mastered list. Defaults to False.
+favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
+collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.quote">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_all:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.quote" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.random">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.random" title="Permalink to this definition">#</a></dt>
+<dd><p>Gets a random word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning (bool, optional): Get a random learning word. Defaults to False.
+mastered (bool, optional): Get a random mastered word. Defaults to False.
+favorite (Optional[bool], optional): Get a random favorite word. Defaults to False.
+tag (Optional[str], optional): Get a random word from a particular tag. Defaults to None.
+collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.rate">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">today:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">week:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.rate" title="Permalink to this definition">#</a></dt>
+<dd><p>Gives the number of words you have learned in a particular time period with a comparison of a previous time period.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>today (bool, optional): If True, get learning rate today. Defaults to False.
+week (bool, optional): If True, get learning rate this week. Defaults to False.
+month (bool, optional): If True, get learning rate this month. Defaults to False.
+year (bool, optional): If True, get learning rate this year. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.readability">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">readability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#readability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.readability" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.refresh">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.refresh" title="Permalink to this definition">#</a></dt>
+<dd><p>Refreshes the cached content from the API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.revise">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">revise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mastered:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">favorite:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#revise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.revise" title="Permalink to this definition">#</a></dt>
+<dd><p>Revise words from your learning list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>number (int, optional): Number of words to revise. Defaults to None.
+tag (str, optional): Tag of words to revise. Defaults to None.
+learning (Optional[bool], optional): Revise words in your learning list. Defaults to False.
+mastered (Optional[bool], optional): Revise words in your mastered list. Defaults to False.
+favorite (Optional[bool], optional): Revise words in your favorite list. Defaults to False.
+collection (Optional[str], optional): Revise words in a particular collection. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.rss">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">rss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">add:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#rss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.rss" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.sentiment">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">sentiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#sentiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.sentiment" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.spellcheck">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">spellcheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#spellcheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.spellcheck" title="Permalink to this definition">#</a></dt>
+<dd><p>Spell check a word.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.streak">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">streak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#streak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.streak" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.summary">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.summary" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.synonym">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">synonym</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#synonym"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.synonym" title="Permalink to this definition">#</a></dt>
+<dd><p>Find synonyms for a word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word to search synonyms for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.tag">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.OptionInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.tag" title="Permalink to this definition">#</a></dt>
+<dd><p>Tags a word.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Words to tagged.
+tag (str): Tag to add to the words.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.unfavorite">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">unfavorite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#unfavorite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.unfavorite" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes a word from the favorite list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be removed from the favorite list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.unlearn">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">unlearn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#unlearn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.unlearn" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes a word from the learning list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be removed from the learning list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.unmaster">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">unmaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#unmaster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.unmaster" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes a word from the mastered list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word which is to be removed from the mastered list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="vocabCLI.vocabCLI.untag">
+<span class="sig-prename descclassname"><span class="pre">vocabCLI.vocabCLI.</span></span><span class="sig-name descname"><span class="pre">untag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words:</span> <span class="pre">~typing.List[str]</span> <span class="pre">=</span> <span class="pre">&lt;typer.models.ArgumentInfo</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vocabCLI/vocabCLI.html#untag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vocabCLI.vocabCLI.untag" title="Permalink to this definition">#</a></dt>
+<dd><p>Remove tag of a word in the dictionary.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>words (List[str]): Word to remove tag from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-vocabCLI">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-vocabCLI" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, AtharvaShah, AnayDeshpande
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">vocabCLI package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-vocabCLI.vocabCLI">vocabCLI.vocabCLI module</a><ul>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.Import"><code class="docutils literal notranslate"><span class="pre">Import()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.ListCMD"><code class="docutils literal notranslate"><span class="pre">ListCMD()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.about"><code class="docutils literal notranslate"><span class="pre">about()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.antonym"><code class="docutils literal notranslate"><span class="pre">antonym()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.bye"><code class="docutils literal notranslate"><span class="pre">bye()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.clean"><code class="docutils literal notranslate"><span class="pre">clean()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.clear"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.daily_quote"><code class="docutils literal notranslate"><span class="pre">daily_quote()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.daily_word"><code class="docutils literal notranslate"><span class="pre">daily_word()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.define"><code class="docutils literal notranslate"><span class="pre">define()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.favorite"><code class="docutils literal notranslate"><span class="pre">favorite()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.flashcard"><code class="docutils literal notranslate"><span class="pre">flashcard()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.graph"><code class="docutils literal notranslate"><span class="pre">graph()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.hardwords"><code class="docutils literal notranslate"><span class="pre">hardwords()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.history"><code class="docutils literal notranslate"><span class="pre">history()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.learn"><code class="docutils literal notranslate"><span class="pre">learn()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.master"><code class="docutils literal notranslate"><span class="pre">master()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.milestone"><code class="docutils literal notranslate"><span class="pre">milestone()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.quiz"><code class="docutils literal notranslate"><span class="pre">quiz()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.quote"><code class="docutils literal notranslate"><span class="pre">quote()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.rate"><code class="docutils literal notranslate"><span class="pre">rate()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.readability"><code class="docutils literal notranslate"><span class="pre">readability()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.refresh"><code class="docutils literal notranslate"><span class="pre">refresh()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.revise"><code class="docutils literal notranslate"><span class="pre">revise()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.rss"><code class="docutils literal notranslate"><span class="pre">rss()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.sentiment"><code class="docutils literal notranslate"><span class="pre">sentiment()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.spellcheck"><code class="docutils literal notranslate"><span class="pre">spellcheck()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.streak"><code class="docutils literal notranslate"><span class="pre">streak()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.summary"><code class="docutils literal notranslate"><span class="pre">summary()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.synonym"><code class="docutils literal notranslate"><span class="pre">synonym()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.tag"><code class="docutils literal notranslate"><span class="pre">tag()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.unfavorite"><code class="docutils literal notranslate"><span class="pre">unfavorite()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.unlearn"><code class="docutils literal notranslate"><span class="pre">unlearn()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.unmaster"><code class="docutils literal notranslate"><span class="pre">unmaster()</span></code></a></li>
+<li><a class="reference internal" href="#vocabCLI.vocabCLI.untag"><code class="docutils literal notranslate"><span class="pre">untag()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vocabCLI">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

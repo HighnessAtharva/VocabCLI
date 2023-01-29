@@ -13,6 +13,7 @@ from rich.panel import Panel
 def export_to_csv() -> None:
     """
     Export words to csv file.
+    
     1. Create a connection to the database.
     2. Create a cursor object.
     3. Execute a SELECT query to fetch all the words from the database.
@@ -107,7 +108,7 @@ def export_to_csv() -> None:
         c.execute("SELECT * FROM rss")
         rss = c.fetchall()
         if len(rss) <= 0:
-            raise NoRSSFoundException
+            raise NoRSSFeedsException
 
         # check if the directory exists, if not create it
         if not os.path.exists("exports"):
@@ -128,7 +129,7 @@ def export_to_csv() -> None:
             )
         )
 
-    except NoRSSFoundException as e:
+    except NoRSSFeedsException as e:
         print(e)
 
     # ==================================#
@@ -176,7 +177,9 @@ def export_to_csv() -> None:
 
 
 def import_from_csv() -> None:
-    """Import words from csv file.
+    """
+    Import words from csv file.
+    
     1. Open the csv file
     2. Get the csv reader
     3. Skip the header
@@ -257,6 +260,7 @@ def import_from_csv() -> None:
     # ==================================#
     """ 
     Import rss feeds from csv file.
+    
     1. Open the csv file
     2. Get the csv reader
     3. Skip the header
@@ -322,6 +326,7 @@ def import_from_csv() -> None:
     # ==================================#
     """ 
     Import quotes from csv file.
+    
     1. Open the csv file
     2. Get the csv reader
     3. Skip the header
@@ -393,6 +398,7 @@ def import_from_csv() -> None:
     # ==================================#
     """ 
     Import quiz history from csv file.
+    
     1. Open the csv file
     2. Get the csv reader
     3. Skip the header
@@ -477,7 +483,9 @@ class PDF(FPDF):
 
 
 def export_to_pdf() -> None:  # sourcery skip: extract-method
-    """Export words to pdf file.
+    """
+    Export words to pdf file.
+    
     1. Create a pdf file
     2. Sets all the attributes (colour, font, size, etc.)
     3. Execute a query to select all words from the database

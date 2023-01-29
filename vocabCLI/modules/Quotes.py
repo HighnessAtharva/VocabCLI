@@ -17,6 +17,7 @@ from rich.table import Table
 def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
+    
     1. Check if there are any quotes in the database
     2. If there are quotes, it prints a table with the quotes, authors and dates added
     3. If there are no quotes, it raises an exception
@@ -77,6 +78,7 @@ def add_quote(quote: str, author: Optional[str] = None) -> None:
     # sourcery skip: remove-redundant-fstring
     """
     Adds a quote to the database.
+    
     1. The quote and author are stripped of any leading or trailing whitespace.
     2. The quote and author are checked to see if they are only whitespaces. If they are, an error message is printed and the function is returned.
     3. The quote and author are checked to see if they already exist in the database. If they do, an error message is printed and the function is returned.
@@ -160,6 +162,7 @@ def add_quote(quote: str, author: Optional[str] = None) -> None:
 def search_quote(quoteText: str) -> None:
     """
     Searches for a quote in the database.
+    
     1. It then strips the quote of any leading or trailing whitespace & removes the quotes from the quote if they exist
     2. It then converts the quote to lowercase so as to match the case of the quotes in the database
     3. It then checks if the quote does not only have whitespace
@@ -257,6 +260,7 @@ def search_quote(quoteText: str) -> None:
 def delete_quote() -> None:
     """
     Deletes a quote from the database.
+    
     1. Displays all the quotes in the database with their index using SELECT query
     2. If there are no quotes in the database, it raises a NoQuotesError
     3. Asks the user to select a quote to delete (by index)
@@ -341,6 +345,7 @@ def delete_quote() -> None:
 def get_random_quote() -> None:
     """
     Gets a random quote from the database.
+    
     1. Displays a random quote from the database using SELECT query
     2. If there are no quotes in the database, it raises a NoQuotesError
     3. Prints the quote
@@ -377,6 +382,7 @@ def get_random_quote() -> None:
 def get_quote_of_the_day() -> None:
     """
     Get a random quote from a public API
+    
     1. Gets a random quote from the API
     2. Prints the quote
     """
@@ -408,6 +414,7 @@ def get_quote_of_the_day() -> None:
 def delete_all_quotes() -> None:
     """
     Deletes all quotes from the database.
+    
     1. Display a warning message & prompt the user to confirm the deletion
     2. Delete all quotes from the database
     3. Display a success message

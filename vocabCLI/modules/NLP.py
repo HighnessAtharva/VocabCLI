@@ -42,6 +42,7 @@ URL_INVALID_PANEL = Panel(
 def check_url_or_text(value: str) -> bool:
     """
     Checks if the value is a URL or a text
+    
     1. Try to get the response from the URL, if we get a response, then it is a URL
     2. If we get an exception, then it is a text
 
@@ -73,6 +74,7 @@ def check_url_or_text(value: str) -> bool:
 def parse_text_from_web(webURL: str) -> str:
     """
     Extracts the text from the main content of the web page. Removes the ads, comments, navigation bar, footer, html tags, etc
+    
     1. Download the web page using trafilatura
     2. Extract the text from the downloaded web page using trafilatura
     3. Return the extracted text
@@ -105,6 +107,7 @@ def parse_text_from_web(webURL: str) -> str:
 def cleanup_text(text: str) -> str:
     """
     Clean up the text by removing special characters, numbers, whitespaces, etc for further processing and to improve the accuracy of the model.
+    
     1. Remove the non-ascii characters
     2. Remove the numbers
     3. Remove the whitespaces
@@ -138,6 +141,7 @@ def cleanup_text(text: str) -> str:
 def censor_bad_words_strict(text: str) -> None:
     """
     Removes the bad words from the text and replaces them with asterisks completely and prints the censor text
+    
     1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
     2. If the text is not a URL, then we directly use the model
     3. Remove the punctuations and convert text to lowercase
@@ -225,6 +229,7 @@ def censor_bad_words_strict(text: str) -> None:
 def censor_bad_words_not_strict(text: str) -> None:
     """
     Removes the bad words from the text and replaces them with asterisks partially and prints the censor text
+    
     1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
     2. If the text is not a URL, then we directly use the model
     3. Remove the punctuations and convert text to lowercase
@@ -321,6 +326,7 @@ def censor_bad_words_not_strict(text: str) -> None:
 def readability_index(text: str) -> None:
     """
     Prints the readability index of the text and the summary of the index
+    
     1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
     2. If the text is not a URL, then we directly use the model
     3. Remove the punctuations and convert text to lowercase
@@ -409,6 +415,7 @@ def readability_index(text: str) -> None:
 def extract_difficult_words(text: str) -> None:
     """
     Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
+    
     1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
     2. If the text is not a URL, then we directly use the model
     3. Open the file with a list of simple words (most common words used in English).
@@ -622,6 +629,7 @@ def sentiment_score_to_summary(sentiment_score: int) -> str:
 def sentiment_analysis(content: str) -> None:
     """
     Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
+    
     1. Check if the content is a URL, if yes, then parse the text from it and then use the model
     2. If text and not URL, then directly use the model
     3. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
@@ -713,6 +721,7 @@ def sentiment_analysis(content: str) -> None:
 def summarize_text_util(text: str, per: int) -> str:
     """
     Summarizes the text using the spacy library
+    
     1. Backend API call to OpenAI
     2. 😎 100% abstraction, GPT 3 does all the work
     3. Strip the text of any escape characters and newlines and return the summarized text
@@ -782,6 +791,7 @@ def summarize_text_util(text: str, per: int) -> str:
 def summarize_text(content: str, file: Optional[bool] = False) -> None:
     """
     Print the summarized text or internet article.
+    
     1. Check if the content is a URL or text
     2. If URL, then parse the text from it and then use the model
     3. If text, then directly use the model

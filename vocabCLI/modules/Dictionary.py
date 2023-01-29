@@ -21,6 +21,7 @@ from rich.table import Table
 def display_theme(query: str) -> None:
     """
     Display the theme of the word if it exists in the collections table
+    
     1. Create a connection to the database
     2. Create a cursor to execute SQL queries on the database
     3. Execute an SQL query that returns the collection name for a given word
@@ -43,6 +44,7 @@ def display_theme(query: str) -> None:
 def show_commonly_confused(word: str) -> None:
     """
     Check if the word is commonly confused with other words, if yes, show them
+    
     1. Open the commonly_confused.csv file
     2. Read the file
     3. If the word is in the row, then print the words in the row as commonly confused words
@@ -68,9 +70,10 @@ def show_commonly_confused(word: str) -> None:
 
 
 # no tests for this function as it is not called anywhere in the command directly
-def connect_to_api(query: str = "hello") -> json:
+def connect_to_api(query: str = "hello") -> str:
     """
     Connects to the API and returns the response in JSON format.
+    
     1. Connect to the internet to check if the word is a valid word.
     2. If the word is a valid word, then check if the word is already in the cache_word table. If the word is in the cache_word table, then return the response from the cache_word table.
     3. If the word is not in the cache_word table, then connect to the API, get the response and then insert the word and its response into the cache_word table.
@@ -155,6 +158,7 @@ def connect_to_api(query: str = "hello") -> json:
 def phonetic(query: str) -> str:
     """
     Prints the phonetic of the word.
+    
     1. It takes the query as an argument.
     2. It connects to the API and retrieves the response.
     3. If the word is not found in the dictionary, it prints the message.
@@ -190,6 +194,7 @@ def phonetic(query: str) -> str:
 def insert_word_to_db(query: str) -> None:
     """
     Add the word in the vocabulary builder list.
+    
     The code above does the following, explained in English:
     1. Check if the word exists in the cache_word table
     2. If the word exists, then insert the word to the database
@@ -239,6 +244,7 @@ def insert_word_to_db(query: str) -> None:
 def insert_to_db_util(conn, query: str) -> None:
     """
     Inserts the word into the database.
+    
     1. If the word exists in the database, with a tag, then insert it with that tag.
     2. If the word exists in the database, without a tag, then insert it without a tag.
     3. If the word exists in the database, with favorite 1, then insert it with favorite 1.
@@ -291,6 +297,7 @@ def insert_to_db_util(conn, query: str) -> None:
 def definition(query: str, short: Optional[bool] = False) -> None:
     """
     Prints the definition of the word.
+    
     1. The function definition first calls the function connect_to_api which takes query (str) as argument and returns the response (dict) if successful or None if unsuccessful.
     2. The function definition then calls the function phonetic which takes query (str) as argument and returns the phonetic (str) of the word.
     3. The function definition then calls the function insert_word_to_db which takes query (str) as argument and inserts the word into the database.
@@ -387,6 +394,7 @@ def one_line_definition(query: str) -> str:
 def say_aloud(query: str) -> None:
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
+    
     1. The function say_aloud first calls the function connect_to_api which takes query (str) as argument and returns the response (dict) if successful or None if unsuccessful.
     2. The function say_aloud then checks if the audio is available or not.
     3. If the audio is available, the function say_aloud then downloads the audio file and plays it.
@@ -432,6 +440,7 @@ def say_aloud(query: str) -> None:
 def get_word_of_the_day() -> None:
     """
     Get a word of the day from a public API and print its definition.
+    
     1. Get the API key from the environment variables
     2. Send a GET request to the Wordnik API to get the word of the day
     3. Get the word from the response
