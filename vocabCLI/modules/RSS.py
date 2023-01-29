@@ -203,10 +203,12 @@ def remove_feed() -> None:
         return
 
     for idx, row in enumerate(rows, start=1):
-        print(Panel(
-            title=f"[b reverse]  Feed {idx}  [/b reverse]",
-            renderable=f" [bold blue]Index: [/bold blue]{idx}\n\n [bold blue]Title: [/bold blue] {row[0]}\n\n [bold blue]Link: [/bold blue] {row[1]}\n\n [bold blue]Summary: [/bold blue]{row[2]}\n\n [bold blue]Date added:[/bold blue] {datetime.datetime.strptime(row[3], '%Y-%m-%d %H:%M').strftime('%d %b %y | %H:%M')}",
-        ))
+        print(
+            Panel(
+                title=f"[b reverse]  Feed {idx}  [/b reverse]",
+                renderable=f" [bold blue]Index: [/bold blue]{idx}\n\n [bold blue]Title: [/bold blue] {row[0]}\n\n [bold blue]Link: [/bold blue] {row[1]}\n\n [bold blue]Summary: [/bold blue]{row[2]}\n\n [bold blue]Date added:[/bold blue] {datetime.datetime.strptime(row[3], '%Y-%m-%d %H:%M').strftime('%d %b %y | %H:%M')}",
+            )
+        )
         print()
 
     print(Panel("Enter the index of the feed you want to remove!"))

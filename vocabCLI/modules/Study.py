@@ -634,13 +634,13 @@ def quiz_collection(
         )
         if c.fetchone() is None:
             print(
-            Panel(
-                title="[b reverse red]  Error!  [/b reverse red]",
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"Collection '{collectionName}' is empty",
+                Panel(
+                    title="[b reverse red]  Error!  [/b reverse red]",
+                    title_align="center",
+                    padding=(1, 1),
+                    renderable=f"Collection '{collectionName}' is empty",
+                )
             )
-        )
             return
         start_quiz(
             c, collection=collectionName, quizType=f"collection: {collectionName}"

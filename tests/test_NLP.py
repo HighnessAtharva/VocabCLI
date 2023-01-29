@@ -52,12 +52,21 @@ class TestNLP:
                 ],
             )
             assert result.exit_code == 0
+            assert "Processing text... 📃" in result.stdout
+            assert "Content Length:" in result.stdout
+            assert "electromagnetic" in result.stdout
+            assert "spacetime" in result.stdout
 
         def test_extract_difficult_words_URL(self, runner):
             result = runner.invoke(
                 app, ["hardwords", "https://en.wikipedia.org/wiki/Black_hole"]
             )
             assert result.exit_code == 0
+            assert "URL detected 🌐" in result.stdout
+            assert "Content Length:" in result.stdout
+            assert "supersymmetric" in result.stdout
+            assert "thermodynamics" in result.stdout
+            assert "geodesic" in result.stdout
 
         def test_extract_difficult_words_URL_invalid(self, runner):
             result = runner.invoke(
@@ -66,6 +75,7 @@ class TestNLP:
             assert result.exit_code == 0
             assert "The URL is not valid" in result.stdout
 
+    # TODO
     class Test_Sentiment_Analysis:
         def test_sentiment_analysis_text(self, runner):
             result = runner.invoke(
@@ -96,17 +106,21 @@ class TestNLP:
                 app,
                 [
                     "clean",
-                    "A black hole is a region of spacetime where gravity is so strong that nothing, including light or other electromagnetic waves, has enough energy to escape its event horizon.[2] The theory of general relativity predicts that a sufficiently compact mass can deform spacetime to form a black hole.[3][4] The boundary of no escape is called the event horizon. Although it has a great effect on the fate and circumstances of an object crossing it, it has no locally detectable features according to general relativity.[5] In many ways, a black hole acts like an ideal black body, as it reflects no light.[6][7] Moreover, quantum field theory in curved spacetime predicts that event horizons emit Hawking radiation, with the same spectrum as a black body of a temperature inversely proportional to its mass. This temperature is of the order of billionths of a kelvin for stellar black holes, making it essentially impossible to observe directly.",
+                    "It is unclear whether the word has always been considered vulgar or, if not, when it first came to be used to describe (often in an extremely angry, hostile or belligerent manner) unpleasant circumstances or people in an intentionally offensive way, such as in the term motherfucker, one of its more common usages in some parts of the English-speaking world. Some English-speaking countries censor it on television and radio. Andrea Millwood Hargrave's 2000 study of the attitudes of the British public found that fuck was considered the third-most-severe profanity, and its derivative motherfucker second. Cunt was considered the most severe",
                     "--strict",
                 ],
             )
             assert result.exit_code == 0
+            assert "Processing text... 📃" in result.stdout
+            assert "Offensive words censored: 4 😤" in result.stdout
 
         def test_censor_URL_strict(self, runner):
             result = runner.invoke(
-                app, ["clean", "https://en.wikipedia.org/wiki/Black_hole", "--strict"]
+                app, ["clean", "https://en.wikipedia.org/wiki/Fuck", "--strict"]
             )
             assert result.exit_code == 0
+            assert "URL detected 🌐" in result.stdout
+            assert "Offensive words censored: 152 😤" in result.stdout
 
         def test_censor_URL_strict_invalid(self, runner):
             result = runner.invoke(
@@ -125,16 +139,18 @@ class TestNLP:
                 app,
                 [
                     "clean",
-                    "A black hole is a region of spacetime where gravity is so strong that nothing, including light or other electromagnetic waves, has enough energy to escape its event horizon.[2] The theory of general relativity predicts that a sufficiently compact mass can deform spacetime to form a black hole.[3][4] The boundary of no escape is called the event horizon. Although it has a great effect on the fate and circumstances of an object crossing it, it has no locally detectable features according to general relativity.[5] In many ways, a black hole acts like an ideal black body, as it reflects no light.[6][7] Moreover, quantum field theory in curved spacetime predicts that event horizons emit Hawking radiation, with the same spectrum as a black body of a temperature inversely proportional to its mass. This temperature is of the order of billionths of a kelvin for stellar black holes, making it essentially impossible to observe directly.",
+                    "It is unclear whether the word has always been considered vulgar or, if not, when it first came to be used to describe (often in an extremely angry, hostile or belligerent manner) unpleasant circumstances or people in an intentionally offensive way, such as in the term motherfucker, one of its more common usages in some parts of the English-speaking world. Some English-speaking countries censor it on television and radio. Andrea Millwood Hargrave's 2000 study of the attitudes of the British public found that fuck was considered the third-most-severe profanity, and its derivative motherfucker second. Cunt was considered the most severe",
                 ],
             )
             assert result.exit_code == 0
+            assert "Processing text... 📃" in result.stdout
+            assert "Offensive words censored: 4 😤" in result.stdout
 
         def test_censor_URL_no_strict(self, runner):
-            result = runner.invoke(
-                app, ["clean", "https://en.wikipedia.org/wiki/Black_hole"]
-            )
+            result = runner.invoke(app, ["clean", "https://en.wikipedia.org/wiki/Fuck"])
             assert result.exit_code == 0
+            assert "URL detected 🌐" in result.stdout
+            assert "Offensive words censored: 152 😤" in result.stdout
 
         def test_censor_URL_no_strict_invalid(self, runner):
             result = runner.invoke(
@@ -153,12 +169,25 @@ class TestNLP:
                 ],
             )
             assert result.exit_code == 0
+            assert "Processing text... 📃" in result.stdout
+            assert "Length of the article:" in result.stdout
+            assert "Length of the summary:" in result.stdout
+            assert "Summary:" in result.stdout
 
         def test_summarize_URL(self, runner):
             result = runner.invoke(
-                app, ["summary", "https://en.wikipedia.org/wiki/Black_hole"]
+                app,
+                [
+                    "summary",
+                    "https://www.teachermagazine.com/in_en/articles/using-toys-to-improve-learning",
+                ],
             )
             assert result.exit_code == 0
+
+            assert "URL detected 🌐" in result.stdout
+            assert "Length of the article:" in result.stdout
+            assert "Length of the summary:" in result.stdout
+            assert "Summary:" in result.stdout
 
         def test_summarize_URL_invalid(self, runner):
             result = runner.invoke(

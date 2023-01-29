@@ -1,9 +1,11 @@
+import os
 from collections import Counter
 from heapq import nlargest
 from string import punctuation
 from typing import *
 
 import nltk
+import openai
 import pandas as pd
 import regex as re
 import requests
@@ -22,9 +24,6 @@ from rich.table import Table
 from spacy.lang.en.stop_words import STOP_WORDS
 from spacytextblob.spacytextblob import SpacyTextBlob
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-import os
-import openai
 
 # Load your API key from an environment variable or secret management service
 openai.api_key = os.getenv("OPENAI")
@@ -524,7 +523,7 @@ def extract_difficult_words(text: str) -> None:
         for word in difficult_words:
             if word[-1] == "s" and word[:-1] in simple_words:
                 difficult_words.remove(word)
-                
+
         # remove words that end with 'ing'
         for word in difficult_words:
             if word[-3:] == "ing":
@@ -725,17 +724,22 @@ def summarize_text_util(text: str, per: int) -> str:
     Returns:
         str: summarized text
     """
-    response = openai.Completion.create(model="text-davinci-003", prompt="summarize the following text:\n"+ text, temperature=0, max_tokens=2000)
-    
-    response = response['choices'][0]['text']
-    
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="summarize the following text:\n" + text,
+        temperature=0,
+        max_tokens=2000,
+    )
+
+    response = response["choices"][0]["text"]
+
     # remove escape characters and newlines
     response = re.sub(r"\\n", " ", response)
-    
+
     # if the response contains "Summary:" then remove it
     if "Summary:" in response:
         response = response.split("Summary:")[1]
-         
+
     return response
 
     # OLD WAY
@@ -848,7 +852,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
                         title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters\n\n[bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)} [/bold]characters \n\n[bold blue]Headline:[/bold blue]\n[bold]{headline}[/bold] \n\n [bold blue]Summary:[/bold blue]\n{text_summary}",
+                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters\n\n[bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)} [/bold]characters \n\n[bold blue]Headline:[/bold blue]\n[bold]{headline}[/bold]\n\n [bold green r]Summary:[/bold green r]\n{text_summary}",
                     )
                 )
             else:

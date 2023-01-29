@@ -34,3 +34,4 @@ torchvision
 typer
 trafilatura
 transformers
+openai
