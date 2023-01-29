@@ -28,6 +28,10 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 # Load your API key from an environment variable or secret management service
 openai.api_key = os.getenv("OPENAI")
 
+from spacy.cli import download
+download("en_core_web_sm")
+
+
 URL_INVALID_PANEL = Panel(
     title="[b reverse red]  Error!  [/b reverse red]",
     title_align="center",
@@ -737,7 +741,7 @@ def summarize_text_util(text: str, per: int) -> str:
         model="text-davinci-003",
         prompt="summarize the following text:\n" + text,
         temperature=0,
-        max_tokens=2000,
+        max_tokens=20000,
     )
 
     response = response["choices"][0]["text"]
@@ -862,7 +866,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
                         title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters\n\n[bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)} [/bold]characters \n\n[bold blue]Headline:[/bold blue]\n[bold]{headline}[/bold]\n\n [bold green r]Summary:[/bold green r]\n{text_summary}",
+                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters\n\n[bold blue]Length of the summary:[/bold blue] [bold]{len(text_summary)} [/bold]characters \n\n[bold blue]Headline:[/bold blue] [bold]{headline}[/bold]\n\n[b green u]Summary:[/b green u]\n{text_summary}",
                     )
                 )
             else:
@@ -871,7 +875,7 @@ def summarize_text(content: str, file: Optional[bool] = False) -> None:
                         title="[b reverse green]  Success!  [/b reverse green]",
                         title_align="center",
                         padding=(1, 1),
-                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters  \n\n [bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)}[/bold] characters \n\n[bold blue] Summary:[/bold blue]\n{text_summary}",
+                        renderable=f"[bold blue]Length of the article:[/bold blue] [bold]{len(text)}[/bold] characters  \n\n [bold blue]Length of the summary:[/bold blue][bold]{len(text_summary)}[/bold] characters\n\n[bold blue]Summary:[/bold blue]\n{text_summary}",
                     )
                 )
 
