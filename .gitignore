@@ -7,3 +7,6 @@ vocabCLI/tempCodeRunnerFile.py
 vocabCLI/__pycache__/
 tests/tempCodeRunnerFile.py
 tests/__pycache__/
+vocabCLI/exports/
+vocabCLI/.coverage
+vocabCLI/VocabularyBuilder.db
