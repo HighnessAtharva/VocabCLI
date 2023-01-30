@@ -63,7 +63,7 @@ def get_quotes() -> None:
         for quote in quotes:
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
-            quote_date = datetime.datetime.strptime(
+            quote_date = datetime.strptime(
                 quote[2], "%Y-%m-%d %H:%M:%S"
             ).strftime("%d %b '%y | %H:%M")
 
@@ -144,7 +144,7 @@ def add_quote(quote: str, author: Optional[str] = None) -> None:
     # insert the quote into the database
     c.execute(
         "INSERT INTO quotes VALUES (?,?,?)",
-        (quote, author, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+        (quote, author, datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
     )
     conn.commit()
 
@@ -246,7 +246,7 @@ def search_quote(quoteText: str) -> None:
         # print the quote
         quote_text = quote[0]
         quote_author = quote[1] if quote[1] is not None else "-"
-        quote_date = datetime.datetime.strptime(quote[2], "%Y-%m-%d %H:%M:%S").strftime(
+        quote_date = datetime.strptime(quote[2], "%Y-%m-%d %H:%M:%S").strftime(
             "%d %b '%y | %H:%M"
         )
 
@@ -396,7 +396,7 @@ def get_quote_of_the_day() -> None:
     quote_text = quote["quote"]
     quote_author = quote["author"] if quote["author"] is not None else "-"
     quote_date = quote["date"]
-    quote_date = datetime.datetime.strptime(quote_date, "%Y-%m-%d").strftime(
+    quote_date = datetime.strptime(quote_date, "%Y-%m-%d").strftime(
         "%d %b '%y"
     )
 

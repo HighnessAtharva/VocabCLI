@@ -80,7 +80,7 @@ def test_milestone_day_two(runner):
 
 
 def test_milestone_already_reached(runner):
-    # TODO:  Causes zero division error due to average_words_per_day=learning_count/(datetime.datetime.now()-first_date).days
+    # TODO:  Causes zero division error due to average_words_per_day=learning_count/(datetime.now()-first_date).days
     result = runner.invoke(app, ["milestone", "2"])
     assert result.exit_code == 0
     assert "You have already reached 2 words" in result.stdout

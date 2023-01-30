@@ -1,7 +1,7 @@
 import nltk
 from Dictionary import *
 from nltk.corpus import wordnet
-from rich import print
+from rich import print, box
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
@@ -68,13 +68,15 @@ def find_synonym(query: str) -> None:
                 )
             )
             synonyms = [
-                Panel(f"[sea_green1]{synonym}[sea_green1]", expand=True)
-                for synonym in synonyms
+                Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [sea_green1]{synonym}[sea_green1]", 
+                      expand=True,
+                      box=box.SQUARE)
+                for idx, synonym in enumerate(synonyms, start=1)
             ]
 
             # ----------------- Columns -----------------#
 
-            print(Columns(synonyms))
+            print(Columns(synonyms, expand=True))
 
             # ----------------- Columns -----------------#
 
@@ -84,6 +86,7 @@ def find_synonym(query: str) -> None:
                     title="[b reverse red]  Error!  [/b reverse red]",
                     title_align="center",
                     padding=(1, 1),
+                    box=box.SQUARE,
                     renderable=f"No synonyms found for {query}",
                 )
             )
@@ -148,12 +151,14 @@ def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
                 )
             )
             antonyms = [
-                Panel(f"[red]{antonym}[red]", expand=True) for antonym in antonyms
+                Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [red]{antonym}[red]", 
+                      expand=True, 
+                      box=box.SQUARE) for idx, antonym in enumerate(antonyms, start=1)
             ]
 
             # ----------------- Columns -----------------#
 
-            print(Columns(antonyms))
+            print(Columns(antonyms, expand=True))
 
             # ----------------- Columns -----------------#
 

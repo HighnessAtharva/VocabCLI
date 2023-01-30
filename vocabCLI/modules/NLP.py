@@ -29,7 +29,10 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 openai.api_key = os.getenv("OPENAI")
 
 from spacy.cli import download
-download("en_core_web_sm")
+
+# check if the model is already downloaded, if not, then download it
+if not spacy.util.is_package("en_core_web_sm"):
+    download("en_core_web_sm")
 
 
 URL_INVALID_PANEL = Panel(
@@ -131,7 +134,7 @@ def cleanup_text(text: str) -> str:
     text = re.sub(r"\d+", "", text)  # remove numbers
     text = re.sub(r"\s+", " ", text)  # remove whitespaces
     # remove special characters except full stop and apostrophe
-    text = re.sub(r"[^a-zA-Z0-9\s.]", "", text)
+    text = re.sub(r"[^a-zA-Z0-9\s.']", "", text)
     # text = text.lower()  # convert text to lowercase
     text = text.strip()  # remove leading and trailing whitespaces
     text = text.encode("ascii", "ignore").decode("ascii")  # remove non-ascii characters
@@ -504,24 +507,7 @@ def extract_difficult_words(text: str) -> None:
         # remove full stop from the words
         text = [word for word in text if "." not in word]
         difficult_words = [word for word in text if word.lower() not in simple_words]
-        filter_words = [
-            "didnt",
-            "couldnt",
-            "wouldnt",
-            "shouldnt",
-            "isnt",
-            "wasnt",
-            "arent",
-            "werent",
-            "dont",
-            "doesnt",
-            "didnt",
-            "hasnt",
-            "hadnt",
-        ]
-        difficult_words = [
-            word for word in difficult_words if word.lower() not in filter_words
-        ]
+       
         # filter out duplicate words
         difficult_words = list(set(difficult_words))
 
@@ -593,16 +579,16 @@ def extract_difficult_words(text: str) -> None:
 
         difficult_words = [
             Panel(
-                f"[thistle1]{word}[thistle1]",
+                f"[b gold1 dim]{idx}[/b gold1 dim]. [i thistle1]{word}[/i thistle1]",
                 expand=True,
-                box=box.ROUNDED,
+                box=box.SQUARE,
                 border_style="pale_violet_red1",
             )
-            for word in difficult_words
+            for idx, word in enumerate(difficult_words, start=1)
         ]
         # ----------------- Columns -----------------#
-
-        print(Columns(difficult_words, equal=True, expand=True))
+      
+        print(Columns(difficult_words, expand=True))
 
         # ----------------- Columns -----------------#
 

@@ -7,6 +7,7 @@ from Database import *
 from Exceptions import *
 from rich.columns import Columns
 from rich.table import Table
+from rich import print, box
 
 
 def delete_collection_from_DB():
@@ -123,14 +124,14 @@ def show_words_from_collection(collectionName: str):
 
         print(
             Panel(
-                f"Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"
+                f"📚 Words from the collection {collectionName} [bold blue][{len(rows)} word(s)][/bold blue]"
             )
         )
-        rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+        rows = [Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [dark_slate_gray1 i]{row[0]}[/dark_slate_gray1 i]", expand=True, box=box.SQUARE) for idx, row in enumerate(rows, start=1)]
 
         # ----------------- Columns -----------------#
 
-        print(Columns(rows, equal=True))
+        print(Columns(rows, expand=True))
 
         # ----------------- Columns -----------------#
 

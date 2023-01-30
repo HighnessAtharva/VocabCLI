@@ -10,3 +10,4 @@ tests/__pycache__/
 vocabCLI/exports/
 vocabCLI/.coverage
 vocabCLI/VocabularyBuilder.db
+vocabCLI/modules/VocabularyBuilder.db

@@ -20,6 +20,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
+from rich import box, print
+
 
 def check_word_exists(query: str) -> bool:
     """
@@ -83,7 +85,7 @@ def fetch_word_history(word: str) -> None:
         )
 
         for row in rows:
-            history = datetime.datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S").strftime(
+            history = datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S").strftime(
                 "%d %b '%y | %H:%M"
             )
             table.add_row(history)
@@ -359,10 +361,10 @@ def set_learning(query: str) -> None:
     if c.fetchone():
         print(
             Panel(
-                title="[b reverse yellow]  Warning!  [/b reverse yellow]",
+                title="[b reverse dark_slate_gray1]  Warning!  [/b reverse dark_slate_gray1]",
                 title_align="center",
                 padding=(1, 1),
-                renderable=f"🛑 [bold yellow]WARNING[/bold yellow] Are you sure you want to move word [bold blue]{query}[/bold blue] from [b]mastered to learning[/b]?",
+                renderable=f"🛑 [bold dark_slate_gray1]WARNING[/bold dark_slate_gray1] Are you sure you want to move word [bold blue]{query}[/bold blue] from [b]mastered to learning[/b]?",
             )
         )
         if sure := typer.confirm(""):
@@ -617,7 +619,7 @@ def get_random_word_definition_from_api() -> None:
 
     lines = open("modules/_random_words.txt").read().splitlines()
     random_word = random.choice(lines).strip()
-    print(Panel(f"A Random Word for You: [bold green]{random_word}[/bold green]"))
+    print(Panel(f"😛 A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)
 
 
@@ -641,7 +643,7 @@ def get_random_word_from_learning_set() -> None:
             raise NoWordsInLearningListException()
         print(
             Panel(
-                f"A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{rows[0][0]}[/bold blue]"
+                f"🧠 A Random word from your [bold blue]learning[/bold blue] words list: [bold blue]{rows[0][0]}[/bold blue]"
             )
         )
         definition(rows[0][0])
@@ -668,7 +670,7 @@ def get_random_word_from_mastered_set() -> None:
 
         print(
             Panel(
-                f"A Random word from your [bold green]mastered[/bold green] words list: [bold green]{rows[0][0]}[/bold green]"
+                f"✅ A Random word from your [bold green]mastered[/bold green] words list: [bold green]{rows[0][0]}[/bold green]"
             )
         )
         definition(rows[0][0])
@@ -692,7 +694,7 @@ def get_random_word_from_favorite_set() -> None:
         if len(rows) <= 0:
             raise NoWordsInFavoriteListException()
         print(
-            Panel(f"A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}")
+            Panel(f"💙 A Random word from your [gold1]favorite[/gold1] list: {rows[0][0]}")
         )
         definition(rows[0][0])
 
@@ -721,7 +723,7 @@ def get_random_word_from_tag(tagName: str) -> None:
             raise NoSuchTagException(tag=tagName)
         print(
             Panel(
-                f"A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"
+                f"🏷️ A Random word from your [bold blue]vocabulary builder[/bold blue] list with the tag {tagName}: [bold blue]{rows[0][0]}[/bold blue]"
             )
         )
         definition(rows[0][0])
@@ -765,19 +767,19 @@ def show_list(
 
     if mastered:
         c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
-        success_message = "[bold green]Mastered[/bold green]"
+        success_message = "✅ [bold green]Mastered[/bold green]"
         error_message = (
             "You have not [bold green]mastered[/bold green] any words yet. ❌"
         )
 
     elif learning:
         c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
-        success_message = "[bold blue]Learning[/bold blue]"
+        success_message = "🧠 [bold blue]Learning[/bold blue]"
         error_message = "You have not added any words to the [bold blue]learning list[/bold blue] yet. ❌"
 
     elif favorite:
         c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
-        success_message = "[bold gold1]Favorite[/bold gold1]"
+        success_message = "💙 [bold gold1]Favorite[/bold gold1]"
         error_message = "You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
     elif days:
@@ -795,9 +797,9 @@ def show_list(
         c.execute(
             f"SELECT DISTINCT word FROM words where datetime > datetime('now' , '-{days} days')"
         )
-        date_today = datetime.datetime.now().strftime("%d/%m/%Y")
-        date_before = datetime.datetime.now() - timedelta(days=int(days))
-        success_message = f"Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue]"
+        date_today = datetime.now().strftime("%d/%m/%Y")
+        date_before = datetime.now() - timedelta(days=int(days))
+        success_message = f"🗓️ Words added to the vocabulary builder list from [bold blue]{date_before.strftime('%d/%m/%Y')}[/bold blue] TO [bold blue]{date_today}[/bold blue]"
         error_message = "No records found within this date range ❌"
 
     elif date:
@@ -855,8 +857,8 @@ def show_list(
 
         # check if the date is not in the future
         date = f"{year}-{month}-{day}"
-        checker = datetime.datetime.strptime(date, "%Y-%m-%d")
-        if checker > datetime.datetime.now():
+        checker = datetime.strptime(date, "%Y-%m-%d")
+        if checker > datetime.now():
             print(
                 Panel(
                     title="[b reverse red]  Error!  [/b reverse red]",
@@ -870,12 +872,12 @@ def show_list(
         # fetch records if all checks pass
         datefmt = f"{date}%"
         c.execute("SELECT DISTINCT word FROM words where datetime LIKE ?", (datefmt,))
-        success_message = f"Words added to the vocabulary builder list on [bold blue]{day}/{month}/{year}[/bold blue]"
+        success_message = f"📅 Words added to the vocabulary builder list on [bold blue]{day}/{month}/{year}[/bold blue]"
         error_message = f"No records found for [bold blue]{date}[/bold blue] ❌"
 
     elif tag:
         c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
-        success_message = f"Words with tag [bold magenta]{tag}[/bold magenta]"
+        success_message = f"🏷️ Words with tag [bold violet]{tag}[/bold violet]"
         error_message = f"Tag {tag} does not exist. ❌"
 
     elif last:
@@ -939,7 +941,7 @@ def show_list(
             "SELECT word, COUNT(word) AS `word_count` FROM words GROUP BY word ORDER BY `word_count` DESC LIMIT ?",
             (most,),
         )
-        success_message = "[bold blue]Top[/bold blue] most searched words"
+        success_message = "🚀 [bold blue]Top[/bold blue] most searched words"
         error_message = "You haven't searched for any words yet. ❌"
 
         rows = c.fetchall()
@@ -971,7 +973,7 @@ def show_list(
 
     elif tagnames:
         c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL")
-        success_message = "[bold magenta]YOUR TAGS :[/bold magenta]"
+        success_message = "🏷️ [bold magenta]YOUR TAGS :[/bold magenta]"
         error_message = "You haven't added any tags to your words yet. ❌"
 
     elif (
@@ -985,7 +987,7 @@ def show_list(
         and tagnames is False
     ):
         c.execute("SELECT DISTINCT word FROM words")
-        success_message = "Here is your list of words"
+        success_message = "😎 Here is your list of words"
         error_message = "You have no words in your vocabulary builder list. ❌"
 
     rows = c.fetchall()
@@ -1000,11 +1002,11 @@ def show_list(
         )
     else:
         print(Panel(f"{success_message} [bold blue][{len(rows)} word(s)][/bold blue]"))
-        rows = [Panel(f"[deep_pink4]{row[0]}[deep_pink4]", expand=True) for row in rows]
+        rows = [Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [dark_slate_gray1 i]{row[0]}[/dark_slate_gray1 i]", expand=True, box=box.SQUARE) for idx, row in enumerate(rows, start=1)]
 
         # ----------------- Columns -----------------#
 
-        print(Columns(rows, equal=True, expand=True))
+        print(Columns(rows, expand=True))
 
         # ----------------- Columns -----------------#
 
@@ -1537,7 +1539,7 @@ def show_streak() -> None:
 
         # convert dates to datetime objects
         for i in range(len(dates)):
-            dates[i] = datetime.datetime.strptime(dates[i][0], "%Y-%m-%d")
+            dates[i] = datetime.strptime(dates[i][0], "%Y-%m-%d")
 
         # sort dates
         dates.sort()
@@ -1608,21 +1610,21 @@ def predict_milestone(milestone: int) -> None:
         else:
             # get the date of the most recent word looked up
             c.execute("SELECT date(datetime) FROM words ORDER BY datetime DESC LIMIT 1")
-            last_date = datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+            last_date = datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
 
             # get the date of the first word looked up
             c.execute("SELECT date(datetime) FROM words ORDER BY datetime ASC LIMIT 1")
-            first_date = datetime.datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
+            first_date = datetime.strptime(c.fetchone()[0], "%Y-%m-%d")
 
             # average words per day
             try:
                 average_words_per_day = (
-                    learning_count / (datetime.datetime.now() - first_date).days
+                    learning_count / (datetime.now() - first_date).days
                 )
                 average_words_per_day = round(average_words_per_day, 2)
 
                 # calculate date to reach milestone based on average words per day
-                milestone_date = datetime.datetime.now() + datetime.timedelta(
+                milestone_date = datetime.now() + datetime.timedelta(
                     days=(milestone - learning_count) / average_words_per_day
                 )
 

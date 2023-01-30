@@ -93,7 +93,7 @@ def add_feed(url: str) -> None:
                 feed.feed.title,
                 url,
                 feed.feed.description,
-                datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                datetime.now().strftime("%Y-%m-%d %H:%M"),
             ),
         )
         conn.commit()
@@ -163,7 +163,7 @@ def get_all_feeds() -> None:
                     f"[b u cyan]{row[0]}[/b u cyan]",
                     link,
                     row[2],
-                    datetime.datetime.strptime(row[3], "%Y-%m-%d %H:%M").strftime(
+                    datetime.strptime(row[3], "%Y-%m-%d %H:%M").strftime(
                         "%d %b '%y | %H:%M"
                     ),
                 )
@@ -209,7 +209,7 @@ def remove_feed() -> None:
         print(
             Panel(
                 title=f"[b reverse]  Feed {idx}  [/b reverse]",
-                renderable=f" [bold blue]Index: [/bold blue]{idx}\n\n [bold blue]Title: [/bold blue] {row[0]}\n\n [bold blue]Link: [/bold blue] {row[1]}\n\n [bold blue]Summary: [/bold blue]{row[2]}\n\n [bold blue]Date added:[/bold blue] {datetime.datetime.strptime(row[3], '%Y-%m-%d %H:%M').strftime('%d %b %y | %H:%M')}",
+                renderable=f" [bold blue]Index: [/bold blue]{idx}\n\n [bold blue]Title: [/bold blue] {row[0]}\n\n [bold blue]Link: [/bold blue] {row[1]}\n\n [bold blue]Summary: [/bold blue]{row[2]}\n\n [bold blue]Date added:[/bold blue] {datetime.strptime(row[3], '%Y-%m-%d %H:%M').strftime('%d %b %y | %H:%M')}",
             )
         )
         print()
@@ -333,7 +333,7 @@ def check_feed_for_new_content(title: str) -> None:
                 published = entry.published_parsed
 
                 # convert 8 tuple to datetime object
-                published = datetime.datetime(*published[:6])
+                published = datetime.(*published[:6])
                 published = published.strftime("%d %b '%y | %H:%M")
 
                 # print first 250 characters of the summary and add ... if summary is longer than 250 characters
