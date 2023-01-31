@@ -144,7 +144,7 @@ def add_quote(quote: str, author: Optional[str] = None) -> None:
     # insert the quote into the database
     c.execute(
         "INSERT INTO quotes VALUES (?,?,?)",
-        (quote, author, datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+        (quote, author, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
     )
     conn.commit()
 
