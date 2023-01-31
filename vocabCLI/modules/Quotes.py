@@ -291,15 +291,34 @@ def delete_quote() -> None:
         )
 
         # display added quotes
+        # ----------------- Table -----------------#
+
+        table = Table(
+            show_header=True,
+            header_style="bold gold3",
+            border_style="white",
+            title="✍🏼 Quotes ",
+            title_style="bold magenta",
+            title_justify="center",
+            box=box.ROUNDED,
+        )
+        table.add_column("No.", width=5)
+        table.add_column("Quote", width=60)
+        table.add_column("Author", width=30, style="blue")
+        table.add_column("Date", width=20, style="magenta")
+
         for idx, quote in enumerate(quotes, start=1):
-            quote_num = idx
+            quote_num = str(idx)
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
             quote_date = quote[2]
+            table.add_row(quote_num, quote_text, quote_author, quote_date)
+            table.add_section()
+        print(table)
 
-            print(
-                f'{quote_num}. [bold green]Quote:[/bold green] "{quote_text}" [bold green]Author:[/bold green] {quote_author} [bold green]Date:[/bold green] {quote_date}'
-            )
+        # ----------------- Table -----------------#
+
+
         # prompt the user to select a quote index to delete
         quoteToDelete = input("🔢 Enter the index of the quote you want to delete: ")
 
