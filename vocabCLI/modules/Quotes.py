@@ -456,7 +456,7 @@ def delete_all_quotes() -> None:
         else:
             print(
                 Panel(
-                    title="[b reverse green]  Your Quotes remain safe!  [/b reverse green]",
+                    title="[b reverse]  Your Quotes remain safe!  [/b reverse]",
                     renderable="None of the quotes were deleted",
                     title_align="center",
                     padding=(1, 1),
