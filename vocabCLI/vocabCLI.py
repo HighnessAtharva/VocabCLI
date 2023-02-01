@@ -79,50 +79,17 @@ def define(
         pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.
     """
     from modules.Dictionary import definition, say_aloud
-    from spellchecker import SpellChecker
-
-    spell = SpellChecker()
+   
     for word in words:
 
-        # check if the word is mispelled
-        mispelled = spell.unknown([word])
-        if mispelled:
-            # store other possible correct words
-            for x in mispelled:
-                candidates = spell.candidates(x)
-                # if there are other possible correct words then ask the user if they meant any of them
-                if candidates:
-                    candidates = ", ".join(candidates)
-                    print(
-                        Panel(
-                            title="[b reverse red]  Error!  [/b reverse red]",
-                            title_align="center",
-                            padding=(1, 1),
-                            renderable=f"The word {word} was not found. Did you mean [u blue]{candidates}[/u blue]? 🤔",
-                        )
-                    )
-                    break
+        if short:
+            definition(word, short=True)
 
-                # otherwise, print the word unavailable message
-                else:
-                    print(
-                        Panel(
-                            title="[b reverse red]  Error!  [/b reverse red]",
-                            title_align="center",
-                            padding=(1, 1),
-                            renderable=f"The word [bold red]{word}[/bold red] is not a valid word. Please check the spelling. 🤔",
-                        )
-                    )
+        if not short:
+            definition(word, short=False)
 
-        else:
-            if short:
-                definition(word, short=True)
-
-            if not short:
-                definition(word, short=False)
-
-            if pronounce:
-                say_aloud(query=word)
+        if pronounce:
+            say_aloud(query=word)
 
 
 @app.command(
