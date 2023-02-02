@@ -1502,7 +1502,7 @@ def get_consecutive_dates(dates: list) -> tuple:
     start_date = dates[0]
 
     for i in range(len(dates) - 1):
-        if dates[i + 1] - dates[i] == datetime.timedelta(days=1):
+        if dates[i + 1] - dates[i] == timedelta(days=1):
             continue
         consecutive_dates.append((start_date, dates[i]))
         start_date = dates[i + 1]
@@ -1624,7 +1624,7 @@ def predict_milestone(milestone: int) -> None:
                 average_words_per_day = round(average_words_per_day, 2)
 
                 # calculate date to reach milestone based on average words per day
-                milestone_date = datetime.now() + datetime.timedelta(
+                milestone_date = datetime.now() + timedelta(
                     days=(milestone - learning_count) / average_words_per_day
                 )
 
