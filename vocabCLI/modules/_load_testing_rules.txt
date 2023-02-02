@@ -1,0 +1,17 @@
+learning ONLY -> a to b
+mastered ONLY -> c to d
+favorite ONLY -> e to g
+
+testtag1 + learning -> h
+testtag2 + mastered -> i
+testtag3 + favorite -> j
+
+testtag4 only -> k
+testtag5 only -> l
+
+
+learning + favorite -> m and n 
+mastered + favorite -> o and p
+
+m to z -> all statuses clear = 200
+

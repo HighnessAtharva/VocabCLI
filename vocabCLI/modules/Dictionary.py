@@ -120,14 +120,6 @@ def connect_to_api(query: str = "hello") -> str:
         )
 
     except exceptions.HTTPError as error:
-        # print(
-        #     Panel(
-        #         title="[b reverse red]  Error!  [/b reverse red]",
-        #         title_align="center",
-        #         padding=(1, 1),
-        #         renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. ❌",
-        #     )
-        # )
         from spellchecker import SpellChecker
 
         spell = SpellChecker()
@@ -155,6 +147,16 @@ def connect_to_api(query: str = "hello") -> str:
                             renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔",
                         )
                     )
+        else:
+            print(
+                        Panel(
+                            title="[b reverse red]  Error!  [/b reverse red]",
+                            title_align="center",
+                            padding=(1, 1),
+                            renderable=f"The word [bold red]{query}[/bold red] is not a valid word. Please check the spelling. 🤔",
+                        )
+                    )
+            
 
     except exceptions.Timeout as error:
         print(
