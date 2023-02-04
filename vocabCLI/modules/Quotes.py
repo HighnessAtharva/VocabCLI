@@ -14,6 +14,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 
+
 def get_quotes() -> None:
     """
     Returns a list of quotes from the database.
@@ -51,10 +52,8 @@ def get_quotes() -> None:
             show_header=True,
             header_style="bold gold3",
             border_style="white",
-            title="✍🏼 Quotes ",
-            title_style="bold magenta",
-            title_justify="center",
             box=box.ROUNDED,
+            expand=True
         )
         table.add_column("Quote", width=30)
         table.add_column("Author", width=30, style="blue")
@@ -63,7 +62,7 @@ def get_quotes() -> None:
         for quote in quotes:
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
-            quote_date = datetime.strptime(
+            quote_date = datetime.datetime.strptime(
                 quote[2], "%Y-%m-%d %H:%M:%S"
             ).strftime("%d %b '%y | %H:%M")
 
@@ -246,7 +245,7 @@ def search_quote(quoteText: str) -> None:
         # print the quote
         quote_text = quote[0]
         quote_author = quote[1] if quote[1] is not None else "-"
-        quote_date = datetime.strptime(quote[2], "%Y-%m-%d %H:%M:%S").strftime(
+        quote_date = datetime.datetime.strptime(quote[2], "%Y-%m-%d %H:%M:%S").strftime(
             "%d %b '%y | %H:%M"
         )
 
@@ -297,15 +296,14 @@ def delete_quote() -> None:
             show_header=True,
             header_style="bold gold3",
             border_style="white",
-            title="✍🏼 Quotes ",
-            title_style="bold magenta",
             title_justify="center",
             box=box.ROUNDED,
+            expand=True
         )
         table.add_column("No.", width=5)
         table.add_column("Quote", width=60)
         table.add_column("Author", width=30, style="blue")
-        table.add_column("Date", width=20, style="magenta")
+        table.add_column("Date", width=20, style="green")
 
         for idx, quote in enumerate(quotes, start=1):
             quote_num = str(idx)
@@ -415,7 +413,7 @@ def get_quote_of_the_day() -> None:
     quote_text = quote["quote"]
     quote_author = quote["author"] if quote["author"] is not None else "-"
     quote_date = quote["date"]
-    quote_date = datetime.strptime(quote_date, "%Y-%m-%d").strftime(
+    quote_date = datetime.datetime.strptime(quote_date, "%Y-%m-%d").strftime(
         "%d %b '%y"
     )
 

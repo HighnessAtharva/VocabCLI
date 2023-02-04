@@ -603,6 +603,9 @@ def word_distribution_month_util() -> tuple[list, list]:
 
     # get unformatted datestrings for each day in current month
     current_month = f"{str(year)}-{str(month)}"
+    if len(current_month)==6:
+        current_month = f"{str(year)}-0{str(month)}"
+    
     if len(str(month_next)) == 1:
         month_next = f"0{str(month_next)}"
     next_month = f"{str(year+1 if increment_year else year)}-{str(month_next)}"
@@ -770,8 +773,8 @@ def viz_learning_vs_mastered(popup: bool = False) -> None:
         loc="center",
         fontname="Constantia",
     )
-    plt.xlabel(
-        "Date",
+    plt.ylabel(
+        "Words",
         fontsize=15,
         fontweight="bold",
         labelpad=0,

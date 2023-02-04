@@ -135,45 +135,46 @@ def export_to_csv() -> None:
     # ==================================#
     # EXPORT QUIZ HISTORY TO CSV FILE   #
     # ==================================#
-    try:
-        c.execute("SELECT * FROM quiz_history")
-        quiz_history = c.fetchall()
-        if len(quiz_history) <= 0:
-            raise NoDataFoundException
-
-        # check if the directory exists, if not create it
-        if not os.path.exists("exports"):
-            os.makedirs("exports")
-
-        with open(
-            "exports/QUIZ_HISTORY.csv",
-            "w",
-            newline="",
-            encoding="utf-8",
-            errors="ignore",
-        ) as file:
-            writer = csv.writer(file)
-            writer.writerow(
-                ["type", "datetime", "question_count", "points", "duration"]
-            )
-            writer.writerows(quiz_history)
+   
+    c.execute("SELECT * FROM quiz_history")
+    quiz_history = c.fetchall()
+    if len(quiz_history) <= 0:
         print(
-            Panel(
-                title="[b reverse green]  Export Successful!  [/b reverse green]",
-                title_align="center",
-                padding=(1, 1),
-                renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(quiz_history)}[/bold blue] quiz history to [bold blue]QUIZ_HISTORY.csv[/bold blue] file 📁",
-            )
+        Panel(
+            title="[b reverse red]  Error!  [/b reverse red]",
+            title_align="center",
+            padding=(1, 1),
+            renderable="No quiz history found in the database. ❌",
         )
-    except NoDataFoundException as e:
-        print(
-            Panel(
-                title="[b reverse red]  Error!  [/b reverse red]",
-                title_align="center",
-                padding=(1, 1),
-                renderable="No quiz history found in the database. ❌",
-            )
+    )
+        return
+
+    # check if the directory exists, if not create it
+    if not os.path.exists("exports"):
+        os.makedirs("exports")
+
+    with open(
+        "exports/QUIZ_HISTORY.csv",
+        "w",
+        newline="",
+        encoding="utf-8",
+        errors="ignore",
+    ) as file:
+        writer = csv.writer(file)
+        writer.writerow(
+            ["type", "datetime", "question_count", "points", "duration"]
         )
+        writer.writerows(quiz_history)
+    print(
+        Panel(
+            title="[b reverse green]  Export Successful!  [/b reverse green]",
+            title_align="center",
+            padding=(1, 1),
+            renderable=f"[bold green]EXPORTED[/bold green] [bold blue]{len(quiz_history)}[/bold blue] quiz history to [bold blue]QUIZ_HISTORY.csv[/bold blue] file 📁",
+        )
+    )
+    
+
 
 
 def import_from_csv() -> None:
