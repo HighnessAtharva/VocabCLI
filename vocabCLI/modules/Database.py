@@ -9,6 +9,7 @@ import requests
 from requests import exceptions
 from rich import print
 from rich.panel import Panel
+
 # from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.progress import track
 
@@ -111,7 +112,7 @@ def initializeDB() -> None:
 def refresh_cache() -> None:
     """
     Refreshes the cache of the words in the database.
-    
+
     1. Connect to the database
     2. Check if the cache is empty, if yes, then do nothing.
     3. If the cache is not empty, then we need to refresh it.

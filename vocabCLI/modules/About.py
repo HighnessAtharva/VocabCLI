@@ -12,7 +12,7 @@ from rich.syntax import Syntax
 def print_about_app() -> None:
     """
     Prints the about app page
-    
+
     1. Create a layout object
     2. Create a header content object with the help of the Panel class
     3. Create a footer content object with the help of the Panel class

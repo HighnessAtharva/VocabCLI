@@ -17,8 +17,10 @@ def show_slider() -> None:
     """
     # set up the tkinter window
     root = Tk()
+    w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+    root.geometry("%dx%d+0+0" % (w, h))
+
     root.title("VocabCLI Graphs")
-    root.geometry("1200x700")
     root.iconbitmap("../assets/logos/VocabCLI.ico")
 
     # dump all the images to the folder
@@ -29,7 +31,6 @@ def show_slider() -> None:
     viz_top_words_pie(popup=False)
     viz_word_distribution_month(popup=False)
     viz_word_distribution_week(popup=False)
-    viz_word_distribution_year(popup=False)
     viz_word_distribution_category(popup=False)
 
     # delete the images if already existing
@@ -41,28 +42,28 @@ def show_slider() -> None:
 
     # set up the images
     image1 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-learning_vs_mastered.png").resize((1200, 700))
+        Image.open("exports/GRAPH-learning_vs_mastered.png").resize((1200, 900))
     )
     image2 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_tags_bar.png").resize((1200, 700))
+        Image.open("exports/GRAPH-top_tags_bar.png").resize((1200, 900))
     )
     image3 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_words_bar.png").resize((1200, 700))
+        Image.open("exports/GRAPH-top_words_bar.png").resize((1200, 900))
     )
     image4 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-word_distribution_month.png").resize((1200, 700))
+        Image.open("exports/GRAPH-word_distribution_month.png").resize((1200, 900))
     )
     image5 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-words_distribution_week.png").resize((1200, 700))
+        Image.open("exports/GRAPH-words_distribution_week.png").resize((1200, 900))
     )
     image6 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_tags_pie.png").resize((1200, 700))
+        Image.open("exports/GRAPH-top_tags_pie.png").resize((1200, 900))
     )
     image7 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_words_pie.png").resize((1200, 700))
+        Image.open("exports/GRAPH-top_words_pie.png").resize((1200, 900))
     )
     image8 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-word_distribution_category.png").resize((1200, 700))
+        Image.open("exports/GRAPH-word_distribution_category.png").resize((1200, 900))
     )
     image_list = [image1, image2, image3, image4, image5, image6, image7, image8]
 

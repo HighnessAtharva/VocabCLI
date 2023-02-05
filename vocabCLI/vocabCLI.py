@@ -79,7 +79,7 @@ def define(
         pronounce (bool, optional): If True, plays the pronunciation of the word. Defaults to False.
     """
     from modules.Dictionary import definition, say_aloud
-   
+
     for word in words:
 
         if short:
@@ -183,8 +183,7 @@ def ListCMD(
         collections (Optional[bool], optional): If True, prints the list of all the collections. Defaults to False.
     """
     from modules.Utils import show_list
-    from modules.WordCollections import (show_all_collections,
-                                         show_words_from_collection)
+    from modules.WordCollections import show_all_collections, show_words_from_collection
 
     if favorite:
         show_list(favorite=True)
@@ -606,9 +605,14 @@ def delete(
         tag (str, optional): Tag of words to be deleted. Defaults to None.
         words (List[str], optional): Word to be deleted. Defaults to None.
     """
-    from modules.Utils import (delete_all, delete_favorite, delete_learning,
-                               delete_mastered, delete_word,
-                               delete_words_from_tag)
+    from modules.Utils import (
+        delete_all,
+        delete_favorite,
+        delete_learning,
+        delete_mastered,
+        delete_word,
+        delete_words_from_tag,
+    )
 
     if mastered:
         print(
@@ -737,8 +741,12 @@ def clear(
         tag (str, optional): If True, clears all the words with a particular tag. Defaults to None.
     """
 
-    from modules.Utils import (clear_all_words_from_tag, clear_favorite,
-                               clear_learning, clear_mastered)
+    from modules.Utils import (
+        clear_all_words_from_tag,
+        clear_favorite,
+        clear_learning,
+        clear_mastered,
+    )
 
     if learning:
         print(
@@ -847,11 +855,13 @@ def random(
         collection (Optional[str], optional): Get a random word from a particular collection. Defaults to None.
     """
 
-    from modules.Utils import (get_random_word_definition_from_api,
-                               get_random_word_from_favorite_set,
-                               get_random_word_from_learning_set,
-                               get_random_word_from_mastered_set,
-                               get_random_word_from_tag)
+    from modules.Utils import (
+        get_random_word_definition_from_api,
+        get_random_word_from_favorite_set,
+        get_random_word_from_learning_set,
+        get_random_word_from_mastered_set,
+        get_random_word_from_tag,
+    )
     from modules.WordCollections import get_random_word_from_collection
 
     if learning:
@@ -922,8 +932,14 @@ def revise(
         collection (Optional[str], optional): Revise words in a particular collection. Defaults to None.
     """
 
-    from modules.Study import (revise_all, revise_collection, revise_favorite,
-                               revise_learning, revise_mastered, revise_tag)
+    from modules.Study import (
+        revise_all,
+        revise_collection,
+        revise_favorite,
+        revise_learning,
+        revise_mastered,
+        revise_tag,
+    )
 
     if not any([learning, mastered, favorite, collection, tag]) and not number:
         revise_all()
@@ -1028,9 +1044,15 @@ def quiz(
         favorite (Optional[bool], optional): Take a quiz on words in your favorite list. Defaults to False.
         collection (Optional[str], optional): Take a quiz on words in a particular collection. Defaults to None.
     """
-    from modules.Study import (quiz_all, quiz_collection, quiz_favorite,
-                               quiz_learning, quiz_mastered, quiz_tag,
-                               show_quiz_history)
+    from modules.Study import (
+        quiz_all,
+        quiz_collection,
+        quiz_favorite,
+        quiz_learning,
+        quiz_mastered,
+        quiz_tag,
+        show_quiz_history,
+    )
 
     if not any([learning, mastered, favorite, collection, tag, history]) and not number:
         quiz_all()
@@ -1121,12 +1143,6 @@ def graph(
         "-lm",
         help="📊 [i u]Bar Graph[/i u] of the word count distribution for days in the past [b u]month[/b u].",
     ),
-    lookupYear: bool = typer.Option(
-        False,
-        "--lookupyear",
-        "-ly",
-        help="📊 [i u]Bar Graph[/i u] of the word count distribution for days in the past [b u]year[/b u].",
-    ),
     learnVSmaster: bool = typer.Option(
         False,
         "--learnvsmaster",
@@ -1156,13 +1172,16 @@ def graph(
         slider (Optional[bool], optional): Shows all graphs one by one in a slider. Defaults to False.
     """
     from modules.Carousel import show_slider
-    from modules.Graph import (viz_learning_vs_mastered, viz_top_tags_bar,
-                               viz_top_tags_pie, viz_top_words_bar,
-                               viz_top_words_pie,
-                               viz_word_distribution_category,
-                               viz_word_distribution_month,
-                               viz_word_distribution_week,
-                               viz_word_distribution_year)
+    from modules.Graph import (
+        viz_learning_vs_mastered,
+        viz_top_tags_bar,
+        viz_top_tags_pie,
+        viz_top_words_bar,
+        viz_top_words_pie,
+        viz_word_distribution_category,
+        viz_word_distribution_month,
+        viz_word_distribution_week,
+    )
 
     if topWordsBar:
         viz_top_words_bar(N=topWordsBar, popup=True)
@@ -1178,8 +1197,6 @@ def graph(
         viz_word_distribution_week(popup=True)
     elif lookupMonth:
         viz_word_distribution_month(popup=True)
-    elif lookupYear:
-        viz_word_distribution_year(popup=True)
 
     elif learnVSmaster:
         viz_learning_vs_mastered(popup=True)
@@ -1207,8 +1224,7 @@ def clean(
     ),
 ):
 
-    from modules.NLP import (censor_bad_words_not_strict,
-                             censor_bad_words_strict)
+    from modules.NLP import censor_bad_words_not_strict, censor_bad_words_strict
 
     if strict:
         censor_bad_words_strict(content)
@@ -1303,8 +1319,12 @@ def rss(
     ),
 ):
 
-    from modules.RSS import (add_feed, check_feed_for_new_content,
-                             get_all_feeds, remove_feed)
+    from modules.RSS import (
+        add_feed,
+        check_feed_for_new_content,
+        get_all_feeds,
+        remove_feed,
+    )
 
     if add:
         add_feed(url=add)
@@ -1338,8 +1358,14 @@ def quote(
     ),
 ):
 
-    from modules.Quotes import (add_quote, delete_all_quotes, delete_quote,
-                                get_quotes, get_random_quote, search_quote)
+    from modules.Quotes import (
+        add_quote,
+        delete_all_quotes,
+        delete_quote,
+        get_quotes,
+        get_random_quote,
+        search_quote,
+    )
 
     if random:
         get_random_quote()
@@ -1426,11 +1452,13 @@ def flashcard(
     Create flashcards for words in your learning list.
     """
 
-    from modules.Flashcard import (generate_all_flashcards,
-                                   generate_favorite_flashcards,
-                                   generate_learning_flashcards,
-                                   generate_mastered_flashcards,
-                                   generate_tag_flashcards)
+    from modules.Flashcard import (
+        generate_all_flashcards,
+        generate_favorite_flashcards,
+        generate_learning_flashcards,
+        generate_mastered_flashcards,
+        generate_tag_flashcards,
+    )
 
     if all:
         generate_all_flashcards()
@@ -1462,9 +1490,11 @@ def spellcheck(text: str = typer.Argument(..., help="🔠 Text to spell check.")
 
 if __name__ == "__main__":
     from modules.Database import initializeDB
-    from modules.WordCollections import (clean_collection_csv_data,
-                                         delete_collection_from_DB,
-                                         insert_collection_to_DB)
+    from modules.WordCollections import (
+        clean_collection_csv_data,
+        delete_collection_from_DB,
+        insert_collection_to_DB,
+    )
 
     # check if Vocabulary.db exists, if not create it
     if not os.path.exists("VocabularyBuilder.db"):

@@ -20,7 +20,7 @@ from rich.table import Table
 def add_feed(url: str) -> None:
     """
     Add the feed to the database
-    
+
     1. Feed parser is used to parse the feed
     2. If the feed is not found, print error message
     3. Check if the feed exists in the database
@@ -93,7 +93,7 @@ def add_feed(url: str) -> None:
                 feed.feed.title,
                 url,
                 feed.feed.description,
-                datetime.now().strftime("%Y-%m-%d %H:%M"),
+                datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
             ),
         )
         conn.commit()
@@ -109,7 +109,7 @@ def add_feed(url: str) -> None:
 def get_all_feeds() -> None:
     """
     Get the feed details from the database
-    
+
     1. Get all feeds from the database
     2. If no feeds exist, print error message
     3. Print the feeds in a table
@@ -163,7 +163,7 @@ def get_all_feeds() -> None:
                     f"[b u cyan]{row[0]}[/b u cyan]",
                     link,
                     row[2],
-                    datetime.strptime(row[3], "%Y-%m-%d %H:%M").strftime(
+                    datetime.datetime.strptime(row[3], "%Y-%m-%d %H:%M").strftime(
                         "%d %b '%y | %H:%M"
                     ),
                 )
@@ -180,7 +180,7 @@ def get_all_feeds() -> None:
 def remove_feed() -> None:
     """
     Remove the feed from the database
-    
+
     1. Get all feeds from the database
     2. If no feeds exist, print error message
     3. Print the feeds in a table
@@ -205,14 +205,35 @@ def remove_feed() -> None:
         )
         return
 
+    # print the table using rich
+    table = Table(
+        show_header=True,
+        header_style="bold gold3",
+        border_style="white",
+        title="📰 YOUR FEEDS ",
+        title_style="bold magenta",
+        title_justify="center",
+        box=box.ROUNDED,
+    )
+    table.add_column("🔢 Index", width=10)
+    table.add_column("🌐 Title", width=30)
+    table.add_column("🔗 Link", width=30, style="blue")
+    table.add_column("📃 Summary", width=60, style="bright_green italic")
+    table.add_column("📅 Date added", width=18, style="magenta")
+
     for idx, row in enumerate(rows, start=1):
-        print(
-            Panel(
-                title=f"[b reverse]  Feed {idx}  [/b reverse]",
-                renderable=f" [bold blue]Index: [/bold blue]{idx}\n\n [bold blue]Title: [/bold blue] {row[0]}\n\n [bold blue]Link: [/bold blue] {row[1]}\n\n [bold blue]Summary: [/bold blue]{row[2]}\n\n [bold blue]Date added:[/bold blue] {datetime.strptime(row[3], '%Y-%m-%d %H:%M').strftime('%d %b %y | %H:%M')}",
-            )
+        table.add_row(
+            f"[b u cyan]{idx}[/b u cyan]",
+            f"[b u cyan]{row[0]}[/b u cyan]",
+            row[1],
+            row[2],
+            datetime.datetime.strptime(row[3], "%Y-%m-%d %H:%M").strftime(
+                "%d %b '%y | %H:%M"
+            ),
         )
-        print()
+        table.add_row("\n", "\n", "\n", "\n", "\n")
+        table.add_section()
+    print(table)
 
     print(Panel("Enter the index of the feed you want to remove!"))
     try:
@@ -268,7 +289,7 @@ def remove_html_tags(html: str) -> str:
 def check_feed_for_new_content(title: str) -> None:
     """
     Parse the feed and check for new content
-    
+
     1. Check if the feed exists in the database
     2. If the feed does not exist, print error message
     3. If the feed exists, parse the feed and check for new content
@@ -333,7 +354,7 @@ def check_feed_for_new_content(title: str) -> None:
                 published = entry.published_parsed
 
                 # convert 8 tuple to datetime object
-                published = datetime.(*published[:6])
+                published = datetime.datetime(*published[:6])
                 published = published.strftime("%d %b '%y | %H:%M")
 
                 # print first 250 characters of the summary and add ... if summary is longer than 250 characters
@@ -355,4 +376,3 @@ def check_feed_for_new_content(title: str) -> None:
             print(table)
 
             # ----------------- Table -----------------#
-

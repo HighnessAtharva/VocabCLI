@@ -1,7 +1,7 @@
 import nltk
 from Dictionary import *
 from nltk.corpus import wordnet
-from rich import print, box
+from rich import box, print
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
@@ -14,7 +14,7 @@ from rich.panel import Panel
 def find_synonym(query: str) -> None:
     """
     Finds the synonyms of the query word
-    
+
     1. Connects to the API
     2. Checks if the API returned a response
     3. If it did, it loops through the response and adds the synonyms to a list
@@ -68,9 +68,11 @@ def find_synonym(query: str) -> None:
                 )
             )
             synonyms = [
-                Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [sea_green1]{synonym}[sea_green1]", 
-                      expand=True,
-                      box=box.SQUARE)
+                Panel(
+                    f"[b gold1 dim]{idx}[/b gold1 dim]. [sea_green1]{synonym}[sea_green1]",
+                    expand=True,
+                    box=box.SQUARE,
+                )
                 for idx, synonym in enumerate(synonyms, start=1)
             ]
 
@@ -96,7 +98,7 @@ def find_synonym(query: str) -> None:
 def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
     """
     Finds the antonyms of the query word
-    
+
     1. Connects to the API
     2. Checks if the API returned a response
     3. If it did, it loops through the response and adds the antonyms to a list
@@ -151,9 +153,12 @@ def find_antonym(query: str) -> None:  # sourcery skip: for-append-to-extend
                 )
             )
             antonyms = [
-                Panel(f"[b gold1 dim]{idx}[/b gold1 dim]. [red]{antonym}[red]", 
-                      expand=True, 
-                      box=box.SQUARE) for idx, antonym in enumerate(antonyms, start=1)
+                Panel(
+                    f"[b gold1 dim]{idx}[/b gold1 dim]. [red]{antonym}[red]",
+                    expand=True,
+                    box=box.SQUARE,
+                )
+                for idx, antonym in enumerate(antonyms, start=1)
             ]
 
             # ----------------- Columns -----------------#

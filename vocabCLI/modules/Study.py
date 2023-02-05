@@ -27,7 +27,7 @@ from Utils import *
 def start_revision(c: Cursor, is_collection: bool = False) -> None:
     """
     Starts the revision process.
-    
+
     1. Fetches all the words in the collection from the database
     2. For each word in the collection, it prints out the word and its definition
     3. It asks the user if they want to set the word as learning
@@ -103,7 +103,7 @@ def revise_all(
 ) -> None:  # sourcery skip: remove-redundant-if
     """
     Revise all words in the database.
-    
+
     1. If number is not specified, then all words are revised.
     2. If number is specified, then only that many words are revised.
     3. If there are no words in the database, then an exception is raised.
@@ -303,7 +303,7 @@ def start_quiz(
 ) -> None:  # sourcery skip: remove-redundant-if
     """
     Starts the quiz.
-    
+
     1. Fetches all the words in the collection or in the database, depending on the quiz type.
     2. Breaks out if the collection has less than 4 words, as the minimum number of words in a quiz is 4.
     3. Sets the style of the quiz.
@@ -654,7 +654,7 @@ def quiz_collection(
 def show_quiz_history() -> None:
     """
     Show quiz history.
-    
+
     1. Execute SQL SELECT statement to get all the rows from the quiz_history table.
     2. If there are no rows, print a message and return.
     3. Else print the quiz history in a table.

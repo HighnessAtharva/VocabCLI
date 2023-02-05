@@ -21,7 +21,7 @@ from rich.panel import Panel
 def viz_top_words_bar(N: int = 10, popup: bool = False) -> None:
     """
     Visualize the top N words looked up by the user
-    
+
     1. Get the top N words and their word count from the database and store them in a list
     2. If no words are found, print an error message and return
     3. If there are less words than the number we want to display, print a warning message
@@ -143,7 +143,7 @@ def viz_top_words_bar(N: int = 10, popup: bool = False) -> None:
 def viz_top_tags_bar(N: int = 10, popup: bool = False) -> None:
     """
     Visualizes the top N tags with the most words.
-    
+
     1. Get the top N tags and their word count from the database and store them in a list
     2. If no words are found, print an error message and return
     3. If there are less words than the number we want to display, print a warning message
@@ -263,7 +263,7 @@ def viz_top_tags_bar(N: int = 10, popup: bool = False) -> None:
 def viz_top_words_pie(N: int = 10, popup: bool = False) -> None:
     """
     Visualizes the top N words with the most lookups.
-    
+
     1. Create a cursor and execute a query to fetch the word and the count of the word from the database
     2. If no words are found, print an error message and return
     3. If there are less words than the number we want to display, print a warning message
@@ -353,7 +353,7 @@ def viz_top_words_pie(N: int = 10, popup: bool = False) -> None:
 def viz_top_tags_pie(N: int = 10, popup: bool = False) -> None:
     """
     Visualizes the top N tags with the most words.
-    
+
     1. Execute a SQL query to get the count of each tag. The query returns a list of tuples, where the first element is the tag and the second is the count.
     2. If no words are found, print an error message and return
     3. If there are less words than the number we want to display, print a warning message
@@ -448,7 +448,7 @@ def viz_top_tags_pie(N: int = 10, popup: bool = False) -> None:
 def words_distribution_week_util() -> tuple[list, list]:
     """
     Returns the distribution of words by day of the week.
-    
+
     1. Create a dictionary with numbers as keys and weekdays as values.
     2. Create two lists, one for weekdays and one for word count.
     3. Query the database for word count for each day in the current week.
@@ -495,7 +495,7 @@ def words_distribution_week_util() -> tuple[list, list]:
 def viz_word_distribution_week(popup: bool = False) -> None:
     """
     Visualizes the distribution of words by day of the week.
-    
+
     1. Create a dataframe from a list of tuples (day, count).
     2. Set the style of the graph.
     3. Plot the graph with the dataframe.
@@ -573,7 +573,7 @@ def viz_word_distribution_week(popup: bool = False) -> None:
 def word_distribution_month_util() -> tuple[list, list]:
     """
     Returns the distribution of word by dates of month.
-    
+
     1. Determine current year, current month and next month.
     2. Determine total number of days in current month.
     3. Get unformatted datestrings for each day in current month.
@@ -603,9 +603,9 @@ def word_distribution_month_util() -> tuple[list, list]:
 
     # get unformatted datestrings for each day in current month
     current_month = f"{str(year)}-{str(month)}"
-    if len(current_month)==6:
+    if len(current_month) == 6:
         current_month = f"{str(year)}-0{str(month)}"
-    
+
     if len(str(month_next)) == 1:
         month_next = f"0{str(month_next)}"
     next_month = f"{str(year+1 if increment_year else year)}-{str(month_next)}"
@@ -629,7 +629,7 @@ def word_distribution_month_util() -> tuple[list, list]:
 def viz_word_distribution_month(popup: bool = False) -> None:
     """
     Visualizes the distribution of words by dates of month.
-    
+
     1. Get the data from the function word_distribution_month_util() which is a list of:
         a. Dates
         b. Word count
@@ -714,18 +714,10 @@ def viz_word_distribution_month(popup: bool = False) -> None:
         plt.show()
 
 
-def word_distribution_year_util():
-    pass
-
-
-def viz_word_distribution_year(popup: bool = False):
-    pass
-
-
 def viz_learning_vs_mastered(popup: bool = False) -> None:
     """
     Visualizes the distribution of words by learning and mastered.
-    
+
     1. Count number of words in learning and mastered.
     2. Set the style of the graph.
     3. Plot a pie chart.
@@ -803,7 +795,7 @@ def viz_learning_vs_mastered(popup: bool = False) -> None:
 def viz_word_distribution_category(popup: bool = False) -> None:
     """
     Visualizes the distribution of words by category.
-    
+
     1. Selects the collection column and the word count from the words and collections table.
     2. Creates a dataframe from the data obtained.
     3. Sets the style of the graph.
@@ -879,7 +871,7 @@ def viz_word_distribution_category(popup: bool = False) -> None:
         color="black",
     )
     # y axis labels ticks interval should be 1
-    graph.set_yticks(np.arange(0, int(max(word_count)), 1))
+    graph.set_yticks(np.arange(0, int(max(word_count)), 50))
 
     plt.tight_layout()
     plt.grid()
