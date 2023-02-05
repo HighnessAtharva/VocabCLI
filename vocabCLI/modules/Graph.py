@@ -488,6 +488,8 @@ def words_distribution_week_util() -> tuple[list, list]:
         days_of_week[index] = days.get(date.weekday())
         word_count[index] = row[1]
 
+    print(days_of_week)
+    print(word_count)
     return days_of_week, word_count
 
 

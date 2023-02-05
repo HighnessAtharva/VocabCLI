@@ -7,6 +7,7 @@ from Exceptions import NoDataFoundException, NoQuotesException, NoRSSFeedsExcept
 from fpdf import FPDF
 from rich import print
 from rich.panel import Panel
+from rich.progress import track
 
 
 def export_to_csv() -> None:
@@ -207,7 +208,19 @@ def import_from_csv() -> None:
             reader = csv.reader(file)
             next(reader)  # skip header
 
-            for row in reader:
+            # get total number of rows in csv file
+            rows = len(list(reader))
+
+            # reset the cursor to the beginning of the file
+            file.seek(0)
+            next(reader)  # skip header
+
+            # IMPORT COMMAND PICKS OFF FROM WHERE IT LEFT OFF SO NO ISSUES IF THE PROGRAM CRASHES
+    
+            # ----------------- Progress Bar -----------------#
+            for row, _ in zip(reader, track(range(rows),description=f"⌚ Importing {rows} Words... ")):
+                # ----------------- Progress Bar -----------------#
+
                 try:
                     # if tag is empty, skip the tag column in db
                     if row[2] == "":
@@ -221,6 +234,7 @@ def import_from_csv() -> None:
                     added_words += c.rowcount
                 except Exception as e:
                     word_already_exists += 1
+
     except FileNotFoundError:
         print(
             Panel(
