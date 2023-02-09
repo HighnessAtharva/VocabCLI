@@ -474,8 +474,8 @@ def words_distribution_week_util() -> tuple[list, list]:
         6: "Sunday",
     }
 
-    days_of_week = [None] * 7
-    word_count = [None] * 7
+    days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    word_count = [0, 0, 0, 0, 0, 0, 0]
 
     # get word count for each day in current week
     c.execute(
@@ -483,13 +483,15 @@ def words_distribution_week_util() -> tuple[list, list]:
     )
 
     rows = c.fetchall()
-    for index, row in enumerate(rows):
+    for row in rows:
         date = datetime.strptime(row[0], "%d/%m/%Y")
-        days_of_week[index] = days.get(date.weekday())
-        word_count[index] = row[1]
+        days_of_week_index = date.weekday()
+        word_count[days_of_week_index] = row[1]
+        
+    # rotate both the lists to start from Sunday 
+    days_of_week = days_of_week[6:] + days_of_week[:6]
+    word_count = word_count[6:] + word_count[:6]
 
-    print(days_of_week)
-    print(word_count)
     return days_of_week, word_count
 
 
@@ -552,7 +554,8 @@ def viz_word_distribution_week(popup: bool = False) -> None:
     )
     graph.set_xticklabels(graph.get_xticklabels(), fontname="Candara", color="black")
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
-
+    
+    plt.yticks(np.arange(min(word_count), max(word_count)+1, 1.0))
     plt.grid()
 
     # check if the directory exists, if not create it
