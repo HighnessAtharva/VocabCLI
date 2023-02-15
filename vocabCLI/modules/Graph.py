@@ -555,7 +555,7 @@ def viz_word_distribution_week(popup: bool = False) -> None:
     graph.set_xticklabels(graph.get_xticklabels(), fontname="Candara", color="black")
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
     
-    plt.yticks(np.arange(min(word_count), max(word_count)+1, 1.0))
+    plt.yticks(np.arange(min(word_count), max(word_count)+1, max(word_count)/10))
     plt.grid()
 
     # check if the directory exists, if not create it
