@@ -54,9 +54,12 @@ def get_quotes() -> None:
             box=box.ROUNDED,
             expand=True,
         )
+        
+        table.add_column("No.", width=1)
         table.add_column("Quote", width=30)
         table.add_column("Author", width=30, style="blue")
         table.add_column("Date", width=18, style="magenta")
+        i=1
 
         for quote in quotes:
             quote_text = quote[0]
@@ -65,7 +68,8 @@ def get_quotes() -> None:
                 quote[2], "%Y-%m-%d %H:%M:%S"
             ).strftime("%d %b '%y | %H:%M")
 
-            table.add_row(quote_text, quote_author, quote_date)
+            table.add_row(str(i),quote_text, quote_author, quote_date)
+            i+=1
             table.add_section()
         print(table)
 
@@ -221,7 +225,7 @@ def search_quote(quoteText: str) -> None:
             title="[b reverse green]  Search Results  [/b reverse green]",
             title_align="center",
             padding=(1, 1),
-            renderable=f"Found {len(quotes)} quotes with the words [u b]{quoteText}[/u b] 🔍",
+            renderable=f"Found {len(quotes)} quotes with the words [u b green]{quoteText}[/u b green] 🔍",
         )
     )
 
@@ -231,14 +235,15 @@ def search_quote(quoteText: str) -> None:
         show_header=True,
         header_style="bold gold3",
         border_style="white",
-        title="✍🏼 Quotes ",
         title_style="bold magenta",
         title_justify="center",
         box=box.ROUNDED,
     )
+    table.add_column("No.", width=5)
     table.add_column("Quote", width=30)
     table.add_column("Author", width=30, style="blue")
     table.add_column("Date", width=18, style="magenta")
+    i=1
 
     for quote in quotes:
         # print the quote
@@ -248,8 +253,9 @@ def search_quote(quoteText: str) -> None:
             "%d %b '%y | %H:%M"
         )
 
-        table.add_row(quote_text, quote_author, quote_date)
+        table.add_row(str(i),quote_text, quote_author, quote_date)
         table.add_section()
+        i=i+1
     print(table)
 
     # ----------------- Table -----------------#
@@ -282,7 +288,7 @@ def delete_quote() -> None:
         print(
             Panel(
                 title="[b reverse green]  Delete Quote  [/b reverse green]",
-                renderable="Select a quote to delete 🔢",
+                renderable="Select a quote to [bold red]delete[/bold red] 🔢",
                 title_align="center",
                 padding=(1, 1),
             )
@@ -299,7 +305,7 @@ def delete_quote() -> None:
             box=box.ROUNDED,
             expand=True,
         )
-        table.add_column("No.", width=5)
+        table.add_column("No.", width=1)
         table.add_column("Quote", width=60)
         table.add_column("Author", width=30, style="blue")
         table.add_column("Date", width=20, style="green")

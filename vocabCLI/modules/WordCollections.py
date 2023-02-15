@@ -91,7 +91,7 @@ def show_all_collections():
 
     # ----------------- Table -----------------#
 
-    table = Table(title="[bold purple underline]Collections[/bold purple underline]")
+    table = Table()
     table.add_column(
         "Words in Collection", justify="center", style="cyan", no_wrap=True
     )
