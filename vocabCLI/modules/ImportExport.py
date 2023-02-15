@@ -535,7 +535,7 @@ def export_to_pdf() -> None:  # sourcery skip: extract-method
             pdf.cell(10, 8, txt=str(sr_no), border=True, align="L")  # Sr No.
             pdf.cell(40, 8, txt=str(row[0]), border=True, align="L")  # Word
 
-            tag = row[2] if row[1] != None else ""
+            tag = row[1] if row[1] != None else ""
             pdf.cell(40, 8, txt=str(tag), border=True, align="L")  # Tag
 
             mastered = "X" if row[2] == 1 else ""
