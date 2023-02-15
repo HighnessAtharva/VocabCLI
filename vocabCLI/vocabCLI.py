@@ -1335,7 +1335,7 @@ def rss(
     elif read:
         check_feed_for_new_content(title=read)
     else:
-        typer.echo("🤷‍♀️ No option selected. Please select an option to continue.")
+        typer.echo("🤷 No option selected. Please select an option to continue.")
 
 
 @app.command(
