@@ -48,7 +48,7 @@ def flashcard_definition(query: str) -> str:
     return {k: defs_and_examples[k] for k in list(defs_and_examples)[:3]}
 
 
-def interpolate(black, random_color, interval):
+def interpolate(random_color2, random_color, interval):
     """
     Interpolate between two colors.
 
@@ -63,9 +63,9 @@ def interpolate(black, random_color, interval):
         random_color (tuple): The second color
         interval (int): The number of steps to take between the two colors"""
 
-    derandom_color = [(t - f) / interval for f, t in zip(black, random_color)]
+    derandom_color = [(t - f) / interval for f, t in zip(random_color2, random_color)]
     for i in range(interval):
-        yield [round(t + det * i) for t, det in zip(black, derandom_color)]
+        yield [round(t + det * i) for t, det in zip(random_color2, derandom_color)]
 
 
 def export_util(c, type: str):  # sourcery skip: low-code-quality
@@ -159,12 +159,17 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
 
         black = (0, 0, 0)
         random_color = random.choice(my_colors)
+        random_color2 = random.choice(my_colors) 
+        
+        if random_color == random_color2:
+            random_color2 = random.choice(my_colors)
+            
         # print(random_color)
-        for i, color in enumerate(interpolate(random_color, black, image.width * 2)):
+        for i, color in enumerate(interpolate(random_color, random_color2, image.width * 2)):
             draw.line([(i, 0), (0, i)], tuple(color), width=1)
 
         # Use ImageFont to specify the font and size of the text
-        font = ImageFont.truetype("../assets/FTLTLT.ttf", 32)
+        font = ImageFont.truetype("../assets/FTLTLT.ttf", 36)
         headingfont = ImageFont.truetype("../assets/FTLTLT.ttf", 64)
 
         # draw the watermark in the top right corner
@@ -203,8 +208,20 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             tagImg = Image.open("../assets/tag.png")
             tagImg = tagImg.resize((75, 75))
             image.paste(tagImg, (50, 125), mask=tagImg)
+            
+            text_size = draw.textsize(tag, font=font)
+            # calculate the position of the text to center it on the image
+            x = 150
+            y = 150
 
-            draw.text((150, 150), tag, fill="white", font=font)
+            # add some padding
+            padding = 15
+            box = (x - padding, y - padding, x + text_size[0] + padding, y + text_size[1] + padding)
+
+            # draw the background
+            draw.rectangle(box, fill="white")
+
+            draw.text((150, 150), tag, fill="black", font=font)
 
         # get the dictionary of definitions:examples
         def_and_example = flashcard_definition(word)

@@ -17,7 +17,7 @@ def show_slider() -> None:
     """
     # set up the tkinter window
     root = Tk()
-    w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+    w, h = root.winfo_screenwidth(), root.winfo_screenheight()+200
     root.geometry("%dx%d+0+0" % (w, h))
 
     root.title("VocabCLI Graphs")
@@ -42,28 +42,28 @@ def show_slider() -> None:
 
     # set up the images
     image1 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-learning_vs_mastered.png").resize((1200, 900))
+        Image.open("exports/GRAPH-learning_vs_mastered.png").resize((1000, 900))
     )
     image2 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_tags_bar.png").resize((1200, 900))
+        Image.open("exports/GRAPH-top_tags_bar.png").resize((1000, 900))
     )
     image3 = ImageTk.PhotoImage(
         Image.open("exports/GRAPH-top_words_bar.png").resize((1200, 900))
     )
     image4 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-word_distribution_month.png").resize((1200, 900))
+        Image.open("exports/GRAPH-word_distribution_month.png").resize((1300, 900))
     )
     image5 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-words_distribution_week.png").resize((1200, 900))
+        Image.open("exports/GRAPH-words_distribution_week.png").resize((1000, 900))
     )
     image6 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_tags_pie.png").resize((1200, 900))
+        Image.open("exports/GRAPH-top_tags_pie.png").resize((1000, 900))
     )
     image7 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-top_words_pie.png").resize((1200, 900))
+        Image.open("exports/GRAPH-top_words_pie.png").resize((1000, 900))
     )
     image8 = ImageTk.PhotoImage(
-        Image.open("exports/GRAPH-word_distribution_category.png").resize((1200, 900))
+        Image.open("exports/GRAPH-word_distribution_category.png").resize((1300, 900))
     )
     image_list = [image1, image2, image3, image4, image5, image6, image7, image8]
 

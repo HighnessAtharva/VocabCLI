@@ -1116,7 +1116,7 @@ def graph(
         "--toptagsbar",
         "-ttb",
         help="📊 [i u]Bar Graph[/i u] of Top N Tags with the most words.",
-        max=25,
+        max=10,
         min=1,
     ),
     topWordsPie: bool = typer.Option(

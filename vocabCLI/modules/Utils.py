@@ -766,19 +766,19 @@ def show_list(
     c = conn.cursor()
 
     if mastered:
-        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1")
+        c.execute("SELECT DISTINCT word FROM words WHERE mastered=1 ORDER BY word ASC")
         success_message = "✅ [bold green]Mastered[/bold green]"
         error_message = (
             "You have not [bold green]mastered[/bold green] any words yet. ❌"
         )
 
     elif learning:
-        c.execute("SELECT DISTINCT word FROM words WHERE learning=1")
+        c.execute("SELECT DISTINCT word FROM words WHERE learning=1 ORDER BY word ASC")
         success_message = "🧠 [bold blue]Learning[/bold blue]"
         error_message = "You have not added any words to the [bold blue]learning list[/bold blue] yet. ❌"
 
     elif favorite:
-        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1")
+        c.execute("SELECT DISTINCT word FROM words WHERE favorite=1 ORDER BY word ASC")
         success_message = "💙 [bold gold1]Favorite[/bold gold1]"
         error_message = "You have not added any words to the [bold gold1]favorite[/bold gold1] list yet. ❌"
 
@@ -876,7 +876,7 @@ def show_list(
         error_message = f"No records found for [bold blue]{date}[/bold blue] ❌"
 
     elif tag:
-        c.execute("SELECT DISTINCT word FROM words WHERE tag=?", (tag,))
+        c.execute("SELECT DISTINCT word FROM words WHERE tag=? ORDER BY word ASC", (tag,))
         success_message = f"🏷️ Words with tag [bold violet]{tag}[/bold violet]"
         error_message = f"Tag {tag} does not exist. ❌"
 
@@ -975,7 +975,7 @@ def show_list(
         return
 
     elif tagnames:
-        c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL")
+        c.execute("SELECT DISTINCT tag FROM words WHERE tag is not NULL ORDER BY word ASC")
         success_message = "🏷️ [bold magenta]YOUR TAGS :[/bold magenta]"
         error_message = "You haven't added any tags to your words yet. ❌"
 
@@ -989,7 +989,7 @@ def show_list(
         and most is None
         and tagnames is False
     ):
-        c.execute("SELECT DISTINCT word FROM words")
+        c.execute("SELECT DISTINCT word FROM words ORDER BY word ASC")
         success_message = "😎 Here is your list of words"
         error_message = "You have no words in your vocabulary builder list. ❌"
 
