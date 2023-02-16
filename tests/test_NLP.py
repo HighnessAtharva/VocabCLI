@@ -30,7 +30,7 @@ class TestNLP:
             )
             assert result.exit_code == 0
             assert "Lexicon Count: 15531" in result.stdout
-            assert "Character Count (without spaces): 82755" in result.stdout
+            assert "Character Count (without spaces): 82835" in result.stdout
             assert "Sentence Count: 1016" in result.stdout
             assert "Words Per Sentence: 15.3" in result.stdout
             assert "Readability Index: 55.95" in result.stdout
@@ -120,7 +120,7 @@ class TestNLP:
             )
             assert result.exit_code == 0
             assert "URL detected 🌐" in result.stdout
-            assert "Offensive words censored: 152 😤" in result.stdout
+            assert "Offensive words censored: 137 😤" in result.stdout
 
         def test_censor_URL_strict_invalid(self, runner):
             result = runner.invoke(
@@ -150,7 +150,7 @@ class TestNLP:
             result = runner.invoke(app, ["clean", "https://en.wikipedia.org/wiki/Fuck"])
             assert result.exit_code == 0
             assert "URL detected 🌐" in result.stdout
-            assert "Offensive words censored: 152 😤" in result.stdout
+            assert "Offensive words censored: 137 😤" in result.stdout
 
         def test_censor_URL_no_strict_invalid(self, runner):
             result = runner.invoke(

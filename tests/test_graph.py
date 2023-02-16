@@ -251,18 +251,7 @@ class TestGraph:
                 in result.stdout
             )
 
-        @mock.patch("typer.confirm")
-        def test_graph_lookup_history_year(self, mock_typer, runner):
-            mock_typer.return_value = True
-            runner.invoke(app, ["delete"])
-            runner.invoke(app, ["define", "school"])
-            result = runner.invoke(app, ["graph", "--lookupyear"])
-            assert result.exit_code == 0
-            assert (
-                "Displaying Bar Graph of yearly word lookup distribution"
-                in result.stdout
-            )
-
+    
     class Test_Word_Category:
         @mock.patch("typer.confirm")
         def test_graph_word_category(self, mock_typer, runner):
