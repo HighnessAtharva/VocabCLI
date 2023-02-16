@@ -117,7 +117,7 @@ def viz_top_words_bar(N: int = 10, popup: bool = False) -> None:
         ha="right",
         fontname="MS Gothic",
         color="black",
-        fontweight="600",
+        fontweight="bold",
     )
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
@@ -209,9 +209,9 @@ def viz_top_tags_bar(N: int = 10, popup: bool = False) -> None:
 
     graph.set_title(
         f"Top {len(top_tags)} Tags",
-        fontsize=25,
+        fontsize=30,
         fontweight="bold",
-        pad=15,
+        pad=20,
         color="black",
         loc="center",
         fontname="Constantia",
@@ -220,7 +220,7 @@ def viz_top_tags_bar(N: int = 10, popup: bool = False) -> None:
         "Tags",
         fontsize=20,
         fontweight="bold",
-        labelpad=10,
+        labelpad=20,
         color="black",
         fontname="MS Gothic",
     )
@@ -236,8 +236,9 @@ def viz_top_tags_bar(N: int = 10, popup: bool = False) -> None:
         graph.get_xticklabels(),
         rotation=0,
         ha="right",
-        fontname="Candara",
+        fontname="MS Gothic",
         color="black",
+        fontweight="bold",
     )
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
@@ -319,12 +320,12 @@ def viz_top_words_pie(N: int = 10, popup: bool = False) -> None:
         autopct="%1.1f%%",
         startangle=90,
         labeldistance=1.15,
-        textprops={"fontsize": 10, "color": "black", "fontname": "Candara"},
+        textprops={"fontsize": 12, "color": "black", "fontname": "Candara","fontweight":"bold"},
     )
     sns.set_style("dark")
     plt.title(
         f"Top {len(top_words)} Words",
-        fontsize=18,
+        fontsize=38,
         fontweight="bold",
         pad=20,
         color="black",
@@ -409,7 +410,7 @@ def viz_top_tags_pie(N: int = 10, popup: bool = False) -> None:
 
     plt.title(
         f"Top {len(top_tags)} Tags",
-        fontsize=18,
+        fontsize=30,
         fontweight="bold",
         pad=20,
         color="black",
@@ -423,7 +424,7 @@ def viz_top_tags_pie(N: int = 10, popup: bool = False) -> None:
         autopct="%1.1f%%",
         startangle=90,
         labeldistance=1.15,
-        textprops={"fontsize": 10, "color": "black", "fontname": "Candara"},
+        textprops={"fontsize": 12, "color": "black", "fontname": "Candara","fontweight":"bold"},
     )
 
     # saving the plot
@@ -552,7 +553,10 @@ def viz_word_distribution_week(popup: bool = False) -> None:
         color="black",
         fontname="MS Gothic",
     )
-    graph.set_xticklabels(graph.get_xticklabels(), fontname="Candara", color="black")
+    graph.set_xticklabels(graph.get_xticklabels(), ha="right",
+        fontname="MS Gothic",
+        color="black",
+        fontweight="bold")
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
     
     plt.yticks(np.arange(min(word_count), max(word_count)+1, max(word_count)/10))
@@ -671,9 +675,9 @@ def viz_word_distribution_month(popup: bool = False) -> None:
 
     graph.set_title(
         "Word Distribution by Month",
-        fontsize=25,
+        fontsize=30,
         fontweight="bold",
-        pad=5,
+        pad=20,
         color="black",
         loc="center",
         fontname="Constantia",
@@ -682,7 +686,7 @@ def viz_word_distribution_month(popup: bool = False) -> None:
         "Date",
         fontsize=20,
         fontweight="bold",
-        labelpad=25,
+        labelpad=20,
         color="black",
         fontname="MS Gothic",
     )
@@ -690,7 +694,7 @@ def viz_word_distribution_month(popup: bool = False) -> None:
         "Count",
         fontsize=20,
         fontweight="bold",
-        labelpad=15,
+        labelpad=20,
         color="black",
         fontname="MS Gothic",
     )
@@ -698,8 +702,9 @@ def viz_word_distribution_month(popup: bool = False) -> None:
         graph.get_xticklabels(),
         rotation=30,
         ha="right",
-        fontname="Candara",
+        fontname="MS Gothic",
         color="black",
+        fontweight="bold",
     )
     # graph.set_yticklabels(graph.get_yticklabels(), fontname='Candara',color='black')
 
@@ -848,24 +853,24 @@ def viz_word_distribution_category(popup: bool = False) -> None:
 
     graph.set_title(
         "Word Distribution by Category",
-        fontsize=18,
+        fontsize=30,
         fontweight="bold",
-        pad=5,
+        pad=20,
         color="black",
         loc="center",
         fontname="Constantia",
     )
     graph.set_xlabel(
         "Word Count",
-        fontsize=15,
+        fontsize=20,
         fontweight="bold",
-        labelpad=0,
+        labelpad=20,
         color="black",
         fontname="MS Gothic",
     )
     graph.set_ylabel(
         "Collection",
-        fontsize=15,
+        fontsize=20,
         fontweight="bold",
         labelpad=20,
         color="black",
@@ -875,8 +880,9 @@ def viz_word_distribution_category(popup: bool = False) -> None:
         graph.get_xticklabels(),
         rotation=40,
         ha="right",
-        fontname="Candara",
+        fontname="MS Gothic",
         color="black",
+        fontweight="bold",
     )
     # y axis labels ticks interval should be 1
     graph.set_yticks(np.arange(0, int(max(word_count)), 50))
