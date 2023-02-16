@@ -85,7 +85,14 @@ def show_slider() -> None:
 
     # set up the components
     imageLabel = Label(root, image=image1)
-    infoLabel = Label(root, text=f"Image 1 of {len(image_list)}", font="Helvetica, 20")
+    infoLabel = Label(root, 
+                      text=f"Image 1 of {len(image_list)}", 
+                      font="Helvetica, 20",
+                      bg="green",
+                      fg="white",
+                      width = 20, 
+                        height = 2
+                      )
     button = Button(
         root,
         text="Change",
@@ -93,13 +100,16 @@ def show_slider() -> None:
         height=2,
         bg="purple",
         fg="white",
+        font="Helvetica, 20",
         command=ChangeImage,
     )
 
     # display the components
     imageLabel.pack()
-    infoLabel.pack()
-    button.pack(side="bottom", pady=3)
+   
+     
+    infoLabel.pack(side="left", padx=5, expand=True, fill="both") 
+    button.pack(side="right", padx=5, expand=True, fill="both")
 
     # run the main loop
     root.mainloop()
