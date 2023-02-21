@@ -1372,7 +1372,7 @@ def get_lookup_rate(
 
         try:
             percentage = round(
-                (learning_count_last_week) / (learning_count_week) * 100, 2
+                (learning_count_week - learning_count_last_week) / (learning_count_week) * 100, 2
             )
         except ZeroDivisionError:
             percentage = 100

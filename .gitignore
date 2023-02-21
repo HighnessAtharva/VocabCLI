@@ -8,4 +8,5 @@ vocabCLI/__pycache__/
 tests/tempCodeRunnerFile.py
 tests/__pycache__/
 vocabCLI/exports/
+env/
 
