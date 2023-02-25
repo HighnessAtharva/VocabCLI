@@ -1335,11 +1335,18 @@ def rss(
     elif read:
         check_feed_for_new_content(title=read)
     else:
-        typer.echo("🤷 No option selected. Please select an option to continue.")
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="🤷 No option selected. Please select an option to continue.",
+            )
+        )
 
 
 @app.command(
-    rich_help_panel="Miscellaneous", help="✍🏼 Add, View, Search or Delete Delete Quotes"
+    rich_help_panel="Miscellaneous", help="✍🏼 Add, View, Search or Delete Quotes"
 )
 def quote(
     random: bool = typer.Option(
