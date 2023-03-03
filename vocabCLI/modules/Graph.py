@@ -770,7 +770,7 @@ def viz_learning_vs_mastered(popup: bool = False) -> None:
     plt.legend(handles=[top_bar, bottom_bar])
 
     plt.title(
-        "Word Distribution by Month",
+        "Learning Vs Mastered Words",
         fontsize=30,
         fontweight="bold",
         pad=25,

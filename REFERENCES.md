@@ -59,12 +59,6 @@
 
 * <https://betterprogramming.pub/build-your-own-plagiarism-checker-with-python-and-machine-learning-7e81877fd970>
 
-**Paraphrase Text**
-
-**Summarize Text**
-
-**Check if Text Contains Offensive Language or Slurs and censor/filter them out**
-'
 
 ## Config Files
 

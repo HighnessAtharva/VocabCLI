@@ -727,7 +727,6 @@ def summarize_text_util(text: str, per: int) -> str:
         model="text-davinci-003",
         prompt="summarize the following text:\n" + text,
         temperature=0,
-        max_tokens=20000,
     )
 
     response = response["choices"][0]["text"]
