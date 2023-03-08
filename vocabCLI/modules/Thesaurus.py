@@ -27,14 +27,14 @@ def find_synonym(query: str) -> None:
     """
     # ----------------- Spinner -----------------#
     with Progress(
-        SpinnerColumn(spinner_name="point", style="bold violet"),
-        TextColumn(
-            "[progress.description]{task.description}",
-            justify="left",
-            style="bold cyan",
-        ),
-        transient=True,
-    ) as progress:
+            SpinnerColumn(spinner_name="point", style="bold violet"),
+            TextColumn(
+                "[progress.description]{task.description}",
+                justify="left",
+                style="bold cyan",
+            ),
+            transient=True,
+        ) as progress:
         progress.add_task(description="Searching Synonyms", total=None)
         # ----------------- Spinner -----------------#
 
@@ -44,10 +44,11 @@ def find_synonym(query: str) -> None:
 
         # check from api and add to list
         for meaningNumber in response["meanings"]:
-            for synonym in meaningNumber["synonyms"]:
-                if query not in synonym and " " not in synonym:
-                    synonyms.append(synonym)
-
+            synonyms.extend(
+                synonym
+                for synonym in meaningNumber["synonyms"]
+                if query not in synonym and " " not in synonym
+            )
         # remove special characters and numbers
         for x in synonyms:
             if x.isalpha() == False:
