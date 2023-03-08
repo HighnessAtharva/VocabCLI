@@ -68,7 +68,7 @@ def interpolate(random_color2, random_color, interval):
         yield [round(t + det * i) for t, det in zip(random_color2, derandom_color)]
 
 
-def export_util(c, type: str):  # sourcery skip: low-code-quality
+def export_util(c, type: str):    # sourcery skip: low-code-quality
     """
     Exports the words from the database to a flashcard image
 
@@ -140,14 +140,11 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
         (255, 192, 203),
     ]
 
-    progressbar_total = 0
-
     # ----------------- Progress Bar -----------------#
 
     for row, _ in zip(
         rows, track(range(len(rows) - 1), description=" 🔃 Exporting Flashcards ")
     ):
-
         # ----------------- Progress Bar -----------------#
 
         tag = row[1] if type == "tag" else None
@@ -160,10 +157,10 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
         black = (0, 0, 0)
         random_color = random.choice(my_colors)
         random_color2 = random.choice(my_colors) 
-        
+
         if random_color == random_color2:
             random_color2 = random.choice(my_colors)
-            
+
         # print(random_color)
         for i, color in enumerate(interpolate(random_color, random_color2, image.width * 2)):
             draw.line([(i, 0), (0, i)], tuple(color), width=1)
@@ -208,7 +205,7 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             tagImg = Image.open("../assets/tag.png")
             tagImg = tagImg.resize((75, 75))
             image.paste(tagImg, (50, 125), mask=tagImg)
-            
+
             text_size = draw.textsize(tag, font=font)
             # calculate the position of the text to center it on the image
             x = 150
@@ -262,8 +259,6 @@ def export_util(c, type: str):  # sourcery skip: low-code-quality
             if os._exists(name := f"flashcard/{type}/{word}.png"):
                 os.remove(name)
             image.save(f"flashcard/{type}/{word}.png")
-
-        progressbar_total += 1
 
 
 def generate_all_flashcards():
