@@ -54,14 +54,12 @@ def get_quotes() -> None:
             box=box.ROUNDED,
             expand=True,
         )
-        
+
         table.add_column("No.", width=1)
         table.add_column("Quote", width=30)
         table.add_column("Author", width=30, style="blue")
         table.add_column("Date", width=18, style="magenta")
-        i=1
-
-        for quote in quotes:
+        for i, quote in enumerate(quotes, start=1):
             quote_text = quote[0]
             quote_author = quote[1] if quote[1] is not None else "-"
             quote_date = datetime.datetime.strptime(
@@ -69,7 +67,6 @@ def get_quotes() -> None:
             ).strftime("%d %b '%y | %H:%M")
 
             table.add_row(str(i),quote_text, quote_author, quote_date)
-            i+=1
             table.add_section()
         print(table)
 
