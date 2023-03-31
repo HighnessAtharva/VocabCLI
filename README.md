@@ -1,8 +1,5 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+**Support me here if you liked this!**
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/AtharvaShah) 
 
 ## About VocabCLI 📚
 
@@ -185,7 +182,6 @@ typer VocabularyCLI.py utils docs --name "VocabularyCLI" --output "../docs/user_
 ```
 
 ### Get Code Stats 📊
-
 ```powershell
 # Move to source folder
 cd vocabCLI
