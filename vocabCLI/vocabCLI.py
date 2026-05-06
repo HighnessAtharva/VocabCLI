@@ -1,19 +1,34 @@
 import os
 import sys
-from typing import *
+from typing import List, Optional
 
 import typer
 from rich import print
 from rich.console import Console
 from rich.panel import Panel
 
-# app configuration
+# ──────────────────────────────────────────────────────────────────────────────
+# Main app
+# ──────────────────────────────────────────────────────────────────────────────
 app = typer.Typer(
     name="Vocabulary Builder",
-    add_completion=False,
+    add_completion=True,
     rich_markup_mode="rich",
-    help="📕[bold green] This is a dictionary and a vocabulary builder CLI.[/bold green] VocabularyCLI is a lightweight Command Line Interface that allows users to look up word definitions, examples, synonyms and antonyms directly via the command line. Powered with several utility based commands our CLI offers rapid and robust Knowledge Base capabilities like Flashcards, Tagging, Word Management, Graph Reporting, Bulk import and export of word lists and is a definitive software for linguaphiles. This application boasts a simple and intuitive interface that is easy to use and is a must have for anyone who wants to expand their vocabulary and improve their language skills. The app also offers advanced Text Classification and Processing via the use of Natural Language Processing. The CLI will be offered with eye-catching Panels, Tables, Animated Symbols, Emojis, Interactive Menus, Spinners, Colored fonts and other rich features that will make the user experience more enjoyable and interactive.",
+    help="📕[bold green] VocabCLI 2026 — AI-powered vocabulary builder.[/bold green] "
+    "Look up words, build your vocabulary, generate AI mnemonics, run spaced-repetition "
+    "reviews, and more. Run [bold]vocab setup[/bold] to get started.",
 )
+
+# ──────────────────────────────────────────────────────────────────────────────
+# AI sub-app (vocab ai <subcommand>)
+# ──────────────────────────────────────────────────────────────────────────────
+ai_app = typer.Typer(
+    name="ai",
+    rich_markup_mode="rich",
+    help="🤖 [bold cyan]AI-powered[/bold cyan] vocabulary tools.  Requires an OpenAI API "
+    "key (set via OPENAI_API_KEY or [bold]vocab setup[/bold]).",
+)
+app.add_typer(ai_app, name="ai", rich_help_panel="AI Features")
 
 
 @app.command(
@@ -1495,6 +1510,348 @@ def spellcheck(text: str = typer.Argument(..., help="🔠 Text to spell check.")
     spell_checker(text)
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# New commands: setup, review (SRS), config, today
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+@app.command(
+    rich_help_panel="Miscellaneous",
+    help="🛠️  [bold cyan]First-run setup wizard[/bold cyan] — configure AI keys and preferences.",
+)
+def setup():
+    """Interactive first-run setup wizard.
+
+    Walks the user through setting up their OpenAI API key, choosing an AI
+    provider (OpenAI or Ollama), and writing the ``~/.vocabcli/config.toml``.
+    """
+    from modules.Config import CONFIG_PATH, set_config
+
+    print(
+        Panel(
+            title="[b reverse cyan]  VocabCLI 2026 Setup Wizard  [/b reverse cyan]",
+            title_align="center",
+            padding=(1, 2),
+            renderable=(
+                "Welcome! 👋  Let's get VocabCLI configured.\n\n"
+                "This wizard will help you set up:\n"
+                "  • Your OpenAI API key (for AI features)\n"
+                "  • AI provider preference (OpenAI or local Ollama)\n"
+                "  • Display preferences\n\n"
+                f"Config will be saved to: [bold]{CONFIG_PATH}[/bold]"
+            ),
+        )
+    )
+
+    # Choose provider
+    provider = typer.prompt(
+        "\n🤖 AI Provider [openai/ollama] (press Enter to skip)",
+        default="",
+    ).strip().lower()
+
+    if provider in ("openai", ""):
+        api_key = typer.prompt(
+            "🔑 OpenAI API key (press Enter to skip)", default="", hide_input=True
+        ).strip()
+        if api_key:
+            set_config("ai", "api_key", api_key)
+            set_config("ai", "provider", "openai")
+            print(Panel("✅ OpenAI API key saved.", padding=(0, 1)))
+        else:
+            print(Panel("⚠️  No API key saved. Set OPENAI_API_KEY env var when you're ready.", padding=(0, 1)))
+
+    elif provider == "ollama":
+        base_url = typer.prompt(
+            "🦙 Ollama base URL", default="http://localhost:11434/v1"
+        ).strip()
+        model = typer.prompt("🦙 Ollama model name", default="llama3.2").strip()
+        set_config("ai", "provider", "ollama")
+        set_config("ai", "ollama_base_url", base_url)
+        set_config("ai", "model", model)
+        print(Panel(f"✅ Ollama configured: {model} @ {base_url}", padding=(0, 1)))
+
+    print(
+        Panel(
+            title="[b reverse green]  Setup Complete!  [/b reverse green]",
+            title_align="center",
+            padding=(1, 2),
+            renderable=(
+                "🎉 All done!  You're ready to use VocabCLI.\n\n"
+                "Quick start:\n"
+                "  [bold]vocab define serendipity[/bold]           — look up a word\n"
+                "  [bold]vocab ai explain serendipity[/bold]       — AI deep-dive\n"
+                "  [bold]vocab ai mnemonic serendipity[/bold]      — generate a mnemonic\n"
+                "  [bold]vocab learn serendipity[/bold]            — add to learning list\n"
+                "  [bold]vocab review[/bold]                       — spaced-repetition review\n"
+                "  [bold]vocab config show[/bold]                  — view current settings\n"
+            ),
+        )
+    )
+
+
+@app.command(
+    rich_help_panel="Vocabulary Builder",
+    help="🔁 [bold green]Spaced-repetition review[/bold green] — study words that are due today.",
+)
+def review(
+    limit: int = typer.Option(
+        20, "--limit", "-n", help="Maximum number of words to review in one session."
+    ),
+):
+    """Run a spaced-repetition (SM-2) review session.
+
+    Shows words that are due for review today based on the SM-2 scheduling
+    algorithm.  After each word you rate your recall (1–5) and the next
+    review date is automatically updated.
+    """
+    from datetime import date as _date
+    from modules.Database import createConnection
+    from modules.Dictionary import definition
+
+    conn = createConnection()
+    c = conn.cursor()
+
+    today = _date.today().isoformat()
+    c.execute(
+        """SELECT DISTINCT word FROM words
+           WHERE learning=1
+             AND (next_review_date IS NULL OR next_review_date <= ?)
+           ORDER BY COALESCE(next_review_date, '1970-01-01') ASC
+           LIMIT ?""",
+        (today, limit),
+    )
+    rows = c.fetchall()
+
+    if not rows:
+        print(
+            Panel(
+                title="[b reverse green]  All Caught Up!  [/b reverse green]",
+                title_align="center",
+                padding=(1, 1),
+                renderable=(
+                    "🎉 No words are due for review today.\n"
+                    "Add more words to your learning list with [bold]vocab learn <word>[/bold]."
+                ),
+            )
+        )
+        return
+
+    print(
+        Panel(
+            title="[b reverse cyan]  Spaced-Repetition Review  [/b reverse cyan]",
+            title_align="center",
+            padding=(1, 1),
+            renderable=f"📚 [bold]{len(rows)}[/bold] word(s) due for review today.\n"
+            "Rate your recall after each word:  "
+            "[bold red]1[/bold red]=forgot  "
+            "[bold yellow]3[/bold yellow]=hard  "
+            "[bold green]5[/bold green]=easy",
+        )
+    )
+
+    reviewed = 0
+    for (word,) in rows:
+        print(f"\n[bold gold1]Word {reviewed + 1}/{len(rows)}:[/bold gold1]")
+        definition(word, short=True)
+
+        # Get SM-2 parameters
+        c.execute(
+            "SELECT ease_factor, interval_days, review_count FROM words WHERE word=? LIMIT 1",
+            (word,),
+        )
+        row = c.fetchone()
+        ef = row[0] if row and row[0] else 2.5
+        interval = row[1] if row and row[1] else 1
+        review_count = row[2] if row and row[2] else 0
+
+        rating_str = typer.prompt("\n⭐ Rate recall (1–5)", default="3")
+        try:
+            rating = max(1, min(5, int(rating_str)))
+        except ValueError:
+            rating = 3
+
+        # SM-2 algorithm
+        ef_new = max(1.3, ef + 0.1 - (5 - rating) * (0.08 + (5 - rating) * 0.02))
+        if rating < 3:
+            interval_new = 1
+        elif review_count == 0:
+            interval_new = 1
+        elif review_count == 1:
+            interval_new = 6
+        else:
+            interval_new = round(interval * ef_new)
+
+        from datetime import date, timedelta
+        next_date = (date.today() + timedelta(days=interval_new)).isoformat()
+
+        c.execute(
+            """UPDATE words SET ease_factor=?, interval_days=?, next_review_date=?,
+               review_count=review_count+1 WHERE word=?""",
+            (ef_new, interval_new, next_date, word),
+        )
+        conn.commit()
+        reviewed += 1
+
+        if reviewed < len(rows):
+            if not typer.confirm("\n➡️  Next word?", default=True):
+                break
+
+    print(
+        Panel(
+            title="[b reverse green]  Review Complete!  [/b reverse green]",
+            title_align="center",
+            padding=(1, 1),
+            renderable=f"✅ Reviewed [bold green]{reviewed}[/bold green] word(s). Great work! 🏆",
+        )
+    )
+
+
+@app.command(
+    rich_help_panel="Miscellaneous",
+    help="⚙️  View or set [bold cyan]configuration[/bold cyan] values.",
+)
+def config(
+    show: bool = typer.Option(False, "--show", "-s", help="Show current configuration."),
+    set_value: Optional[str] = typer.Option(
+        None,
+        "--set",
+        help="Set a config value.  Format: [bold]section.key=value[/bold]  "
+        "Example: [bold]ai.provider=ollama[/bold]",
+        metavar="SECTION.KEY=VALUE",
+    ),
+):
+    """View or update configuration values in ``~/.vocabcli/config.toml``."""
+    from modules.Config import set_config, show_config
+
+    if show:
+        show_config()
+    elif set_value:
+        try:
+            dotted, value = set_value.split("=", 1)
+            section, key = dotted.split(".", 1)
+            set_config(section.strip(), key.strip(), value.strip())
+            print(Panel(f"✅ Set [bold]{dotted}[/bold] = [green]{value}[/green]", padding=(0, 1)))
+        except ValueError:
+            print(
+                Panel(
+                    "❌ Invalid format.  Use [bold]--set section.key=value[/bold]\n"
+                    "Example: [bold]vocab config --set ai.provider=ollama[/bold]",
+                    title="[b reverse red]  Error  [/b reverse red]",
+                    title_align="center",
+                    padding=(1, 1),
+                )
+            )
+    else:
+        show_config()
+
+
+@app.command(
+    rich_help_panel="Miscellaneous",
+    help="😍 [bold cyan]Word of the day[/bold cyan] — works even without a Wordnik API key.",
+)
+def today():
+    """Display the word of the day.
+
+    Tries the Wordnik API first; falls back to a curated random word list
+    when no ``WORDNIK_API_KEY`` is set, so the command always works
+    out-of-the-box.
+    """
+    from modules.Dictionary import get_word_of_the_day
+
+    get_word_of_the_day()
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# AI sub-commands  (vocab ai <subcommand>)
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+@ai_app.command(name="explain", help="🔍 Deep AI explanation of a word.")
+def ai_explain_cmd(
+    word: str = typer.Argument(..., help="Word to explain."),
+    provider: Optional[str] = typer.Option(
+        None, "--provider", "-p", help="AI provider: openai or ollama."
+    ),
+):
+    """Explain a word with etymology, register, common mistakes, and a memory tip."""
+    from modules.AI import ai_explain
+
+    ai_explain(word, provider=provider)
+
+
+@ai_app.command(name="mnemonic", help="🧠 Generate a mnemonic to remember a word.")
+def ai_mnemonic_cmd(
+    word: str = typer.Argument(..., help="Word to create a mnemonic for."),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Generate a vivid mnemonic story hook to remember the word."""
+    from modules.AI import ai_mnemonic
+
+    ai_mnemonic(word, provider=provider)
+
+
+@ai_app.command(name="story", help="📖 Generate a story using your learning list words.")
+def ai_story_cmd(
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Write a short story that naturally uses all words in your learning list."""
+    from modules.AI import ai_story
+
+    ai_story(provider=provider)
+
+
+@ai_app.command(name="sentence", help="📝 Generate 3 diverse example sentences for a word.")
+def ai_sentences_cmd(
+    word: str = typer.Argument(..., help="Word to generate sentences for."),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Generate formal, casual, and literary example sentences for a word."""
+    from modules.AI import ai_sentences
+
+    ai_sentences(word, provider=provider)
+
+
+@ai_app.command(name="suggest", help="💡 Get personalised word recommendations.")
+def ai_suggest_cmd(
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Suggest 10 words to learn next based on your vocabulary history."""
+    from modules.AI import ai_suggest
+
+    ai_suggest(provider=provider)
+
+
+@ai_app.command(name="quiz", help="❓ Take an AI-generated vocabulary quiz.")
+def ai_quiz_cmd(
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Run an AI-generated quiz with advanced question types (analogies, fill-in-the-blank)."""
+    from modules.AI import ai_quiz
+
+    ai_quiz(provider=provider)
+
+
+@ai_app.command(name="chat", help="💬 Interactive AI vocabulary tutor chat.")
+def ai_chat_cmd(
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Start an interactive conversational vocabulary tutoring session."""
+    from modules.AI import ai_chat
+
+    ai_chat(provider=provider)
+
+
+@ai_app.command(name="paraphrase", help="🔄 AI-powered paraphrasing.")
+def ai_paraphrase_cmd(
+    text: str = typer.Argument(..., help="Text to paraphrase."),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="AI provider."),
+):
+    """Paraphrase the given text using AI (2 alternatives)."""
+    from modules.AI import ai_paraphrase
+
+    ai_paraphrase(text, provider=provider)
+
+
 if __name__ == "__main__":
     from modules.Database import initializeDB
     from modules.WordCollections import (
@@ -1503,15 +1860,8 @@ if __name__ == "__main__":
         insert_collection_to_DB,
     )
 
-    # check if Vocabulary.db exists, if not create it
-    if not os.path.exists("VocabularyBuilder.db"):
-
-        # initialize the database with the tables if not already existing
-        initializeDB()
-        # uncomment this to easily delete all words from collections table during testing
-        delete_collection_from_DB()
-        clean_collection_csv_data()
-        # add all the collection words to the database if not already existing
-        insert_collection_to_DB()
+    # Initialize DB (now lives in ~/.vocabcli/ — no CWD check needed)
+    initializeDB()
+    insert_collection_to_DB()
 
     app()

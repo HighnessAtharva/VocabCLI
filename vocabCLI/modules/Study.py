@@ -4,20 +4,20 @@ import os
 import random
 import time
 from datetime import datetime, timedelta
-from typing import *
+from typing import Optional
 
 import questionary
 import requests
 import typer
-from Database import createConnection, createTables
-from Dictionary import *
-from Exceptions import *
+from .Database import createConnection, createTables
+from .Dictionary import *
+from .Exceptions import *
 from questionary import Style
 from rich import print
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
-from Utils import *
+from .Utils import *
 
 #####################
 # REVISE FUNCTIONS #

@@ -1,18 +1,16 @@
 import os
 from collections import Counter
 from heapq import nlargest
+from pathlib import Path
 from string import punctuation
-from typing import *
+from typing import Optional, List
 
 import nltk
-import openai
 import pandas as pd
 import regex as re
 import requests
 import rich
-import spacy
 import textstat
-import torch
 import trafilatura
 from bs4 import BeautifulSoup
 from rich import box, print
@@ -21,18 +19,49 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
-from spacy.lang.en.stop_words import STOP_WORDS
-from spacytextblob.spacytextblob import SpacyTextBlob
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-# Load your API key from an environment variable or secret management service
-openai.api_key = os.getenv("OPENAI")
+# NLP / ML dependencies are optional ([nlp] extra).  Degrade gracefully so
+# that users who install only the core package don't get an ImportError.
+try:
+    import spacy
+    import torch
+    from spacy.lang.en.stop_words import STOP_WORDS
+    from spacytextblob.spacytextblob import SpacyTextBlob
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from spacy.cli import download as _spacy_download
 
-from spacy.cli import download
+    # Download the spaCy model on first use if not already present
+    if not spacy.util.is_package("en_core_web_sm"):
+        _spacy_download("en_core_web_sm")
 
-# check if the model is already downloaded, if not, then download it
-if not spacy.util.is_package("en_core_web_sm"):
-    download("en_core_web_sm")
+    _NLP_AVAILABLE = True
+except ImportError:
+    _NLP_AVAILABLE = False
+    STOP_WORDS: set = set()  # type: ignore[assignment]
+
+_MODULES_DIR = Path(__file__).parent
+
+_NLP_MISSING_PANEL = Panel(
+    title="[b reverse yellow]  NLP Dependencies Missing  [/b reverse yellow]",
+    title_align="center",
+    padding=(1, 1),
+    renderable=(
+        "This feature requires the [bold cyan]nlp[/bold cyan] optional extras.\n\n"
+        "Install with: [bold white]pip install \"vocabcli[nlp]\"[/bold white]"
+    ),
+)
+
+
+def _require_nlp() -> bool:
+    """Return True if NLP deps are available; print an error and return False otherwise.
+
+    Returns:
+        bool: True when spaCy, torch, and transformers are importable.
+    """
+    if not _NLP_AVAILABLE:
+        print(_NLP_MISSING_PANEL)
+        return False
+    return True
 
 
 URL_INVALID_PANEL = Panel(
@@ -204,7 +233,7 @@ def censor_bad_words_strict(text: str) -> None:
         new_text = ""
         offensive_words = 0
 
-        with open("modules/_bad_words.txt", mode="r", encoding="utf-8") as f:
+        with open(_MODULES_DIR / "_bad_words.txt", mode="r", encoding="utf-8") as f:
             bad_words = f.read().splitlines()
             bad_words_plural = [bad_words[i] + "s" for i in range(len(bad_words))]
             bad_words = bad_words + bad_words_plural
@@ -288,7 +317,7 @@ def censor_bad_words_not_strict(text: str) -> None:
             print(URL_INVALID_PANEL)
             return
 
-        with open("modules/_bad_words.txt", mode="r", encoding="utf-8") as f:
+        with open(_MODULES_DIR / "_bad_words.txt", mode="r", encoding="utf-8") as f:
             bad_words = f.read().splitlines()
             bad_words_plural = [bad_words[i] + "s" for i in range(len(bad_words))]
             bad_words = bad_words + bad_words_plural
@@ -420,27 +449,16 @@ def readability_index(text: str) -> None:
 
 
 def extract_difficult_words(text: str) -> None:
-    """
-    Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
+    """Extracts the difficult words from the text and prints them.
 
-    1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
-    2. If the text is not a URL, then we directly use the model
-    3. Open the file with a list of simple words (most common words used in English).
-    4. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
-    5. Calculate the word count of the text.
-    6. Create a list of difficult words by filtering out all words that are in the list of simple words.
-    7. Remove some common words that are not in the list of simple words.
-    8. Remove duplicate words.
-    9. Remove plurals of the same word.
-    10. Remove plurals of which singular is in the simple words list.
-    11. Sort the list of difficult words.
-    12. Print the word count and the number of difficult words.
-    13. Print the list of difficult words in columns.
+    Uses the ``_most_common_words.txt`` file to determine difficult words, and
+    spaCy NER to remove proper nouns.  Requires the ``[nlp]`` optional extras.
 
     Args:
-        text (str): text/url to be analyzed
+        text (str): text or URL to be analysed.
     """
-
+    if not _require_nlp():
+        return
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="aesthetic", style="bold gold1"),
@@ -617,21 +635,17 @@ def sentiment_score_to_summary(sentiment_score: int) -> str:
 
 
 def sentiment_analysis(content: str) -> None:
-    """
-    Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
+    """Perform sentiment analysis on the text and print the result.
 
-    1. Check if the content is a URL, if yes, then parse the text from it and then use the model
-    2. If text and not URL, then directly use the model
-    3. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
-    5. Load the tokenizer and model
-    6. Encode the text using the tokenizer
-    7. Send the encoded text to the model and get the result
-    8. Take the highest value from the result and convert it to a summary
-    9. Print the sentiment score and the summary
+    Uses ``nlptown/bert-base-multilingual-uncased-sentiment`` via Hugging Face
+    Transformers.  Requires the ``[nlp]`` optional extras.
 
     Args:
-        content (str): text/url to be analyzed
+        content (str): text or URL to be analysed.
     """
+    if not _require_nlp():
+        return
+
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="smiley", style="bold green"),
@@ -710,71 +724,60 @@ def sentiment_analysis(content: str) -> None:
 # TODO @atharva check this
 def summarize_text_util(text: str, per: int) -> str:
     """
-    Summarizes the text using the spacy library
-
-    1. Backend API call to OpenAI
-    2. 😎 100% abstraction, GPT 3 does all the work
-    3. Strip the text of any escape characters and newlines and return the summarized text
+    Summarizes the text using the OpenAI API (modern client, ``openai>=1.0``).
 
     Args:
         text (str): text to be summarized
-        per (int): percentage of the text to be summarized
+        per (int): percentage of the text to be summarized (currently unused,
+            kept for interface compatibility)
 
     Returns:
         str: summarized text
     """
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt="summarize the following text:\n" + text,
-        temperature=0,
-    )
-
-    response = response["choices"][0]["text"]
-
-    # remove escape characters and newlines
-    response = re.sub(r"\\n", " ", response)
-
-    # if the response contains "Summary:" then remove it
-    if "Summary:" in response:
-        response = response.split("Summary:")[1]
-
-    return response
-
-    # OLD WAY
-
-    # # Loading the NLP model
-    # nlp = spacy.load("en_core_web_sm")
-
-    # doc = nlp(text)
-    # tokens = [token.text for token in doc]
-    # word_frequencies = {}
-    # for word in doc:
-    #     if (
-    #         word.text.lower() not in list(STOP_WORDS)
-    #         and word.text.lower() not in punctuation
-    #     ):
-    #         if word.text in word_frequencies:
-    #             word_frequencies[word.text] += 1
-    #         else:
-    #             word_frequencies[word.text] = 1
-
-    # max_frequency = max(word_frequencies.values())
-    # for word in word_frequencies:
-    #     word_frequencies[word] = word_frequencies[word] / max_frequency
-    # sentence_tokens = list(doc.sents)
-    # sentence_scores = {}
-    # for sent in sentence_tokens:
-    #     for word in sent:
-    #         if word.text.lower() in word_frequencies:
-    #             if sent in sentence_scores:
-    #                 sentence_scores[sent] += word_frequencies[word.text.lower()]
-    #             else:
-    #                 sentence_scores[sent] = word_frequencies[word.text.lower()]
-    # select_length = int(len(sentence_tokens) * per)
-    # summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
-    # final_summary = [word.text for word in summary]
-    # summary = "".join(final_summary)
-    # return summary
+    try:
+        from openai import OpenAI
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI"))
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Summarize the following text concisely:\n\n{text}",
+                }
+            ],
+            temperature=0,
+        )
+        result = response.choices[0].message.content or ""
+        # remove escape characters and newlines
+        result = re.sub(r"\\n", " ", result)
+        if "Summary:" in result:
+            result = result.split("Summary:")[1]
+        return result.strip()
+    except Exception as exc:
+        # Graceful degradation: fall back to extractive summarisation with spacy
+        if not _NLP_AVAILABLE:
+            return text
+        nlp = spacy.load("en_core_web_sm")  # type: ignore[name-defined]
+        doc = nlp(text)
+        tokens = [token.text for token in doc]
+        word_frequencies: dict = {}
+        for word in doc:
+            if word.text.lower() not in list(STOP_WORDS) and word.text.lower() not in punctuation:
+                word_frequencies[word.text] = word_frequencies.get(word.text, 0) + 1
+        if not word_frequencies:
+            return text
+        max_frequency = max(word_frequencies.values())
+        for word in word_frequencies:
+            word_frequencies[word] /= max_frequency
+        sentence_tokens = list(doc.sents)
+        sentence_scores: dict = {}
+        for sent in sentence_tokens:
+            for word in sent:
+                if word.text.lower() in word_frequencies:
+                    sentence_scores[sent] = sentence_scores.get(sent, 0) + word_frequencies[word.text.lower()]
+        select_length = max(1, int(len(sentence_tokens) * per))
+        summary = nlargest(select_length, sentence_scores, key=sentence_scores.get)
+        return "".join(word.text for word in summary)
 
 
 def summarize_text(content: str, file: Optional[bool] = False) -> None:

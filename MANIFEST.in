@@ -1,0 +1,6 @@
+include README.md
+include CHANGELOG.md
+include LICENSE.md
+include requirements.txt
+recursive-include vocabCLI/modules *.csv *.txt
+recursive-include vocabCLI/assets *

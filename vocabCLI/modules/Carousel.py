@@ -1,10 +1,21 @@
 import glob
 import os
-from tkinter import *
+from pathlib import Path
 
 import typer
-from Graph import *
-from PIL import Image, ImageTk
+from .Graph import (
+    viz_learning_vs_mastered,
+    viz_top_tags_bar,
+    viz_top_tags_pie,
+    viz_top_words_bar,
+    viz_top_words_pie,
+    viz_word_distribution_category,
+    viz_word_distribution_month,
+    viz_word_distribution_week,
+)
+from PIL import Image
+
+_ASSETS_DIR = Path(__file__).parent.parent.parent / "assets"
 
 
 def show_slider() -> None:

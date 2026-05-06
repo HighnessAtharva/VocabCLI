@@ -1,8 +1,10 @@
 import calendar
 import json
+import os
 import sqlite3
 import threading
 from datetime import datetime
+from pathlib import Path
 from sqlite3 import Error
 
 import requests
@@ -14,17 +16,40 @@ from rich.panel import Panel
 from rich.progress import track
 
 
+def _get_db_path() -> str:
+    """Return the path to the SQLite database.
+
+    The path can be overridden via the ``VOCABCLI_DB_PATH`` environment variable
+    (useful in tests).  Otherwise the database lives in ``~/.vocabcli/``.
+    In both cases, the parent directory is created if it does not exist.
+
+    Returns:
+        str: Absolute path to the database file.
+    """
+    if env_path := os.getenv("VOCABCLI_DB_PATH"):
+        Path(env_path).parent.mkdir(parents=True, exist_ok=True)
+        return env_path
+    db_dir = Path.home() / ".vocabcli"
+    db_dir.mkdir(parents=True, exist_ok=True)
+    return str(db_dir / "VocabularyBuilder.db")
+
+
 # no tests for this function as it is not called anywhere in the command directly
 def createConnection():
     """
-    Creates a database connection to a SQLite database VocabularyBuilder.db
+    Creates a database connection to the VocabularyBuilder SQLite database.
+
+    The database is stored in ``~/.vocabcli/VocabularyBuilder.db`` so that it
+    persists across working-directory changes and is user-scoped.  The path can
+    be overridden via the ``VOCABCLI_DB_PATH`` environment variable (used by the
+    test suite).
 
     Returns:
-        Connection object or None.
+        sqlite3.Connection | None: Connection object, or None on error.
     """
     conn = None
     try:
-        conn = sqlite3.connect("./VocabularyBuilder.db")
+        conn = sqlite3.connect(_get_db_path())
     except Error as e:
         print(e)
     return conn
@@ -33,14 +58,20 @@ def createConnection():
 # no tests for this function as it is not called anywhere in the command directly
 def createTables(conn: sqlite3.Connection) -> None:
     """
-    1. Creates the tables in the database if they do not exist
-    2. Tables created are words, cache_words, collections, quiz_history, quotes, rss
-    3. The tables are created using the SQL statements in the docstring with respective column names and data types
-    4. The tables are created using the execute method of the connection object
-    5. The connection object is passed as an argument to the function
+    Creates the application tables in the database if they do not exist.
+
+    Tables created:
+        - ``words``        – vocabulary entries with SRS scheduling columns
+        - ``cache_words``  – API response cache to reduce network calls
+        - ``collections``  – curated word-to-domain mappings
+        - ``quiz_history`` – history of quiz sessions
+        - ``quotes``       – user-saved quotes
+        - ``rss``          – tracked RSS feeds
+        - ``ai_cache``     – cached AI-generated insights (mnemonics, explanations)
+        - ``streaks``      – daily activity log for streak tracking
 
     Args:
-        conn (sqlite3.Connection): Connection object
+        conn (sqlite3.Connection): Active database connection.
     """
 
     words = """CREATE TABLE IF NOT EXISTS "words" (
@@ -49,7 +80,11 @@ def createTables(conn: sqlite3.Connection) -> None:
 	"tag"	TEXT,
 	"mastered"	INTEGER NOT NULL DEFAULT 0,
 	"learning"	INTEGER NOT NULL DEFAULT 0,
-	"favorite"	INTEGER NOT NULL DEFAULT 0
+	"favorite"	INTEGER NOT NULL DEFAULT 0,
+	"ease_factor"	REAL NOT NULL DEFAULT 2.5,
+	"interval_days"	INTEGER NOT NULL DEFAULT 1,
+	"next_review_date"	TEXT,
+	"review_count"	INTEGER NOT NULL DEFAULT 0
 );
     """
 
@@ -89,41 +124,66 @@ def createTables(conn: sqlite3.Connection) -> None:
             );
             """
 
+    ai_cache = """CREATE TABLE IF NOT EXISTS "ai_cache" (
+            "word"      TEXT NOT NULL,
+            "type"      TEXT NOT NULL,
+            "content"   TEXT NOT NULL,
+            "model"     TEXT,
+            "datetime"  timestamp NOT NULL,
+            PRIMARY KEY ("word", "type")
+            );
+            """
+
+    streaks = """CREATE TABLE IF NOT EXISTS "streaks" (
+            "date" TEXT NOT NULL UNIQUE,
+            "word_count" INTEGER NOT NULL DEFAULT 0
+            );
+            """
+
     try:
         c = conn.cursor()
         c.executescript(
-            words + cache_words + collections + quiz_history + quotes + rss
+            words + cache_words + collections + quiz_history + quotes + rss + ai_cache + streaks
         )  # execute multiple statements
+        # Migrate existing databases: add SRS columns if absent
+        for col, definition in [
+            ("ease_factor", "REAL NOT NULL DEFAULT 2.5"),
+            ("interval_days", "INTEGER NOT NULL DEFAULT 1"),
+            ("next_review_date", "TEXT"),
+            ("review_count", "INTEGER NOT NULL DEFAULT 0"),
+        ]:
+            try:
+                c.execute(f'ALTER TABLE words ADD COLUMN "{col}" {definition}')
+                conn.commit()
+            except Exception:
+                pass  # column already exists
     except Exception as e:
         print(e)
 
 
 # no tests for this function as it is not called anywhere in the command directly
 def initializeDB() -> None:
-    """Initializes the database"""
+    """Initializes the database, creating tables and running any pending migrations."""
 
     conn = createConnection()
     createTables(conn)
 
 
 # NOTE: Use this command very sparingly. It is not recommended to use this command more than once a week due to possible API overuse
-
-# TODO: ADD ASYNCIO MULTITHREADING TO THIS FUNCTION
 def refresh_cache() -> None:
-    """
-    Refreshes the cache of the words in the database.
+    """Refreshes the API response cache for every tracked word.
 
-    1. Connect to the database
-    2. Check if the cache is empty, if yes, then do nothing.
-    3. If the cache is not empty, then we need to refresh it.
-    4. Get all the words from the cache.
-    5. For each word, get the response from the API and update the cache.
-    6. If there's an error, then show a error message and exit.
-    7. If there's no error, then update the cache.
-    8. If the cache is updated, then show a success message.
+    Fetches an up-to-date response from the dictionary API for every word
+    stored in the ``cache_words`` table.  Runs concurrent requests using
+    ``httpx.AsyncClient`` to avoid the previous sequential bottleneck.
+
+    Skips gracefully when the cache is empty or the network is unavailable.
     """
 
-    # check if cache is empty, if yes then do nothing
+    import asyncio
+
+    import httpx
+
     conn = createConnection()
     c = conn.cursor()
 
@@ -131,47 +191,48 @@ def refresh_cache() -> None:
     if not c.fetchone()[0]:
         return
     c.execute("SELECT word FROM cache_words")
-    rows = c.fetchall()
+    rows = [r[0] for r in c.fetchall()]
 
-    total = 0
-    for row in rows:
-        # ----------------- Progress Bar -----------------#
-        for _ in track(range(len(rows)), description=" 🔃 Refreshing Cache "):
+    API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
 
-            # ----------------- Progress Bar -----------------#
+    async def _fetch_all(words: list[str]) -> dict[str, str]:
+        results: dict[str, str] = {}
+        async with httpx.AsyncClient(timeout=10) as client:
+            tasks = {word: client.get(API_URL.format(word=word)) for word in words}
+            for word, coro in tasks.items():
+                try:
+                    resp = await coro
+                    if resp.status_code == 200:
+                        results[word] = json.dumps(resp.json()[0])
+                except Exception:
+                    pass
+        return results
 
-            word = row[0]
-            try:
-                response = requests.get(
-                    f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
-                )
-                response.raise_for_status()
+    try:
+        updated = asyncio.run(_fetch_all(rows))
+    except Exception:
+        print(
+            Panel(
+                title="[b reverse red]  Error!  [/b reverse red]",
+                title_align="center",
+                padding=(1, 1),
+                renderable="[bold red]Cache refresh failed. Check your internet connection.[/bold red] ❌",
+            )
+        )
+        return
 
-            except exceptions.ConnectionError as error:
-                print(
-                    Panel(
-                        title="[b reverse red]  Error!  [/b reverse red]",
-                        title_align="center",
-                        padding=(1, 1),
-                        renderable="[bold red]Error: You are not connected to the internet.[/bold red] ❌",
-                    )
-                )
-            else:
-                if response.status_code == 200:
-                    c.execute(
-                        "UPDATE cache_words SET api_response=? WHERE word=?",
-                        (json.dumps(response.json()[0]), word),
-                    )
-                    conn.commit()
-
-            # update the progress bar
-            total += 1
+    for word, payload in track(updated.items(), description=" 🔃 Updating Cache "):
+        c.execute(
+            "UPDATE cache_words SET api_response=? WHERE word=?",
+            (payload, word),
+        )
+    conn.commit()
 
     print(
         Panel(
             title="[b reverse green]  Success!  [/b reverse green]",
             title_align="center",
             padding=(1, 1),
-            renderable="Cache refreshed successfully. ✅",
+            renderable=f"Cache refreshed for [bold green]{len(updated)}[/bold green] word(s). ✅",
         )
     )

@@ -1,5 +1,5 @@
 import nltk
-from Dictionary import *
+from .Dictionary import *
 from nltk.corpus import wordnet
 from rich import box, print
 from rich.columns import Columns

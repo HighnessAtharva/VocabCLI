@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, "copilot/**"]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Test matrix
+# ──────────────────────────────────────────────────────────────────────────────
+jobs:
+  test:
+    name: Test — Python ${{ matrix.python-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install core dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          # Install only core deps + test deps (skip heavy torch/spacy for CI)
+          pip install \
+            typer rich requests httpx beautifulsoup4 feedparser fpdf2 \
+            Pillow pyspellchecker questionary regex matplotlib seaborn \
+            pandas numpy textstat trafilatura \
+            pytest pytest-cov
+
+      - name: Run fast tests (skip slow/NLP)
+        env:
+          VOCABCLI_DB_PATH: ${{ runner.temp }}/vocabcli_test.db
+        run: |
+          pytest tests/ -v -m "not slow and not network" \
+            --tb=short \
+            --cov=vocabCLI \
+            --cov-report=term-missing
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Lint
+  # ────────────────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ruff
+        run: pip install ruff>=0.4
+
+      - name: Check formatting & style
+        run: ruff check vocabCLI/ --select E,W,F,I --ignore E501,F403,F405,F401
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Publish to PyPI (only on GitHub Release)
+  # ────────────────────────────────────────────────────────────────────────────
+  publish:
+    name: Publish to PyPI
+    needs: [test, lint]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+    environment:
+      name: pypi
+      url: https://pypi.org/project/vocabcli/
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Build wheel and sdist
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No API token needed — uses OIDC trusted publishing

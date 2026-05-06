@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VocabCLI — AI-powered vocabulary builder for your terminal</title>
+  <meta name="description" content="VocabCLI 2026 — The AI-powered vocabulary builder CLI. Look up words, generate mnemonics, run spaced-repetition reviews, and chat with an AI tutor — all in your terminal." />
+  <style>
+    :root {
+      --green: #22c55e;
+      --green-dark: #16a34a;
+      --blue: #3b82f6;
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --radius: 12px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--bg3);
+      position: sticky;
+      top: 0;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    nav .logo { font-weight: 700; font-size: 1.25rem; }
+    nav .logo span { color: var(--green); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: var(--text-muted); font-size: 0.95rem; }
+    nav ul a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      background: var(--green);
+      color: #000 !important;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .nav-cta:hover { background: var(--green-dark); text-decoration: none !important; }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 900px;
+      margin: 5rem auto;
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(34,197,94,.15);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,.3);
+      border-radius: 999px;
+      padding: 0.25rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 .highlight { color: var(--green); }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-block;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.4); text-decoration: none; }
+    .btn-primary { background: var(--green); color: #000; }
+    .btn-secondary { background: var(--bg2); color: var(--text); border: 1px solid var(--bg3); }
+
+    /* ── Install snippet ── */
+    .install-block {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      max-width: 680px;
+      margin: 3rem auto 0;
+      text-align: left;
+    }
+    .install-block code {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--green);
+      display: block;
+      line-height: 2;
+    }
+    .install-block .comment { color: var(--text-muted); }
+
+    /* ── Section ── */
+    section { padding: 5rem 1.5rem; max-width: 1100px; margin: 0 auto; }
+    section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+    section h2 span { color: var(--green); }
+
+    /* ── Feature grid ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--green); transform: translateY(-3px); }
+    .feature-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.875rem; color: var(--text-muted); }
+
+    /* ── AI Spotlight ── */
+    .spotlight {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 700px) { .spotlight { grid-template-columns: 1fr; } }
+    .terminal {
+      background: #000;
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    .terminal .prompt { color: var(--green); }
+    .terminal .cmd { color: var(--text); }
+    .terminal .out { color: #a78bfa; line-height: 1.8; }
+    .terminal .dim { color: var(--text-muted); }
+
+    /* ── Install tabs ── */
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .tab {
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--bg3);
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+    }
+    .tab.active { background: var(--green); color: #000; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--bg3);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    footer a { color: var(--green); }
+  </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="logo">📕 <span>Vocab</span>CLI</div>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#ai">AI</a></li>
+    <li><a href="#install">Install</a></li>
+    <li><a href="https://github.com/HighnessAtharva/VocabCLI">Docs</a></li>
+    <li><a href="https://github.com/HighnessAtharva/VocabCLI" class="nav-cta">GitHub ★</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="badge">🚀 VocabCLI 2026 — Now with AI</div>
+  <h1>The <span class="highlight">AI-Powered</span><br>Vocabulary Builder<br>for Your Terminal</h1>
+  <p>Look up words, generate mnemonics, run spaced-repetition reviews, and chat with an AI tutor — all without leaving your terminal.</p>
+  <div class="hero-actions">
+    <a href="#install" class="btn btn-primary">📦 Get Started</a>
+    <a href="https://github.com/HighnessAtharva/VocabCLI" class="btn btn-secondary">⭐ View on GitHub</a>
+  </div>
+
+  <div class="install-block">
+    <code><span class="comment"># Core install</span></code>
+    <code><span class="prompt">$</span> <span class="cmd">pip install "vocabcli[ai]"</span></code>
+    <code>&nbsp;</code>
+    <code><span class="comment"># First-run setup</span></code>
+    <code><span class="prompt">$</span> <span class="cmd">vocab setup</span></code>
+    <code>&nbsp;</code>
+    <code><span class="comment"># Try it</span></code>
+    <code><span class="prompt">$</span> <span class="cmd">vocab define serendipity</span></code>
+    <code><span class="prompt">$</span> <span class="cmd">vocab ai mnemonic serendipity</span></code>
+  </div>
+</div>
+
+<!-- ── Features ── -->
+<section id="features">
+  <h2>Everything you need to <span>master vocabulary</span></h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">📚</div>
+      <h3>Dictionary & Thesaurus</h3>
+      <p>Definitions, phonetics, audio pronunciation, commonly confused words, synonyms, and antonyms — all offline-first with smart caching.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🤖</div>
+      <h3>AI Explanations</h3>
+      <p>Go beyond the dictionary. Get etymology, register, when to use vs. avoid, and a memory tip — all streamed live to your terminal.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🧠</div>
+      <h3>Spaced Repetition (SM-2)</h3>
+      <p>The Anki algorithm built right in. <code>vocab review</code> shows only words due today. Rate your recall and intervals are auto-adjusted.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎫</div>
+      <h3>Flashcard Generator</h3>
+      <p>Generate beautiful image flashcards for your learning, mastered, and favorite word lists with custom fonts and icons.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📖</div>
+      <h3>AI Story Mode</h3>
+      <p>VocabCLI writes a short story using all the words in your learning list. Reading in context dramatically improves retention.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💬</div>
+      <h3>Interactive AI Tutor</h3>
+      <p>Ask anything: "What's the difference between ephemeral and transient?" Get a streaming answer from a vocabulary expert AI.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <h3>Graphs & Analytics</h3>
+      <p>8 visualisations: word distribution by week/month, top tags, learning vs. mastered breakdown, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔥</div>
+      <h3>Streaks & Gamification</h3>
+      <p>Daily lookup streak tracking. See your longest streak and build the habit of learning a few new words every day.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🦙</div>
+      <h3>Runs Locally with Ollama</h3>
+      <p>All AI features work with local LLMs (Llama 3, Mistral, Phi-3) via Ollama. No API key, no cloud, complete privacy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── AI Spotlight ── -->
+<section id="ai" style="background: var(--bg2); max-width: 100%; padding: 5rem 1.5rem;">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-bottom: 3rem;">AI Features <span>Spotlight</span></h2>
+    <div class="spotlight">
+      <div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">Before: Static Dictionary</h3>
+        <div class="terminal">
+          <div><span class="prompt">$</span> <span class="cmd">vocab define ephemeral</span></div>
+          <div class="out">
+            <br>
+            EPHEMERAL<br>
+            /ɪˈfemərəl/<br>
+            ──────────────────────────<br>
+            adjective<br>
+            1. Lasting for a very short time.<br>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.25rem;">After: AI Deep-Dive</h3>
+        <div class="terminal">
+          <div><span class="prompt">$</span> <span class="cmd">vocab ai explain ephemeral</span></div>
+          <div class="out">
+            <br>
+            ✨ AI Explanation — EPHEMERAL<br>
+            ──────────────────────────<br>
+            <span class="dim">**Etymology**: From Greek *ephēmeros*<br>
+            (*epi-* "on" + *hēmera* "day") — literally<br>
+            "lasting only a day"…<br><br>
+            **Register**: Literary / formal ✓<br>
+            **Use when**: describing fleeting beauty,<br>
+            transient trends, short-lived phenomena<br><br>
+            🧠 **Remember**: Think of an EP record —<br>
+            EPHEMERAL lasts about as long as one side.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Install ── -->
+<section id="install">
+  <h2>Quick <span>Install</span></h2>
+  <div style="max-width: 640px; margin: 0 auto;">
+    <div class="tabs">
+      <button class="tab active">pip</button>
+      <button class="tab">pipx (recommended)</button>
+    </div>
+    <div class="terminal">
+      <div><span class="comment dim"># Core — always lightweight</span></div>
+      <div><span class="prompt">$</span> <span class="cmd">pip install vocabcli</span></div>
+      <div>&nbsp;</div>
+      <div><span class="comment dim"># + AI features (OpenAI / Ollama)</span></div>
+      <div><span class="prompt">$</span> <span class="cmd">pip install "vocabcli[ai]"</span></div>
+      <div>&nbsp;</div>
+      <div><span class="comment dim"># + NLP / spaCy / transformers (large, opt-in)</span></div>
+      <div><span class="prompt">$</span> <span class="cmd">pip install "vocabcli[nlp]"</span></div>
+    </div>
+    <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+      Requires Python 3.11+.
+      <a href="https://github.com/HighnessAtharva/VocabCLI/blob/main/CHANGELOG.md">See what's new in 2.0</a>
+    </p>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>
+    Built with ❤️ by <a href="https://github.com/HighnessAtharva">Atharva Shah</a> &amp;
+    <a href="https://github.com/anay-deshpande">Anay Deshpande</a> &nbsp;·&nbsp;
+    <a href="https://github.com/HighnessAtharva/VocabCLI">GitHub</a> &nbsp;·&nbsp;
+    <a href="https://pypi.org/project/vocabcli/">PyPI</a> &nbsp;·&nbsp;
+    <a href="https://github.com/HighnessAtharva/VocabCLI/blob/main/LICENSE.md">MIT License</a>
+  </p>
+</footer>
+
+</body>
+</html>
