@@ -10,7 +10,6 @@ import pandas as pd
 import regex as re
 import requests
 import rich
-import spacy
 import textstat
 import trafilatura
 from bs4 import BeautifulSoup
@@ -20,19 +19,49 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
-from spacy.lang.en.stop_words import STOP_WORDS
-from spacytextblob.spacytextblob import SpacyTextBlob
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-import torch
+# NLP / ML dependencies are optional ([nlp] extra).  Degrade gracefully so
+# that users who install only the core package don't get an ImportError.
+try:
+    import spacy
+    import torch
+    from spacy.lang.en.stop_words import STOP_WORDS
+    from spacytextblob.spacytextblob import SpacyTextBlob
+    from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    from spacy.cli import download as _spacy_download
 
-from spacy.cli import download
+    # Download the spaCy model on first use if not already present
+    if not spacy.util.is_package("en_core_web_sm"):
+        _spacy_download("en_core_web_sm")
 
-# check if the model is already downloaded, if not, then download it
-if not spacy.util.is_package("en_core_web_sm"):
-    download("en_core_web_sm")
+    _NLP_AVAILABLE = True
+except ImportError:
+    _NLP_AVAILABLE = False
+    STOP_WORDS: set = set()  # type: ignore[assignment]
 
 _MODULES_DIR = Path(__file__).parent
+
+_NLP_MISSING_PANEL = Panel(
+    title="[b reverse yellow]  NLP Dependencies Missing  [/b reverse yellow]",
+    title_align="center",
+    padding=(1, 1),
+    renderable=(
+        "This feature requires the [bold cyan]nlp[/bold cyan] optional extras.\n\n"
+        "Install with: [bold white]pip install \"vocabcli[nlp]\"[/bold white]"
+    ),
+)
+
+
+def _require_nlp() -> bool:
+    """Return True if NLP deps are available; print an error and return False otherwise.
+
+    Returns:
+        bool: True when spaCy, torch, and transformers are importable.
+    """
+    if not _NLP_AVAILABLE:
+        print(_NLP_MISSING_PANEL)
+        return False
+    return True
 
 
 URL_INVALID_PANEL = Panel(
@@ -420,27 +449,16 @@ def readability_index(text: str) -> None:
 
 
 def extract_difficult_words(text: str) -> None:
-    """
-    Extracts the difficult words from the text and prints them, uses the _most_common_words.txt file to determine the difficult words
+    """Extracts the difficult words from the text and prints them.
 
-    1. First we check if the text is a URL, if yes, then we parse the text from it and then use the model
-    2. If the text is not a URL, then we directly use the model
-    3. Open the file with a list of simple words (most common words used in English).
-    4. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
-    5. Calculate the word count of the text.
-    6. Create a list of difficult words by filtering out all words that are in the list of simple words.
-    7. Remove some common words that are not in the list of simple words.
-    8. Remove duplicate words.
-    9. Remove plurals of the same word.
-    10. Remove plurals of which singular is in the simple words list.
-    11. Sort the list of difficult words.
-    12. Print the word count and the number of difficult words.
-    13. Print the list of difficult words in columns.
+    Uses the ``_most_common_words.txt`` file to determine difficult words, and
+    spaCy NER to remove proper nouns.  Requires the ``[nlp]`` optional extras.
 
     Args:
-        text (str): text/url to be analyzed
+        text (str): text or URL to be analysed.
     """
-
+    if not _require_nlp():
+        return
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="aesthetic", style="bold gold1"),
@@ -617,21 +635,17 @@ def sentiment_score_to_summary(sentiment_score: int) -> str:
 
 
 def sentiment_analysis(content: str) -> None:
-    """
-    Performs sentiment analysis on the text and prints the sentiment score and the summary of the score
+    """Perform sentiment analysis on the text and print the result.
 
-    1. Check if the content is a URL, if yes, then parse the text from it and then use the model
-    2. If text and not URL, then directly use the model
-    3. Clean up the text from any unnecessary characters, full stops, and convert it to lowercase.
-    5. Load the tokenizer and model
-    6. Encode the text using the tokenizer
-    7. Send the encoded text to the model and get the result
-    8. Take the highest value from the result and convert it to a summary
-    9. Print the sentiment score and the summary
+    Uses ``nlptown/bert-base-multilingual-uncased-sentiment`` via Hugging Face
+    Transformers.  Requires the ``[nlp]`` optional extras.
 
     Args:
-        content (str): text/url to be analyzed
+        content (str): text or URL to be analysed.
     """
+    if not _require_nlp():
+        return
+
     # ----------------- Spinner -----------------#
     with Progress(
         SpinnerColumn(spinner_name="smiley", style="bold green"),
@@ -741,7 +755,9 @@ def summarize_text_util(text: str, per: int) -> str:
         return result.strip()
     except Exception as exc:
         # Graceful degradation: fall back to extractive summarisation with spacy
-        nlp = spacy.load("en_core_web_sm")
+        if not _NLP_AVAILABLE:
+            return text
+        nlp = spacy.load("en_core_web_sm")  # type: ignore[name-defined]
         doc = nlp(text)
         tokens = [token.text for token in doc]
         word_frequencies: dict = {}

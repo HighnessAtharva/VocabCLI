@@ -19,6 +19,8 @@ jobs:
   test:
     name: Test — Python ${{ matrix.python-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -39,7 +41,7 @@ jobs:
           pip install -e ".[dev]"
           # Install only core deps + test deps (skip heavy torch/spacy for CI)
           pip install \
-            typer[all] rich requests httpx beautifulsoup4 feedparser fpdf2 \
+            typer rich requests httpx beautifulsoup4 feedparser fpdf2 \
             Pillow pyspellchecker questionary regex matplotlib seaborn \
             pandas numpy textstat trafilatura \
             pytest pytest-cov
@@ -52,7 +54,6 @@ jobs:
             --tb=short \
             --cov=vocabCLI \
             --cov-report=term-missing
-        working-directory: vocabCLI
 
   # ────────────────────────────────────────────────────────────────────────────
   # Lint
@@ -60,6 +61,8 @@ jobs:
   lint:
     name: Lint (ruff)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -87,6 +90,7 @@ jobs:
       name: pypi
       url: https://pypi.org/project/vocabcli/
     permissions:
+      contents: read
       id-token: write  # Required for OIDC trusted publishing
     steps:
       - uses: actions/checkout@v4

@@ -149,8 +149,10 @@ def get_ai_client(provider: Optional[str] = None) -> tuple:
                 padding=(1, 1),
                 renderable=(
                     "No OpenAI API key found.\n\n"
-                    "Run [bold white]vocab setup[/bold white] to configure AI features, "
-                    "or set the [bold white]OPENAI_API_KEY[/bold white] environment variable.\n\n"
+                    "Options:\n"
+                    "  1. Set the environment variable: "
+                    "[bold white]export OPENAI_API_KEY=sk-...[/bold white]\n"
+                    "  2. Run the setup wizard: [bold white]vocab setup[/bold white]\n\n"
                     "🆓 Get a free key at [bold cyan]https://platform.openai.com/api-keys[/bold cyan]"
                 ),
             )
