@@ -4,18 +4,19 @@ import os
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import *
+from typing import Optional
 
 import requests
-from Database import createConnection
-from Exceptions import *
-from playsound import playsound
+from .Database import createConnection
+from .Exceptions import *
 from requests import exceptions
 from rich import print
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
+
+_MODULES_DIR = Path(__file__).parent
 
 
 def display_theme(query: str) -> None:
@@ -54,7 +55,7 @@ def show_commonly_confused(word: str) -> None:
         word (str): Word to check if it is commonly confused with other words
     """
 
-    with open("modules/commonly_confused.csv", "r") as file:
+    with open(_MODULES_DIR / "commonly_confused.csv", "r") as file:
         reader = csv.reader(file)
         for row in reader:
             if word in row:
@@ -243,7 +244,6 @@ def insert_word_to_db(query: str) -> None:
         # if word exists in the cache_word table, return the response from the cache_word table
         if c.fetchone():
             conn = createConnection()
-            time.sleep(1)
             insert_to_db_util(conn, query)
             return
         response = requests.get(
@@ -423,19 +423,14 @@ def say_aloud(query: str) -> None:
     """
     Pronounces the word. Downloads the audio file, plays it and deletes it.
 
-    1. The function say_aloud first calls the function connect_to_api which takes query (str) as argument and returns the response (dict) if successful or None if unsuccessful.
-    2. The function say_aloud then checks if the audio is available or not.
-    3. If the audio is available, the function say_aloud then downloads the audio file and plays it.
-    4. If the audio is not available, the function say_aloud then raises the AudioUnavailableException.
-    5. The function say_aloud then deletes the audio file.
-    6. The function say_aloud then prints the phonetic (str) of the word.
+    Uses ``pygame.mixer`` to play the audio so the app works on all platforms
+    (the original ``playsound`` library is abandoned and crashes on Linux/macOS).
 
     Args:
         query (str): Word to be pronounced.
 
     Raises:
         AudioUnavailableException: Raised when the audio is not available.
-
     """
 
     if not (response := connect_to_api(query)):
@@ -456,10 +451,30 @@ def say_aloud(query: str) -> None:
             raise AudioUnavailableException
 
         audio = requests.get(audioURL, allow_redirects=True)
-        open(f"{query}.mp3", "wb").write(audio.content)
-        playsound(os.path.join(Path().cwd(), f"{query}.mp3"))
+        audio_file = f"{query}.mp3"
+        with open(audio_file, "wb") as f:
+            f.write(audio.content)
+
+        try:
+            import pygame
+            pygame.mixer.init()
+            pygame.mixer.music.load(audio_file)
+            pygame.mixer.music.play()
+            import time as _time
+            while pygame.mixer.music.get_busy():
+                _time.sleep(0.1)
+            pygame.mixer.music.unload()
+        except Exception:
+            # Fallback: try playsound if pygame not available
+            try:
+                from playsound import playsound
+                playsound(os.path.join(Path().cwd(), audio_file))
+            except Exception:
+                pass
+
         print(Panel("[bold green]Audio played[/bold green] 🎧"))
-        os.remove(f"{query}.mp3") if os.path.exists(f"{query}.mp3") else None
+        if os.path.exists(audio_file):
+            os.remove(audio_file)
 
     except AudioUnavailableException as e:
         print(e)
@@ -467,18 +482,37 @@ def say_aloud(query: str) -> None:
 
 def get_word_of_the_day() -> None:
     """
-    Get a word of the day from a public API and print its definition.
+    Get a word of the day and print its definition.
 
-    1. Get the API key from the environment variables
-    2. Send a GET request to the Wordnik API to get the word of the day
-    3. Get the word from the response
-    4. Print the word & definition of the word of the day"""
+    Tries the Wordnik API first (requires ``WORDNIK_API_KEY`` environment
+    variable). Falls back to picking a random word from the built-in curated
+    word list when no API key is available, so the command always works
+    out-of-the-box.
+    """
 
     WORDNIK_API_KEY = os.getenv("WORDNIK_API_KEY")
-    response = requests.get(
-        f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={WORDNIK_API_KEY}"
-    ).json()
-    word = response["word"]
-    print(Panel("[bold green]WORD OF THE DAY[/bold green] 📅"))
+    word = None
 
+    if WORDNIK_API_KEY:
+        try:
+            response = requests.get(
+                f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={WORDNIK_API_KEY}",
+                timeout=5,
+            ).json()
+            word = response.get("word")
+        except Exception:
+            pass
+
+    if not word:
+        # Fallback: pick from the curated random words list
+        try:
+            import random as _random
+            words_file = _MODULES_DIR / "_random_words.txt"
+            with open(words_file, "r", encoding="utf-8") as f:
+                words_list = [line.strip() for line in f if line.strip()]
+            word = _random.choice(words_list) if words_list else "serendipity"
+        except Exception:
+            word = "serendipity"
+
+    print(Panel("[bold green]WORD OF THE DAY[/bold green] 📅"))
     definition(query=word, short=True)

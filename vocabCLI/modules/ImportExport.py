@@ -2,8 +2,8 @@ import csv
 import os
 from datetime import datetime
 
-from Database import createConnection
-from Exceptions import NoDataFoundException, NoQuotesException, NoRSSFeedsException
+from .Database import createConnection
+from .Exceptions import NoDataFoundException, NoQuotesException, NoRSSFeedsException
 from fpdf import FPDF
 from rich import print
 from rich.panel import Panel

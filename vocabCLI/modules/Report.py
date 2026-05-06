@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from Database import createConnection
+from .Database import createConnection
 from fpdf import FPDF
-from ImportExport import PDF
+from .ImportExport import PDF
 
 # todo @anay - formatting can be improved, add color, styles and emojis.
 # todo @anay - complete the functions below

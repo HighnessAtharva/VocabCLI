@@ -1,3 +1,89 @@
+Metadata-Version: 2.4
+Name: vocabcli
+Version: 2.0.0
+Summary: AI-powered vocabulary builder and dictionary CLI for linguaphiles
+Author: Anay Deshpande
+Author-email: Atharva Shah <HighnessAtharva@gmail.com>
+License: MIT License
+        
+        Copyright (c) 2022 Atharva Shah, Anay Deshpande
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://vocabcli.github.io
+Project-URL: Documentation, https://vocabcli.github.io/docs
+Project-URL: Repository, https://github.com/HighnessAtharva/VocabCLI
+Project-URL: Bug Tracker, https://github.com/HighnessAtharva/VocabCLI/issues
+Project-URL: Changelog, https://github.com/HighnessAtharva/VocabCLI/blob/main/CHANGELOG.md
+Keywords: cli,vocabulary,dictionary,nlp,openai,typer,terminal,language-learning,spaced-repetition,flashcards
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Education
+Classifier: Topic :: Utilities
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: typer[all]>=0.12
+Requires-Dist: rich>=13.9
+Requires-Dist: requests>=2.32
+Requires-Dist: httpx>=0.27
+Requires-Dist: beautifulsoup4>=4.12
+Requires-Dist: feedparser>=6.0.11
+Requires-Dist: fpdf2>=2.8
+Requires-Dist: Pillow>=10.4
+Requires-Dist: pyspellchecker>=0.8
+Requires-Dist: questionary>=2.0
+Requires-Dist: regex>=2024.9
+Requires-Dist: matplotlib>=3.9
+Requires-Dist: seaborn>=0.13
+Requires-Dist: pandas>=2.2
+Requires-Dist: numpy>=2.0
+Requires-Dist: textstat>=0.7.4
+Requires-Dist: trafilatura>=1.12
+Requires-Dist: textual>=0.80
+Provides-Extra: ai
+Requires-Dist: openai>=1.50; extra == "ai"
+Provides-Extra: nlp
+Requires-Dist: spacy>=3.8; extra == "nlp"
+Requires-Dist: spacytextblob>=0.1.7; extra == "nlp"
+Requires-Dist: nltk>=3.9; extra == "nlp"
+Requires-Dist: torch>=2.4; extra == "nlp"
+Requires-Dist: transformers>=4.44; extra == "nlp"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.2; extra == "dev"
+Requires-Dist: pytest-cov>=5.0; extra == "dev"
+Requires-Dist: pytest-benchmark>=4.0; extra == "dev"
+Requires-Dist: ruff>=0.4; extra == "dev"
+Requires-Dist: mypy>=1.10; extra == "dev"
+Requires-Dist: mkdocs-material>=9.5; extra == "dev"
+Requires-Dist: mkdocs-typer>=0.0.3; extra == "dev"
+Dynamic: license-file
+
 <div align="center">
 
 # 📕 VocabCLI

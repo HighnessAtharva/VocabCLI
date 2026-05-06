@@ -2,15 +2,14 @@ import calendar
 import glob
 import os
 from datetime import datetime
-from tkinter import *
+from pathlib import Path
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from Database import *
-from PIL import Image, ImageTk
+from .Database import createConnection
 from rich.panel import Panel
 
 ################################

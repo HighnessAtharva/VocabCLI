@@ -4,21 +4,22 @@ import os
 import random
 from datetime import datetime, timedelta
 from pathlib import Path
-from sqlite3 import *
-from typing import *
+from sqlite3 import Cursor
+from typing import Optional, List
 
 import requests
 import typer
-from Database import createConnection, createTables
-from Dictionary import *
-from Exceptions import *
-from playsound import playsound
+from .Database import createConnection, createTables
+from .Dictionary import *
+from .Exceptions import *
 from requests import exceptions
 from rich import box, print
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+
+_MODULES_DIR = Path(__file__).parent
 
 
 def check_word_exists(query: str) -> bool:
@@ -615,7 +616,7 @@ def count_tag(tag: str) -> int:
 def get_random_word_definition_from_api() -> None:
     """Gets a random word from the text file and gets its definition from the API."""
 
-    lines = open("modules/_random_words.txt").read().splitlines()
+    lines = open(_MODULES_DIR / "_random_words.txt").read().splitlines()
     random_word = random.choice(lines).strip()
     print(Panel(f"😛 A Random Word for You: [bold green]{random_word}[/bold green]"))
     definition(random_word)

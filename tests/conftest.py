@@ -1,7 +1,7 @@
 """ HOW TO RUN TESTS """
-# Run all Tests: ⏩ python -m pytest ../tests -vvv
-# Run specific Class Test: ⏩ python -m pytest -k "ClassName" ../tests -vvv
-# Run a specific Test: ⏩ python -m pytest -k "test_bye" ../tests -vvv
+# Run all Tests (from repo root): ⏩ pytest
+# Run specific Class Test: ⏩ pytest -k "ClassName" -vvv
+# Run a specific Test: ⏩ pytest -k "test_bye" -vvv
 
 # NOTE:
 # To tackle confirmation prompts, we are using the following approach: https://github.com/tiangolo/typer/issues/205
@@ -10,53 +10,39 @@
 import os
 import shutil
 import sqlite3
+import tempfile
 from pathlib import Path
 
 import pytest
-from modules.Database import *
-from modules.WordCollections import *
 from typer.testing import CliRunner
+
+# Point the app to a temporary test database so tests never touch the user's
+# real ~/.vocabcli/VocabularyBuilder.db.
+_TEST_DB_DIR = tempfile.mkdtemp(prefix="vocabcli_test_")
+_TEST_DB_PATH = os.path.join(_TEST_DB_DIR, "VocabularyBuilder_test.db")
+os.environ.setdefault("VOCABCLI_DB_PATH", _TEST_DB_PATH)
+
+from modules.Database import initializeDB  # noqa: E402 (after env var is set)
+from modules.WordCollections import insert_collection_to_DB  # noqa: E402
 
 
 def pytest_sessionstart(session):
-    """
-    Will run before any test.
-    Setup any state specific to the execution.
-    """
-
-    if not os.path.exists("VocabularyBuilder.db"):
-        return
-
-    # move the app database to the parent directory
-    app_DB_path = os.path.join(os.getcwd(), "VocabularyBuilder.db")
-    parent_dir = Path(os.getcwd()).parents[0]
-    shutil.move(app_DB_path, parent_dir)
-
-    initializeDB()  # this is from Database.py
-    insert_collection_to_DB()  # this is from WordCollections.py
+    """Setup: initialise a fresh test database before any test runs."""
+    initializeDB()
+    insert_collection_to_DB()
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Will run after all tests.
-    Teardown any state that was previously setup with a setup_module method.
-    """
-
-    # close the connection
-    conn = sqlite3.connect("./VocabularyBuilder.db")
-    conn.close()
-
-    # delete the test database
-    if os.path.exists("VocabularyBuilder.db"):
-        os.remove("VocabularyBuilder.db")
-
-    # move the app database back to the app folder
-    app_DB_path = os.path.join(Path(os.getcwd()).parents[0], "VocabularyBuilder.db")
-    current_dir = os.getcwd()
-    shutil.move(app_DB_path, current_dir)
+    """Teardown: remove the temporary test database after all tests finish."""
+    try:
+        if os.path.exists(_TEST_DB_PATH):
+            os.remove(_TEST_DB_PATH)
+        shutil.rmtree(_TEST_DB_DIR, ignore_errors=True)
+    except Exception:
+        pass
 
 
-# This is a fixture that will be used in all tests, must be passed as an argument to the test function
+# This fixture is used by every test file that invokes CLI commands.
 @pytest.fixture(scope="session")
 def runner():
     return CliRunner()

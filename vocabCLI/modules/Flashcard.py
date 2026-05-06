@@ -1,11 +1,15 @@
 import json
+import os
 import random
 import textwrap
+from pathlib import Path
 
-from Database import createConnection
-from Dictionary import *
+from .Database import createConnection
+from .Dictionary import *
 from PIL import Image, ImageDraw, ImageFont
 from rich.progress import track
+
+_ASSETS_DIR = Path(__file__).parent.parent.parent / "assets"
 
 
 def flashcard_definition(query: str) -> str:
@@ -166,11 +170,12 @@ def export_util(c, type: str):    # sourcery skip: low-code-quality
             draw.line([(i, 0), (0, i)], tuple(color), width=1)
 
         # Use ImageFont to specify the font and size of the text
-        font = ImageFont.truetype("../assets/FTLTLT.ttf", 36)
-        headingfont = ImageFont.truetype("../assets/FTLTLT.ttf", 64)
+        font_path = str(_ASSETS_DIR / "FTLTLT.TTF")
+        font = ImageFont.truetype(font_path, 36)
+        headingfont = ImageFont.truetype(font_path, 64)
 
         # draw the watermark in the top right corner
-        watermark = Image.open("../assets/VocabCLI -  White.png")
+        watermark = Image.open(_ASSETS_DIR / "VocabCLI -  White.png")
         watermark = watermark.resize((200, 200))
         image.paste(watermark, (880, -50), mask=watermark)
 
@@ -186,23 +191,23 @@ def export_util(c, type: str):    # sourcery skip: low-code-quality
 
         if type == "favorite":
             # paste the heart on the image at position (250, 50) with transparency
-            heart = Image.open("../assets/heart.png")
+            heart = Image.open(_ASSETS_DIR / "heart.png")
             heart = heart.resize((50, 50))
             image.paste(heart, (50, 150), mask=heart)
 
         elif type == "learning":
-            clock = Image.open("../assets/clock.png")
+            clock = Image.open(_ASSETS_DIR / "clock.png")
             clock = clock.resize((50, 50))
             image.paste(clock, (50, 150), mask=clock)
 
         elif type == "mastered":
-            tick = Image.open("../assets/tick.png")
+            tick = Image.open(_ASSETS_DIR / "tick.png")
             tick = tick.resize((50, 50))
             image.paste(tick, (50, 150), mask=tick)
 
         # check if the word has any tag
         if tag:
-            tagImg = Image.open("../assets/tag.png")
+            tagImg = Image.open(_ASSETS_DIR / "tag.png")
             tagImg = tagImg.resize((75, 75))
             image.paste(tagImg, (50, 125), mask=tagImg)
 

@@ -1,14 +1,14 @@
 import contextlib
 from datetime import datetime, timedelta
 from pathlib import Path
-from sqlite3 import *
-from typing import *
+from sqlite3 import Cursor
+from typing import Optional
 
 import feedparser
 import typer
 from bs4 import BeautifulSoup
-from Database import createConnection, createTables
-from Exceptions import *
+from .Database import createConnection, createTables
+from .Exceptions import *
 from rich import box, print
 from rich.columns import Columns
 from rich.console import Console

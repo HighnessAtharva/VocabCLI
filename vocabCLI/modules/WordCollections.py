@@ -1,13 +1,17 @@
 import contextlib
 import csv
 import os
+from pathlib import Path
+from typing import Optional
 
 import pandas as pd
-from Database import *
-from Exceptions import *
+from .Database import createConnection
+from .Exceptions import *
 from rich import box, print
 from rich.columns import Columns
 from rich.table import Table
+
+_MODULES_DIR = Path(__file__).parent
 
 
 def delete_collection_from_DB():
@@ -21,7 +25,7 @@ def delete_collection_from_DB():
 def clean_collection_csv_data():
     """Cleans the domains.csv file and writes the cleaned data to domains.csv"""
 
-    df = pd.read_csv("modules/domains.csv", encoding="latin-1")  # Read the CSV Files
+    df = pd.read_csv(_MODULES_DIR / "domains.csv", encoding="latin-1")  # Read the CSV Files
     df["word"] = df["word"].str.lower()  # convert all words to lowercase
     # Remove the rows with spaces in the word column
     df = df[df["word"].str.contains(" ") == False]
@@ -44,10 +48,10 @@ def clean_collection_csv_data():
             df.drop(i, inplace=True)
 
     # delete the current domains.csv file
-    os.remove("modules/domains.csv")
+    os.remove(_MODULES_DIR / "domains.csv")
 
     # write to new csv
-    df.to_csv("modules/domains.csv", index=False)
+    df.to_csv(_MODULES_DIR / "domains.csv", index=False)
 
     # print(df.shape) # print row and column count
     # print(df.groupby('topic').count().sort_values(['word'],ascending=False)) # show word count grouped by topic and sorted by word count
@@ -65,7 +69,7 @@ def insert_collection_to_DB():
         return
 
     clean_collection_csv_data()
-    with open(file="modules/domains.csv", mode="r", encoding="utf-8") as f:
+    with open(file=_MODULES_DIR / "domains.csv", mode="r", encoding="utf-8") as f:
         reader = csv.reader(f)
         next(reader)
         for row in reader:
